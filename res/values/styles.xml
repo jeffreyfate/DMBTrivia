@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="ActivityThemeNoTitle" parent="@style/ActivityTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    
+    <style name="ActivityTheme">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    
+    <style name="SplashLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginBottom">10dip</item>
+        <item name="android:background">@color/background_dark</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    
+    <style name="SplashTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/title</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    
+    <style name="SplashTitleXLargePort" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">30dip</item>
+    </style>
+    
+    <style name="SplashTitleXLargeLand" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">10dip</item>
+    </style>
+    
+    <style name="SplashTitleSmallPort" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">2dip</item>
+    </style>
+    
+    <style name="SplashTitleSmallLand" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">4dip</item>
+    </style>
+    
+    <style name="SplashTitlePort" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">5dip</item>
+    </style>
+    
+    <style name="SplashTitleLargePort" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">12dip</item>
+    </style>
+    
+    <style name="SplashTitleLargeLand" parent="@style/SplashTitle">
+        <item name="android:layout_height">200dip</item>
+        <item name="android:layout_marginBottom">16dip</item>
+    </style>
+    
+    <style name="SplashTitleLand" parent="@style/SplashTitle">
+        <item name="android:layout_marginBottom">10dip</item>
+    </style>
+    
+    <style name="SplashLoginLayout">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    
+    <style name="SplashLoginLayoutLand" parent="@style/SplashLoginLayout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginBottom">10dip</item>
+    </style>
+    
+    <style name="SplashLoginLayoutLargeLand" parent="@style/SplashLoginLayoutLand">
+        <item name="android:layout_marginBottom">10dip</item>
+    </style>
+    
+    <style name="SplashLoginLayoutSmallLand" parent="@style/SplashLoginLayoutLand">
+        <item name="android:layout_marginBottom">8dip</item>
+    </style>
+    
+    <style name="SplashLoginLayoutXLargeLand" parent="@style/SplashLoginLayoutLand">
+        <item name="android:layout_marginBottom">16dip</item>
+    </style>
+    
+    <style name="SplashLoginLayoutPort" parent="@style/SplashLoginLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_below">@id/TwitterLoginButton</item>
+        <item name="android:layout_marginBottom">5dip</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    
+    <style name="SplashLoginLayoutLargePort" parent="@style/SplashLoginLayoutPort">
+        <item name="android:layout_marginBottom">12dip</item>
+    </style>
+    
+    <style name="SplashLoginLayoutSmallPort" parent="@style/SplashLoginLayoutPort">
+        <item name="android:layout_marginBottom">2dip</item>
+    </style>
+</resources>

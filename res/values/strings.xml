@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DMB Trivia Dev</string>
+    
+    <string name="MyStats">Stats</string>
+    <string name="CorrectAnswers">My Correct Answers</string>
+    <string name="Error">Error</string>
+    <string name="HintsUsed">My Hints Used</string>
+    <string name="LatestQuestion">Latest Question</string>
+    <string name="Leaders">Leaders</string>
+    <string name="NoConnection">Unable to connect to service</string>
+    <string name="StatsLoading">Calculating stats&#8230;</string>
+    <string name="LoginLoading">Fetching user info&#8230;</string>
+    
+    <string name="enter">ENTER</string>
+    <string name="done">DONE</string>
+    <string name="retry">RETRY</string>
+    <string name="hint">HINT</string>
+    <string name="skip">SKIP</string>
+    <string name="login">LOGIN</string>
+    <string name="signup">SIGNUP</string>
+    <string name="justPlay">JUST PLAY</string>
+    <string name="loginEmail">EMAIL LOGIN</string>
+    <string name="hintTime">15</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    
+    <string name="backgroundImage">Background Image</string>
+    <string name="answerImage">Answer Image</string>
+    <string name="splashTitle">DMB Trivia</string>
+    <string name="facebookLogin">Login with Facebook</string>
+    <string name="twitterLogin">Login with Twitter</string>
+    
+    <string name="usernameHint">email address</string>
+    <string name="passwordHint">password</string>
+    
+    <string name="SwitchBackground">Switch Background</string>
+    <string name="SoundTitle">Toggle Sounds</string>
+    <string name="LeadersTitle">Stats &amp; Standings</string>
+    <string name="LogoutTitle">Logout</string>
+    <string name="ExitTitle">Exit</string>
+    <string name="BackTitle">Back</string>
+    <string name="InfoTitle">FAQ</string>
+    <string name="FollowTitle">Follow @dmbtrivia</string>
+    <string name="LikeTitle">DMB Trivia on Facebook</string>
+    <string name="ReportTitle">Report Question</string>
+    <string name="ShareScreen">Share Screenshot</string>
+    <string name="NotificationTitle">Toggle Notifications</string>
+    <string name="NameTitle">Edit Display Name</string>
+    
+    <string name="ScoreDialogTitle">Scoring Notes</string>
+    <string name="NameDialogTitle">Edit Display Name</string>
+    
+    <string name="InfoText">DMB Trivia Mini-FAQ:\n\nQ: How are the question values calculated?\nA: A question\'s value is calculated based on the number of times it has been correctly answered/skipped.  The maxiumum point value for a quesiton is 1000 (hardest) and the minimum is 100 (easiest).\n\nQ: Does using a hint penalize me?\nA: Using a hint cuts the value you can earn for answering that question correct in half.\n\nQ: Why are answers revealed?\nA: The goal was to make a trivia game that would attempt to inspire people to seek out new DMB audio, stories, etc.  By revealing the answer we feel the app is more than a test or a quiz.  Hopefully it inspires people to get more interested in the band and their music.\n\nQ: How many questions are there?\nA: Over 1300 - More can be added without an application update so overtime the number will grow and questions about current tours/DMB news should be incorportated.\n\nQ: What if I find an error in a question or a question that can\'t be answered?\nA: Please report that issue to us @dmbtrivia or via email jaybtv5@gmail.com or choose Report Question from the menu.\n\nQ: These questions are impossible - how do people know so much about DMB tours and dates?\nA: The Dave Matthews Band allows live audio recording of their concerts which are then shared by tapers.  DMB also provides realtime setlist information on their website during shows.  There\'s a large community of fans who download/collect live audio recordings and/or also follow and discuss show setlists.  If these questions prove difficult for most their score values will increase.  See below for a few good fan websites that may help you follow upcoming DMB tours and or revist old shows and setlists.\n\nQ: Who developed this game?\nA: @jeffthefate (Coder) &amp; @Copperpot5 (Audio/Question set).\n\nQ: My friend/etc has an iPhone - is there an iPhone version coming soon?\nA: We have no plans to develop an iphone version of "DMBTrivia" at this time for a variety of reasons.\n\nOfficial DMB site for realtime setlist, merch, etc: www.dmband.com\nDMB Setlists, Songs Statistics, Guest Information, etc: www.dmbalmanac.com\nFree live/legal downloads of DMB audio recordings: www.dreamingtree.org\nGeneral forum discussion: www.antsmarching.org\nMP3 rarity and tour highlights: www.dontburnthepig.org\n\nMany rarities and highlights can also be found on YouTube.\n\nFeel free to ask general DMB questions to @dmbtrivia as well.  We\'re friendly and always looking to help fans find the DMB info/fan media they\'re looking for.</string>
+    <string name="ScoreDialogText">•Wrong answers DON\'T subtract points\n•Using a Hint cuts the possible score in half\n•Maximum question value is 1000\n•Global question score decreases for each correct answer\n•Global question score increases for each Skip\n•Minimum question value is 100\n•This makes the harder questions worth more and the easy questions worth less</string>
+    
+    <string name="sound_key">sound</string>
+    <string name="dialog_key">dialog</string>
+    <string name="notification_key">notification</string>
+    
+    <string name="leaders">Top Scores</string>
+    
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <ImageView
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash8"
+        android:contentDescription="@string/backgroundImage" />
+    <TextView
+        android:id="@+id/NoConnection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:text="@string/NoConnection"
+        android:layout_centerInParent="true"
+        android:background="@drawable/background_text"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="gone" />
+</RelativeLayout>

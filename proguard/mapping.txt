@@ -1,0 +1,3662 @@
+android.support.v4.app.ActivityCompatHoneycomb -> a:
+    android.support.v4.app.ActivityCompatHoneycomb next$fe619d5 -> a
+    android.support.v4.app.ActivityCompatHoneycomb prev$fe619d5 -> b
+    int cmd -> c
+    android.support.v4.app.Fragment fragment -> d
+    int enterAnim -> e
+    int exitAnim -> f
+    int popEnterAnim -> g
+    int popExitAnim -> h
+    java.util.ArrayList removed -> i
+    void buildShortClassTag(java.lang.Object,java.lang.StringBuilder) -> a
+    org.json.JSONObject readHeader(java.io.InputStream) -> a
+    boolean isSubset(java.util.Collection,java.util.Collection) -> a
+    boolean isNullOrEmpty(java.util.Collection) -> a
+    boolean isNullOrEmpty(java.lang.String) -> a
+    java.lang.String md5hash(java.lang.String) -> b
+    android.net.Uri buildUri(java.lang.String,java.lang.String,android.os.Bundle) -> a
+    void closeQuietly(java.io.Closeable) -> a
+    void disconnectQuietly(java.net.HttpURLConnection) -> a
+    java.util.Set jsonObjectKeySet(org.json.JSONObject) -> a
+    void jsonObjectPutAll(org.json.JSONObject,java.util.Map) -> a
+    java.util.Collection jsonObjectValues(org.json.JSONObject) -> b
+    java.lang.Object getStringPropertyAsJSON(org.json.JSONObject,java.lang.String,java.lang.String) -> a
+    java.lang.String readStreamToString(java.io.InputStream) -> b
+    void clearCookiesForDomain(android.content.Context,java.lang.String) -> a
+    void clearFacebookCookies(android.content.Context) -> a
+    void notNull(java.lang.Object,java.lang.String) -> a
+    void notEmptyAndContainsNoNulls(java.util.Collection,java.lang.String) -> a
+    void notNullOrEmpty(java.lang.String,java.lang.String) -> a
+    byte[] getBytesUnchecked(java.lang.String,java.lang.String) -> b
+    java.lang.IllegalStateException newIllegalStateException(java.lang.String,java.io.UnsupportedEncodingException) -> a
+    java.lang.String newString(byte[],java.lang.String) -> a
+android.support.v4.app.BackStackRecord -> b:
+    android.support.v4.app.FragmentManagerImpl mManager -> l
+    android.support.v4.app.ActivityCompatHoneycomb mHead$fe619d5 -> a
+    android.support.v4.app.ActivityCompatHoneycomb mTail$fe619d5 -> m
+    int mNumOp -> b
+    int mTransition -> c
+    int mTransitionStyle -> d
+    boolean mAddToBackStack -> e
+    boolean mAllowAddToBackStack -> n
+    java.lang.String mName -> f
+    boolean mCommitted -> o
+    int mIndex -> g
+    int mBreadCrumbTitleRes -> h
+    java.lang.CharSequence mBreadCrumbTitleText -> i
+    int mBreadCrumbShortTitleRes -> j
+    java.lang.CharSequence mBreadCrumbShortTitleText -> k
+    void dump$ec96877(java.lang.String,java.io.PrintWriter) -> a
+    void addOp$568ae146(android.support.v4.app.ActivityCompatHoneycomb) -> a
+    android.support.v4.app.FragmentTransaction replace(int,android.support.v4.app.Fragment,java.lang.String) -> a
+    android.support.v4.app.FragmentTransaction remove(android.support.v4.app.Fragment) -> a
+    android.support.v4.app.FragmentTransaction show(android.support.v4.app.Fragment) -> b
+    android.support.v4.app.FragmentTransaction addToBackStack(java.lang.String) -> a
+    void bumpBackStackNesting(int) -> a
+    int commit() -> a
+    void run() -> run
+    void popFromBackStack(boolean) -> a
+    boolean isEmpty() -> b
+android.support.v4.app.BackStackState -> c:
+    int[] mOps -> a
+    int mTransition -> b
+    int mTransitionStyle -> c
+    java.lang.String mName -> d
+    int mIndex -> e
+    int mBreadCrumbTitleRes -> f
+    java.lang.CharSequence mBreadCrumbTitleText -> g
+    int mBreadCrumbShortTitleRes -> h
+    java.lang.CharSequence mBreadCrumbShortTitleText -> i
+    android.os.Parcelable$Creator CREATOR -> CREATOR
+    android.support.v4.app.BackStackRecord instantiate(android.support.v4.app.FragmentManagerImpl) -> a
+    int describeContents() -> describeContents
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+android.support.v4.app.BackStackState$1 -> d:
+    java.lang.Object[] newArray(int) -> newArray
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+android.support.v4.app.Fragment -> e:
+    java.util.HashMap sClassMap -> K
+    int mState -> a
+    android.view.View mAnimatingAway -> b
+    int mStateAfterAnimating -> c
+    android.os.Bundle mSavedFragmentState -> d
+    android.util.SparseArray mSavedViewState -> e
+    int mIndex -> f
+    java.lang.String mWho -> L
+    android.os.Bundle mArguments -> g
+    android.support.v4.app.Fragment mTarget -> h
+    int mTargetIndex -> i
+    int mTargetRequestCode -> j
+    boolean mAdded -> k
+    boolean mRemoving -> l
+    boolean mResumed -> m
+    boolean mFromLayout -> n
+    boolean mInLayout -> o
+    boolean mRestored -> p
+    int mBackStackNesting -> q
+    android.support.v4.app.FragmentManagerImpl mFragmentManager -> r
+    android.support.v4.app.FragmentActivity mActivity -> s
+    int mFragmentId -> t
+    int mContainerId -> u
+    java.lang.String mTag -> v
+    boolean mHidden -> w
+    boolean mDetached -> x
+    boolean mRetainInstance -> y
+    boolean mRetaining -> z
+    boolean mHasMenu -> A
+    boolean mMenuVisible -> B
+    boolean mCalled -> C
+    int mNextAnim -> D
+    android.view.ViewGroup mContainer -> E
+    android.view.View mView -> F
+    android.view.View mInnerView -> G
+    boolean mDeferStart -> H
+    boolean mUserVisibleHint -> I
+    android.support.v4.app.LoaderManagerImpl mLoaderManager -> J
+    boolean mLoadersStarted -> M
+    boolean mCheckedForLoaderManager -> N
+    android.support.v4.app.Fragment instantiate(android.content.Context,java.lang.String) -> a
+    android.support.v4.app.Fragment instantiate(android.content.Context,java.lang.String,android.os.Bundle) -> a
+    void restoreViewState() -> a
+    void setIndex(int) -> a
+    boolean isInBackStack() -> b
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+    java.lang.String toString() -> toString
+    android.support.v4.app.FragmentActivity getActivity() -> c
+    android.content.res.Resources getResources() -> d
+    java.lang.String getString(int) -> b
+    boolean isAdded() -> y
+    boolean isVisible() -> e
+    void onHiddenChanged$1385ff() -> f
+    void setHasOptionsMenu(boolean) -> a
+    void startActivity(android.content.Intent) -> a
+    void startActivityForResult(android.content.Intent,int) -> a
+    void onActivityResult$6eb84b52() -> g
+    android.view.LayoutInflater getLayoutInflater$2ee30c11() -> h
+    void onInflate$423a76cd() -> i
+    void onAttach(android.app.Activity) -> a
+    android.view.animation.Animation onCreateAnimation$24236ca7() -> j
+    void onCreate(android.os.Bundle) -> a
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onViewCreated$65f1d89() -> k
+    void onActivityCreated$79e5e33f() -> l
+    void onResume() -> m
+    void onSaveInstanceState(android.os.Bundle) -> b
+    void onConfigurationChanged(android.content.res.Configuration) -> onConfigurationChanged
+    void onPause() -> n
+    void onLowMemory() -> onLowMemory
+    void onDestroy() -> o
+    void initState() -> p
+    void onDetach() -> q
+    void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
+    void onPrepareOptionsMenu(android.view.Menu) -> a
+    void onDestroyOptionsMenu() -> r
+    boolean onOptionsItemSelected(android.view.MenuItem) -> a
+    void onOptionsMenuClosed$1eec55bd() -> s
+    void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
+    boolean onContextItemSelected$1b88ab4c() -> t
+    void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
+    void performStart() -> u
+    void performStop() -> v
+    void performReallyStop() -> w
+    void performDestroyView() -> x
+android.support.v4.app.Fragment$InstantiationException -> f:
+android.support.v4.app.FragmentActivity -> android.support.v4.app.FragmentActivity:
+    android.os.Handler mHandler -> a
+    android.support.v4.app.FragmentManagerImpl mFragments -> b
+    boolean mCreated -> e
+    boolean mResumed -> f
+    boolean mStopped -> c
+    boolean mReallyStopped -> g
+    boolean mRetaining -> d
+    boolean mOptionsMenuInvalidated -> h
+    boolean mCheckedForLoaderManager -> i
+    boolean mLoadersStarted -> j
+    android.support.v4.util.SparseArrayCompat mAllLoaderManagers -> k
+    android.support.v4.app.LoaderManagerImpl mLoaderManager -> l
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    void onBackPressed() -> onBackPressed
+    void onConfigurationChanged(android.content.res.Configuration) -> onConfigurationChanged
+    void onCreate(android.os.Bundle) -> onCreate
+    boolean onCreatePanelMenu(int,android.view.Menu) -> onCreatePanelMenu
+    android.view.View onCreateView(java.lang.String,android.content.Context,android.util.AttributeSet) -> onCreateView
+    void onDestroy() -> onDestroy
+    boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
+    void onLowMemory() -> onLowMemory
+    boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
+    void onPanelClosed(int,android.view.Menu) -> onPanelClosed
+    void onPause() -> onPause
+    void onResume() -> onResume
+    void onPostResume() -> onPostResume
+    void onResumeFragments() -> a
+    boolean onPreparePanel(int,android.view.View,android.view.Menu) -> onPreparePanel
+    java.lang.Object onRetainNonConfigurationInstance() -> onRetainNonConfigurationInstance
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onStart() -> onStart
+    void onStop() -> onStop
+    void supportInvalidateOptionsMenu() -> b
+    void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> dump
+    void doReallyStop(boolean) -> a
+    void onAttachFragment$65850823() -> c
+    void startActivityForResult(android.content.Intent,int) -> startActivityForResult
+    void startActivityFromFragment(android.support.v4.app.Fragment,android.content.Intent,int) -> a
+    void invalidateSupportFragmentIndex(int) -> a
+    android.support.v4.app.LoaderManagerImpl getLoaderManager(int,boolean,boolean) -> a
+android.support.v4.app.FragmentActivity$1 -> g:
+    android.support.v4.app.FragmentActivity this$0 -> a
+    void handleMessage(android.os.Message) -> handleMessage
+android.support.v4.app.FragmentActivity$FragmentTag -> h:
+    int[] Fragment -> a
+android.support.v4.app.FragmentActivity$NonConfigurationInstances -> i:
+    java.util.ArrayList fragments -> a
+    android.support.v4.util.SparseArrayCompat loaders -> b
+    java.security.MessageDigest getDigest(java.lang.String) -> a
+    java.lang.String md5Hex(java.lang.String) -> b
+android.support.v4.app.FragmentManager -> j:
+    android.support.v4.app.FragmentTransaction beginTransaction() -> a
+    boolean executePendingTransactions() -> b
+    android.support.v4.app.Fragment findFragmentByTag(java.lang.String) -> a
+    boolean popBackStackImmediate() -> c
+android.support.v4.app.FragmentManager$OnBackStackChangedListener -> k:
+    com.parse.ParseFieldOperation decode$2b0f4984() -> a
+android.support.v4.app.FragmentManagerImpl -> l:
+    boolean DEBUG -> a
+    boolean HONEYCOMB -> f
+    java.util.ArrayList mPendingActions -> g
+    java.lang.Runnable[] mTmpActions -> h
+    boolean mExecutingActions -> i
+    java.util.ArrayList mActive -> b
+    java.util.ArrayList mAdded -> c
+    java.util.ArrayList mAvailIndices -> j
+    java.util.ArrayList mBackStack -> k
+    java.util.ArrayList mCreatedMenus -> l
+    java.util.ArrayList mBackStackIndices -> m
+    java.util.ArrayList mAvailBackStackIndices -> n
+    int mCurState -> d
+    android.support.v4.app.FragmentActivity mActivity -> o
+    boolean mNeedMenuInvalidate -> p
+    boolean mStateSaved -> q
+    boolean mDestroyed -> r
+    java.lang.String mNoTransactionsBecause -> e
+    boolean mHavePendingDeferredStart -> s
+    android.os.Bundle mStateBundle -> t
+    android.util.SparseArray mStateArray -> u
+    java.lang.Runnable mExecCommit -> v
+    android.view.animation.Interpolator DECELERATE_QUINT -> w
+    android.view.animation.Interpolator DECELERATE_CUBIC -> x
+    android.support.v4.app.FragmentTransaction beginTransaction() -> a
+    boolean executePendingTransactions() -> b
+    boolean popBackStackImmediate() -> c
+    java.lang.String toString() -> toString
+    void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
+    android.view.animation.Animation makeOpenCloseAnimation$376f30fd(float,float,float,float) -> a
+    android.view.animation.Animation makeFadeAnimation$424ea1bd(float,float) -> a
+    android.view.animation.Animation loadAnimation(android.support.v4.app.Fragment,int,boolean,int) -> a
+    void moveToState(android.support.v4.app.Fragment,int,int,int,boolean) -> a
+    void moveToState(android.support.v4.app.Fragment) -> a
+    void moveToState(int,boolean) -> a
+    void moveToState(int,int,int,boolean) -> a
+    void startPendingDeferredFragments() -> q
+    void addFragment(android.support.v4.app.Fragment,boolean) -> a
+    void removeFragment(android.support.v4.app.Fragment,int,int) -> a
+    void hideFragment(android.support.v4.app.Fragment,int,int) -> b
+    void showFragment(android.support.v4.app.Fragment,int,int) -> c
+    void detachFragment(android.support.v4.app.Fragment,int,int) -> d
+    void attachFragment(android.support.v4.app.Fragment,int,int) -> e
+    android.support.v4.app.Fragment findFragmentById(int) -> a
+    android.support.v4.app.Fragment findFragmentByTag(java.lang.String) -> a
+    void checkStateLoss() -> r
+    void enqueueAction(java.lang.Runnable,boolean) -> a
+    int allocBackStackIndex(android.support.v4.app.BackStackRecord) -> a
+    void setBackStackIndex(int,android.support.v4.app.BackStackRecord) -> a
+    void freeBackStackIndex(int) -> b
+    boolean execPendingActions() -> d
+    void addBackStackState(android.support.v4.app.BackStackRecord) -> b
+    java.util.ArrayList retainNonConfig() -> e
+    void saveFragmentViewState(android.support.v4.app.Fragment) -> b
+    android.os.Parcelable saveAllState() -> f
+    void restoreAllState(android.os.Parcelable,java.util.ArrayList) -> a
+    void attachActivity(android.support.v4.app.FragmentActivity) -> a
+    void noteStateNotSaved() -> g
+    void dispatchCreate() -> h
+    void dispatchActivityCreated() -> i
+    void dispatchStart() -> j
+    void dispatchResume() -> k
+    void dispatchPause() -> l
+    void dispatchStop() -> m
+    void dispatchReallyStop() -> n
+    void dispatchDestroy() -> o
+    void dispatchConfigurationChanged(android.content.res.Configuration) -> a
+    void dispatchLowMemory() -> p
+    boolean dispatchCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
+    boolean dispatchPrepareOptionsMenu(android.view.Menu) -> a
+    boolean dispatchOptionsItemSelected(android.view.MenuItem) -> a
+    boolean dispatchContextItemSelected(android.view.MenuItem) -> b
+    void dispatchOptionsMenuClosed(android.view.Menu) -> b
+    int reverseTransit(int) -> c
+android.support.v4.app.FragmentManagerImpl$1 -> m:
+    android.support.v4.app.FragmentManagerImpl this$0 -> a
+    void run() -> run
+android.support.v4.app.FragmentManagerImpl$5 -> n:
+    android.support.v4.app.Fragment val$fragment -> a
+    android.support.v4.app.FragmentManagerImpl this$0 -> b
+    void onAnimationEnd(android.view.animation.Animation) -> onAnimationEnd
+    void onAnimationRepeat(android.view.animation.Animation) -> onAnimationRepeat
+    void onAnimationStart(android.view.animation.Animation) -> onAnimationStart
+android.support.v4.app.FragmentManagerState -> o:
+    android.support.v4.app.FragmentState[] mActive -> a
+    int[] mAdded -> b
+    android.support.v4.app.BackStackState[] mBackStack -> c
+    android.os.Parcelable$Creator CREATOR -> CREATOR
+    int describeContents() -> describeContents
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+android.support.v4.app.FragmentManagerState$1 -> p:
+    java.lang.Object[] newArray(int) -> newArray
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+android.support.v4.app.FragmentState -> q:
+    java.lang.String mClassName -> c
+    int mIndex -> d
+    boolean mFromLayout -> e
+    int mFragmentId -> f
+    int mContainerId -> g
+    java.lang.String mTag -> h
+    boolean mRetainInstance -> i
+    boolean mDetached -> j
+    android.os.Bundle mArguments -> k
+    android.os.Bundle mSavedFragmentState -> a
+    android.support.v4.app.Fragment mInstance -> b
+    android.os.Parcelable$Creator CREATOR -> CREATOR
+    android.support.v4.app.Fragment instantiate(android.support.v4.app.FragmentActivity) -> a
+    int describeContents() -> describeContents
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+android.support.v4.app.FragmentState$1 -> r:
+    java.lang.Object[] newArray(int) -> newArray
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+android.support.v4.app.FragmentTransaction -> s:
+    android.support.v4.app.FragmentTransaction replace(int,android.support.v4.app.Fragment,java.lang.String) -> a
+    android.support.v4.app.FragmentTransaction remove(android.support.v4.app.Fragment) -> a
+    android.support.v4.app.FragmentTransaction show(android.support.v4.app.Fragment) -> b
+    boolean isEmpty() -> b
+    android.support.v4.app.FragmentTransaction addToBackStack(java.lang.String) -> a
+    int commit() -> a
+android.support.v4.app.LoaderManager -> t:
+    boolean hasRunningLoaders() -> a
+android.support.v4.app.LoaderManagerImpl -> u:
+    boolean DEBUG -> a
+    android.support.v4.util.SparseArrayCompat mLoaders -> d
+    android.support.v4.util.SparseArrayCompat mInactiveLoaders -> e
+    android.support.v4.app.FragmentActivity mActivity -> b
+    boolean mStarted -> f
+    boolean mRetaining -> c
+    void updateActivity(android.support.v4.app.FragmentActivity) -> a
+    void doStart() -> b
+    void doStop() -> c
+    void doRetain() -> d
+    void finishRetain() -> e
+    void doReportNextStart() -> f
+    void doReportStart() -> g
+    void doDestroy() -> h
+    java.lang.String toString() -> toString
+    void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
+    boolean hasRunningLoaders() -> a
+android.support.v4.app.LoaderManagerImpl$LoaderInfo -> v:
+    int mId -> a
+    android.os.Bundle mArgs -> j
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener mCallbacks$641e715d -> b
+    android.support.v4.content.Loader mLoader -> c
+    boolean mHaveData -> k
+    boolean mDeliveredData -> d
+    java.lang.Object mData -> l
+    boolean mStarted -> e
+    boolean mRetaining -> f
+    boolean mRetainingStarted -> g
+    boolean mReportNextStart -> h
+    boolean mDestroyed -> m
+    boolean mListenerRegistered -> i
+    void stop() -> a
+    void destroy() -> b
+    java.lang.String toString() -> toString
+    void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
+android.support.v4.app.NoSaveStateFrameLayout -> w:
+    android.view.ViewGroup wrap(android.view.View) -> a
+    void dispatchSaveInstanceState(android.util.SparseArray) -> dispatchSaveInstanceState
+    void dispatchRestoreInstanceState(android.util.SparseArray) -> dispatchRestoreInstanceState
+android.support.v4.app.SuperNotCalledException -> x:
+android.support.v4.content.Loader -> y:
+    int mId -> a
+    android.support.v4.content.Loader$OnLoadCompleteListener mListener -> b
+    boolean mStarted -> c
+    boolean mAbandoned -> d
+    boolean mReset -> e
+    boolean mContentChanged -> f
+    void unregisterListener(android.support.v4.content.Loader$OnLoadCompleteListener) -> a
+    java.lang.String toString() -> toString
+android.support.v4.content.Loader$OnLoadCompleteListener -> z:
+android.support.v4.content.LocalBroadcastManager -> A:
+    android.content.Context mAppContext -> a
+    java.util.HashMap mReceivers -> b
+    java.util.HashMap mActions -> c
+    java.util.ArrayList mPendingBroadcasts -> d
+    android.os.Handler mHandler -> e
+    java.lang.Object mLock -> f
+    android.support.v4.content.LocalBroadcastManager mInstance -> g
+    android.support.v4.content.LocalBroadcastManager getInstance(android.content.Context) -> a
+    void registerReceiver(android.content.BroadcastReceiver,android.content.IntentFilter) -> a
+    void unregisterReceiver(android.content.BroadcastReceiver) -> a
+    boolean sendBroadcast(android.content.Intent) -> a
+    void access$000(android.support.v4.content.LocalBroadcastManager) -> a
+android.support.v4.content.LocalBroadcastManager$1 -> B:
+    android.support.v4.content.LocalBroadcastManager this$0 -> a
+    void handleMessage(android.os.Message) -> handleMessage
+android.support.v4.content.LocalBroadcastManager$BroadcastRecord -> C:
+    android.content.Intent intent -> a
+    java.util.ArrayList receivers -> b
+android.support.v4.content.LocalBroadcastManager$ReceiverRecord -> D:
+    android.content.IntentFilter filter -> a
+    android.content.BroadcastReceiver receiver -> b
+    boolean broadcasting -> c
+    java.lang.String toString() -> toString
+android.support.v4.os.ParcelableCompat$CompatCreator -> E:
+    android.support.v4.os.ParcelableCompatCreatorCallbacks mCallbacks -> a
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+    java.lang.Object[] newArray(int) -> newArray
+android.support.v4.os.ParcelableCompatCreatorCallbacks -> F:
+    java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
+    java.lang.Object[] newArray(int) -> a
+android.support.v4.os.ParcelableCompatCreatorHoneycombMR2 -> G:
+    android.support.v4.os.ParcelableCompatCreatorCallbacks mCallbacks -> a
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+    java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> createFromParcel
+    java.lang.Object[] newArray(int) -> newArray
+android.support.v4.util.LogWriter -> H:
+    java.lang.String mTag -> a
+    java.lang.StringBuilder mBuilder -> b
+    void close() -> close
+    void flush() -> flush
+    void write(char[],int,int) -> write
+    void flushBuilder() -> a
+android.support.v4.util.SparseArrayCompat -> I:
+    java.lang.Object DELETED -> a
+    boolean mGarbage -> b
+    int[] mKeys -> c
+    java.lang.Object[] mValues -> d
+    int mSize -> e
+    java.lang.Object get(int) -> a
+    void remove(int) -> b
+    void removeAt(int) -> c
+    void gc() -> c
+    int size() -> a
+    int keyAt(int) -> d
+    java.lang.Object valueAt(int) -> e
+    void clear() -> b
+    int binarySearch(int[],int,int,int) -> a
+    int idealIntArraySize(int) -> f
+android.support.v4.view.AccessibilityDelegateCompat -> J:
+    android.support.v4.view.AccessibilityDelegateCompat$AccessibilityDelegateImpl IMPL -> a
+    java.lang.Object DEFAULT_DELEGATE -> b
+    java.lang.Object mBridge -> c
+    java.lang.Object getBridge() -> a
+    void sendAccessibilityEvent(android.view.View,int) -> a
+    void sendAccessibilityEventUnchecked(android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    boolean dispatchPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> b
+    void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> c
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+    void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat) -> a
+    boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompat getAccessibilityNodeProvider(android.view.View) -> a
+    boolean performAccessibilityAction(android.view.View,int,android.os.Bundle) -> a
+android.support.v4.view.AccessibilityDelegateCompat$AccessibilityDelegateIcsImpl -> K:
+    java.lang.Object newAccessiblityDelegateDefaultImpl() -> a
+    java.lang.Object newAccessiblityDelegateBridge(android.support.v4.view.AccessibilityDelegateCompat) -> a
+    boolean dispatchPopulateAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void onInitializeAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> b
+    void onInitializeAccessibilityNodeInfo(java.lang.Object,android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat) -> a
+    void onPopulateAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> c
+    boolean onRequestSendAccessibilityEvent(java.lang.Object,android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void sendAccessibilityEvent(java.lang.Object,android.view.View,int) -> a
+    void sendAccessibilityEventUnchecked(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+android.support.v4.view.AccessibilityDelegateCompat$AccessibilityDelegateImpl -> L:
+    java.lang.Object newAccessiblityDelegateDefaultImpl() -> a
+    java.lang.Object newAccessiblityDelegateBridge(android.support.v4.view.AccessibilityDelegateCompat) -> a
+    boolean dispatchPopulateAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void onInitializeAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> b
+    void onInitializeAccessibilityNodeInfo(java.lang.Object,android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat) -> a
+    void onPopulateAccessibilityEvent(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> c
+    boolean onRequestSendAccessibilityEvent(java.lang.Object,android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void sendAccessibilityEvent(java.lang.Object,android.view.View,int) -> a
+    void sendAccessibilityEventUnchecked(java.lang.Object,android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompat getAccessibilityNodeProvider(java.lang.Object,android.view.View) -> a
+    boolean performAccessibilityAction(java.lang.Object,android.view.View,int,android.os.Bundle) -> a
+android.support.v4.view.AccessibilityDelegateCompat$AccessibilityDelegateJellyBeanImpl -> M:
+    java.lang.Object newAccessiblityDelegateBridge(android.support.v4.view.AccessibilityDelegateCompat) -> a
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompat getAccessibilityNodeProvider(java.lang.Object,android.view.View) -> a
+    boolean performAccessibilityAction(java.lang.Object,android.view.View,int,android.os.Bundle) -> a
+android.support.v4.view.AccessibilityDelegateCompatIcs$1 -> N:
+    android.support.v4.view.AccessibilityDelegateCompatIcs$AccessibilityDelegateBridge val$bridge -> a
+    boolean dispatchPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> dispatchPopulateAccessibilityEvent
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> onInitializeAccessibilityEvent
+    void onInitializeAccessibilityNodeInfo(android.view.View,android.view.accessibility.AccessibilityNodeInfo) -> onInitializeAccessibilityNodeInfo
+    void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> onPopulateAccessibilityEvent
+    boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> onRequestSendAccessibilityEvent
+    void sendAccessibilityEvent(android.view.View,int) -> sendAccessibilityEvent
+    void sendAccessibilityEventUnchecked(android.view.View,android.view.accessibility.AccessibilityEvent) -> sendAccessibilityEventUnchecked
+android.support.v4.view.AccessibilityDelegateCompatIcs$AccessibilityDelegateBridge -> O:
+    android.support.v4.view.AccessibilityDelegateCompat val$compat -> a
+    boolean dispatchPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> b
+    void onInitializeAccessibilityNodeInfo(android.view.View,java.lang.Object) -> a
+    void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> c
+    boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void sendAccessibilityEvent(android.view.View,int) -> a
+    void sendAccessibilityEventUnchecked(android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+android.support.v4.view.AccessibilityDelegateCompatJellyBean$1 -> P:
+    android.support.v4.view.AccessibilityDelegateCompatJellyBean$AccessibilityDelegateBridgeJellyBean val$bridge -> a
+    boolean dispatchPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> dispatchPopulateAccessibilityEvent
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> onInitializeAccessibilityEvent
+    void onInitializeAccessibilityNodeInfo(android.view.View,android.view.accessibility.AccessibilityNodeInfo) -> onInitializeAccessibilityNodeInfo
+    void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> onPopulateAccessibilityEvent
+    boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> onRequestSendAccessibilityEvent
+    void sendAccessibilityEvent(android.view.View,int) -> sendAccessibilityEvent
+    void sendAccessibilityEventUnchecked(android.view.View,android.view.accessibility.AccessibilityEvent) -> sendAccessibilityEventUnchecked
+    android.view.accessibility.AccessibilityNodeProvider getAccessibilityNodeProvider(android.view.View) -> getAccessibilityNodeProvider
+    boolean performAccessibilityAction(android.view.View,int,android.os.Bundle) -> performAccessibilityAction
+android.support.v4.view.AccessibilityDelegateCompatJellyBean$AccessibilityDelegateBridgeJellyBean -> Q:
+    android.support.v4.view.AccessibilityDelegateCompat val$compat -> a
+    boolean dispatchPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> b
+    void onInitializeAccessibilityNodeInfo(android.view.View,java.lang.Object) -> a
+    void onPopulateAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> c
+    boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent) -> a
+    void sendAccessibilityEvent(android.view.View,int) -> a
+    void sendAccessibilityEventUnchecked(android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+    java.lang.Object getAccessibilityNodeProvider(android.view.View) -> a
+    boolean performAccessibilityAction(android.view.View,int,android.os.Bundle) -> a
+android.support.v4.view.KeyEventCompat -> R:
+    android.support.v4.view.KeyEventCompat$KeyEventVersionImpl IMPL -> a
+    boolean hasModifiers(android.view.KeyEvent,int) -> a
+    boolean hasNoModifiers(android.view.KeyEvent) -> a
+android.support.v4.view.KeyEventCompat$BaseKeyEventVersionImpl -> S:
+    int metaStateFilterDirectionalModifiers(int,int,int,int,int) -> a
+    int normalizeMetaState(int) -> b
+    boolean metaStateHasModifiers(int,int) -> a
+    boolean metaStateHasNoModifiers(int) -> a
+android.support.v4.view.KeyEventCompat$HoneycombKeyEventVersionImpl -> T:
+    boolean metaStateHasModifiers(int,int) -> a
+    boolean metaStateHasNoModifiers(int) -> a
+android.support.v4.view.KeyEventCompat$KeyEventVersionImpl -> U:
+    boolean metaStateHasModifiers(int,int) -> a
+    boolean metaStateHasNoModifiers(int) -> a
+android.support.v4.view.MotionEventCompat -> V:
+    android.support.v4.view.MotionEventCompat$MotionEventVersionImpl IMPL -> a
+    int getActionIndex(android.view.MotionEvent) -> a
+    int findPointerIndex(android.view.MotionEvent,int) -> a
+    int getPointerId(android.view.MotionEvent,int) -> b
+    float getX(android.view.MotionEvent,int) -> c
+    float getY(android.view.MotionEvent,int) -> d
+android.support.v4.view.MotionEventCompat$BaseMotionEventVersionImpl -> W:
+    int findPointerIndex(android.view.MotionEvent,int) -> a
+    int getPointerId(android.view.MotionEvent,int) -> b
+    float getX(android.view.MotionEvent,int) -> c
+    float getY(android.view.MotionEvent,int) -> d
+android.support.v4.view.MotionEventCompat$EclairMotionEventVersionImpl -> X:
+    int findPointerIndex(android.view.MotionEvent,int) -> a
+    int getPointerId(android.view.MotionEvent,int) -> b
+    float getX(android.view.MotionEvent,int) -> c
+    float getY(android.view.MotionEvent,int) -> d
+android.support.v4.view.MotionEventCompat$MotionEventVersionImpl -> Y:
+    int findPointerIndex(android.view.MotionEvent,int) -> a
+    int getPointerId(android.view.MotionEvent,int) -> b
+    float getX(android.view.MotionEvent,int) -> c
+    float getY(android.view.MotionEvent,int) -> d
+android.support.v4.view.PagerAdapter -> Z:
+    int getCount() -> a
+    void destroyItem(android.view.ViewGroup,int,java.lang.Object) -> a
+    boolean isViewFromObject$171eb1dd() -> b
+android.support.v4.view.PagerTabStrip -> android.support.v4.view.PagerTabStrip:
+    int mIndicatorColor -> f
+    int mIndicatorHeight -> g
+    int mMinPaddingBottom -> h
+    int mMinTextSpacing -> i
+    int mMinStripHeight -> j
+    int mTabPadding -> k
+    android.graphics.Paint mTabPaint -> l
+    android.graphics.Rect mTempRect -> m
+    int mTabAlpha -> n
+    boolean mDrawFullUnderline -> o
+    boolean mDrawFullUnderlineSet -> p
+    int mFullUnderlineHeight -> q
+    boolean mIgnoreTap -> r
+    float mInitialMotionX -> s
+    float mInitialMotionY -> t
+    int mTouchSlop -> u
+    void setTabIndicatorColor(int) -> setTabIndicatorColor
+    void setTabIndicatorColorResource(int) -> setTabIndicatorColorResource
+    int getTabIndicatorColor() -> getTabIndicatorColor
+    void setPadding(int,int,int,int) -> setPadding
+    void setTextSpacing(int) -> setTextSpacing
+    void setBackgroundDrawable(android.graphics.drawable.Drawable) -> setBackgroundDrawable
+    void setBackgroundColor(int) -> setBackgroundColor
+    void setBackgroundResource(int) -> setBackgroundResource
+    void setDrawFullUnderline(boolean) -> setDrawFullUnderline
+    boolean getDrawFullUnderline() -> getDrawFullUnderline
+    int getMinHeight() -> getMinHeight
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+    void onDraw(android.graphics.Canvas) -> onDraw
+    void updateTextPositions(int,float,boolean) -> a
+android.support.v4.view.PagerTabStrip$1 -> aa:
+    android.support.v4.view.PagerTabStrip this$0 -> a
+    void onClick(android.view.View) -> onClick
+android.support.v4.view.PagerTabStrip$2 -> ab:
+    android.support.v4.view.PagerTabStrip this$0 -> a
+    void onClick(android.view.View) -> onClick
+android.support.v4.view.PagerTitleStrip -> android.support.v4.view.PagerTitleStrip:
+    android.support.v4.view.ViewPager mPager -> a
+    android.widget.TextView mPrevText -> b
+    android.widget.TextView mCurrText -> c
+    android.widget.TextView mNextText -> d
+    int mLastKnownCurrentPage -> f
+    float mLastKnownPositionOffset -> g
+    int mScaledTextSpacing -> h
+    int mGravity -> i
+    boolean mUpdatingText -> j
+    boolean mUpdatingPositions -> k
+    android.support.v4.view.PagerTitleStrip$PageListener mPageListener -> l
+    int[] ATTRS -> m
+    int[] TEXT_ATTRS -> n
+    int mNonPrimaryAlpha -> o
+    int mTextColor -> e
+    android.support.v4.view.PagerTitleStrip$PagerTitleStripImpl IMPL -> p
+    void setSingleLineAllCaps(android.widget.TextView) -> setSingleLineAllCaps
+    void setTextSpacing(int) -> setTextSpacing
+    int getTextSpacing() -> getTextSpacing
+    void setNonPrimaryAlpha(float) -> setNonPrimaryAlpha
+    void setTextColor(int) -> setTextColor
+    void setGravity(int) -> setGravity
+    void onAttachedToWindow() -> onAttachedToWindow
+    void onDetachedFromWindow() -> onDetachedFromWindow
+    void updateText(int,android.support.v4.view.PagerAdapter) -> a
+    void requestLayout() -> requestLayout
+    void updateAdapter(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter) -> a
+    void updateTextPositions(int,float,boolean) -> a
+    void onMeasure(int,int) -> onMeasure
+    void onLayout(boolean,int,int,int,int) -> onLayout
+    int getMinHeight() -> getMinHeight
+android.support.v4.view.PagerTitleStrip$PageListener -> ac:
+    int mScrollState -> a
+    android.support.v4.view.PagerTitleStrip this$0 -> b
+    void onPageScrolled$486775f1(int,float) -> a
+    void onPageSelected$13462e() -> a
+    void onPageScrollStateChanged(int) -> a
+    void onAdapterChanged(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter) -> a
+    void onChanged() -> onChanged
+android.support.v4.view.PagerTitleStrip$PagerTitleStripImpl -> ad:
+    void setSingleLineAllCaps(android.widget.TextView) -> a
+android.support.v4.view.PagerTitleStrip$PagerTitleStripImplBase -> ae:
+    void setSingleLineAllCaps(android.widget.TextView) -> a
+android.support.v4.view.PagerTitleStrip$PagerTitleStripImplIcs -> af:
+    void setSingleLineAllCaps(android.widget.TextView) -> a
+android.support.v4.view.PagerTitleStripIcs$SingleLineAllCapsTransform -> ag:
+    java.util.Locale mLocale -> a
+    java.lang.CharSequence getTransformation(java.lang.CharSequence,android.view.View) -> getTransformation
+android.support.v4.view.VelocityTrackerCompat -> ah:
+    android.support.v4.view.VelocityTrackerCompat$VelocityTrackerVersionImpl IMPL -> a
+    float getXVelocity(android.view.VelocityTracker,int) -> a
+android.support.v4.view.VelocityTrackerCompat$BaseVelocityTrackerVersionImpl -> ai:
+    float getXVelocity(android.view.VelocityTracker,int) -> a
+android.support.v4.view.VelocityTrackerCompat$HoneycombVelocityTrackerVersionImpl -> aj:
+    float getXVelocity(android.view.VelocityTracker,int) -> a
+android.support.v4.view.VelocityTrackerCompat$VelocityTrackerVersionImpl -> ak:
+    float getXVelocity(android.view.VelocityTracker,int) -> a
+android.support.v4.view.ViewCompat -> al:
+    android.support.v4.view.ViewCompat$ViewCompatImpl IMPL -> a
+    boolean canScrollHorizontally(android.view.View,int) -> a
+    int getOverScrollMode(android.view.View) -> a
+    void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat) -> a
+    void postInvalidateOnAnimation(android.view.View) -> b
+    int getImportantForAccessibility(android.view.View) -> c
+    void setImportantForAccessibility(android.view.View,int) -> b
+android.support.v4.view.ViewCompat$GBViewCompatImpl -> am:
+    int getOverScrollMode(android.view.View) -> a
+android.support.v4.view.ViewCompat$HCViewCompatImpl -> an:
+    long getFrameTime() -> a
+android.support.v4.view.ViewCompat$ICSViewCompatImpl -> ao:
+    boolean canScrollHorizontally(android.view.View,int) -> a
+    void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat) -> a
+android.support.v4.view.ViewCompat$JBViewCompatImpl -> ap:
+    void postInvalidateOnAnimation(android.view.View) -> b
+    int getImportantForAccessibility(android.view.View) -> c
+    void setImportantForAccessibility(android.view.View,int) -> b
+android.support.v4.view.ViewCompat$ViewCompatImpl -> aq:
+    boolean canScrollHorizontally(android.view.View,int) -> a
+    int getOverScrollMode(android.view.View) -> a
+    void setAccessibilityDelegate(android.view.View,android.support.v4.view.AccessibilityDelegateCompat) -> a
+    void postInvalidateOnAnimation(android.view.View) -> b
+    int getImportantForAccessibility(android.view.View) -> c
+    void setImportantForAccessibility(android.view.View,int) -> b
+    long getFrameTime() -> a
+android.support.v4.view.ViewConfigurationCompat -> ar:
+    android.support.v4.view.ViewConfigurationCompat$ViewConfigurationVersionImpl IMPL -> a
+    int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$BaseViewConfigurationVersionImpl -> as:
+    int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$FroyoViewConfigurationVersionImpl -> at:
+    int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$ViewConfigurationVersionImpl -> au:
+    int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
+    int[] LAYOUT_ATTRS -> a
+    java.util.Comparator COMPARATOR -> b
+    android.view.animation.Interpolator sInterpolator -> c
+    java.util.ArrayList mItems -> d
+    android.support.v4.view.ViewPager$ItemInfo mTempItem -> e
+    android.graphics.Rect mTempRect -> f
+    android.support.v4.view.PagerAdapter mAdapter -> g
+    int mCurItem -> h
+    int mRestoredCurItem -> i
+    android.os.Parcelable mRestoredAdapterState -> j
+    java.lang.ClassLoader mRestoredClassLoader -> k
+    android.widget.Scroller mScroller -> l
+    android.support.v4.view.ViewPager$PagerObserver mObserver -> m
+    int mPageMargin -> n
+    android.graphics.drawable.Drawable mMarginDrawable -> o
+    int mTopPageBounds -> p
+    int mBottomPageBounds -> q
+    float mFirstOffset -> r
+    float mLastOffset -> s
+    int mChildHeightMeasureSpec -> t
+    boolean mInLayout -> u
+    boolean mScrollingCacheEnabled -> v
+    boolean mPopulatePending -> w
+    int mOffscreenPageLimit -> x
+    boolean mIsBeingDragged -> y
+    boolean mIsUnableToDrag -> z
+    int mDefaultGutterSize -> A
+    int mGutterSize -> B
+    int mTouchSlop -> C
+    float mInitialMotionX -> D
+    float mLastMotionX -> E
+    float mLastMotionY -> F
+    int mActivePointerId -> G
+    android.view.VelocityTracker mVelocityTracker -> H
+    int mMinimumVelocity -> I
+    int mMaximumVelocity -> J
+    int mFlingDistance -> K
+    int mCloseEnough -> L
+    android.support.v4.widget.EdgeEffectCompat mLeftEdge -> M
+    android.support.v4.widget.EdgeEffectCompat mRightEdge -> N
+    boolean mFirstLayout -> O
+    boolean mCalledSuper -> P
+    int mDecorChildCount -> Q
+    android.support.v4.view.ViewPager$OnPageChangeListener mOnPageChangeListener -> R
+    android.support.v4.view.ViewPager$OnPageChangeListener mInternalPageChangeListener -> S
+    android.support.v4.view.ViewPager$OnAdapterChangeListener mAdapterChangeListener -> T
+    int mScrollState -> U
+    void setScrollState(int) -> setScrollState
+    void setAdapter(android.support.v4.view.PagerAdapter) -> setAdapter
+    android.support.v4.view.PagerAdapter getAdapter() -> getAdapter
+    void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener) -> setOnAdapterChangeListener
+    void setCurrentItem(int) -> setCurrentItem
+    void setCurrentItem(int,boolean) -> a
+    int getCurrentItem() -> getCurrentItem
+    void setCurrentItemInternal(int,boolean,boolean) -> a
+    void setCurrentItemInternal(int,boolean,boolean,int) -> a
+    void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener) -> setOnPageChangeListener
+    android.support.v4.view.ViewPager$OnPageChangeListener setInternalPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener) -> a
+    int getOffscreenPageLimit() -> getOffscreenPageLimit
+    void setOffscreenPageLimit(int) -> setOffscreenPageLimit
+    void setPageMargin(int) -> setPageMargin
+    int getPageMargin() -> getPageMargin
+    void setPageMarginDrawable(android.graphics.drawable.Drawable) -> setPageMarginDrawable
+    void setPageMarginDrawable(int) -> setPageMarginDrawable
+    boolean verifyDrawable(android.graphics.drawable.Drawable) -> verifyDrawable
+    void drawableStateChanged() -> drawableStateChanged
+    android.support.v4.view.ViewPager$ItemInfo addNewItem(int,int) -> a
+    void dataSetChanged() -> a
+    void populate() -> c
+    void populate(int) -> a
+    android.os.Parcelable onSaveInstanceState() -> onSaveInstanceState
+    void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
+    void addView(android.view.View,int,android.view.ViewGroup$LayoutParams) -> addView
+    android.support.v4.view.ViewPager$ItemInfo infoForChild(android.view.View) -> a
+    android.support.v4.view.ViewPager$ItemInfo infoForPosition(int) -> b
+    void onAttachedToWindow() -> onAttachedToWindow
+    void onMeasure(int,int) -> onMeasure
+    void onSizeChanged(int,int,int,int) -> onSizeChanged
+    void recomputeScrollPosition(int,int,int,int) -> a
+    void onLayout(boolean,int,int,int,int) -> onLayout
+    void computeScroll() -> computeScroll
+    boolean pageScrolled(int) -> c
+    void onPageScrolled(int,float,int) -> a
+    void completeScroll() -> d
+    boolean onInterceptTouchEvent(android.view.MotionEvent) -> onInterceptTouchEvent
+    boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
+    boolean performDrag(float) -> a
+    android.support.v4.view.ViewPager$ItemInfo infoForCurrentScrollPosition() -> e
+    void draw(android.graphics.Canvas) -> draw
+    void onDraw(android.graphics.Canvas) -> onDraw
+    void onSecondaryPointerUp(android.view.MotionEvent) -> a
+    void endDrag() -> f
+    void setScrollingCacheEnabled(boolean) -> setScrollingCacheEnabled
+    boolean canScroll(android.view.View,boolean,int,int,int) -> a
+    boolean dispatchKeyEvent(android.view.KeyEvent) -> dispatchKeyEvent
+    boolean arrowScroll(int) -> d
+    android.graphics.Rect getChildRectInPagerCoordinates(android.graphics.Rect,android.view.View) -> a
+    boolean pageLeft() -> g
+    boolean pageRight() -> h
+    void addFocusables(java.util.ArrayList,int,int) -> addFocusables
+    void addTouchables(java.util.ArrayList) -> addTouchables
+    boolean onRequestFocusInDescendants(int,android.graphics.Rect) -> onRequestFocusInDescendants
+    boolean dispatchPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent) -> dispatchPopulateAccessibilityEvent
+    android.view.ViewGroup$LayoutParams generateDefaultLayoutParams() -> generateDefaultLayoutParams
+    android.view.ViewGroup$LayoutParams generateLayoutParams(android.view.ViewGroup$LayoutParams) -> generateLayoutParams
+    boolean checkLayoutParams(android.view.ViewGroup$LayoutParams) -> checkLayoutParams
+    android.view.ViewGroup$LayoutParams generateLayoutParams(android.util.AttributeSet) -> generateLayoutParams
+    android.support.v4.view.PagerAdapter access$100(android.support.v4.view.ViewPager) -> a
+    int access$200(android.support.v4.view.ViewPager) -> b
+    int[] access$300() -> b
+android.support.v4.view.ViewPager$1 -> av:
+    int compare(java.lang.Object,java.lang.Object) -> compare
+android.support.v4.view.ViewPager$2 -> aw:
+    float getInterpolation(float) -> getInterpolation
+android.support.v4.view.ViewPager$Decor -> ax:
+android.support.v4.view.ViewPager$ItemInfo -> ay:
+    java.lang.Object object -> a
+    int position -> b
+    boolean scrolling -> c
+    float widthFactor -> d
+    float offset -> e
+android.support.v4.view.ViewPager$LayoutParams -> android.support.v4.view.ViewPager$LayoutParams:
+    boolean isDecor -> a
+    int gravity -> b
+    float widthFactor -> c
+    boolean needsMeasure -> d
+android.support.v4.view.ViewPager$MyAccessibilityDelegate -> az:
+    android.support.v4.view.ViewPager this$0 -> a
+    void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+    void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat) -> a
+    boolean performAccessibilityAction(android.view.View,int,android.os.Bundle) -> a
+android.support.v4.view.ViewPager$OnAdapterChangeListener -> aA:
+    void onAdapterChanged(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter) -> a
+android.support.v4.view.ViewPager$OnPageChangeListener -> aB:
+    void onPageScrolled$486775f1(int,float) -> a
+    void onPageSelected$13462e() -> a
+    void onPageScrollStateChanged(int) -> a
+android.support.v4.view.ViewPager$PagerObserver -> aC:
+    android.support.v4.view.ViewPager this$0 -> a
+    void onChanged() -> onChanged
+    void onInvalidated() -> onInvalidated
+android.support.v4.view.ViewPager$SavedState -> aD:
+    int position -> a
+    android.os.Parcelable adapterState -> b
+    java.lang.ClassLoader loader -> c
+    android.os.Parcelable$Creator CREATOR -> CREATOR
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+    java.lang.String toString() -> toString
+android.support.v4.view.ViewPager$SavedState$1 -> aE:
+    java.lang.Object[] newArray(int) -> a
+    java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
+android.support.v4.view.accessibility.AccessibilityNodeInfoCompat -> aF:
+    android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoImpl IMPL -> a
+    java.lang.Object mInfo -> b
+    java.lang.Object getInfo() -> a
+    void addAction(int) -> a
+    void setScrollable(boolean) -> a
+    void setClassName(java.lang.CharSequence) -> a
+    int hashCode() -> hashCode
+    boolean equals(java.lang.Object) -> equals
+android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoIcsImpl -> aG:
+    void addAction(java.lang.Object,int) -> a
+    void setClassName(java.lang.Object,java.lang.CharSequence) -> a
+    void setScrollable(java.lang.Object,boolean) -> a
+android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoImpl -> aH:
+    void addAction(java.lang.Object,int) -> a
+    void setScrollable(java.lang.Object,boolean) -> a
+    void setClassName(java.lang.Object,java.lang.CharSequence) -> a
+android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoJellybeanImpl -> aI:
+android.support.v4.view.accessibility.AccessibilityNodeProviderCompat -> aJ:
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompat$AccessibilityNodeProviderImpl IMPL -> a
+    java.lang.Object mProvider -> b
+    java.lang.Object getProvider() -> a
+    android.support.v4.view.accessibility.AccessibilityNodeInfoCompat createAccessibilityNodeInfo$f3a5639() -> b
+    boolean performAction$5985f823() -> c
+    java.util.List findAccessibilityNodeInfosByText$2393931d() -> d
+android.support.v4.view.accessibility.AccessibilityNodeProviderCompat$AccessibilityNodeProviderImpl -> aK:
+    java.lang.Object newAccessibilityNodeProviderBridge(android.support.v4.view.accessibility.AccessibilityNodeProviderCompat) -> a
+android.support.v4.view.accessibility.AccessibilityNodeProviderCompat$AccessibilityNodeProviderJellyBeanImpl -> aL:
+    java.lang.Object newAccessibilityNodeProviderBridge(android.support.v4.view.accessibility.AccessibilityNodeProviderCompat) -> a
+android.support.v4.view.accessibility.AccessibilityNodeProviderCompatJellyBean$1 -> aM:
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompatJellyBean$AccessibilityNodeInfoBridge val$bridge -> a
+    android.view.accessibility.AccessibilityNodeInfo createAccessibilityNodeInfo(int) -> createAccessibilityNodeInfo
+    java.util.List findAccessibilityNodeInfosByText(java.lang.String,int) -> findAccessibilityNodeInfosByText
+    boolean performAction(int,int,android.os.Bundle) -> performAction
+android.support.v4.view.accessibility.AccessibilityNodeProviderCompatJellyBean$AccessibilityNodeInfoBridge -> aN:
+    android.support.v4.view.accessibility.AccessibilityNodeProviderCompat val$compat -> a
+    java.lang.Object createAccessibilityNodeInfo(int) -> a
+    boolean performAction(int,int,android.os.Bundle) -> a
+    java.util.List findAccessibilityNodeInfosByText(java.lang.String,int) -> a
+android.support.v4.widget.EdgeEffectCompat -> aO:
+    java.lang.Object mEdgeEffect -> a
+    android.support.v4.widget.EdgeEffectCompat$EdgeEffectImpl IMPL -> b
+    void setSize(int,int) -> a
+    boolean isFinished() -> a
+    void finish() -> b
+    boolean onPull(float) -> a
+    boolean onRelease() -> c
+    boolean draw(android.graphics.Canvas) -> a
+android.support.v4.widget.EdgeEffectCompat$BaseEdgeEffectImpl -> aP:
+    java.lang.Object newEdgeEffect(android.content.Context) -> a
+    void setSize(java.lang.Object,int,int) -> a
+    boolean isFinished(java.lang.Object) -> a
+    void finish(java.lang.Object) -> b
+    boolean onPull(java.lang.Object,float) -> a
+    boolean onRelease(java.lang.Object) -> c
+    boolean draw(java.lang.Object,android.graphics.Canvas) -> a
+android.support.v4.widget.EdgeEffectCompat$EdgeEffectIcsImpl -> aQ:
+    java.lang.Object newEdgeEffect(android.content.Context) -> a
+    void setSize(java.lang.Object,int,int) -> a
+    boolean isFinished(java.lang.Object) -> a
+    void finish(java.lang.Object) -> b
+    boolean onPull(java.lang.Object,float) -> a
+    boolean onRelease(java.lang.Object) -> c
+    boolean draw(java.lang.Object,android.graphics.Canvas) -> a
+android.support.v4.widget.EdgeEffectCompat$EdgeEffectImpl -> aR:
+    java.lang.Object newEdgeEffect(android.content.Context) -> a
+    void setSize(java.lang.Object,int,int) -> a
+    boolean isFinished(java.lang.Object) -> a
+    void finish(java.lang.Object) -> b
+    boolean onPull(java.lang.Object,float) -> a
+    boolean onRelease(java.lang.Object) -> c
+    boolean draw(java.lang.Object,android.graphics.Canvas) -> a
+com.facebook.AccessToken -> aS:
+    java.util.Date MIN_DATE -> a
+    java.util.Date expires -> b
+    java.util.List permissions -> c
+    java.lang.String token -> d
+    boolean isSSO -> e
+    java.util.Date lastRefresh -> f
+    java.lang.String getToken() -> a
+    java.util.Date getExpires() -> b
+    java.util.List getPermissions() -> c
+    boolean getIsSSO() -> d
+    java.util.Date getLastRefresh() -> e
+    com.facebook.AccessToken createEmptyToken(java.util.List) -> a
+    com.facebook.AccessToken createFromDialog(java.util.List,android.os.Bundle) -> a
+    com.facebook.AccessToken createFromSSO(java.util.List,android.content.Intent) -> a
+    com.facebook.AccessToken createForRefresh(com.facebook.AccessToken,android.os.Bundle) -> a
+    com.facebook.AccessToken createNew(java.util.List,android.os.Bundle,boolean,java.util.Date) -> a
+    com.facebook.AccessToken createFromCache(android.os.Bundle) -> a
+    android.os.Bundle toCacheBundle() -> f
+    boolean isInvalid() -> g
+    java.lang.String toString() -> toString
+    void appendPermissions(java.lang.StringBuilder) -> a
+    java.util.Date getExpiresInDate(android.os.Bundle,java.util.Date) -> a
+com.facebook.FacebookActivity -> com.facebook.FacebookActivity:
+    com.facebook.SessionTracker sessionTracker -> e
+    void onCreate(android.os.Bundle) -> onCreate
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    void onDestroy() -> onDestroy
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onSessionStateChange$24b0c870() -> d
+com.facebook.FacebookActivity$DefaultSessionStatusCallback -> aT:
+    com.facebook.FacebookActivity this$0 -> a
+    void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
+com.facebook.FacebookAuthorizationException -> aU:
+com.facebook.FacebookException -> aV:
+com.facebook.FacebookGraphObjectException -> aW:
+com.facebook.FacebookOperationCanceledException -> aX:
+com.facebook.FacebookServiceErrorException -> aY:
+    int httpResponseCode -> a
+    int facebookErrorCode -> b
+    java.lang.String facebookErrorType -> c
+    int getFacebookErrorCode() -> a
+    java.lang.String toString() -> toString
+com.facebook.FileLruCache -> aZ:
+    java.lang.String TAG -> a
+    java.util.concurrent.atomic.AtomicLong bufferIndex -> b
+    java.lang.String tag -> c
+    com.facebook.FileLruCache$Limits limits -> d
+    java.io.File directory -> e
+    java.io.InputStream get(java.lang.String) -> a
+    java.io.InputStream get(java.lang.String,java.lang.String) -> a
+    java.io.OutputStream openPutStream(java.lang.String,java.lang.String) -> b
+    java.io.InputStream interceptAndPut(java.lang.String,java.io.InputStream) -> a
+    java.lang.String toString() -> toString
+    java.util.concurrent.atomic.AtomicLong access$0() -> a
+    java.io.File access$1(com.facebook.FileLruCache) -> a
+    void access$2(com.facebook.FileLruCache) -> b
+com.facebook.FileLruCache$BufferFile -> ba:
+    java.io.FilenameFilter filterExcludeBufferFiles -> a
+    java.io.FilenameFilter filterExcludeNonBufferFiles -> b
+    void deleteAll(java.io.File) -> a
+    java.io.FilenameFilter excludeBufferFiles() -> a
+    java.io.File newFile(java.io.File) -> b
+com.facebook.FileLruCache$BufferFile$1 -> bb:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.facebook.FileLruCache$BufferFile$2 -> bc:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.facebook.FileLruCache$CloseCallbackOutputStream -> bd:
+    java.io.OutputStream innerStream -> a
+    com.facebook.FileLruCache$StreamCloseCallback callback -> b
+    void close() -> close
+    void flush() -> flush
+    void write(byte[],int,int) -> write
+    void write(byte[]) -> write
+    void write(int) -> write
+com.facebook.FileLruCache$CopyingInputStream -> be:
+    java.io.InputStream input -> a
+    java.io.OutputStream output -> b
+    int available() -> available
+    void close() -> close
+    void mark(int) -> mark
+    boolean markSupported() -> markSupported
+    int read(byte[]) -> read
+    int read() -> read
+    int read(byte[],int,int) -> read
+    void reset() -> reset
+    long skip(long) -> skip
+com.facebook.FileLruCache$Limits -> bf:
+    int byteCount -> a
+    int fileCount -> b
+com.facebook.FileLruCache$ModifiedFile -> bg:
+    java.io.File file -> a
+    long modified -> b
+    java.io.File getFile() -> a
+    long getModified() -> b
+    int compareTo(com.facebook.FileLruCache$ModifiedFile) -> a
+    boolean equals(java.lang.Object) -> equals
+    int compareTo(java.lang.Object) -> compareTo
+com.facebook.FileLruCache$StreamCloseCallback -> bh:
+    com.facebook.FileLruCache this$0 -> a
+    java.lang.String val$key -> b
+    java.io.File val$buffer -> c
+    void onClose() -> a
+com.facebook.GraphObject -> bi:
+    com.facebook.GraphObject cast$687313cb() -> a
+    java.util.Map asMap() -> b
+    org.json.JSONObject getInnerJSONObject() -> c
+    java.lang.Object getProperty$9543ced() -> d
+    void setProperty$645b3fe5() -> e
+com.facebook.GraphObjectList -> bj:
+    org.json.JSONArray getInnerJSONArray() -> a
+com.facebook.GraphObjectWrapper -> bk:
+    java.util.HashSet verifiedGraphObjectClasses -> a
+    java.text.SimpleDateFormat[] dateFormats -> b
+    com.facebook.GraphObject createGraphObject(org.json.JSONObject) -> a
+    com.facebook.GraphObject createGraphObject() -> a
+    com.facebook.GraphObjectList wrapArray(org.json.JSONArray,java.lang.Class) -> a
+    com.facebook.GraphObject createGraphObjectProxy(java.lang.Class,org.json.JSONObject) -> b
+    boolean hasClassBeenVerified(java.lang.Class) -> a
+    void recordClassHasBeenVerified(java.lang.Class) -> b
+    java.lang.Object coerceValueToExpectedType(java.lang.Object,java.lang.Class,java.lang.reflect.ParameterizedType) -> a
+    com.facebook.GraphObject access$0(java.lang.Class,org.json.JSONObject) -> a
+    java.util.Map access$1(org.json.JSONObject) -> b
+    java.lang.Object access$2(java.lang.Object) -> a
+com.facebook.GraphObjectWrapper$GraphObjectListImpl -> bl:
+    org.json.JSONArray state -> a
+    java.lang.Class itemType -> b
+    java.lang.String toString() -> toString
+    void add(int,java.lang.Object) -> add
+    java.lang.Object set(int,java.lang.Object) -> set
+    int hashCode() -> hashCode
+    boolean equals(java.lang.Object) -> equals
+    java.lang.Object get(int) -> get
+    int size() -> size
+    org.json.JSONArray getInnerJSONArray() -> a
+    void clear() -> clear
+    boolean remove(java.lang.Object) -> remove
+    boolean removeAll(java.util.Collection) -> removeAll
+    boolean retainAll(java.util.Collection) -> retainAll
+    void checkIndex(int) -> a
+    void put(int,java.lang.Object) -> a
+com.facebook.GraphObjectWrapper$GraphObjectProxy -> bm:
+    java.lang.Class graphObjectClass -> b
+    java.lang.String toString() -> toString
+    java.lang.Object invoke(java.lang.Object,java.lang.reflect.Method,java.lang.Object[]) -> invoke
+    java.lang.Object proxyGraphObjectGettersAndSetters(java.lang.reflect.Method,java.lang.Object[]) -> b
+    java.lang.Object setJSONProperty(java.lang.Object[]) -> a
+com.facebook.GraphObjectWrapper$ProxyBase -> bn:
+    java.lang.Object state -> a
+    java.lang.Object throwUnexpectedMethodSignature(java.lang.reflect.Method) -> a
+    java.lang.Object proxyObjectMethods$6638a866(java.lang.reflect.Method,java.lang.Object[]) -> a
+com.facebook.GraphUser -> bo:
+    java.lang.String getName() -> f
+com.facebook.HttpMethod -> bp:
+    com.facebook.HttpMethod GET -> a
+    com.facebook.HttpMethod POST -> b
+    com.facebook.HttpMethod DELETE -> c
+    com.facebook.HttpMethod[] ENUM$VALUES -> d
+    com.facebook.HttpMethod[] values() -> values
+    com.facebook.HttpMethod valueOf(java.lang.String) -> valueOf
+com.facebook.ImageDownloader$ImageDownloadTask -> bq:
+    com.facebook.ImageResponse doInBackground(com.facebook.ImageRequest[]) -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.facebook.ImageRequest -> br:
+    android.content.Context context -> a
+    java.net.URL imageUrl -> b
+    com.facebook.ImageRequest$Callback callback -> c
+    boolean isCancelled -> d
+    boolean allowCachedRedirects -> e
+com.facebook.ImageRequest$Callback -> bs:
+    com.facebook.ProfilePictureView this$0 -> a
+    void onCompleted(com.facebook.ImageResponse) -> a
+com.facebook.ImageResponse -> bt:
+    com.facebook.ImageRequest request -> a
+    java.lang.Exception error -> b
+    boolean isCachedRedirect -> c
+    android.graphics.Bitmap bitmap -> d
+com.facebook.ImageResponseCache -> bu:
+    java.lang.String TAG -> a
+    java.lang.String REDIRECT_CONTENT_TAG -> b
+    com.facebook.FileLruCache imageCache -> c
+    java.io.InputStream getCachedImageStream(java.net.URL,android.content.Context,java.util.EnumSet) -> a
+    com.facebook.FileLruCache getCache(android.content.Context) -> a
+    java.io.InputStream getImageStream(java.net.URL,android.content.Context,java.util.EnumSet) -> b
+    java.io.InputStream cacheImageFromStream(android.content.Context,java.net.URL,java.io.InputStream) -> a
+    java.net.URL getRedirectedURL(android.content.Context,java.lang.String) -> a
+    boolean isCDNURL(java.net.URL) -> a
+com.facebook.ImageResponseCache$BufferedHttpInputStream -> bv:
+    java.net.HttpURLConnection connection -> a
+    void close() -> close
+com.facebook.ImageResponseCache$Options -> bw:
+    com.facebook.ImageResponseCache$Options FOLLOW_REDIRECTS -> a
+    com.facebook.ImageResponseCache$Options RETURN_STREAM_ON_HTTP_ERROR -> b
+    java.util.EnumSet NONE -> c
+    com.facebook.ImageResponseCache$Options[] ENUM$VALUES -> d
+    com.facebook.ImageResponseCache$Options[] values() -> values
+    com.facebook.ImageResponseCache$Options valueOf(java.lang.String) -> valueOf
+com.facebook.Logger -> bx:
+    java.util.HashMap stringsToReplace -> a
+    com.facebook.LoggingBehaviors behavior -> b
+    java.lang.String tag -> c
+    java.lang.StringBuilder contents -> d
+    int priority -> e
+    void registerStringToReplace(java.lang.String,java.lang.String) -> a
+    void registerAccessToken(java.lang.String) -> a
+    void log(com.facebook.LoggingBehaviors,java.lang.String,java.lang.String) -> a
+    void log(com.facebook.LoggingBehaviors,java.lang.String,java.lang.String,java.lang.Object[]) -> a
+    void log(com.facebook.LoggingBehaviors,int,java.lang.String,java.lang.String) -> a
+    java.lang.String replaceStrings(java.lang.String) -> c
+    void log() -> a
+    void append(java.lang.String) -> b
+    void appendKeyValue(java.lang.String,java.lang.Object) -> a
+com.facebook.LoggingBehaviors -> by:
+    com.facebook.LoggingBehaviors REQUESTS -> a
+    com.facebook.LoggingBehaviors INCLUDE_ACCESS_TOKENS -> b
+    com.facebook.LoggingBehaviors INCLUDE_RAW_RESPONSES -> c
+    com.facebook.LoggingBehaviors CACHE -> d
+    com.facebook.LoggingBehaviors[] ENUM$VALUES -> e
+    com.facebook.LoggingBehaviors[] values() -> values
+    com.facebook.LoggingBehaviors valueOf(java.lang.String) -> valueOf
+com.facebook.LoginActivity -> com.facebook.LoginActivity:
+    android.app.Dialog loginDialog -> a
+    android.app.Dialog errorDialog -> b
+    void onResume() -> onResume
+    void onPause() -> onPause
+com.facebook.LoginActivity$1 -> bz:
+    com.facebook.LoginActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.facebook.LoginActivity$2 -> bA:
+    com.facebook.LoginActivity this$0 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.facebook.LoginActivity$3 -> bB:
+    com.facebook.LoginActivity this$0 -> a
+    void onComplete(android.os.Bundle) -> a
+    void onError(com.facebook.android.DialogError) -> a
+    void onFacebookError(com.facebook.android.FacebookError) -> a
+    void onCancel() -> a
+    void setResultAndFinish(int,android.os.Bundle) -> a
+com.facebook.LoginButton -> com.facebook.LoginButton:
+    java.lang.String TAG -> a
+    java.util.List permissions -> b
+    com.facebook.Session$AuthorizationType authorizationType -> c
+    java.lang.String applicationId -> d
+    com.facebook.SessionTracker sessionTracker -> e
+    com.facebook.GraphUser user -> f
+    com.facebook.Session userInfoSession -> g
+    boolean confirmLogout -> h
+    boolean fetchUserInfo -> i
+    java.lang.String loginText -> j
+    java.lang.String logoutText -> k
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener userInfoChangedCallback$1caf82ed -> l
+    android.support.v4.app.Fragment parentFragment -> m
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener onErrorListener$29ae23ca -> n
+    void setOnErrorListener$4d95efd5(android.support.v4.app.FragmentManager$OnBackStackChangedListener) -> setOnErrorListener$4d95efd5
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener getOnErrorListener$2bd0ff7() -> getOnErrorListener$2bd0ff7
+    void setReadPermissions(java.util.List) -> setReadPermissions
+    void setPublishPermissions(java.util.List) -> setPublishPermissions
+    boolean validatePermissions(java.util.List,com.facebook.Session$AuthorizationType) -> a
+    void setApplicationId(java.lang.String) -> setApplicationId
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener getUserInfoChangedCallback$218fa02c() -> getUserInfoChangedCallback$218fa02c
+    void setUserInfoChangedCallback$625145c8(android.support.v4.app.FragmentManager$OnBackStackChangedListener) -> setUserInfoChangedCallback$625145c8
+    void setSession(com.facebook.Session) -> setSession
+    void onFinishInflate() -> onFinishInflate
+    void setFragment(android.support.v4.app.Fragment) -> setFragment
+    void onAttachedToWindow() -> onAttachedToWindow
+    void onDetachedFromWindow() -> onDetachedFromWindow
+    java.util.List getPermissions() -> getPermissions
+    void parseAttributes(android.util.AttributeSet) -> a
+    void setButtonText() -> a
+    boolean initializeActiveSessionWithCachedToken(android.content.Context) -> a
+    void fetchUserInfo() -> b
+    void handleError(java.lang.Exception) -> a
+    com.facebook.SessionTracker access$0(com.facebook.LoginButton) -> a
+    boolean access$1(com.facebook.LoginButton) -> b
+    com.facebook.GraphUser access$2(com.facebook.LoginButton) -> c
+    java.lang.String access$3(com.facebook.LoginButton) -> d
+    android.support.v4.app.Fragment access$4(com.facebook.LoginButton) -> e
+    java.util.List access$5(com.facebook.LoginButton) -> f
+    com.facebook.Session$AuthorizationType access$6(com.facebook.LoginButton) -> g
+    void access$7(com.facebook.LoginButton) -> h
+    void access$8(com.facebook.LoginButton) -> i
+    void access$9(com.facebook.LoginButton,com.facebook.GraphUser) -> a
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener access$10$53f0e5e5(com.facebook.LoginButton) -> j
+com.facebook.LoginButton$LoginButtonCallback -> bC:
+    com.facebook.LoginButton this$0 -> a
+    void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
+com.facebook.LoginButton$LoginClickListener -> bD:
+    com.facebook.LoginButton this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.facebook.LoginButton$LoginClickListener$1 -> bE:
+    com.facebook.Session val$openSession -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.facebook.ProfilePictureView -> com.facebook.ProfilePictureView:
+    java.lang.String TAG -> a
+    java.lang.String userId -> b
+    int queryHeight -> c
+    int queryWidth -> d
+    boolean isCropped -> e
+    android.graphics.Bitmap imageContents -> f
+    android.widget.ImageView image -> g
+    int presetSizeType -> h
+    com.facebook.ImageRequest lastRequest -> i
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener onErrorListener$1cbdff9 -> j
+    int getPresetSize() -> getPresetSize
+    void setPresetSize(int) -> setPresetSize
+    void setCropped(boolean) -> setCropped
+    java.lang.String getUserId() -> getUserId
+    void setUserId(java.lang.String) -> setUserId
+    android.support.v4.app.FragmentManager$OnBackStackChangedListener getOnErrorListener$43b42118() -> getOnErrorListener$43b42118
+    void setOnErrorListener$17d41622(android.support.v4.app.FragmentManager$OnBackStackChangedListener) -> setOnErrorListener$17d41622
+    void onMeasure(int,int) -> onMeasure
+    void onLayout(boolean,int,int,int,int) -> onLayout
+    android.os.Parcelable onSaveInstanceState() -> onSaveInstanceState
+    void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
+    void onDetachedFromWindow() -> onDetachedFromWindow
+    void initialize(android.content.Context) -> a
+    void parseAttributes(android.util.AttributeSet) -> a
+    void refreshImage(boolean) -> a
+    void sendImageRequest(boolean) -> b
+    int getPresetSizeInPixels(boolean) -> c
+    void access$0(com.facebook.ProfilePictureView,com.facebook.ImageResponse) -> a
+com.facebook.PropertyName -> bF:
+    java.lang.String value() -> a
+com.facebook.Request -> bG:
+    java.text.SimpleDateFormat iso8601DateFormat -> a
+    com.facebook.Session session -> b
+    com.facebook.HttpMethod httpMethod -> c
+    java.lang.String graphPath -> d
+    com.facebook.GraphObject graphObject -> e
+    boolean batchEntryOmitResultOnSuccess -> f
+    android.os.Bundle parameters -> g
+    com.facebook.Request$Callback callback -> h
+    java.lang.String userAgent -> i
+    com.facebook.Request newPostRequest(com.facebook.Session,java.lang.String,com.facebook.GraphObject,com.facebook.Request$Callback) -> a
+    com.facebook.Request newMeRequest(com.facebook.Session,com.facebook.Request$GraphUserCallback) -> a
+    com.facebook.Request newGraphPathRequest(com.facebook.Session,java.lang.String,com.facebook.Request$Callback) -> a
+    void setParameters(android.os.Bundle) -> a
+    com.facebook.Session getSession() -> a
+    com.facebook.Response executeAndWait() -> b
+    java.net.HttpURLConnection toHttpConnection(com.facebook.RequestBatch) -> b
+    java.util.List executeBatchAndWait(com.facebook.RequestBatch) -> a
+    com.facebook.RequestAsyncTask executeBatchAsync(com.facebook.Request[]) -> a
+    java.util.List executeConnectionAndWait(java.net.HttpURLConnection,com.facebook.RequestBatch) -> a
+    java.lang.String toString() -> toString
+    void runCallbacks(com.facebook.RequestBatch,java.util.List) -> a
+    void addCommonParameters() -> c
+    java.lang.String appendParametersToBaseUrl(java.lang.String) -> a
+    java.lang.String getUrlStringForBatchedRequest() -> d
+    void serializeToBatch(org.json.JSONArray,android.os.Bundle) -> a
+    void processGraphObject(com.facebook.GraphObject,java.lang.String,com.facebook.Request$KeyValueSerializer) -> a
+    void processGraphObjectProperty(java.lang.String,java.lang.Object,com.facebook.Request$KeyValueSerializer,boolean) -> a
+    void serializeParameters(android.os.Bundle,com.facebook.Request$Serializer) -> a
+    void serializeAttachments(android.os.Bundle,com.facebook.Request$Serializer) -> b
+    void serializeRequestsAsJSON(com.facebook.Request$Serializer,java.util.Collection,android.os.Bundle) -> a
+    java.lang.String getBatchAppId(java.util.Collection) -> a
+com.facebook.Request$4 -> bH:
+    java.util.ArrayList val$callbacks -> a
+    void run() -> run
+com.facebook.Request$5 -> bI:
+    java.util.ArrayList val$keysAndValues -> a
+    void writeString(java.lang.String,java.lang.String) -> a
+com.facebook.Request$Callback -> bJ:
+    com.facebook.Request$GraphUserCallback val$callback -> a
+    void onCompleted(com.facebook.Response) -> a
+com.facebook.Request$GraphUserCallback -> bK:
+    com.facebook.LoginButton this$0 -> a
+    com.facebook.Session val$currentSession -> b
+    void onCompleted(com.facebook.GraphUser,com.facebook.Response) -> a
+com.facebook.Request$KeyValueSerializer -> bL:
+    void writeString(java.lang.String,java.lang.String) -> a
+com.facebook.Request$Serializer -> bM:
+    java.io.BufferedOutputStream outputStream -> a
+    com.facebook.Logger logger -> b
+    boolean firstWrite -> c
+    void writeObject(java.lang.String,java.lang.Object) -> a
+    void writeString(java.lang.String,java.lang.String) -> a
+    void writeFile(java.lang.String,android.os.ParcelFileDescriptor) -> a
+    void writeRecordBoundary() -> a
+    void writeContentDisposition(java.lang.String,java.lang.String,java.lang.String) -> a
+    void write(java.lang.String,java.lang.Object[]) -> a
+    void writeLine(java.lang.String,java.lang.Object[]) -> b
+    boolean isSupportedAttachmentType(java.lang.Object) -> a
+com.facebook.RequestAsyncTask -> bN:
+    java.lang.String TAG -> a
+    java.net.HttpURLConnection connection -> b
+    com.facebook.RequestBatch requests -> c
+    java.lang.Exception exception -> d
+    java.lang.String toString() -> toString
+    void onPreExecute() -> onPreExecute
+    java.util.List doInBackground$68cf9880() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.facebook.RequestBatch -> bO:
+    java.util.concurrent.atomic.AtomicInteger idGenerator -> a
+    android.os.Handler callbackHandler -> b
+    java.util.ArrayList requests -> c
+    int timeoutInMilliseconds -> d
+    java.lang.String id -> e
+    int getTimeout() -> a
+    void clear() -> clear
+    com.facebook.Request get(int) -> a
+    int size() -> size
+    java.lang.String getId() -> b
+    java.lang.String getCacheKey() -> c
+    boolean getForceRoundTrip() -> d
+    android.os.Handler getCallbackHandler() -> e
+    void setCallbackHandler(android.os.Handler) -> a
+    java.util.ArrayList getRequests() -> f
+    java.lang.Object get(int) -> get
+    void add(int,java.lang.Object) -> add
+    boolean add(java.lang.Object) -> add
+    java.lang.Object set(int,java.lang.Object) -> set
+    java.lang.Object remove(int) -> remove
+com.facebook.Response -> bP:
+    java.net.HttpURLConnection connection -> a
+    com.facebook.GraphObject graphObject -> b
+    boolean isFromCache -> c
+    com.facebook.FacebookException error -> d
+    com.facebook.FileLruCache responseCache -> e
+    boolean $assertionsDisabled -> f
+    com.facebook.FacebookException getError() -> a
+    com.facebook.GraphObject getGraphObject() -> b
+    com.facebook.GraphObject getGraphObjectAs(java.lang.Class) -> a
+    java.lang.String toString() -> toString
+    java.util.List fromHttpConnection(java.net.HttpURLConnection,com.facebook.RequestBatch) -> a
+    java.util.List createResponsesFromStream(java.io.InputStream,java.net.HttpURLConnection,com.facebook.RequestBatch,boolean) -> a
+    java.util.List createResponsesFromObject(java.net.HttpURLConnection,java.util.List,java.lang.Object,boolean) -> a
+    com.facebook.FacebookServiceErrorException checkResponseAndCreateException(org.json.JSONObject) -> a
+    java.util.List constructErrorResponses(java.util.List,java.net.HttpURLConnection,com.facebook.FacebookException) -> a
+com.facebook.ServerProtocol -> bQ:
+    java.util.Collection errorsProxyAuthDisabled -> a
+    java.util.Collection errorsUserCanceled -> b
+com.facebook.Session -> bR:
+    java.lang.String TAG -> a
+    java.lang.Object staticLock -> b
+    com.facebook.Session activeSession -> c
+    android.content.Context staticContext -> d
+    java.util.Set OTHER_PUBLISH_PERMISSIONS -> e
+    java.lang.String applicationId -> f
+    com.facebook.SessionState state -> g
+    com.facebook.AccessToken tokenInfo -> h
+    java.util.Date lastAttemptedTokenExtendDate -> i
+    boolean shouldAutoPublish -> j
+    com.facebook.Session$AuthorizationRequest pendingRequest -> k
+    android.os.Bundle authorizationBundle -> l
+    java.util.List callbacks -> m
+    android.os.Handler handler -> n
+    com.facebook.Session$AutoPublishAsyncTask autoPublishAsyncTask -> o
+    java.lang.Object lock -> p
+    com.facebook.TokenCache tokenCache -> q
+    com.facebook.Session$TokenRefreshRequest currentTokenRefreshRequest -> r
+    int[] $SWITCH_TABLE$com$facebook$SessionState -> s
+    boolean isOpened() -> a
+    com.facebook.SessionState getState() -> b
+    java.lang.String getApplicationId() -> c
+    java.lang.String getAccessToken() -> d
+    java.util.Date getExpirationDate() -> m
+    java.util.List getPermissions() -> e
+    void openForRead(com.facebook.Session$OpenRequest) -> a
+    void openForPublish(com.facebook.Session$OpenRequest) -> b
+    void open() -> f
+    boolean onActivityResult(android.app.Activity,int,int,android.content.Intent) -> a
+    void close() -> n
+    void closeAndClearTokenInformation() -> g
+    java.lang.String toString() -> toString
+    void internalRefreshToken(android.os.Bundle) -> a
+    void saveSession(com.facebook.Session,android.os.Bundle) -> a
+    com.facebook.Session restoreSession(android.content.Context,com.facebook.TokenCache,com.facebook.Session$StatusCallback,android.os.Bundle) -> a
+    com.facebook.Session getActiveSession() -> h
+    void setActiveSession(com.facebook.Session) -> a
+    android.content.Context getStaticContext() -> i
+    void initializeStaticContext(android.content.Context) -> b
+    void authorize(com.facebook.Session$AuthorizationRequest) -> a
+    void addCallback(com.facebook.Session$StatusCallback) -> a
+    void removeCallback(com.facebook.Session$StatusCallback) -> b
+    void open(com.facebook.Session$OpenRequest,com.facebook.Session$AuthorizationType) -> a
+    boolean tryActivityAuth(android.content.Intent,com.facebook.Session$AuthorizationRequest,boolean) -> a
+    boolean resolveIntent(android.content.Intent,boolean) -> a
+    boolean validateFacebookAppSignature(java.lang.String) -> a
+    void finishAuth(com.facebook.AccessToken,java.lang.Exception) -> a
+    void postStateChange(com.facebook.SessionState,com.facebook.SessionState,java.lang.Exception) -> a
+    void postActiveSessionAction(java.lang.String) -> b
+    void runWithHandlerOrExecutor(android.os.Handler,java.lang.Runnable) -> b
+    void extendAccessTokenIfNeeded() -> j
+    com.facebook.AccessToken getTokenInfo() -> k
+    void setLastAttemptedTokenExtendDate(java.util.Date) -> a
+    java.lang.String getMetadataApplicationId(android.content.Context) -> a
+    int hashCode() -> hashCode
+    boolean equals(java.lang.Object) -> equals
+    boolean areEqual(java.lang.Object,java.lang.Object) -> a
+    android.content.Context access$1() -> l
+    boolean access$2(com.facebook.Session,java.lang.String) -> a
+    com.facebook.Session$TokenRefreshRequest access$3(com.facebook.Session) -> b
+    void access$4(com.facebook.Session,com.facebook.Session$TokenRefreshRequest) -> a
+    void access$5(com.facebook.Session,com.facebook.Session$AutoPublishAsyncTask) -> a
+    int[] $SWITCH_TABLE$com$facebook$SessionState() -> o
+    void access$7(com.facebook.Session,android.os.Bundle) -> b
+    java.util.List access$8(com.facebook.Session) -> c
+    android.os.Handler access$9(com.facebook.Session) -> d
+    void access$10(android.os.Handler,java.lang.Runnable) -> a
+com.facebook.Session$1 -> bS:
+com.facebook.Session$2 -> bT:
+    com.facebook.Session this$0 -> a
+    com.facebook.Session$AuthorizationRequest val$request -> b
+    void onComplete(android.os.Bundle) -> a
+    void onError(com.facebook.android.DialogError) -> a
+    void onFacebookError(com.facebook.android.FacebookError) -> a
+    void onCancel() -> a
+com.facebook.Session$3 -> bU:
+    com.facebook.Session this$0 -> a
+    com.facebook.SessionState val$newState -> b
+    java.lang.Exception val$exception -> c
+    void run() -> run
+com.facebook.Session$3$1 -> bV:
+    com.facebook.Session$3 this$1 -> a
+    com.facebook.Session$StatusCallback val$callback -> b
+    com.facebook.SessionState val$newState -> c
+    java.lang.Exception val$exception -> d
+    void run() -> run
+com.facebook.Session$AuthorizationRequest -> bW:
+    com.facebook.Session$StartActivityDelegate startActivityDelegate -> a
+    com.facebook.SessionLoginBehavior loginBehavior -> b
+    int requestCode -> c
+    boolean suppressLoginActivityVerification -> e
+    java.util.List permissions -> d
+    int[] $SWITCH_TABLE$com$facebook$SessionLoginBehavior -> f
+    com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior) -> a
+    com.facebook.Session$AuthorizationRequest setPermissions(java.util.List) -> a
+    java.util.List getPermissions() -> a
+    int[] $SWITCH_TABLE$com$facebook$SessionLoginBehavior() -> b
+com.facebook.Session$AuthorizationRequest$1 -> bX:
+    android.app.Activity val$activity -> a
+    void startActivityForResult(android.content.Intent,int) -> a
+    android.app.Activity getActivityContext() -> a
+com.facebook.Session$AuthorizationRequest$2 -> bY:
+    android.support.v4.app.Fragment val$fragment -> a
+    void startActivityForResult(android.content.Intent,int) -> a
+    android.app.Activity getActivityContext() -> a
+com.facebook.Session$AuthorizationType -> bZ:
+    com.facebook.Session$AuthorizationType READ -> a
+    com.facebook.Session$AuthorizationType PUBLISH -> b
+    com.facebook.Session$AuthorizationType[] ENUM$VALUES -> c
+    com.facebook.Session$AuthorizationType[] values() -> values
+    com.facebook.Session$AuthorizationType valueOf(java.lang.String) -> valueOf
+com.facebook.Session$AutoPublishAsyncTask -> ca:
+    java.lang.String mApplicationId -> a
+    android.content.Context mApplicationContext -> b
+    com.facebook.Session this$0 -> c
+    java.lang.Void doInBackground$10299ca() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.facebook.Session$Builder -> cb:
+    android.content.Context context -> a
+    java.lang.String applicationId -> b
+    boolean shouldAutoPublishInstall -> c
+com.facebook.Session$OpenRequest -> cc:
+    com.facebook.Session$OpenRequest setPermissions(java.util.List) -> b
+    com.facebook.Session$AuthorizationRequest setPermissions(java.util.List) -> a
+    com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior) -> a
+com.facebook.Session$StartActivityDelegate -> cd:
+    void startActivityForResult(android.content.Intent,int) -> a
+    android.app.Activity getActivityContext() -> a
+com.facebook.Session$StatusCallback -> ce:
+    void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
+com.facebook.Session$TokenRefreshRequest -> cf:
+    android.os.Messenger messageReceiver -> a
+    android.os.Messenger messageSender -> b
+    com.facebook.Session this$0 -> c
+    void bind() -> a
+    void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
+    void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
+    void cleanup() -> b
+    void access$0(com.facebook.Session$TokenRefreshRequest) -> a
+com.facebook.Session$TokenRefreshRequestHandler -> cg:
+    java.lang.ref.WeakReference sessionWeakReference -> a
+    java.lang.ref.WeakReference refreshRequestWeakReference -> b
+    void handleMessage(android.os.Message) -> handleMessage
+com.facebook.SessionLoginBehavior -> ch:
+    com.facebook.SessionLoginBehavior SSO_WITH_FALLBACK -> a
+    com.facebook.SessionLoginBehavior SSO_ONLY -> b
+    com.facebook.SessionLoginBehavior SUPPRESS_SSO -> c
+    com.facebook.SessionLoginBehavior[] ENUM$VALUES -> d
+    com.facebook.SessionLoginBehavior[] values() -> values
+    com.facebook.SessionLoginBehavior valueOf(java.lang.String) -> valueOf
+com.facebook.SessionState -> ci:
+    com.facebook.SessionState CREATED -> a
+    com.facebook.SessionState CREATED_TOKEN_LOADED -> b
+    com.facebook.SessionState OPENING -> c
+    com.facebook.SessionState OPENED -> d
+    com.facebook.SessionState OPENED_TOKEN_UPDATED -> e
+    com.facebook.SessionState CLOSED_LOGIN_FAILED -> f
+    com.facebook.SessionState CLOSED -> g
+    com.facebook.SessionState$Category category -> h
+    com.facebook.SessionState[] ENUM$VALUES -> i
+    boolean isOpened() -> a
+    boolean isClosed() -> b
+    com.facebook.SessionState[] values() -> values
+    com.facebook.SessionState valueOf(java.lang.String) -> valueOf
+com.facebook.SessionState$Category -> cj:
+    com.facebook.SessionState$Category CREATED_CATEGORY -> a
+    com.facebook.SessionState$Category OPENED_CATEGORY -> b
+    com.facebook.SessionState$Category CLOSED_CATEGORY -> c
+    com.facebook.SessionState$Category[] ENUM$VALUES -> d
+    com.facebook.SessionState$Category[] values() -> values
+    com.facebook.SessionState$Category valueOf(java.lang.String) -> valueOf
+com.facebook.SessionTracker -> ck:
+    com.facebook.Session session -> a
+    com.facebook.Session$StatusCallback callback -> b
+    android.content.BroadcastReceiver receiver -> d
+    android.support.v4.content.LocalBroadcastManager broadcastManager -> e
+    boolean isTracking -> c
+    com.facebook.Session getSession() -> a
+    com.facebook.Session getOpenSession() -> b
+    void setSession(com.facebook.Session) -> a
+    void startTracking() -> c
+    void stopTracking() -> d
+    void addBroadcastReceiver() -> e
+com.facebook.SessionTracker$ActiveSessionBroadcastReceiver -> cl:
+    com.facebook.SessionTracker this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.facebook.SessionTracker$CallbackWrapper -> cm:
+    com.facebook.Session$StatusCallback wrapped -> a
+    com.facebook.SessionTracker this$0 -> b
+    void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
+com.facebook.Settings -> cn:
+    java.util.HashSet loggingBehaviors -> a
+    java.util.concurrent.Executor executor -> b
+    java.lang.Object LOCK -> c
+    android.net.Uri ATTRIBUTION_ID_CONTENT_URI -> d
+    java.util.concurrent.BlockingQueue DEFAULT_WORK_QUEUE -> e
+    java.util.concurrent.ThreadFactory DEFAULT_THREAD_FACTORY -> f
+    boolean isLoggingBehaviorEnabled(com.facebook.LoggingBehaviors) -> a
+    java.util.concurrent.Executor getExecutor() -> a
+    java.util.concurrent.Executor getAsyncTaskExecutor() -> b
+    boolean publishInstall(android.content.Context,java.lang.String) -> a
+com.facebook.Settings$1 -> co:
+    java.util.concurrent.atomic.AtomicInteger counter -> a
+    java.lang.Thread newThread(java.lang.Runnable) -> newThread
+com.facebook.SharedPreferencesTokenCache -> cp:
+    java.lang.String TAG -> a
+    java.lang.String cacheKey -> b
+    android.content.SharedPreferences cache -> c
+    android.os.Bundle load() -> a
+    void save(android.os.Bundle) -> a
+    void clear() -> b
+    void deserializeKey(java.lang.String,android.os.Bundle) -> a
+com.facebook.TokenCache -> cq:
+    android.os.Bundle load() -> a
+    void save(android.os.Bundle) -> a
+    void clear() -> b
+    java.util.Date getDate(android.os.Bundle,java.lang.String) -> a
+    void putDate(android.os.Bundle,java.lang.String,java.util.Date) -> a
+com.facebook.Utility$JSONObjectEntry -> cr:
+    java.lang.String key -> a
+    java.lang.Object value -> b
+    java.lang.Object getValue() -> getValue
+    java.lang.Object setValue(java.lang.Object) -> setValue
+    java.lang.Object getKey() -> getKey
+com.facebook.android.DialogError -> cs:
+    int mErrorCode -> a
+    java.lang.String mFailingUrl -> b
+    int getErrorCode() -> a
+    java.lang.String getFailingUrl() -> b
+com.facebook.android.Facebook -> ct:
+com.facebook.android.Facebook$DialogListener -> cu:
+    void onComplete(android.os.Bundle) -> a
+    void onFacebookError(com.facebook.android.FacebookError) -> a
+    void onError(com.facebook.android.DialogError) -> a
+    void onCancel() -> a
+com.facebook.android.FacebookError -> cv:
+com.facebook.android.FbDialog -> cw:
+    android.widget.FrameLayout$LayoutParams FILL -> a
+    java.lang.String mUrl -> b
+    com.facebook.android.Facebook$DialogListener mListener -> c
+    android.app.ProgressDialog mSpinner -> d
+    android.widget.ImageView mCrossImage -> e
+    android.webkit.WebView mWebView -> f
+    android.widget.FrameLayout mContent -> g
+    void dismiss() -> dismiss
+    void onCreate(android.os.Bundle) -> onCreate
+    com.facebook.android.Facebook$DialogListener access$0(com.facebook.android.FbDialog) -> a
+    android.app.ProgressDialog access$1(com.facebook.android.FbDialog) -> b
+    android.widget.FrameLayout access$2(com.facebook.android.FbDialog) -> c
+    android.webkit.WebView access$3(com.facebook.android.FbDialog) -> d
+    android.widget.ImageView access$4(com.facebook.android.FbDialog) -> e
+com.facebook.android.FbDialog$1 -> cx:
+    com.facebook.android.FbDialog this$0 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.facebook.android.FbDialog$2 -> cy:
+    com.facebook.android.FbDialog this$0 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.facebook.android.FbDialog$3 -> cz:
+    com.facebook.android.FbDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.facebook.android.FbDialog$FbWebViewClient -> cA:
+    com.facebook.android.FbDialog this$0 -> a
+    boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
+    void onReceivedSslError(android.webkit.WebView,android.webkit.SslErrorHandler,android.net.http.SslError) -> onReceivedSslError
+    void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
+    void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+com.facebook.android.FbDialog$SingleDispatchDialogListener -> cB:
+    com.facebook.android.Facebook$DialogListener wrapped -> a
+    boolean allowDispatch -> b
+    void onComplete(android.os.Bundle) -> a
+    void onFacebookError(com.facebook.android.FacebookError) -> a
+    void onError(com.facebook.android.DialogError) -> a
+    void onCancel() -> a
+    boolean checkAndSetDispatch(boolean) -> a
+com.facebook.android.Util -> cC:
+    boolean ENABLE_LOG -> a
+    android.os.Bundle decodeUrl(java.lang.String) -> b
+    android.os.Bundle parseUrl(java.lang.String) -> a
+    void logd(java.lang.String,java.lang.String) -> a
+com.jeffthefate.dmbquiz_dev.ApplicationEx -> com.jeffthefate.dmbquiz_dev.ApplicationEx:
+    android.content.Context app -> b
+    com.jeffthefate.dmbquiz_dev.DatabaseHelper dbHelper -> a
+    boolean mHasWifi -> c
+    boolean mHasConnection -> d
+    android.net.ConnectivityManager connMan -> e
+    void onCreate() -> onCreate
+    android.content.Context getApp() -> a
+    void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    void reportQuestion(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    void setWifi(boolean) -> a
+    void getNetworkInfo() -> b
+    boolean hasConnection() -> c
+    void setConnection(boolean) -> b
+    boolean access$0() -> d
+    android.content.Context access$1() -> e
+com.jeffthefate.dmbquiz_dev.ApplicationEx$1 -> cD:
+    void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.ApplicationEx$CheckConnectionTask -> cE:
+    java.lang.Void doInBackground$10299ca() -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.jeffthefate.dmbquiz_dev.CustomWebView -> com.jeffthefate.dmbquiz_dev.CustomWebView:
+    void onWindowFocusChanged(boolean) -> onWindowFocusChanged
+com.jeffthefate.dmbquiz_dev.DatabaseHelper -> cF:
+    android.database.sqlite.SQLiteDatabase db -> a
+    com.jeffthefate.dmbquiz_dev.DatabaseHelper instance -> b
+    com.jeffthefate.dmbquiz_dev.DatabaseHelper getInstance() -> a
+    java.lang.Object clone() -> clone
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+    long insertRecord(android.content.ContentValues,java.lang.String,java.lang.String) -> a
+    long updateRecord(android.content.ContentValues,java.lang.String,java.lang.String,java.lang.String[]) -> a
+    boolean hasUser(java.lang.String) -> a
+    void addUser(com.parse.ParseUser,java.lang.String) -> a
+    boolean isAnonUser(java.lang.String) -> b
+    java.lang.String getUserType(java.lang.String) -> c
+    java.lang.String getUserName(java.lang.String) -> d
+    long setScore(int,java.lang.String) -> a
+    int getScore(java.lang.String) -> e
+    long setOffset(int,java.lang.String) -> b
+    java.lang.String getCurrUser() -> b
+    boolean addAnswer(java.lang.String,java.lang.String,boolean,boolean,boolean) -> a
+    void markAnswerCorrect(java.lang.String,java.lang.String,boolean) -> a
+    int deleteAnswer(java.lang.String,java.lang.String) -> a
+    boolean hasAnswer(java.lang.String,java.lang.String) -> b
+    boolean hasCorrectAnswer(java.lang.String,java.lang.String) -> c
+    int getAnswerCount(java.lang.String) -> f
+    java.util.ArrayList readAnswers(java.lang.String) -> g
+    long setQuestions(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    java.lang.String getCurrQuestionId(java.lang.String) -> h
+    java.lang.String getCurrQuestionQuestion(java.lang.String) -> i
+    java.lang.String getCurrQuestionAnswer(java.lang.String) -> j
+    java.lang.String getCurrQuestionCategory(java.lang.String) -> k
+    java.lang.String getCurrQuestionScore(java.lang.String) -> l
+    java.lang.String getNextQuestionId(java.lang.String) -> m
+    java.lang.String getNextQuestionQuestion(java.lang.String) -> n
+    java.lang.String getNextQuestionAnswer(java.lang.String) -> o
+    java.lang.String getNextQuestionCategory(java.lang.String) -> p
+    java.lang.String getNextQuestionScore(java.lang.String) -> q
+    long setQuestionHint(java.lang.String,boolean,java.lang.String,boolean) -> a
+    long setQuestionSkip(java.lang.String,boolean,java.lang.String,boolean) -> b
+    boolean getQuestionHint(java.lang.String,java.lang.String) -> d
+    boolean getQuestionSkip(java.lang.String,java.lang.String) -> e
+    java.util.HashMap getHintMap(java.lang.String) -> r
+    long setCurrBackground(java.lang.String,java.lang.String) -> f
+    java.lang.String getCurrBackground(java.lang.String) -> s
+com.jeffthefate.dmbquiz_dev.LeaderAdapter -> cG:
+    android.content.Context mContext -> a
+    java.lang.String userId -> b
+    java.util.ArrayList rankList -> c
+    java.util.ArrayList userList -> d
+    java.util.ArrayList scoreList -> e
+    java.util.ArrayList userIdList -> f
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.jeffthefate.dmbquiz_dev.LeaderAdapter$ViewHolder -> cH:
+    android.widget.TextView rank -> a
+    android.widget.TextView text1 -> b
+    android.widget.TextView text2 -> c
+com.jeffthefate.dmbquiz_dev.R$drawable -> cI:
+    int background_text -> background_text
+    int button -> button
+    int button_default -> button_default
+    int button_disabled -> button_disabled
+    int button_pressed -> button_pressed
+    int com_facebook_loginbutton_blue -> com_facebook_loginbutton_blue
+    int com_facebook_loginbutton_blue_focused -> com_facebook_loginbutton_blue_focused
+    int com_facebook_loginbutton_blue_normal -> com_facebook_loginbutton_blue_normal
+    int com_facebook_loginbutton_blue_pressed -> com_facebook_loginbutton_blue_pressed
+    int com_facebook_picker_top_button -> com_facebook_picker_top_button
+    int com_facebook_top_background -> com_facebook_top_background
+    int com_twitter_loginbutton_grey -> com_twitter_loginbutton_grey
+    int com_twitter_loginbutton_grey_focused -> com_twitter_loginbutton_grey_focused
+    int com_twitter_loginbutton_grey_normal -> com_twitter_loginbutton_grey_normal
+    int com_twitter_loginbutton_grey_pressed -> com_twitter_loginbutton_grey_pressed
+    int correct -> correct
+    int edit_text -> edit_text
+    int edit_text_default -> edit_text_default
+    int ic_launcher -> ic_launcher
+    int progress -> progress
+    int splash1 -> splash1
+    int splash10 -> splash10
+    int splash11 -> splash11
+    int splash12 -> splash12
+    int splash13 -> splash13
+    int splash14 -> splash14
+    int splash15 -> splash15
+    int splash2 -> splash2
+    int splash3 -> splash3
+    int splash4 -> splash4
+    int splash5 -> splash5
+    int splash6 -> splash6
+    int splash7 -> splash7
+    int splash8 -> splash8
+    int splash9 -> splash9
+    int title -> title
+    int wrong -> wrong
+com.jeffthefate.dmbquiz_dev.R$raw -> cJ:
+    int correct1 -> correct1
+    int correct10 -> correct10
+    int correct11 -> correct11
+    int correct12 -> correct12
+    int correct13 -> correct13
+    int correct14 -> correct14
+    int correct15 -> correct15
+    int correct16 -> correct16
+    int correct17 -> correct17
+    int correct18 -> correct18
+    int correct19 -> correct19
+    int correct2 -> correct2
+    int correct20 -> correct20
+    int correct21 -> correct21
+    int correct22 -> correct22
+    int correct23 -> correct23
+    int correct24 -> correct24
+    int correct25 -> correct25
+    int correct26 -> correct26
+    int correct27 -> correct27
+    int correct28 -> correct28
+    int correct29 -> correct29
+    int correct3 -> correct3
+    int correct30 -> correct30
+    int correct31 -> correct31
+    int correct32 -> correct32
+    int correct33 -> correct33
+    int correct34 -> correct34
+    int correct35 -> correct35
+    int correct36 -> correct36
+    int correct37 -> correct37
+    int correct39 -> correct39
+    int correct4 -> correct4
+    int correct5 -> correct5
+    int correct6 -> correct6
+    int correct7 -> correct7
+    int correct8 -> correct8
+    int correct9 -> correct9
+    int hint1 -> hint1
+    int hint10 -> hint10
+    int hint11 -> hint11
+    int hint12 -> hint12
+    int hint13 -> hint13
+    int hint14 -> hint14
+    int hint15 -> hint15
+    int hint16 -> hint16
+    int hint17 -> hint17
+    int hint18 -> hint18
+    int hint19 -> hint19
+    int hint2 -> hint2
+    int hint20 -> hint20
+    int hint21 -> hint21
+    int hint22 -> hint22
+    int hint24 -> hint24
+    int hint25 -> hint25
+    int hint26 -> hint26
+    int hint27 -> hint27
+    int hint28 -> hint28
+    int hint29 -> hint29
+    int hint3 -> hint3
+    int hint30 -> hint30
+    int hint31 -> hint31
+    int hint32 -> hint32
+    int hint33 -> hint33
+    int hint34 -> hint34
+    int hint35 -> hint35
+    int hint36 -> hint36
+    int hint37 -> hint37
+    int hint4 -> hint4
+    int hint5 -> hint5
+    int hint6 -> hint6
+    int hint7 -> hint7
+    int hint8 -> hint8
+    int hint9 -> hint9
+    int skip1 -> skip1
+    int skip10 -> skip10
+    int skip11 -> skip11
+    int skip12 -> skip12
+    int skip13 -> skip13
+    int skip14 -> skip14
+    int skip15 -> skip15
+    int skip16 -> skip16
+    int skip18 -> skip18
+    int skip19 -> skip19
+    int skip2 -> skip2
+    int skip20 -> skip20
+    int skip21 -> skip21
+    int skip22 -> skip22
+    int skip23 -> skip23
+    int skip24 -> skip24
+    int skip25 -> skip25
+    int skip26 -> skip26
+    int skip27 -> skip27
+    int skip28 -> skip28
+    int skip29 -> skip29
+    int skip3 -> skip3
+    int skip30 -> skip30
+    int skip31 -> skip31
+    int skip32 -> skip32
+    int skip33 -> skip33
+    int skip34 -> skip34
+    int skip35 -> skip35
+    int skip36 -> skip36
+    int skip37 -> skip37
+    int skip38 -> skip38
+    int skip39 -> skip39
+    int skip4 -> skip4
+    int skip5 -> skip5
+    int skip6 -> skip6
+    int skip7 -> skip7
+    int skip8 -> skip8
+    int skip9 -> skip9
+    int wrong1 -> wrong1
+    int wrong10 -> wrong10
+    int wrong11 -> wrong11
+    int wrong12 -> wrong12
+    int wrong13 -> wrong13
+    int wrong14 -> wrong14
+    int wrong15 -> wrong15
+    int wrong16 -> wrong16
+    int wrong17 -> wrong17
+    int wrong18 -> wrong18
+    int wrong2 -> wrong2
+    int wrong20 -> wrong20
+    int wrong21 -> wrong21
+    int wrong22 -> wrong22
+    int wrong23 -> wrong23
+    int wrong24 -> wrong24
+    int wrong25 -> wrong25
+    int wrong26 -> wrong26
+    int wrong27 -> wrong27
+    int wrong28 -> wrong28
+    int wrong29 -> wrong29
+    int wrong3 -> wrong3
+    int wrong30 -> wrong30
+    int wrong31 -> wrong31
+    int wrong32 -> wrong32
+    int wrong33 -> wrong33
+    int wrong34 -> wrong34
+    int wrong35 -> wrong35
+    int wrong36 -> wrong36
+    int wrong37 -> wrong37
+    int wrong4 -> wrong4
+    int wrong5 -> wrong5
+    int wrong6 -> wrong6
+    int wrong7 -> wrong7
+    int wrong8 -> wrong8
+    int wrong9 -> wrong9
+com.jeffthefate.dmbquiz_dev.ScrollTextView -> com.jeffthefate.dmbquiz_dev.ScrollTextView:
+    android.widget.Scroller mSlr -> a
+    int mRndDuration -> b
+    int mXPaused -> c
+    boolean mPaused -> d
+    void computeScroll() -> computeScroll
+    int getRndDuration() -> getRndDuration
+    void setRndDuration(int) -> setRndDuration
+com.jeffthefate.dmbquiz_dev.VersionedActionBar -> cK:
+    com.jeffthefate.dmbquiz_dev.VersionedActionBar create(android.app.Activity) -> a
+    void setDisplayHome() -> a
+com.jeffthefate.dmbquiz_dev.VersionedActionBar$GingerbreadActionBar -> cL:
+    com.jeffthefate.dmbquiz_dev.VersionedActionBar create(android.app.Activity) -> a
+    void setDisplayHome() -> a
+com.jeffthefate.dmbquiz_dev.VersionedActionBar$HoneycombActionBar -> cM:
+    android.app.ActionBar actionBar -> a
+    com.jeffthefate.dmbquiz_dev.VersionedActionBar create(android.app.Activity) -> a
+    void setDisplayHome() -> a
+com.jeffthefate.dmbquiz_dev.activity.ActivityMain -> com.jeffthefate.dmbquiz_dev.activity.ActivityMain:
+    android.support.v4.app.FragmentManager fMan -> e
+    android.widget.ImageView background -> f
+    android.widget.ProgressBar progress -> g
+    android.widget.TextView noConnection -> h
+    com.parse.ParseUser user -> i
+    java.lang.String userId -> j
+    java.lang.String currFrag -> k
+    int rawIndex -> l
+    java.lang.reflect.Field[] fields -> m
+    java.util.ArrayList fieldsList -> n
+    java.lang.String currentBackground -> o
+    boolean loggingIn -> p
+    boolean splashVisible -> q
+    com.jeffthefate.dmbquiz_dev.activity.ActivityMain$ConnectionReceiver connReceiver -> r
+    com.jeffthefate.dmbquiz_dev.receiver.ConnectivityReceiver connectivityReceiver -> s
+    boolean inStats -> t
+    void onCreate(android.os.Bundle) -> onCreate
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    void onResume() -> onResume
+    void onPause() -> onPause
+    void onBackPressed() -> onBackPressed
+    java.lang.String setBackground(java.lang.String,boolean) -> a
+    void checkUser() -> g
+    void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    void onButtonPressed(com.jeffthefate.dmbquiz_dev.fragment.FragmentBase,java.lang.String,boolean) -> a
+    void onStatsPressed() -> d
+    void setProgress(boolean) -> b
+    java.lang.String getBackground() -> e
+    void setSplashVisibility(boolean) -> c
+    boolean getSplashVisibility() -> f
+    void setUserId(java.lang.String) -> a
+    android.widget.TextView access$0(com.jeffthefate.dmbquiz_dev.activity.ActivityMain) -> a
+    java.lang.String access$1(com.jeffthefate.dmbquiz_dev.activity.ActivityMain) -> b
+    void access$2(com.jeffthefate.dmbquiz_dev.activity.ActivityMain) -> c
+com.jeffthefate.dmbquiz_dev.activity.ActivityMain$ConnectionReceiver -> cN:
+    com.jeffthefate.dmbquiz_dev.activity.ActivityMain this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.jeffthefate.dmbquiz_dev.fragment.FragmentBase -> cO:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentBase$OnButtonListener mCallback -> K
+    void onCreate(android.os.Bundle) -> a
+    void onAttach(android.app.Activity) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentBase$OnButtonListener -> cP:
+    void onButtonPressed(com.jeffthefate.dmbquiz_dev.fragment.FragmentBase,java.lang.String,boolean) -> a
+    void setProgress(boolean) -> b
+    java.lang.String setBackground(java.lang.String,boolean) -> a
+    java.lang.String getBackground() -> e
+    void setSplashVisibility(boolean) -> c
+    boolean getSplashVisibility() -> f
+    void onStatsPressed() -> d
+    void setUserId(java.lang.String) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentInfo -> cQ:
+    android.widget.TextView infoText -> L
+    android.widget.Button doneButton -> M
+    void onCreate(android.os.Bundle) -> a
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentInfo$1 -> cR:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentInfo this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders -> cS:
+    java.lang.String userId -> L
+    int answerCount -> M
+    int hintCount -> N
+    android.view.ViewGroup leadersLayout -> O
+    android.widget.TextView userText -> P
+    android.widget.TextView userAnswerText -> Q
+    android.widget.TextView userAnswers -> R
+    android.widget.TextView userHintText -> S
+    android.widget.TextView userHints -> T
+    android.widget.TextView leaderText -> U
+    android.widget.ListView leaderList -> V
+    android.widget.TextView userName -> W
+    android.widget.TextView userScore -> X
+    java.util.ArrayList rankList -> Y
+    java.util.ArrayList userList -> Z
+    java.util.ArrayList scoreList -> aa
+    java.util.ArrayList userIdList -> ab
+    android.content.res.Resources res -> ac
+    boolean isRestored -> ad
+    java.lang.String userNameText -> ae
+    com.parse.ParseUser user -> af
+    boolean userDone -> ag
+    boolean leaderDone -> ah
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders$ShowTask showTask -> ai
+    void onCreate(android.os.Bundle) -> a
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onSaveInstanceState(android.os.Bundle) -> b
+    void onResume() -> m
+    void onPause() -> n
+    boolean access$0(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> a
+    boolean access$1(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> b
+    android.view.ViewGroup access$2(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> c
+    android.content.res.Resources access$3(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> d
+    android.widget.TextView access$4(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> e
+    android.widget.TextView access$5(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> f
+    android.widget.TextView access$6(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> g
+    android.widget.TextView access$7(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> h
+    android.widget.TextView access$8(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> i
+    android.widget.TextView access$9(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> j
+    android.widget.ListView access$10(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> k
+    android.widget.TextView access$11(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> l
+    android.widget.TextView access$12(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> m
+    void access$13(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,int) -> a
+    int access$14(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> n
+    void access$15(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,int) -> b
+    int access$16(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> o
+    void access$17(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,boolean) -> a
+    void access$18(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,java.util.ArrayList) -> a
+    void access$19(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,java.util.ArrayList) -> b
+    void access$20(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,java.util.ArrayList) -> c
+    void access$21(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,java.util.ArrayList) -> d
+    java.util.ArrayList access$22(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> p
+    java.util.ArrayList access$23(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> q
+    java.util.ArrayList access$24(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> r
+    java.util.ArrayList access$25(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> s
+    java.lang.String access$26(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders) -> t
+    void access$27(com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders,boolean) -> b
+com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders$1 -> cT:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders this$0 -> a
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders$2 -> cU:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders this$0 -> a
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders$ShowTask -> cV:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentLeaders this$0 -> a
+    java.lang.Void doInBackground$10299ca() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz -> cW:
+    android.widget.TextView scoreText -> N
+    android.widget.TextView questionText -> O
+    android.widget.EditText answerText -> P
+    android.widget.TextView answerPlace -> Q
+    android.widget.Button answerButton -> R
+    android.widget.RelativeLayout skipButton -> S
+    android.widget.TextView skipText -> T
+    android.widget.TextView skipTime -> U
+    android.widget.RelativeLayout hintButton -> V
+    android.widget.TextView hintText -> W
+    android.widget.TextView hintTime -> X
+    android.widget.ImageView answerImage -> Y
+    android.widget.Button retryButton -> Z
+    com.parse.ParseUser user -> aa
+    java.lang.String questionId -> ab
+    java.lang.String question -> ac
+    java.lang.String questionScore -> ad
+    java.lang.String questionCategory -> ae
+    java.lang.String correctAnswer -> af
+    java.lang.String nextQuestionId -> ag
+    java.lang.String nextQuestion -> ah
+    java.lang.String nextQuestionScore -> ai
+    java.lang.String nextQuestionCategory -> aj
+    java.lang.String nextCorrectAnswer -> ak
+    long skipTick -> al
+    long hintTick -> am
+    boolean newQuestion -> an
+    java.lang.String userId -> ao
+    java.lang.String displayName -> ap
+    android.media.MediaPlayer mediaPlayer -> aq
+    android.media.AudioManager audioManager -> ar
+    java.lang.reflect.Field[] fields -> as
+    int rawIndex -> at
+    int currentAudio -> au
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$SkipTimer skipTimer -> av
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$HintTimer hintTimer -> aw
+    java.util.ArrayList answerIds -> ax
+    int currScore -> ay
+    java.lang.String savedAnswer -> az
+    java.lang.String savedHint -> aA
+    boolean hintPressed -> aB
+    boolean skipPressed -> aC
+    boolean isCorrect -> aD
+    boolean skipButtonEnabled -> aE
+    boolean hintButtonEnabled -> aF
+    boolean answerButtonEnabled -> aG
+    int skipTextVis -> aH
+    int hintTextVis -> aI
+    int skipTimeVis -> aJ
+    int hintTimeVis -> aK
+    int skipButtonVis -> aL
+    int hintButtonVis -> aM
+    int answerImageVis -> aN
+    int questionTextVis -> aO
+    int answerTextVis -> aP
+    int answerPlaceVis -> aQ
+    int answerButtonVis -> aR
+    int scoreTextVis -> aS
+    java.lang.String answerTextHint -> aT
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$UserTask userTask -> aU
+    android.view.animation.ScaleAnimation animScore -> aV
+    android.view.animation.ScaleAnimation unanimScore -> aW
+    android.os.CountDownTimer wrongTimer -> aX
+    android.content.res.Resources res -> aY
+    android.content.SharedPreferences sharedPrefs -> aZ
+    boolean inLeaders -> ba
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$CorrectAnswersTask correctAnswersTask -> L
+    boolean loggingOut -> bb
+    int questionCount -> bc
+    android.media.AudioManager$OnAudioFocusChangeListener afChangeListener -> M
+    void next() -> y
+    void onCreate(android.os.Bundle) -> a
+    void indicateHint() -> z
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void userSetup() -> A
+    void setupQuestion(java.lang.String) -> a
+    void getCorrectAnswers(java.lang.String,boolean) -> a
+    void onResume() -> m
+    void onPause() -> n
+    void getCurrentScore(java.util.HashMap,boolean,boolean,int) -> a
+    void saveUserScore(int) -> c
+    void getQuestionCount(boolean) -> b
+    void getNextQuestion(boolean) -> c
+    void onSaveInstanceState(android.os.Bundle) -> b
+    void setQuestion() -> B
+    void showNoMoreQuestions() -> C
+    void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
+    void onPrepareOptionsMenu(android.view.Menu) -> a
+    boolean onOptionsItemSelected(android.view.MenuItem) -> a
+    android.content.Intent getOpenFacebookIntent(android.content.Context) -> a
+    android.widget.ImageView access$0(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> a
+    void access$1(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> a
+    android.widget.TextView access$2(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> b
+    android.media.MediaPlayer access$3(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> c
+    void access$4(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,long) -> a
+    android.widget.TextView access$5(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> d
+    android.widget.TextView access$6(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> e
+    void access$7(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> b
+    void access$8(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> c
+    android.widget.RelativeLayout access$9(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> f
+    void access$10(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> a
+    android.widget.RelativeLayout access$11(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> g
+    void access$12(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> b
+    void access$13(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,long) -> b
+    android.widget.TextView access$14(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> h
+    android.widget.TextView access$15(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> i
+    void access$16(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> d
+    void access$17(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> e
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$SkipTimer access$18(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> j
+    void access$19(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$SkipTimer) -> a
+    java.lang.String access$20(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> k
+    java.lang.String access$21(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> l
+    java.lang.String access$22(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> m
+    void access$23(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> c
+    java.lang.String access$24(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> n
+    void access$25(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> a
+    void access$26(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> b
+    android.widget.TextView access$27(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> o
+    java.lang.String access$28(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> p
+    void access$29(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> f
+    android.widget.EditText access$30(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> q
+    java.lang.String access$31(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> r
+    android.content.res.Resources access$32(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> s
+    void access$33(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> c
+    java.lang.String access$34(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> t
+    void access$35(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,com.parse.ParseUser) -> a
+    com.parse.ParseUser access$36(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> u
+    void access$37(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> d
+    void access$38(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> g
+    int access$39(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> v
+    void access$40(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> h
+    android.widget.TextView access$41(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> w
+    long access$42(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> x
+    boolean access$43(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> y
+    long access$44(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> z
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$HintTimer access$45(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> A
+    void access$46(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$HintTimer) -> a
+    java.util.ArrayList access$47(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> B
+    void access$48(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.util.ArrayList) -> a
+    void access$49(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> i
+    void access$50(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String,boolean) -> a
+    void access$51(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> e
+    void access$52(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> d
+    void access$53(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.util.HashMap,boolean,boolean,int) -> a
+    void access$54(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> e
+    void access$55(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> f
+    void access$56(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> g
+    void access$57(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> f
+    android.os.CountDownTimer access$58(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> C
+    boolean access$59(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> D
+    void access$60(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> g
+    java.lang.String access$61(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> E
+    android.widget.Button access$62(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> F
+    void access$63(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> h
+    void access$64(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> G
+    void access$65(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> i
+    void access$66(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> H
+    int access$67(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> I
+    void access$68(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> j
+    void access$69(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,boolean) -> j
+    void access$70(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> J
+    void access$71(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> h
+    void access$72(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> i
+    void access$73(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> j
+    void access$74(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> k
+    void access$75(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> l
+    void access$76(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> m
+    void access$77(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> n
+    void access$78(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> o
+    void access$79(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> p
+    void access$80(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,java.lang.String) -> q
+    java.lang.String access$81(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> K
+    java.lang.String access$82(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> L
+    java.lang.String access$83(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> M
+    java.lang.String access$84(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> N
+    java.lang.String access$85(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> O
+    java.lang.String access$86(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> P
+    java.lang.String access$87(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> Q
+    void access$88(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> R
+    void access$89(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> k
+    void access$90(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz,int) -> l
+    android.media.AudioManager access$91(com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz) -> S
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$1 -> cX:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onFinish() -> onFinish
+    void onTick(long) -> onTick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$10 -> cY:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    boolean val$isSkip -> b
+    void done(com.parse.ParseObject,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$11 -> cZ:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    int val$curr -> b
+    java.util.HashMap val$answerMap -> c
+    boolean val$updateUi -> d
+    boolean val$saveToParse -> e
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$12 -> da:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    boolean val$setQuestion -> b
+    void done(int,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$13 -> db:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$14 -> dc:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onCompletion(android.media.MediaPlayer) -> onCompletion
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$15 -> dd:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    boolean onError(android.media.MediaPlayer,int,int) -> onError
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$16 -> de:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$2 -> df:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onAudioFocusChange(int) -> onAudioFocusChange
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$3 -> dg:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$4 -> dh:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$5 -> di:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$6 -> dj:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$7 -> dk:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$8 -> dl:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$9 -> dm:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    java.lang.String val$userId -> b
+    boolean val$getScore -> c
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$CorrectAnswersTask -> dn:
+    java.lang.String userId -> a
+    boolean getScore -> b
+    java.util.List answerList -> c
+    java.util.HashMap answerMap -> d
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> e
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$FacebookTask -> do:
+    com.parse.ParseUser user -> a
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> b
+    java.lang.Void doInBackground$10299ca() -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$HintTask -> dp:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+    void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$HintTimer -> dq:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onTick(long) -> onTick
+    void onFinish() -> onFinish
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$SkipTimer -> dr:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onTick(long) -> onTick
+    void onFinish() -> onFinish
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$UserTask -> ds:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+    void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
+com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz$VerifyTask -> dt:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentQuiz this$0 -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+    void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash -> du:
+    android.widget.EditText loginUsername -> L
+    android.widget.EditText loginPassword -> M
+    android.widget.RelativeLayout emailButtonLayout -> N
+    android.widget.LinearLayout buttonLayout -> O
+    android.widget.TextView loginButton -> P
+    android.widget.TextView signupButton -> Q
+    android.widget.ImageView facebookLogin -> R
+    android.widget.ImageView twitterLogin -> S
+    android.widget.TextView playButton -> T
+    android.widget.TextView emailButton -> U
+    android.widget.LinearLayout emailLayout -> V
+    android.widget.RelativeLayout splashLayout -> W
+    java.lang.String username -> X
+    java.lang.String password -> Y
+    android.util.DisplayMetrics dm -> Z
+    boolean isSignedUp -> aa
+    android.content.Context context -> ab
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
+    void onCreate(android.os.Bundle) -> a
+    void onResume() -> m
+    void onAttach(android.app.Activity) -> a
+    void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
+    boolean onOptionsItemSelected(android.view.MenuItem) -> a
+    void access$0(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash,java.lang.String) -> a
+    boolean access$1(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> a
+    void access$2(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash,boolean) -> a
+    void access$3(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> b
+    void access$4(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> c
+    void access$5(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> d
+    android.widget.TextView access$6(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> e
+    android.widget.TextView access$7(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> f
+    android.widget.LinearLayout access$8(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> g
+    android.widget.LinearLayout access$9(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> h
+    java.lang.String access$10(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> i
+    android.widget.RelativeLayout access$11(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> j
+    android.widget.TextView access$12(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> k
+    android.widget.TextView access$13(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash) -> l
+    void access$14(com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash,boolean) -> b
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$1 -> dv:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$10 -> dw:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$11 -> dx:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    com.parse.ParseUser val$user -> b
+    void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$12 -> dy:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$13 -> dz:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$13$1 -> dA:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$13 this$1 -> a
+    com.parse.ParseUser val$user -> b
+    void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$14 -> dB:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$15 -> dC:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$2 -> dD:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onFocusChange(android.view.View,boolean) -> onFocusChange
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$3 -> dE:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$4 -> dF:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$5 -> dG:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$6 -> dH:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$7 -> dI:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$8 -> dJ:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$9 -> dK:
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash$FacebookTask -> dL:
+    com.parse.ParseUser user -> a
+    com.jeffthefate.dmbquiz_dev.fragment.FragmentSplash this$0 -> b
+    java.lang.Void doInBackground$10299ca() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.jeffthefate.dmbquiz_dev.receiver.ConnectivityReceiver -> com.jeffthefate.dmbquiz_dev.receiver.ConnectivityReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.jeffthefate.stacktrace.DefaultExceptionHandler -> dM:
+    java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler -> a
+    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
+com.jeffthefate.stacktrace.ExceptionHandler -> dN:
+    java.lang.String TAG -> a
+    java.lang.String[] stackTraceFileList -> b
+    com.jeffthefate.stacktrace.ExceptionHandler$OnStacktraceListener mCallback -> c
+    boolean register(android.app.Application) -> a
+    java.lang.String[] searchForStackTraces() -> b
+    void submitStackTraces() -> a
+com.jeffthefate.stacktrace.ExceptionHandler$1 -> dO:
+    void run() -> run
+com.jeffthefate.stacktrace.ExceptionHandler$2 -> dP:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.jeffthefate.stacktrace.ExceptionHandler$OnStacktraceListener -> dQ:
+    void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+com.jeffthefate.stacktrace.G -> dR:
+    java.lang.String FILES_PATH -> a
+    java.lang.String APP_VERSION -> b
+    java.lang.String APP_PACKAGE -> c
+    java.lang.String PHONE_MODEL -> d
+    java.lang.String ANDROID_VERSION -> e
+com.parse.BackgroundTask -> dS:
+    com.parse.ParseCallback callback -> a
+    java.lang.Object result -> b
+    com.parse.ParseException exception -> c
+    java.lang.Object run() -> a
+    java.lang.Void doInBackground$10299ca() -> b
+    int executeTask(com.parse.BackgroundTask) -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.CountCallback -> dT:
+    void done(int,com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.CountingMultipartEntity -> dU:
+    com.parse.ParseCallback progressCallback$138625ed -> a
+    void writeTo(java.io.OutputStream) -> writeTo
+com.parse.CountingMultipartEntity$CountingOutputStream -> dV:
+    com.parse.ParseCallback progressCallback$138625ed -> a
+    long uploadedSize -> b
+    long totalSize -> c
+    boolean hasReportedDone -> d
+    void write(byte[],int,int) -> write
+    void write(int) -> write
+    void notifyCallback() -> a
+com.parse.CountingMultipartEntity$CountingOutputStream$1 -> dW:
+    int val$progressToReport -> a
+    java.lang.Object run() -> a
+com.parse.FindCallback -> dX:
+    void done(java.util.List,com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.GetCallback -> dY:
+    void done(com.parse.ParseObject,com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.LocalIdManager -> dZ:
+    com.parse.LocalIdManager defaultInstance -> a
+    java.io.File diskPath -> b
+    java.util.Random random -> c
+    com.parse.LocalIdManager getDefaultInstance() -> a
+    boolean isLocalId(java.lang.String) -> d
+    com.parse.LocalIdManager$MapEntry getMapEntry(java.lang.String) -> e
+    void putMapEntry(java.lang.String,com.parse.LocalIdManager$MapEntry) -> a
+    void removeMapEntry(java.lang.String) -> f
+    java.lang.String createLocalId() -> b
+    void retainLocalIdOnDisk(java.lang.String) -> a
+    void releaseLocalIdOnDisk(java.lang.String) -> b
+    java.lang.String getObjectId(java.lang.String) -> c
+    void setObjectId(java.lang.String,java.lang.String) -> a
+com.parse.LocalIdManager$MapEntry -> ea:
+    java.lang.String objectId -> a
+    int retainCount -> b
+com.parse.LogInCallback -> eb:
+    void done(com.parse.ParseUser,com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.Parse -> ec:
+    android.content.Context applicationContext -> a
+    java.lang.String applicationId -> b
+    java.lang.String clientKey -> c
+    int logLevel -> d
+    int maxKeyValueCacheBytes -> e
+    int maxKeyValueCacheFiles -> f
+    com.parse.ParseCommandCache commandCache -> g
+    java.text.DateFormat dateFormat -> h
+    void initialize(android.content.Context,java.lang.String,java.lang.String) -> a
+    int getLogLevel() -> a
+    void log(int,java.lang.String,java.lang.String,java.lang.Throwable) -> a
+    void logV(java.lang.String,java.lang.String) -> a
+    void logD(java.lang.String,java.lang.String) -> b
+    void logI(java.lang.String,java.lang.String) -> c
+    void logW(java.lang.String,java.lang.String) -> d
+    void logE(java.lang.String,java.lang.String,java.lang.Throwable) -> a
+    void logE(java.lang.String,java.lang.String) -> e
+    void setContextIfNeeded(android.content.Context) -> a
+    java.io.File getParseDir() -> b
+    void recursiveDelete(java.io.File) -> a
+    void checkCacheApplicationId() -> e
+    java.io.File getKeyValueCacheDir() -> f
+    java.io.File getKeyValueCacheFile(java.lang.String) -> d
+    long getKeyValueCacheAge(java.io.File) -> b
+    void saveToKeyValueCache(java.lang.String,java.lang.String) -> f
+    java.lang.String loadFromKeyValueCache(java.lang.String,long) -> b
+    java.lang.Object jsonFromKeyValueCache(java.lang.String,long) -> a
+    com.parse.ParseCommandCache getCommandCache() -> c
+    void checkInit() -> d
+    void checkContext() -> g
+    boolean hasPermission(java.lang.String) -> a
+    void requirePermission(java.lang.String) -> b
+    java.util.List convertArrayToList(org.json.JSONArray) -> a
+    java.util.Map convertJSONObjectToMap(org.json.JSONObject) -> b
+    java.lang.Object decodeJSONObject(java.lang.Object) -> a
+    org.json.JSONObject encodeJSONObject(java.lang.Object,boolean) -> b
+    boolean isValidType(java.lang.Object) -> b
+    java.lang.Object maybeEncodeJSONObject(java.lang.Object,boolean) -> a
+    java.lang.Object maybeReferenceAndEncode(java.lang.Object) -> c
+    org.json.JSONObject parseObjectToJSONPointer(com.parse.ParseObject) -> a
+    java.util.Date parseDate(java.lang.String) -> c
+    java.lang.String encodeDate(java.util.Date) -> a
+    org.json.JSONObject dateToObject(java.util.Date) -> b
+    java.lang.Iterable keys(org.json.JSONObject) -> a
+    boolean isContainerObject(java.lang.Object) -> d
+    java.lang.String join(java.util.Collection,java.lang.String) -> a
+com.parse.Parse$1 -> ed:
+    void run() -> run
+com.parse.Parse$2 -> ee:
+    java.lang.String val$suffix -> a
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.parse.Parse$3 -> ef:
+    int compare(java.lang.Object,java.lang.Object) -> compare
+com.parse.Parse$4 -> eg:
+    org.json.JSONObject val$finalObject -> a
+    java.util.Iterator iterator() -> iterator
+com.parse.ParseACL -> eh:
+    boolean shared -> a
+    com.parse.ParseUser unresolvedUser -> b
+    org.json.JSONObject permissionsById -> c
+    com.parse.ParseACL copy() -> a
+    com.parse.ParseACL createACLFromJSONObject(org.json.JSONObject) -> a
+    boolean hasUnresolvedUser() -> b
+    void setAccess(java.lang.String,java.lang.String,boolean) -> a
+com.parse.ParseACL$UserResolutionListener -> ei:
+    java.lang.ref.WeakReference parent -> a
+    void done(com.parse.ParseObject,com.parse.ParseException) -> a
+com.parse.ParseAddUniqueOperation -> ej:
+    java.util.LinkedHashSet objects -> a
+    com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
+    java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
+    java.lang.Object encode() -> a
+com.parse.ParseAnonymousUtils -> ek:
+    com.parse.auth.AnonymousAuthenticationProvider provider -> a
+    boolean isLinked(com.parse.ParseUser) -> a
+    void logIn(com.parse.LogInCallback) -> a
+com.parse.ParseBroadcastReceiver -> com.parse.ParseBroadcastReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.parse.ParseCallback -> el:
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.ParseCommand -> em:
+    java.lang.String op -> a
+    org.json.JSONObject params -> b
+    java.lang.String localId -> c
+    org.apache.http.client.HttpClient client -> d
+    org.apache.http.client.methods.HttpPost post -> e
+    boolean cancelled -> f
+    boolean retryEnabled -> g
+    int attemptsMade -> h
+    long delay -> i
+    com.parse.ParseCommand$InternalCallback internalCallback -> j
+    int SOCKET_TIMEOUT -> k
+    int CONNECTION_TIMEOUT -> l
+    int INITIAL_DELAY -> m
+    boolean callCallbacksOnFailure -> n
+    void put(java.lang.String,java.lang.String) -> a
+    void put(java.lang.String,int) -> a
+    void put(java.lang.String,org.json.JSONArray) -> a
+    void put(java.lang.String,org.json.JSONObject) -> a
+    void setOp(java.lang.String) -> a
+    java.lang.String getLocalId() -> a
+    void setLocalId(java.lang.String) -> b
+    org.json.JSONObject toJSONObject() -> b
+    java.lang.String getCacheKey() -> c
+    void addToStringer(org.json.JSONStringer,java.lang.Object) -> a
+    java.lang.Object perform() -> d
+    com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> a
+    void preparePost() -> h
+    void setInternalCallback(com.parse.ParseCommand$InternalCallback) -> a
+    java.lang.Object perform(boolean) -> a
+    void setCallCallbacksOnFailure(boolean) -> b
+    org.json.JSONObject sendRequestWithRetries() -> i
+    void maybeSetupHttpProxy() -> j
+    org.json.JSONObject sendRequest(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost) -> a
+    void enableRetrying() -> e
+    void getLocalPointersIn(java.lang.Object,java.util.ArrayList) -> a
+    void retainLocalIds() -> f
+    void releaseLocalIds() -> g
+com.parse.ParseCommand$InternalCallback -> en:
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseCommandCache -> eo:
+    java.io.File cachePath -> a
+    int timeoutMaxRetries -> b
+    double timeoutRetryWaitSeconds -> c
+    int maxCacheSizeBytes -> d
+    int filenameCounter -> e
+    boolean shouldStop -> f
+    boolean connected -> g
+    java.util.HashMap commandsInCache -> h
+    java.util.HashMap callbacksForCommands -> i
+    java.lang.Object lock -> j
+    boolean running -> k
+    java.lang.Object runningLock -> l
+    java.util.logging.Logger log -> m
+    com.parse.ParseCommandCache$TestHelper testHelper -> n
+    void removeFile(java.io.File) -> a
+    void runEventually(com.parse.ParseCommand,com.parse.ParseCallback,com.parse.ParseObject) -> a
+    void setConnected(boolean) -> a
+    void maybeRunAllCommandsNow(int) -> a
+    void access$000(com.parse.ParseCommandCache) -> a
+    com.parse.ParseCommandCache$TestHelper access$100(com.parse.ParseCommandCache) -> b
+com.parse.ParseCommandCache$1 -> ep:
+    android.net.ConnectivityManager val$connectivityManager -> a
+    com.parse.ParseCommandCache this$0 -> b
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.parse.ParseCommandCache$2 -> eq:
+    com.parse.ParseCommandCache this$0 -> a
+    void run() -> run
+com.parse.ParseCommandCache$3 -> er:
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseCommandCache$4 -> es:
+    com.parse.ParseCallback val$callback -> a
+    com.parse.ParseCommandCache this$0 -> b
+    void run() -> run
+com.parse.ParseCommandCache$TestHelper -> et:
+    com.parse.facebook.Facebook facebook -> a
+    com.parse.auth.FacebookAuthenticationProvider provider -> b
+    boolean isInitialized -> c
+    com.parse.facebook.Facebook getFacebook() -> a
+    com.parse.auth.FacebookAuthenticationProvider getAuthenticationProvider() -> b
+com.parse.ParseDeleteOperation -> eu:
+    com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
+    java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
+    java.lang.Object encode() -> a
+com.parse.ParseException -> ev:
+    int code -> a
+    int getCode() -> a
+com.parse.ParseFieldOperation -> ew:
+    java.lang.Object encode() -> a
+    com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
+    java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
+com.parse.ParseFieldOperations -> ex:
+    java.util.Map opDecoderMap -> a
+    com.parse.ParseFieldOperation decode(org.json.JSONObject) -> a
+    java.util.ArrayList jsonArrayAsArrayList(org.json.JSONArray) -> a
+com.parse.ParseFile -> ey:
+    java.lang.String name -> a
+    java.lang.String url -> b
+    com.parse.ParseCommand currentCommand -> d
+    org.apache.http.client.methods.HttpPost fileUploadPost -> e
+    com.parse.ParseFile$ParseFileState state -> c
+    com.parse.ParseFile$ParseFileState previousState -> f
+    void setState(com.parse.ParseFile$ParseFileState) -> a
+    void revertState() -> b
+    void assertNotRunning() -> c
+    void handleFileUploadResult$99f44(org.json.JSONObject,com.parse.ParseCallback) -> a
+    void save() -> a
+com.parse.ParseFile$ParseFileState -> ez:
+    com.parse.ParseFile$ParseFileState DIRTY -> a
+    com.parse.ParseFile$ParseFileState SAVING -> b
+    com.parse.ParseFile$ParseFileState AWAITING_FETCH -> c
+    com.parse.ParseFile$ParseFileState FETCHING -> d
+    com.parse.ParseFile$ParseFileState DATA_AVAILABLE -> e
+    com.parse.ParseFile$ParseFileState[] $VALUES -> f
+    com.parse.ParseFile$ParseFileState[] values() -> values
+    com.parse.ParseFile$ParseFileState valueOf(java.lang.String) -> valueOf
+com.parse.ParseGeoPoint -> eA:
+    double latitude -> a
+    double longitude -> b
+    double getLatitude() -> a
+    double getLongitude() -> b
+com.parse.ParseInstallation -> eB:
+    com.parse.ParseInstallation currentInstallation -> e
+    java.util.List readonlyFields -> f
+    com.parse.ParseInstallation getCurrentInstallation() -> a
+    java.lang.String getOrCreateCurrentInstallationId() -> u
+    java.lang.String getInstallationId() -> b
+    void put(java.lang.String,java.lang.Object) -> a
+    void save(boolean) -> a
+    com.parse.ParseObject fetch() -> c
+    void maybeFlushToDisk(com.parse.ParseInstallation) -> a
+com.parse.ParseJSONCacheItem -> eC:
+    org.json.JSONObject json -> b
+    java.lang.String hashValue -> a
+    java.lang.Object getJSONObject() -> a
+com.parse.ParseMulticastDelegate -> eD:
+    java.util.List callbacks -> a
+com.parse.ParseObject -> eE:
+    java.lang.String server -> a
+    java.util.Map objectFactories -> e
+    java.text.DateFormat impreciseDateFormat -> f
+    boolean dirty -> b
+    java.lang.String objectId -> c
+    java.lang.String localId -> g
+    java.lang.String className -> h
+    com.parse.ParseMulticastDelegate saveEvent -> i
+    java.util.Map serverData -> j
+    java.util.LinkedList operationSetQueue -> d
+    java.util.Map estimatedData -> k
+    java.util.Map dataAvailability -> l
+    java.util.Map hashedObjects -> m
+    boolean hasBeenFetched -> n
+    java.util.Date updatedAt -> o
+    java.util.Date createdAt -> p
+    java.lang.Boolean isRunning -> q
+    com.parse.ParseObject createWithoutData(java.lang.String,java.lang.String) -> a
+    void registerFactory(java.lang.String,com.parse.ParseObject$ParseObjectFactory) -> a
+    java.lang.String getApplicationId() -> d
+    java.util.Date impreciseParseDate(java.lang.String) -> f
+    org.json.JSONObject getDiskObject(android.content.Context,java.lang.String) -> a
+    org.json.JSONObject getDiskObject(java.io.File) -> a
+    void saveDiskObject(android.content.Context,java.lang.String,org.json.JSONObject) -> a
+    void saveDiskObject(java.io.File,org.json.JSONObject) -> a
+    void deleteDiskObject(android.content.Context,java.lang.String) -> b
+    void checkIfRunning() -> e
+    void checkIfRunning(boolean) -> b
+    void finishedRunning() -> f
+    void saveToDisk(android.content.Context,java.lang.String) -> c
+    void addToHashedObjects(java.lang.Object) -> a
+    com.parse.ParseObject getFromDisk(android.content.Context,java.lang.String) -> d
+    java.lang.String getClassName() -> g
+    void clearChanges() -> h
+    void copyChangesFrom(com.parse.ParseObject) -> a
+    void mergeFromObject(com.parse.ParseObject) -> b
+    void mergeAfterFetch(org.json.JSONObject) -> a
+    void mergeFromServer(org.json.JSONObject) -> b
+    boolean isDirty() -> i
+    boolean isDirty(boolean) -> c
+    void checkpointMutableContainer(java.lang.Object) -> b
+    void checkForChangesToMutableContainers() -> j
+    java.lang.String getObjectId() -> k
+    java.lang.String getOrCreateLocalId() -> l
+    void setObjectIdInternal(java.lang.String) -> g
+    void findUnsavedChildren(java.lang.Object,java.util.List) -> a
+    com.parse.ParseCommand constructSaveCommand() -> m
+    org.json.JSONObject toJSONObjectForDataFile() -> n
+    org.json.JSONObject toJSONObjectForSaving() -> o
+    void handleSaveResult(java.lang.String,org.json.JSONObject) -> a
+    void startSave() -> p
+    void validateSave() -> q
+    void save() -> r
+    void save(boolean) -> a
+    void saveInBackground(com.parse.SaveCallback) -> a
+    void saveInBackground() -> s
+    void saveEventually() -> t
+    void saveEventually(com.parse.SaveCallback) -> b
+    void handleFetchResult(org.json.JSONObject) -> c
+    com.parse.ParseObject fetch() -> c
+    com.parse.ParseObject fetch(boolean) -> d
+    void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List,java.util.IdentityHashMap,java.util.IdentityHashMap) -> a
+    boolean canBeSerializedAsValue(java.lang.Object) -> c
+    void deepSave(java.lang.Object) -> d
+    java.util.Map currentOperations() -> a
+    void applyOperations(java.util.Map,java.util.Map) -> a
+    void rebuildEstimatedData() -> b
+    void performOperation(java.lang.String,com.parse.ParseFieldOperation) -> a
+    void put(java.lang.String,java.lang.Object) -> a
+    void addUnique(java.lang.String,java.lang.Object) -> b
+    void addAllUnique(java.lang.String,java.util.Collection) -> a
+    void removeAll(java.lang.String,java.util.Collection) -> b
+    java.lang.String getString(java.lang.String) -> a
+    java.lang.Number getNumber(java.lang.String) -> b
+    java.util.List getList(java.lang.String) -> c
+    boolean getBoolean(java.lang.String) -> d
+    com.parse.ParseACL getACL(boolean) -> e
+    boolean isDataAvailable(java.lang.String) -> h
+    java.lang.Object get(java.lang.String) -> e
+    void checkGetAccess(java.lang.String) -> i
+    void registerSaveListener(com.parse.GetCallback) -> a
+    void unregisterSaveListener(com.parse.GetCallback) -> b
+com.parse.ParseObject$1 -> eF:
+    java.lang.Class getExpectedType() -> a
+    com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$2 -> eG:
+    java.lang.Class getExpectedType() -> a
+    com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$3 -> eH:
+    java.lang.Class getExpectedType() -> a
+    com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$4 -> eI:
+    com.parse.ParseObject this$0 -> a
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseObject$5 -> eJ:
+    com.parse.ParseObject this$0 -> a
+    java.lang.Object run() -> a
+com.parse.ParseObject$6 -> eK:
+    com.parse.ParseObject this$0 -> a
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseObject$ParseObjectFactory -> eL:
+    com.parse.ParseObject getNew(boolean) -> a
+    java.lang.Class getExpectedType() -> a
+com.parse.ParsePushRouter -> eM:
+    java.util.Map channelRoutes -> b
+    com.parse.ParsePushRouter$CallbackFactory defaultRoute -> c
+    java.util.Set channels -> a
+    java.lang.String lastTime -> d
+    java.lang.String ignoreAfter -> e
+    org.json.JSONObject history -> f
+    int maxHistory -> g
+    boolean hasLoadedStateFromDisk -> h
+    boolean $assertionsDisabled -> i
+    void saveEventually(android.content.Context,com.parse.ParseInstallation) -> a
+    boolean hasRoutes(android.content.Context) -> a
+    void ensureStateIsLoaded(android.content.Context) -> b
+    void parseChannelRoutes(org.json.JSONObject) -> a
+    void saveStateToDisk(android.content.Context) -> e
+    void insertIntoHistory(java.lang.String,java.lang.String) -> a
+    java.util.Set getSubscriptions(android.content.Context) -> f
+    java.lang.String getApplicationId(android.content.Context) -> g
+    void routePush(com.parse.PushService,org.json.JSONObject) -> a
+    boolean isSubscribedToChannel$5ffc0101(java.lang.String) -> a
+    org.json.JSONObject getPushRequestJSON(android.content.Context) -> c
+    void access$000(android.content.Context) -> d
+    boolean access$100(android.content.Context,java.lang.String) -> a
+com.parse.ParsePushRouter$1 -> eN:
+    android.content.Context val$context -> a
+    com.parse.ParseInstallation val$installation -> b
+    void done(com.parse.ParseException) -> a
+com.parse.ParsePushRouter$1$1 -> eO:
+    com.parse.ParsePushRouter$1 this$0 -> a
+    java.lang.Object run() -> a
+com.parse.ParsePushRouter$2 -> eP:
+    com.parse.PushService val$service -> a
+    org.json.JSONObject val$message -> b
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.ParsePushRouter$3 -> eQ:
+    java.lang.String val$channel -> a
+    com.parse.PushService val$service -> b
+    java.lang.Boolean run() -> b
+    java.lang.Object run() -> a
+com.parse.ParsePushRouter$CallbackFactory -> eR:
+    java.lang.Class klass -> a
+    org.json.JSONObject contextData -> b
+    org.json.JSONObject toJSON() -> a
+com.parse.ParseQuery -> eS:
+    java.lang.String className -> d
+    java.util.HashMap where -> e
+    java.util.ArrayList include -> f
+    int limit -> g
+    boolean trace -> h
+    int skip -> i
+    java.lang.String order -> a
+    long queryStart -> j
+    long querySent -> k
+    long queryReceived -> l
+    long objectsParsed -> m
+    com.parse.ParseCommand currentCommand -> b
+    java.lang.Boolean isRunning -> n
+    com.parse.ParseQuery$CachePolicy cachePolicy -> c
+    long maxCacheAge -> o
+    void checkIfRunning(boolean) -> a
+    void finishedRunning() -> d
+    java.lang.Object maybeEncodeSubQueries(java.lang.Object) -> a
+    org.json.JSONObject getFindParams() -> e
+    com.parse.ParseCommand makeFindCommand() -> f
+    java.util.List convertFindResponse(org.json.JSONObject) -> a
+    java.lang.Object runCommandWithPolicy(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy) -> a
+    java.util.List findWithCachePolicy(com.parse.ParseQuery$CachePolicy) -> a
+    java.util.List find(boolean) -> d
+    com.parse.ParseObject getFirst(boolean) -> e
+    java.util.List findFromNetwork(boolean) -> b
+    java.util.List findFromCache() -> a
+    java.lang.Integer countFromCache() -> b
+    void findInBackground(com.parse.FindCallback) -> a
+    com.parse.ParseCommand makeCountCommand() -> c
+    int count(boolean) -> c
+    com.parse.ParseObject get(java.lang.String,boolean) -> a
+    void addCondition(java.lang.String,java.lang.String,java.lang.Object) -> a
+    com.parse.ParseQuery whereNotContainedIn(java.lang.String,java.util.Collection) -> a
+    com.parse.ParseQuery whereMatches(java.lang.String,java.lang.String) -> b
+    com.parse.ParseQuery whereContains(java.lang.String,java.lang.String) -> a
+    com.parse.ParseQuery whereExists(java.lang.String) -> a
+    void setLimit(int) -> a
+    void setSkip(int) -> b
+com.parse.ParseQuery$1 -> eT:
+    com.parse.ParseQuery this$0 -> a
+    java.lang.Object runFromCache() -> a
+    java.lang.Object runOnNetwork(boolean) -> a
+com.parse.ParseQuery$2 -> eU:
+    com.parse.ParseQuery this$0 -> a
+    java.lang.Object runFromCache() -> a
+    java.lang.Object runOnNetwork(boolean) -> a
+com.parse.ParseQuery$3 -> eV:
+    com.parse.ParseQuery$CachePolicy val$callbackCachePolicy -> a
+    com.parse.ParseQuery this$0 -> b
+    java.lang.Object run() -> a
+com.parse.ParseQuery$5 -> eW:
+    com.parse.ParseQuery this$0 -> a
+    java.lang.Object run() -> a
+com.parse.ParseQuery$6 -> eX:
+    java.lang.String val$finalObjectId -> a
+    com.parse.ParseQuery this$0 -> b
+    java.lang.Object run() -> a
+com.parse.ParseQuery$7 -> eY:
+    int[] $SwitchMap$com$parse$ParseQuery$CachePolicy -> a
+com.parse.ParseQuery$CachePolicy -> eZ:
+    com.parse.ParseQuery$CachePolicy IGNORE_CACHE -> a
+    com.parse.ParseQuery$CachePolicy CACHE_ONLY -> b
+    com.parse.ParseQuery$CachePolicy NETWORK_ONLY -> c
+    com.parse.ParseQuery$CachePolicy CACHE_ELSE_NETWORK -> d
+    com.parse.ParseQuery$CachePolicy NETWORK_ELSE_CACHE -> e
+    com.parse.ParseQuery$CachePolicy CACHE_THEN_NETWORK -> f
+    com.parse.ParseQuery$CachePolicy[] $VALUES -> g
+    com.parse.ParseQuery$CachePolicy[] values() -> values
+    com.parse.ParseQuery$CachePolicy valueOf(java.lang.String) -> valueOf
+com.parse.ParseQuery$CommandDelegate -> fa:
+    java.lang.Object runOnNetwork(boolean) -> a
+    java.lang.Object runFromCache() -> a
+com.parse.ParseRelation -> fb:
+    com.parse.ParseObject parent -> a
+    java.lang.String key -> b
+    java.lang.String targetClass -> c
+com.parse.ParseRemoveOperation -> fc:
+    java.util.HashSet objects -> a
+    com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
+    java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
+    java.lang.Object encode() -> a
+com.parse.ParseRequestRetryer -> fd:
+    org.apache.http.client.HttpClient client -> a
+    org.apache.http.client.methods.HttpUriRequest request -> b
+    long delay -> c
+    int maxAttempts -> d
+    int attemptsMade -> e
+    org.apache.http.client.HttpClient testClient -> f
+    byte[] sendOneRequest$3f932915(com.parse.ParseCallback) -> b
+    byte[] go$3f932915(com.parse.ParseCallback) -> a
+    com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> a
+com.parse.ParseRequestRetryer$1 -> fe:
+    int val$progressToReport -> a
+    java.lang.Object run() -> a
+com.parse.ParseRole -> ff:
+    java.util.regex.Pattern NAME_PATTERN -> e
+    void validateSave() -> q
+    void put(java.lang.String,java.lang.Object) -> a
+com.parse.ParseSetOperation -> fg:
+    java.lang.Object value -> a
+    java.lang.Object encode() -> a
+    com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
+    java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
+com.parse.ParseTwitterUtils -> fh:
+    com.parse.twitter.Twitter twitter -> b
+    com.parse.auth.TwitterAuthenticationProvider provider -> c
+    boolean isInitialized -> a
+    com.parse.auth.TwitterAuthenticationProvider getAuthenticationProvider() -> a
+    com.parse.twitter.Twitter getTwitter() -> b
+com.parse.ParseUser -> fi:
+    java.lang.String password -> e
+    java.lang.String sessionToken -> f
+    org.json.JSONObject authData -> g
+    java.util.Set linkedServiceNames -> h
+    java.util.Set readOnlyLinkedServiceNames -> i
+    boolean isNew -> j
+    boolean isLazy -> k
+    com.parse.ParseUser currentUser -> l
+    java.util.Map authenticationProviders -> m
+    boolean currentUserMatchesDisk -> n
+    boolean isCurrentUser -> o
+    boolean isLazy() -> a
+    org.json.JSONObject toJSONObjectForSaving() -> o
+    org.json.JSONObject toJSONObjectForDataFile() -> n
+    void mergeFromObject(com.parse.ParseObject) -> b
+    void mergeFromServer(org.json.JSONObject) -> b
+    void cleanUpAuthData() -> A
+    void setUsername(java.lang.String) -> f
+    java.lang.String getUsername() -> b
+    void setPassword(java.lang.String) -> g
+    void put(java.lang.String,java.lang.Object) -> a
+    void stripAnonymity() -> B
+    java.lang.String getSessionToken() -> u
+    void validateSave() -> q
+    void save(boolean) -> a
+    com.parse.ParseCommand constructSaveCommand() -> m
+    com.parse.ParseCommand constructSignUpOrLoginCommand() -> C
+    void signUp(boolean) -> c
+    void signUpInBackground(com.parse.SignUpCallback) -> a
+    com.parse.ParseUser logIn(java.lang.String,java.lang.String) -> b
+    void logInInBackground(java.lang.String,java.lang.String,com.parse.LogInCallback) -> a
+    com.parse.ParseUser getCurrentUser() -> v
+    void saveCurrentUser(com.parse.ParseUser) -> f
+    void logOut() -> w
+    void checkApplicationContext() -> D
+    java.util.Set getLinkedServiceNames() -> x
+    void synchronizeAuthData(java.lang.String) -> h
+    void unlinkFromInBackground(java.lang.String,com.parse.SaveCallback) -> a
+    void registerAuthenticationProvider(com.parse.auth.ParseAuthenticationProvider) -> a
+    void logInWith(java.lang.String,com.parse.LogInCallback) -> a
+    void logInWith(java.lang.String,org.json.JSONObject,com.parse.LogInCallback) -> a
+    void resolveLaziness(boolean) -> d
+    com.parse.ParseQuery getQuery() -> y
+    com.parse.ParseObject fetch() -> c
+    org.json.JSONObject access$000(com.parse.ParseUser) -> a
+    java.util.Set access$100(com.parse.ParseUser) -> b
+    java.util.Map access$200() -> z
+    com.parse.ParseCommand access$300(com.parse.ParseUser) -> c
+    void access$400(com.parse.ParseUser,java.lang.String) -> a
+    void access$500(com.parse.ParseUser) -> d
+    void access$600(com.parse.ParseUser) -> e
+    void access$700(com.parse.ParseUser,boolean) -> a
+    void access$800(com.parse.ParseUser,org.json.JSONObject) -> a
+com.parse.ParseUser$1 -> fj:
+    com.parse.ParseUser this$0 -> a
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseUser$11 -> fk:
+    java.lang.String val$authType -> a
+    org.json.JSONObject val$authData -> b
+    com.parse.ParseUser this$0 -> c
+    java.lang.Void run() -> b
+    java.lang.Object run() -> a
+com.parse.ParseUser$2 -> fl:
+    com.parse.ParseUser this$0 -> a
+    java.lang.Object run() -> a
+com.parse.ParseUser$3 -> fm:
+    java.lang.String val$username -> a
+    java.lang.String val$password -> b
+    java.lang.Object run() -> a
+com.parse.ParseUser$5 -> fn:
+    java.lang.String val$authType -> a
+    com.parse.SaveCallback val$callback -> b
+    com.parse.ParseUser this$0 -> c
+    void done(com.parse.ParseException) -> a
+com.parse.ParseUser$6 -> fo:
+    java.lang.String val$authType -> a
+    org.json.JSONObject val$authData -> b
+    com.parse.ParseUser run() -> b
+    java.lang.Object run() -> a
+com.parse.ParseUser$6$1 -> fp:
+    com.parse.ParseUser val$user -> a
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseUser$7 -> fq:
+    java.lang.String val$authType -> a
+    org.json.JSONObject val$authData -> b
+    com.parse.ParseUser run() -> b
+    java.lang.Object run() -> a
+com.parse.ParseUser$8 -> fr:
+    com.parse.BackgroundTask val$logInWithTask -> a
+    com.parse.LogInCallback val$callback -> b
+    void done(com.parse.ParseException) -> a
+com.parse.ParseUser$9 -> fs:
+    com.parse.ParseUser this$0 -> a
+    void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.PushCallback -> ft:
+    void setLocalData(org.json.JSONObject) -> a
+    void setPushData(org.json.JSONObject) -> b
+    void setService(android.app.Service) -> a
+    void setChannel(java.lang.String) -> a
+com.parse.PushService -> com.parse.PushService:
+    java.lang.String pushServer -> b
+    int defaultPushPort -> c
+    int pushPort -> d
+    java.net.Socket socket -> a
+    com.parse.os.ParseAsyncTask task -> e
+    int delaySeconds -> f
+    com.parse.PushService$ServiceState state -> g
+    java.util.Timer keepAliveTimer -> h
+    int consecutiveFailures -> i
+    void startService(android.content.Context) -> c
+    void startServiceIfRequired(android.content.Context) -> a
+    void sleep(int) -> a
+    void resetDelay() -> a
+    void onCreate() -> onCreate
+    boolean sendMessage(java.lang.String) -> a
+    boolean sendSubscriptionInformation(android.content.Context) -> d
+    void readInBackground(java.io.BufferedReader) -> a
+    android.os.IBinder onBind(android.content.Intent) -> onBind
+    void onDestroy() -> onDestroy
+    void access$000(com.parse.PushService) -> a
+    int access$100() -> b
+    com.parse.PushService$ServiceState access$200(com.parse.PushService) -> b
+    void access$300(com.parse.PushService) -> c
+    java.lang.String access$400() -> c
+    int access$500(com.parse.PushService) -> d
+    boolean access$600(android.content.Context) -> b
+    com.parse.PushService$ServiceState access$202(com.parse.PushService,com.parse.PushService$ServiceState) -> a
+    void access$700(com.parse.PushService,java.io.BufferedReader) -> a
+com.parse.PushService$1 -> fu:
+    com.parse.PushService this$0 -> a
+    void run() -> run
+com.parse.PushService$2 -> fv:
+    java.io.BufferedReader reader -> a
+    java.io.BufferedReader val$initialReader -> b
+    com.parse.PushService val$finalService -> c
+    com.parse.PushService this$0 -> d
+    java.lang.String doInBackground$606be067() -> d
+    void onPostExecute(java.lang.Object) -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> a
+com.parse.PushService$ServiceState -> fw:
+    com.parse.PushService$ServiceState STOPPED -> a
+    com.parse.PushService$ServiceState ABORTING -> b
+    com.parse.PushService$ServiceState DESTRUCTING -> c
+    com.parse.PushService$ServiceState RUNNING -> d
+    com.parse.PushService$ServiceState[] $VALUES -> e
+    com.parse.PushService$ServiceState[] values() -> values
+    com.parse.PushService$ServiceState valueOf(java.lang.String) -> valueOf
+com.parse.SaveCallback -> fx:
+    void done(com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.SignUpCallback -> fy:
+    void done(com.parse.ParseException) -> a
+    void internalDone(java.lang.Object,com.parse.ParseException) -> a
+com.parse.auth.AnonymousAuthenticationProvider -> fz:
+    void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
+    org.json.JSONObject getAuthData() -> a
+    void deauthenticate() -> b
+    boolean restoreAuthentication(org.json.JSONObject) -> a
+    java.lang.String getAuthType() -> c
+com.parse.auth.FacebookAuthenticationProvider -> fA:
+    java.text.DateFormat preciseDateFormat -> a
+    com.parse.facebook.Facebook facebook -> b
+    boolean useSingleSignOn -> d
+    int activityCode -> e
+    java.lang.ref.WeakReference baseActivity -> f
+    java.util.Collection permissions -> g
+    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback currentOperationCallback -> c
+    void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
+    void cancel() -> d
+    java.lang.String getAuthType() -> c
+    void handleCancel() -> a
+    void handleError(java.lang.Throwable) -> a
+    void setActivity(android.app.Activity) -> a
+    void setActivityCode(int) -> a
+    void setPermissions(java.util.Collection) -> a
+    void setSingleSignOn(boolean) -> a
+    boolean restoreAuthentication(org.json.JSONObject) -> a
+    void deauthenticate() -> b
+com.parse.auth.FacebookAuthenticationProvider$2 -> fB:
+    com.parse.auth.FacebookAuthenticationProvider this$0 -> a
+    void onCancel() -> a
+    void onComplete(android.os.Bundle) -> a
+    void onError(com.parse.facebook.DialogError) -> a
+    void onFacebookError(com.parse.facebook.FacebookError) -> a
+com.parse.auth.FacebookAuthenticationProvider$GetUserIdBackgroundTask -> fC:
+    com.parse.auth.FacebookAuthenticationProvider this$0 -> a
+    java.lang.Object doInBackground$532ebdd5() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.auth.ParseAuthenticationProvider -> fD:
+    void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
+    void deauthenticate() -> b
+    boolean restoreAuthentication(org.json.JSONObject) -> a
+    java.lang.String getAuthType() -> c
+com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback -> fE:
+    com.parse.auth.ParseAuthenticationProvider val$authenticator -> a
+    com.parse.LogInCallback val$callback -> b
+    void onSuccess(org.json.JSONObject) -> a
+    void onCancel() -> a
+    void onError(java.lang.Throwable) -> a
+com.parse.auth.TwitterAuthenticationProvider -> fF:
+    java.lang.ref.WeakReference baseContext -> a
+    com.parse.twitter.Twitter twitter -> b
+    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback currentOperationCallback -> c
+    void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
+    void deauthenticate() -> b
+    java.lang.String getAuthType() -> c
+    void handleCancel(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> b
+    boolean restoreAuthentication(org.json.JSONObject) -> a
+com.parse.codec.binary.Base64 -> fG:
+    byte[] CHUNK_SEPARATOR -> g
+    byte[] STANDARD_ENCODE_TABLE -> h
+    byte[] URL_SAFE_ENCODE_TABLE -> i
+    byte[] DECODE_TABLE -> j
+    byte[] encodeTable -> k
+    byte[] decodeTable -> l
+    byte[] lineSeparator -> m
+    int decodeSize -> n
+    int encodeSize -> o
+    int bitWorkArea -> p
+    void encode(byte[],int,int) -> a
+    void decode(byte[],int,int) -> b
+    java.lang.String encodeBase64String(byte[]) -> a
+    byte[] decodeBase64(java.lang.String) -> a
+    boolean isInAlphabet(byte) -> a
+com.parse.codec.binary.BaseNCodec -> fH:
+    int unencodedBlockSize -> g
+    int encodedBlockSize -> h
+    int lineLength -> a
+    int chunkSeparatorLength -> i
+    byte[] buffer -> b
+    int pos -> c
+    int readPos -> j
+    boolean eof -> d
+    int currentLinePos -> e
+    int modulus -> f
+    void ensureBufferSize(int) -> a
+    int readResults(byte[],int,int) -> c
+    void reset() -> a
+    byte[] decode(byte[]) -> b
+    byte[] encode(byte[]) -> c
+    void encode(byte[],int,int) -> a
+    void decode(byte[],int,int) -> b
+    boolean isInAlphabet(byte) -> a
+    boolean containsAlphabetOrPad(byte[]) -> d
+    long getEncodedLength(byte[]) -> e
+com.parse.codec.binary.Hex -> fI:
+    char[] DIGITS_LOWER -> a
+    char[] DIGITS_UPPER -> b
+    java.lang.String charsetName -> c
+    char[] encodeHex(byte[]) -> b
+    java.lang.String encodeHexString(byte[]) -> a
+    java.lang.String toString() -> toString
+com.parse.entity.mime.FormBodyPart -> fJ:
+    java.lang.String name -> c
+    com.parse.entity.mime.Header header -> a
+    com.parse.entity.mime.content.ContentDescriptor body$73bbee5 -> b
+    void addField(java.lang.String,java.lang.String) -> a
+com.parse.entity.mime.Header -> fK:
+    java.util.List fields -> a
+    java.util.Map fieldMap -> b
+    void addField(com.parse.entity.mime.MinimalField) -> a
+    com.parse.entity.mime.MinimalField getField(java.lang.String) -> a
+    java.util.Iterator iterator() -> iterator
+    java.lang.String toString() -> toString
+com.parse.entity.mime.HttpMultipart -> fL:
+    org.apache.http.util.ByteArrayBuffer FIELD_SEP -> a
+    org.apache.http.util.ByteArrayBuffer CR_LF -> b
+    org.apache.http.util.ByteArrayBuffer TWO_DASHES -> c
+    java.nio.charset.Charset charset -> d
+    java.lang.String boundary -> e
+    java.util.List parts -> f
+    com.parse.entity.mime.HttpMultipartMode mode -> g
+    org.apache.http.util.ByteArrayBuffer encode(java.nio.charset.Charset,java.lang.String) -> a
+    void writeBytes(org.apache.http.util.ByteArrayBuffer,java.io.OutputStream) -> a
+    void writeBytes(java.lang.String,java.nio.charset.Charset,java.io.OutputStream) -> a
+    void writeBytes(java.lang.String,java.io.OutputStream) -> a
+    void writeField(com.parse.entity.mime.MinimalField,java.nio.charset.Charset,java.io.OutputStream) -> a
+    java.util.List getBodyParts() -> a
+    void addBodyPart(com.parse.entity.mime.FormBodyPart) -> a
+    void doWriteTo(com.parse.entity.mime.HttpMultipartMode,java.io.OutputStream,boolean) -> a
+    void writeTo(java.io.OutputStream) -> a
+    long getTotalLength() -> b
+com.parse.entity.mime.HttpMultipart$1 -> fM:
+    int[] $SwitchMap$com$parse$entity$mime$HttpMultipartMode -> a
+com.parse.entity.mime.HttpMultipartMode -> fN:
+    com.parse.entity.mime.HttpMultipartMode STRICT -> a
+    com.parse.entity.mime.HttpMultipartMode BROWSER_COMPATIBLE -> b
+    com.parse.entity.mime.HttpMultipartMode[] $VALUES -> c
+    com.parse.entity.mime.HttpMultipartMode[] values() -> values
+    com.parse.entity.mime.HttpMultipartMode valueOf(java.lang.String) -> valueOf
+com.parse.entity.mime.MIME -> fO:
+    java.nio.charset.Charset DEFAULT_CHARSET -> a
+com.parse.entity.mime.MinimalField -> fP:
+    java.lang.String name -> a
+    java.lang.String value -> b
+    java.lang.String toString() -> toString
+com.parse.entity.mime.MultipartEntity -> fQ:
+    char[] MULTIPART_CHARS -> a
+    com.parse.entity.mime.HttpMultipart multipart -> b
+    org.apache.http.Header contentType -> c
+    long length -> d
+    boolean dirty -> e
+    java.lang.String generateBoundary() -> a
+    void addPart$273283b6(java.lang.String,com.parse.entity.mime.content.ContentDescriptor) -> a
+    boolean isRepeatable() -> isRepeatable
+    boolean isChunked() -> isChunked
+    boolean isStreaming() -> isStreaming
+    long getContentLength() -> getContentLength
+    org.apache.http.Header getContentType() -> getContentType
+    org.apache.http.Header getContentEncoding() -> getContentEncoding
+    void consumeContent() -> consumeContent
+    java.io.InputStream getContent() -> getContent
+    void writeTo(java.io.OutputStream) -> writeTo
+com.parse.entity.mime.content.ByteArrayBody -> fR:
+    byte[] data -> b
+    java.lang.String filename -> c
+    java.lang.String getFilename() -> a
+    void writeTo(java.io.OutputStream) -> a
+    java.lang.String getCharset() -> b
+    java.lang.String getTransferEncoding() -> c
+    long getContentLength() -> d
+com.parse.entity.mime.content.ContentDescriptor -> fS:
+    java.lang.String mimeType -> a
+    java.lang.String getMimeType() -> e
+    java.lang.String getCharset() -> b
+    java.lang.String getTransferEncoding() -> c
+    long getContentLength() -> d
+    java.lang.String getFilename() -> a
+    void writeTo(java.io.OutputStream) -> a
+com.parse.entity.mime.content.StringBody -> fT:
+    byte[] content -> b
+    java.nio.charset.Charset charset -> c
+    void writeTo(java.io.OutputStream) -> a
+    java.lang.String getTransferEncoding() -> c
+    java.lang.String getCharset() -> b
+    long getContentLength() -> d
+    java.lang.String getFilename() -> a
+com.parse.facebook.DialogError -> fU:
+com.parse.facebook.Facebook -> fV:
+    java.lang.String DIALOG_BASE_URL -> a
+    java.lang.String GRAPH_BASE_URL -> b
+    java.lang.String RESTSERVER_URL -> c
+    java.lang.String mAccessToken -> d
+    long mAccessExpires -> e
+    java.lang.String mAppId -> f
+    android.app.Activity mAuthActivity -> g
+    java.lang.String[] mAuthPermissions -> h
+    int mAuthActivityCode -> i
+    com.parse.facebook.Facebook$DialogListener mAuthDialogListener -> j
+    void authorize(android.app.Activity,java.lang.String[],int,com.parse.facebook.Facebook$DialogListener) -> a
+    boolean startSingleSignOn(android.app.Activity,java.lang.String,java.lang.String[],int) -> a
+    boolean validateAppSignatureForPackage(android.content.Context,java.lang.String) -> a
+    void startDialogAuth(android.app.Activity,java.lang.String[]) -> a
+    void authorizeCallback(int,int,android.content.Intent) -> a
+    java.lang.String request(java.lang.String) -> a
+    java.lang.String request(java.lang.String,android.os.Bundle) -> a
+    java.lang.String request(java.lang.String,android.os.Bundle,java.lang.String) -> a
+    boolean isSessionValid() -> a
+    java.lang.String getAccessToken() -> b
+    long getAccessExpires() -> c
+    void setAccessToken(java.lang.String) -> b
+    void setAccessExpires(long) -> a
+    void setAccessExpiresIn(java.lang.String) -> c
+    void setAppId(java.lang.String) -> d
+    com.parse.facebook.Facebook$DialogListener access$000(com.parse.facebook.Facebook) -> a
+com.parse.facebook.Facebook$1 -> fW:
+    com.parse.facebook.Facebook this$0 -> a
+    void onComplete(android.os.Bundle) -> a
+    void onError(com.parse.facebook.DialogError) -> a
+    void onFacebookError(com.parse.facebook.FacebookError) -> a
+    void onCancel() -> a
+com.parse.facebook.Facebook$2 -> fX:
+    void onFacebookError(com.parse.facebook.FacebookError) -> a
+    void onError(com.parse.facebook.DialogError) -> a
+    void onComplete(android.os.Bundle) -> a
+    void onCancel() -> a
+com.parse.facebook.Facebook$DialogListener -> fY:
+    void onComplete(android.os.Bundle) -> a
+    void onFacebookError(com.parse.facebook.FacebookError) -> a
+    void onError(com.parse.facebook.DialogError) -> a
+    void onCancel() -> a
+com.parse.facebook.FacebookError -> fZ:
+com.parse.facebook.FbDialog -> ga:
+    android.widget.FrameLayout$LayoutParams FILL -> a
+    java.lang.String mUrl -> b
+    com.parse.facebook.Facebook$DialogListener mListener -> c
+    android.app.ProgressDialog mSpinner -> d
+    android.widget.ImageView mCrossImage -> e
+    android.webkit.WebView mWebView -> f
+    android.widget.FrameLayout mContent -> g
+    void onCreate(android.os.Bundle) -> onCreate
+    com.parse.facebook.Facebook$DialogListener access$000(com.parse.facebook.FbDialog) -> a
+    android.app.ProgressDialog access$200(com.parse.facebook.FbDialog) -> b
+    android.widget.FrameLayout access$300(com.parse.facebook.FbDialog) -> c
+    android.webkit.WebView access$400(com.parse.facebook.FbDialog) -> d
+    android.widget.ImageView access$500(com.parse.facebook.FbDialog) -> e
+com.parse.facebook.FbDialog$1 -> gb:
+    com.parse.facebook.FbDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.parse.facebook.FbDialog$FbWebViewClient -> gc:
+    com.parse.facebook.FbDialog this$0 -> a
+    boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
+    void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
+    void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+com.parse.facebook.Util -> gd:
+    boolean ENABLE_LOG -> a
+    java.lang.String encodePostBody(android.os.Bundle,java.lang.String) -> a
+    java.lang.String encodeUrl(android.os.Bundle) -> a
+    android.os.Bundle decodeUrl(java.lang.String) -> c
+    android.os.Bundle parseUrl(java.lang.String) -> a
+    java.lang.String openUrl(java.lang.String,java.lang.String,android.os.Bundle) -> a
+    java.lang.String read(java.io.InputStream) -> a
+    org.json.JSONObject parseJson(java.lang.String) -> b
+    void showAlert(android.content.Context,java.lang.String,java.lang.String) -> a
+    void logd(java.lang.String,java.lang.String) -> a
+com.parse.gdata.PercentEscaper -> ge:
+    char[] URI_ESCAPED_SPACE -> a
+    char[] UPPER_HEX_DIGITS -> b
+    boolean plusForSpace -> c
+    boolean[] safeOctets -> d
+    boolean[] createSafeOctets(java.lang.String) -> b
+    int nextEscapeIndex(java.lang.CharSequence,int,int) -> a
+    java.lang.String escape(java.lang.String) -> a
+    char[] escape(int) -> a
+com.parse.gdata.UnicodeEscaper -> gf:
+    java.lang.ThreadLocal DEST_TL -> a
+    char[] escape(int) -> a
+    int nextEscapeIndex(java.lang.CharSequence,int,int) -> a
+    java.lang.String escape(java.lang.String) -> a
+    java.lang.String escapeSlow(java.lang.String,int) -> a
+    int codePointAt(java.lang.CharSequence,int,int) -> b
+    char[] growBuffer(char[],int,int) -> a
+com.parse.gdata.UnicodeEscaper$2 -> gg:
+    java.lang.Object initialValue() -> initialValue
+com.parse.internal.AsyncCallback -> gh:
+    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback val$callback -> a
+    com.parse.auth.TwitterAuthenticationProvider this$0 -> b
+    void onSuccess$5d527811() -> a
+    void onCancel() -> b
+    void onFailure(java.lang.Throwable) -> a
+com.parse.oauth.OAuth1FlowDialog -> gi:
+    android.widget.FrameLayout$LayoutParams FILL -> a
+    java.lang.String callbackUrl -> b
+    java.lang.String requestUrl -> c
+    java.lang.String serviceUrlIdentifier -> d
+    com.parse.oauth.OAuth1FlowDialog$FlowResultHandler handler -> e
+    android.app.ProgressDialog progressDialog -> f
+    android.widget.ImageView closeImage -> g
+    android.webkit.WebView webView -> h
+    android.widget.FrameLayout content -> i
+    void onCreate(android.os.Bundle) -> onCreate
+    com.parse.oauth.OAuth1FlowDialog$FlowResultHandler access$000(com.parse.oauth.OAuth1FlowDialog) -> a
+    java.lang.String access$200(com.parse.oauth.OAuth1FlowDialog) -> b
+    java.lang.String access$300(com.parse.oauth.OAuth1FlowDialog) -> c
+    android.app.ProgressDialog access$400(com.parse.oauth.OAuth1FlowDialog) -> d
+    android.widget.FrameLayout access$500(com.parse.oauth.OAuth1FlowDialog) -> e
+    android.webkit.WebView access$600(com.parse.oauth.OAuth1FlowDialog) -> f
+    android.widget.ImageView access$700(com.parse.oauth.OAuth1FlowDialog) -> g
+com.parse.oauth.OAuth1FlowDialog$1 -> gj:
+    com.parse.oauth.OAuth1FlowDialog this$0 -> a
+    void onCancel(android.content.DialogInterface) -> onCancel
+com.parse.oauth.OAuth1FlowDialog$2 -> gk:
+    com.parse.oauth.OAuth1FlowDialog this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.parse.oauth.OAuth1FlowDialog$FlowResultHandler -> gl:
+    com.parse.twitter.Twitter$1 this$1 -> a
+    void onCancel() -> a
+    void onError(int,java.lang.String,java.lang.String) -> a
+    void onComplete(java.lang.String) -> a
+com.parse.oauth.OAuth1FlowDialog$OAuth1WebViewClient -> gm:
+    com.parse.oauth.OAuth1FlowDialog this$0 -> a
+    boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
+    void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
+    void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+com.parse.oauth.OAuth1FlowException -> gn:
+com.parse.os.ParseAsyncTask -> go:
+    java.util.concurrent.BlockingQueue sWorkQueue -> a
+    java.util.concurrent.ThreadFactory sThreadFactory -> b
+    java.util.concurrent.ThreadPoolExecutor sExecutor -> c
+    com.parse.os.ParseAsyncTask$InternalHandler sHandler -> d
+    com.parse.os.ParseAsyncTask$WorkerRunnable mWorker -> e
+    java.util.concurrent.FutureTask mFuture -> f
+    com.parse.os.ParseAsyncTask$Status mStatus -> g
+    java.lang.Object doInBackground(java.lang.Object[]) -> a
+    void onPostExecute(java.lang.Object) -> a
+    void onProgressUpdate$1b4f7664() -> a
+    void onCancelled() -> b
+    boolean cancel(boolean) -> a
+    com.parse.os.ParseAsyncTask execute(java.lang.Object[]) -> b
+    com.parse.os.ParseAsyncTask$InternalHandler access$200() -> c
+    void access$300(com.parse.os.ParseAsyncTask,java.lang.Object) -> a
+com.parse.os.ParseAsyncTask$1 -> gp:
+    java.util.concurrent.atomic.AtomicInteger mCount -> a
+    java.lang.Thread newThread(java.lang.Runnable) -> newThread
+com.parse.os.ParseAsyncTask$2 -> gq:
+    com.parse.os.ParseAsyncTask this$0 -> b
+    java.lang.Object call() -> call
+com.parse.os.ParseAsyncTask$3 -> gr:
+    com.parse.os.ParseAsyncTask this$0 -> a
+    void done() -> done
+com.parse.os.ParseAsyncTask$4 -> gs:
+    int[] $SwitchMap$com$parse$os$ParseAsyncTask$Status -> a
+com.parse.os.ParseAsyncTask$InternalHandler -> gt:
+    void handleMessage(android.os.Message) -> handleMessage
+com.parse.os.ParseAsyncTask$ParseAsyncTaskResult -> gu:
+    com.parse.os.ParseAsyncTask mTask -> a
+    java.lang.Object[] mData -> b
+com.parse.os.ParseAsyncTask$Status -> gv:
+    com.parse.os.ParseAsyncTask$Status PENDING -> a
+    com.parse.os.ParseAsyncTask$Status RUNNING -> b
+    com.parse.os.ParseAsyncTask$Status FINISHED -> c
+    com.parse.os.ParseAsyncTask$Status[] $VALUES -> d
+    com.parse.os.ParseAsyncTask$Status[] values() -> values
+    com.parse.os.ParseAsyncTask$Status valueOf(java.lang.String) -> valueOf
+com.parse.os.ParseAsyncTask$WorkerRunnable -> gw:
+    java.lang.Object[] mParams -> a
+com.parse.signpost.AbstractOAuthConsumer -> gx:
+    java.lang.String consumerKey -> a
+    java.lang.String consumerSecret -> b
+    java.lang.String token -> c
+    com.parse.signpost.signature.OAuthMessageSigner messageSigner -> d
+    com.parse.signpost.signature.SigningStrategy signingStrategy -> e
+    com.parse.signpost.http.HttpParameters additionalParameters -> f
+    com.parse.signpost.http.HttpParameters requestParameters -> g
+    void setAdditionalParameters(com.parse.signpost.http.HttpParameters) -> a
+    com.parse.signpost.http.HttpRequest sign(com.parse.signpost.http.HttpRequest) -> a
+    com.parse.signpost.http.HttpRequest sign(java.lang.Object) -> a
+    com.parse.signpost.http.HttpRequest wrap(java.lang.Object) -> b
+    void setTokenWithSecret(java.lang.String,java.lang.String) -> a
+    java.lang.String getToken() -> a
+    java.lang.String getTokenSecret() -> b
+    java.lang.String getConsumerKey() -> c
+    java.lang.String getConsumerSecret() -> d
+com.parse.signpost.AbstractOAuthProvider -> gy:
+    java.lang.String requestTokenEndpointUrl -> a
+    java.lang.String accessTokenEndpointUrl -> b
+    java.lang.String authorizationWebsiteUrl -> c
+    com.parse.signpost.http.HttpParameters responseParameters -> d
+    java.util.Map defaultHeaders -> e
+    boolean isOAuth10a -> f
+    java.lang.String retrieveRequestToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> a
+    void retrieveAccessToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> b
+    void retrieveToken(com.parse.signpost.OAuthConsumer,java.lang.String,java.lang.String[]) -> a
+    com.parse.signpost.http.HttpRequest createRequest(java.lang.String) -> a
+    com.parse.signpost.http.HttpResponse sendRequest(com.parse.signpost.http.HttpRequest) -> a
+    void closeConnection$723f2095(com.parse.signpost.http.HttpResponse) -> a
+    com.parse.signpost.http.HttpParameters getResponseParameters() -> a
+com.parse.signpost.OAuth -> gz:
+    com.parse.gdata.PercentEscaper percentEncoder -> a
+    java.lang.String percentEncode(java.lang.String) -> a
+    java.lang.String percentDecode(java.lang.String) -> b
+    com.parse.signpost.http.HttpParameters decodeForm(java.lang.String) -> c
+    com.parse.signpost.http.HttpParameters decodeForm(java.io.InputStream) -> a
+    java.lang.String addQueryParameters(java.lang.String,java.lang.String[]) -> a
+    com.parse.signpost.http.HttpParameters oauthHeaderToParamsMap(java.lang.String) -> d
+    java.lang.String toHeaderElement(java.lang.String,java.lang.String) -> a
+    void debugOut(java.lang.String,java.lang.String) -> b
+com.parse.signpost.OAuthConsumer -> gA:
+    void setAdditionalParameters(com.parse.signpost.http.HttpParameters) -> a
+    com.parse.signpost.http.HttpRequest sign(com.parse.signpost.http.HttpRequest) -> a
+    com.parse.signpost.http.HttpRequest sign(java.lang.Object) -> a
+    void setTokenWithSecret(java.lang.String,java.lang.String) -> a
+    java.lang.String getToken() -> a
+    java.lang.String getTokenSecret() -> b
+    java.lang.String getConsumerKey() -> c
+    java.lang.String getConsumerSecret() -> d
+com.parse.signpost.OAuthProvider -> gB:
+    java.lang.String retrieveRequestToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> a
+    void retrieveAccessToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> b
+    com.parse.signpost.http.HttpParameters getResponseParameters() -> a
+com.parse.signpost.commonshttp.CommonsHttpOAuthConsumer -> gC:
+    com.parse.signpost.http.HttpRequest wrap(java.lang.Object) -> b
+com.parse.signpost.commonshttp.CommonsHttpOAuthProvider -> gD:
+    org.apache.http.client.HttpClient httpClient -> a
+    com.parse.signpost.http.HttpRequest createRequest(java.lang.String) -> a
+    com.parse.signpost.http.HttpResponse sendRequest(com.parse.signpost.http.HttpRequest) -> a
+    void closeConnection$723f2095(com.parse.signpost.http.HttpResponse) -> a
+com.parse.signpost.exception.OAuthCommunicationException -> gE:
+com.parse.signpost.exception.OAuthException -> gF:
+com.parse.signpost.exception.OAuthExpectationFailedException -> gG:
+com.parse.signpost.exception.OAuthMessageSignerException -> gH:
+com.parse.signpost.exception.OAuthNotAuthorizedException -> gI:
+com.parse.signpost.http.HttpParameters -> gJ:
+    java.util.TreeMap wrappedMap -> a
+    java.lang.String put(java.lang.String,java.lang.String) -> a
+    java.lang.String put(java.lang.String,java.lang.String,boolean) -> a
+    void putAll(java.util.Map) -> putAll
+    void putAll(java.util.Map,boolean) -> a
+    void putAll(java.lang.String[],boolean) -> a
+    java.util.SortedSet get(java.lang.Object) -> d
+    java.lang.String getFirst(java.lang.Object) -> a
+    java.lang.String getAsQueryString(java.lang.Object) -> b
+    java.lang.String getAsHeaderElement(java.lang.String) -> a
+    boolean containsKey(java.lang.Object) -> containsKey
+    boolean containsValue(java.lang.Object) -> containsValue
+    int size() -> size
+    boolean isEmpty() -> isEmpty
+    void clear() -> clear
+    java.util.SortedSet remove(java.lang.Object) -> c
+    java.util.Set keySet() -> keySet
+    java.util.Collection values() -> values
+    java.util.Set entrySet() -> entrySet
+    java.lang.Object remove(java.lang.Object) -> remove
+    java.lang.Object put(java.lang.Object,java.lang.Object) -> put
+    java.lang.Object get(java.lang.Object) -> get
+com.parse.signpost.http.HttpRequest -> gK:
+    org.apache.http.client.methods.HttpUriRequest request -> a
+    org.apache.http.HttpEntity entity -> b
+    java.lang.String getMethod() -> a
+    java.lang.String getRequestUrl() -> b
+    void setHeader(java.lang.String,java.lang.String) -> a
+    java.lang.String getHeader(java.lang.String) -> a
+    java.io.InputStream getMessagePayload() -> c
+    java.lang.String getContentType() -> d
+    java.lang.Object unwrap() -> e
+com.parse.signpost.http.HttpResponse -> gL:
+    org.apache.http.HttpResponse response -> a
+    int getStatusCode() -> a
+    java.lang.String getReasonPhrase() -> b
+    java.io.InputStream getContent() -> c
+    java.lang.Object unwrap() -> d
+com.parse.signpost.signature.HmacSha1MessageSigner -> gM:
+    java.lang.String getSignatureMethod() -> a
+    java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
+com.parse.signpost.signature.OAuthMessageSigner -> gN:
+    com.parse.codec.binary.Base64 base64 -> a
+    java.lang.String consumerSecret -> b
+    java.lang.String tokenSecret -> c
+    java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
+    java.lang.String getSignatureMethod() -> a
+com.parse.signpost.signature.SignatureBaseString -> gO:
+    com.parse.signpost.http.HttpRequest request -> a
+    com.parse.signpost.http.HttpParameters requestParameters -> b
+    java.lang.String generate() -> a
+    java.lang.String normalizeRequestParameters() -> b
+com.parse.signpost.signature.SigningStrategy -> gP:
+    java.lang.String writeSignature(java.lang.String,com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
+com.parse.twitter.Twitter -> gQ:
+    com.parse.signpost.OAuthProvider PROVIDER -> a
+    java.lang.String consumerKey -> b
+    java.lang.String consumerSecret -> c
+    java.lang.String authToken -> d
+    java.lang.String authTokenSecret -> e
+    java.lang.String userId -> f
+    java.lang.String screenName -> g
+    java.lang.String getConsumerKey() -> a
+    void setConsumerKey(java.lang.String) -> a
+    java.lang.String getConsumerSecret() -> b
+    void setConsumerSecret(java.lang.String) -> b
+    java.lang.String getAuthToken() -> c
+    void setAuthToken(java.lang.String) -> c
+    java.lang.String getAuthTokenSecret() -> d
+    void setAuthTokenSecret(java.lang.String) -> d
+    java.lang.String getUserId() -> e
+    void setUserId(java.lang.String) -> e
+    java.lang.String getScreenName() -> f
+    void setScreenName(java.lang.String) -> f
+    void authorize(android.content.Context,com.parse.internal.AsyncCallback) -> a
+    com.parse.signpost.OAuthProvider access$000() -> g
+com.parse.twitter.Twitter$1 -> gR:
+    java.lang.Throwable error -> e
+    com.parse.internal.AsyncCallback val$callback -> a
+    android.content.Context val$context -> f
+    com.parse.signpost.OAuthConsumer val$consumer -> b
+    android.app.ProgressDialog val$progress -> c
+    com.parse.twitter.Twitter this$0 -> d
+    void onPreExecute() -> onPreExecute
+    java.lang.String doInBackground$606be067() -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.twitter.Twitter$1$1$1 -> gS:
+    java.lang.Throwable error -> a
+    java.lang.String val$verifier -> b
+    com.parse.oauth.OAuth1FlowDialog$FlowResultHandler this$2$225f7840 -> c
+    com.parse.signpost.http.HttpParameters doInBackground$49a5fd33() -> a
+    void onPreExecute() -> onPreExecute
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground

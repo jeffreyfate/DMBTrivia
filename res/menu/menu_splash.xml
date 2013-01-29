@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/SwitchBackground"
+        android:title="@string/SwitchBackground" />
+    <item
+        android:id="@+id/Notifications"
+        android:title="@string/NotificationTitle" />
+    <item
+        android:id="@+id/FollowMenu"
+        android:title="@string/FollowTitle" />
+    <item
+        android:id="@+id/LikeMenu"
+        android:title="@string/LikeTitle" />
+    <item
+        android:id="@+id/InfoMenu"
+        android:title="@string/InfoTitle" />
+    <item
+        android:id="@+id/ExitMenu"
+        android:title="@string/ExitTitle" />
+</menu>

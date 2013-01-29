@@ -1,0 +1,14 @@
+                                                                                correctAnswers  currentScore    setupQuestion   getQuestionCount
+UserTask                                                                        false           false           false           false
+    CorrectAnswersTask                                                          false           false           false           false
+        GetCurrentScoreTask                                                     false           false           false           false
+                                                                                false           true            false           false
+        SetupQuestionTask                                                       false           true            false           false
+            GetQuestionCountTask                                                false           true            false           false
+                                                                                false           true            false           true
+                                                                                false           true            true            true
+                                                                                true            true            true            true
+    SetupQuestionTask                                                           true            true            false           false
+        GetQuestionCountTask                                                    true            true            false           false
+                                                                                true            true            false           true
+                                                                                true            true            true            true

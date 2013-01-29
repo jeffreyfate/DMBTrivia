@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/SplashLayout"
+    style="@style/SplashLayout" >
+    <ImageView
+        android:id="@+id/SplashTitle"
+        style="@style/SplashTitleXLargeLand"
+        android:contentDescription="@string/splashTitle" />
+    <LinearLayout
+        android:id="@+id/ButtonsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/SplashTitle" >
+	    <LinearLayout
+	        android:id="@+id/LoginLayout"
+	        style="@style/SplashLoginLayoutXLargeLand" >
+		    <ImageView
+		        android:id="@+id/FacebookLoginButton"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/com_facebook_loginbutton_blue"
+		        android:layout_gravity="center"
+		        android:layout_marginRight="4dip"
+		        android:contentDescription="@string/facebookLogin" />
+		    <ImageView
+		        android:id="@+id/TwitterLoginButton"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:background="@drawable/com_twitter_loginbutton_grey"
+		        android:layout_marginLeft="4dip"
+		        android:contentDescription="@string/twitterLogin" />
+	    </LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/EmailLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:visibility="gone"
+	        android:layout_marginBottom="16dip"
+            android:layout_gravity="center"
+            android:baselineAligned="false" >
+		    <LinearLayout
+	            android:id="@+id/EmailEditLayout"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginBottom="16dip" >
+			    <EditText
+			        android:id="@+id/LoginUsername"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:inputType="textEmailAddress"
+			        android:imeOptions="actionNext"
+			        android:layout_gravity="center"
+			        android:hint="@string/usernameHint"
+			        android:typeface="serif"
+			        android:textColor="@android:color/white"
+			        android:textColorHint="@android:color/white"
+			        android:textSize="44sp"
+			        android:background="@drawable/edit_text"
+			        android:layout_weight="0.45"
+	                android:layout_marginRight="4dip" />
+			    <EditText
+			        android:id="@+id/LoginPassword"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:inputType="textPassword"
+			        android:imeOptions="actionDone"
+			        android:layout_gravity="center"
+			        android:hint="@string/passwordHint"
+			        android:textColor="@android:color/white"
+			        android:textColorHint="@android:color/white"
+			        android:textSize="44sp"
+			        android:background="@drawable/edit_text"
+			        android:layout_weight="0.45"
+			        android:layout_marginLeft="4dip" />
+		    </LinearLayout>
+		    <RelativeLayout
+		        android:id="@+id/EmailButtonLayout"
+		        android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_weight="0.55" >
+			    <TextView
+			        android:id="@+id/LoginButton"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:textColor="@android:color/black"
+			        android:textSize="44sp"
+			        android:textStyle="bold"
+			        android:layout_gravity="center"
+			        android:paddingTop="0dip"
+			        android:paddingBottom="0dip"
+			        android:paddingLeft="20dip"
+			        android:paddingRight="20dip"
+			        android:gravity="center"
+			        android:text="@string/login"
+			        android:background="@drawable/button"
+			        android:visibility="gone" />
+			    <TextView
+		            android:id="@+id/SignupButton"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:textColor="@android:color/black"
+		            android:textSize="44sp"
+		            android:textStyle="bold"
+		            android:layout_gravity="center"
+		            android:paddingTop="0dip"
+		            android:paddingBottom="0dip"
+		            android:paddingLeft="20dip"
+		            android:paddingRight="20dip"
+		            android:gravity="center"
+		            android:text="@string/signup"
+		            android:background="@drawable/button"
+		            android:visibility="gone" />
+		    </RelativeLayout>
+	    </LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/ButtonLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_marginBottom="10dip" >
+		    <TextView
+		        android:id="@+id/JustPlayButton"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:textColor="@android:color/black"
+		        android:textStyle="bold"
+		        android:textSize="40sp"
+		        android:paddingTop="10dip"
+		        android:paddingBottom="10dip"
+		        android:paddingLeft="20dip"
+		        android:paddingRight="20dip"
+		        android:layout_marginRight="4dip"
+		        android:gravity="center"
+		        android:text="@string/justPlay"
+		        android:layout_gravity="center"
+		        android:background="@drawable/button"
+		        android:layout_weight="0.5" />
+		    <TextView
+		        android:id="@+id/EmailButton"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:textColor="@android:color/black"
+		        android:textStyle="bold"
+		        android:textSize="40sp"
+		        android:layout_gravity="center"
+		        android:paddingTop="10dip"
+		        android:paddingBottom="10dip"
+		        android:paddingLeft="20dip"
+		        android:paddingRight="20dip"
+		        android:layout_marginLeft="4dip"
+		        android:gravity="center"
+		        android:text="@string/loginEmail"
+		        android:background="@drawable/button"
+		        android:layout_weight="0.5" />
+	    </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
