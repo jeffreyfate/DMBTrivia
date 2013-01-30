@@ -197,6 +197,10 @@ public class FragmentQuiz extends FragmentBase {
     private class HintTimer extends CountDownTimer {
         public HintTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            long text = (millisInFuture/1000)+1;
+            if (text > 15)
+                text = 15;
+            hintTime.setText(Long.toString(text));
             hintText.setVisibility(View.INVISIBLE);
             hintTime.setVisibility(View.VISIBLE);
             skipTime.setText("");

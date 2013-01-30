@@ -45,17 +45,16 @@ public final class R {
         public static final int splash13=0x7f020019;
         public static final int splash14=0x7f02001a;
         public static final int splash15=0x7f02001b;
-        public static final int splash16=0x7f02001c;
-        public static final int splash2=0x7f02001d;
-        public static final int splash3=0x7f02001e;
-        public static final int splash4=0x7f02001f;
-        public static final int splash5=0x7f020020;
-        public static final int splash6=0x7f020021;
-        public static final int splash7=0x7f020022;
-        public static final int splash8=0x7f020023;
-        public static final int splash9=0x7f020024;
-        public static final int title=0x7f020025;
-        public static final int wrong=0x7f020026;
+        public static final int splash2=0x7f02001c;
+        public static final int splash3=0x7f02001d;
+        public static final int splash4=0x7f02001e;
+        public static final int splash5=0x7f02001f;
+        public static final int splash6=0x7f020020;
+        public static final int splash7=0x7f020021;
+        public static final int splash8=0x7f020022;
+        public static final int splash9=0x7f020023;
+        public static final int title=0x7f020024;
+        public static final int wrong=0x7f020025;
     }
     public static final class id {
         public static final int AnswerImage=0x7f09002b;
