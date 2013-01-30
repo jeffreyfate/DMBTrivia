@@ -268,8 +268,12 @@ public class FragmentSplash extends FragmentBase {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
         case R.id.SwitchBackground:
-            if (mCallback != null)
-                mCallback.setBackground(mCallback.getBackground(), true);
+            if (mCallback != null) {
+                String newBackground = mCallback.setBackground(
+                        mCallback.getBackground(), true);
+                ApplicationEx.dbHelper.setCurrBackground(mCallback.getUserId(),
+                        newBackground);
+            }
             break;
         case R.id.Notifications:
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
