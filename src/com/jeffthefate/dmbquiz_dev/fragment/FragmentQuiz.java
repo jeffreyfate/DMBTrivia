@@ -162,6 +162,11 @@ public class FragmentQuiz extends FragmentBase {
     private class SkipTimer extends CountDownTimer {
         public SkipTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            skipTime.setText("");
+            skipText.setTextColor(Color.BLACK);
+            skipText.setBackgroundResource(R.drawable.button);
+            skipText.setVisibility(View.INVISIBLE);
+            skipTime.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -170,6 +175,8 @@ public class FragmentQuiz extends FragmentBase {
             ApplicationEx.dbHelper.setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
             skipTime.setText(Long.toString((millisUntilFinished/1000)-1));
+            skipText.setVisibility(View.INVISIBLE);
+            skipTime.setVisibility(View.VISIBLE);
             if (millisUntilFinished < 2000) {
                 skipText.setVisibility(View.VISIBLE);
                 skipText.setTextColor(Color.BLACK);
@@ -190,6 +197,13 @@ public class FragmentQuiz extends FragmentBase {
     private class HintTimer extends CountDownTimer {
         public HintTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            hintText.setVisibility(View.INVISIBLE);
+            hintTime.setVisibility(View.VISIBLE);
+            skipTime.setText("");
+            skipText.setTextColor(Color.BLACK);
+            skipText.setBackgroundResource(R.drawable.button);
+            skipText.setVisibility(View.INVISIBLE);
+            skipTime.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -197,15 +211,14 @@ public class FragmentQuiz extends FragmentBase {
             hintTick = millisUntilFinished;
             ApplicationEx.dbHelper.setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
+            Log.i(Constants.LOG_TAG, "onTick setting hintText to " + Long.toString((hintTick/1000)+1));
             hintTime.setText(Long.toString((millisUntilFinished/1000)+1));
+            hintText.setVisibility(View.INVISIBLE);
+            hintTime.setVisibility(View.VISIBLE);
         }
         
         @Override
         public void onFinish() {
-            hintText.setVisibility(View.VISIBLE);
-            hintText.setTextColor(Color.BLACK);
-            hintText.setBackgroundResource(R.drawable.button);
-            hintTime.setVisibility(View.INVISIBLE);
             if (!isCorrect) {
                 hintButton.setEnabled(true);
                 if (skipTimer != null)
@@ -215,6 +228,10 @@ public class FragmentQuiz extends FragmentBase {
                 skipText.setVisibility(View.INVISIBLE);
                 skipTime.setVisibility(View.VISIBLE);
             }
+            hintText.setVisibility(View.VISIBLE);
+            hintText.setTextColor(Color.BLACK);
+            hintText.setBackgroundResource(R.drawable.button);
+            hintTime.setVisibility(View.INVISIBLE);
             hintTick = 0;
             ApplicationEx.dbHelper.setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
@@ -462,6 +479,8 @@ public class FragmentQuiz extends FragmentBase {
         });
         skipText = (TextView) v.findViewById(R.id.SkipText);
         skipTime = (TextView) v.findViewById(R.id.SkipTime);
+        if (skipTick > 0)
+            skipTime.setText(Long.toString((skipTick/1000)+1));
         hintButton = (RelativeLayout) v.findViewById(R.id.Hint);
         hintButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -475,6 +494,10 @@ public class FragmentQuiz extends FragmentBase {
         });
         hintText = (TextView) v.findViewById(R.id.HintText);
         hintTime = (TextView) v.findViewById(R.id.HintTime);
+        if (hintTick > 0) {
+            Log.i(Constants.LOG_TAG, "onCreateView setting hintText to " + Long.toString((hintTick/1000)+1));
+            hintTime.setText(Long.toString((hintTick/1000)+1));
+        }
         answerImage = (ImageView) v.findViewById(R.id.AnswerImage);
         answerImage.bringToFront();
         retryText = (TextView) v.findViewById(R.id.RetryText);
@@ -569,10 +592,6 @@ public class FragmentQuiz extends FragmentBase {
                 questionText.setTextColor(Color.WHITE);
                 answerImage.setVisibility(View.INVISIBLE);
             }
-            hintText.setVisibility(View.VISIBLE);
-            hintTime.setVisibility(View.INVISIBLE);
-            skipText.setVisibility(View.VISIBLE);
-            skipTime.setVisibility(View.INVISIBLE);
             hintText.setTextColor(res.getColor(R.color.light_gray));
             hintText.setBackgroundResource(R.drawable.button_disabled);
             skipText.setTextColor(res.getColor(R.color.light_gray));
@@ -595,18 +614,7 @@ public class FragmentQuiz extends FragmentBase {
             answerButton.setEnabled(true);
             questionText.setTextColor(Color.WHITE);
             answerImage.setVisibility(View.INVISIBLE);
-            hintText.setVisibility(View.INVISIBLE);
-            hintTime.setVisibility(View.VISIBLE);
-            skipText.setVisibility(View.INVISIBLE);
-            skipTime.setVisibility(View.VISIBLE);
-            skipTime.setText("");
-            hintText.setTextColor(Color.BLACK);
-            hintText.setBackgroundResource(R.drawable.button);
-            skipText.setTextColor(Color.BLACK);
-            skipText.setBackgroundResource(R.drawable.button);
         }
-        if (hintTimer != null)
-            hintTimer.cancel();
         hintButton.setEnabled(false);
         hintButton.setVisibility(View.VISIBLE);
         if (hintPressed) {
@@ -616,15 +624,16 @@ public class FragmentQuiz extends FragmentBase {
             hintTime.setVisibility(View.INVISIBLE);
         }
         else {
-            hintText.setBackgroundResource(R.drawable.button);
-            hintText.setTextColor(Color.BLACK);
             if (hintTick > 0) {
-                hintText.setVisibility(View.INVISIBLE);
-                hintTime.setVisibility(View.VISIBLE);
+                if (hintTimer != null)
+                    hintTimer.cancel();
+                Log.i(Constants.LOG_TAG, "hintTick: " + hintTick);
                 hintTimer = new HintTimer(hintTick, 500);
                 hintTimer.start();
             }
             else {
+                hintText.setBackgroundResource(R.drawable.button);
+                hintText.setTextColor(Color.BLACK);
                 hintText.setVisibility(View.VISIBLE);
                 hintTime.setVisibility(View.INVISIBLE);
                 hintButton.setEnabled(true);
@@ -635,14 +644,12 @@ public class FragmentQuiz extends FragmentBase {
         skipButton.setEnabled(false);
         skipButton.setVisibility(View.VISIBLE);
         if (skipPressed) {
-            skipText.setVisibility(View.VISIBLE);
-            skipTime.setVisibility(View.INVISIBLE);
             skipText.setTextColor(res.getColor(R.color.light_gray));
             skipText.setBackgroundResource(R.drawable.button_disabled);
+            skipText.setVisibility(View.VISIBLE);
+            skipTime.setVisibility(View.INVISIBLE);
         }
         else {
-            skipText.setBackgroundResource(R.drawable.button);
-            skipText.setTextColor(Color.BLACK);
             if (skipTick > 0) {
                 if (hintTick == 0) {
                     skipTimer = new SkipTimer(skipTick, 500);
@@ -650,6 +657,8 @@ public class FragmentQuiz extends FragmentBase {
                 }
             }
             else {
+                skipText.setBackgroundResource(R.drawable.button);
+                skipText.setTextColor(Color.BLACK);
                 skipText.setVisibility(View.VISIBLE);
                 skipTime.setVisibility(View.INVISIBLE);
                 skipButton.setEnabled(true);
@@ -710,7 +719,7 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private class VerifyTask extends AsyncTask<String, Void, Void> {
-        private void getAnswerCount(final String userId,
+        private void saveAnswer(final String userId,
                 final String questionId) {
             ParseQuery query = new ParseQuery("CorrectAnswers");
             query.whereEqualTo("userId", userId);
@@ -718,7 +727,7 @@ public class FragmentQuiz extends FragmentBase {
             query.getFirstInBackground(new GetCallback() {
                 @Override
                 public void done(ParseObject answer, ParseException e) {
-                    if (e == null && answer == null) {
+                    if (answer == null) {
                         ParseObject correctAnswer =
                                 new ParseObject("CorrectAnswers");
                         correctAnswer.put("questionId", questionId);
@@ -792,7 +801,7 @@ public class FragmentQuiz extends FragmentBase {
                         mCallback.addCurrentScore(tempScore);
                     }
                     mCallback.saveUserScore(mCallback.getCurrentScore());
-                    getAnswerCount(mCallback.getUserId(), qId);
+                    saveAnswer(mCallback.getUserId(), qId);
                 }
             }
             else {
