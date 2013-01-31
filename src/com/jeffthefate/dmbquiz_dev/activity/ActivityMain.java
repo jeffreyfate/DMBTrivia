@@ -444,22 +444,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void setupUser() {
-        if (userId == null) {
+        if (userId == null && !isLogging) {
             showSplash();
             return;
         }
-        if (fMan.findFragmentByTag("fLogin") == null)
-            showLogin();
-        else {
-            try {
-                FragmentLogin fLogin =
-                        (FragmentLogin) fMan.findFragmentByTag("fLogin");
-                fMan.beginTransaction().replace(android.R.id.content, fLogin,
-                        "fLogin").commitAllowingStateLoss();
-                fMan.executePendingTransactions();
-                currFrag = fLogin;
-            } catch (IllegalStateException e) {}
-        }
+        showLogin();
         if (userTask != null)
             userTask.cancel(true);
         userTask = new UserTask();
@@ -972,7 +961,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         if (getAnswersTask != null)
             getAnswersTask.cancel(true);
         if (!isLogging) {
-            getParseTask = new GetParseTask(false);
+            getParseTask = new GetParseTask(false, userId);
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
                 getParseTask.execute();
@@ -1163,9 +1152,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         private int sum = 0;
         private Number score;
         private boolean show = false;
+        private String userId;
         
-        private GetParseTask(boolean show) {
+        private GetParseTask(boolean show, String userId) {
             this.show = show;
+            this.userId = userId;
         }
         
         private void getAnswerCount(final String userId) {
@@ -1402,7 +1393,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             nextQuestion();
                         }
                         else {
-                            getParseTask = new GetParseTask(true);
+                            getParseTask = new GetParseTask(true, userId);
                             if (Build.VERSION.SDK_INT <
                                     Build.VERSION_CODES.HONEYCOMB)
                                 getParseTask.execute();
@@ -1440,7 +1431,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     nextQuestion();
                 }
                 else if (!isCancelled()) {
-                    getParseTask = new GetParseTask(true);
+                    getParseTask = new GetParseTask(true, userId);
                     if (Build.VERSION.SDK_INT <
                             Build.VERSION_CODES.HONEYCOMB)
                         getParseTask.execute();
@@ -1678,7 +1669,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         ParseException e) {
                     if (e == null) {
                         if (!questions.isEmpty()) {
-                            Log.i(Constants.LOG_TAG, "found " + questions.size());
                             Number score;
                             ParseObject followQuestion = null;
                             if (questions.size() == 3) {

@@ -215,7 +215,6 @@ public class FragmentQuiz extends FragmentBase {
             hintTick = millisUntilFinished;
             ApplicationEx.dbHelper.setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-            Log.i(Constants.LOG_TAG, "onTick setting hintText to " + Long.toString((hintTick/1000)+1));
             hintTime.setText(Long.toString((millisUntilFinished/1000)+1));
             hintText.setVisibility(View.INVISIBLE);
             hintTime.setVisibility(View.VISIBLE);
@@ -498,10 +497,8 @@ public class FragmentQuiz extends FragmentBase {
         });
         hintText = (TextView) v.findViewById(R.id.HintText);
         hintTime = (TextView) v.findViewById(R.id.HintTime);
-        if (hintTick > 0) {
-            Log.i(Constants.LOG_TAG, "onCreateView setting hintText to " + Long.toString((hintTick/1000)+1));
+        if (hintTick > 0)
             hintTime.setText(Long.toString((hintTick/1000)+1));
-        }
         answerImage = (ImageView) v.findViewById(R.id.AnswerImage);
         answerImage.bringToFront();
         retryText = (TextView) v.findViewById(R.id.RetryText);
@@ -631,7 +628,6 @@ public class FragmentQuiz extends FragmentBase {
             if (hintTick > 0) {
                 if (hintTimer != null)
                     hintTimer.cancel();
-                Log.i(Constants.LOG_TAG, "hintTick: " + hintTick);
                 hintTimer = new HintTimer(hintTick, 500);
                 hintTimer.start();
             }
