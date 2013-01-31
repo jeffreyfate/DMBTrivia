@@ -169,6 +169,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private boolean isPersisted = false;
     private boolean networkProblem = false;
+    private boolean facebookLogin = false;
     
     public interface UiCallback {
         public void showNetworkProblem();
@@ -180,6 +181,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         public void resetHint();
         public void disableButton(boolean isRetry);
         public void enableButton(boolean isRetry);
+        public void setDisplayName(String displayName);
     }
     
     private NotificationManager nManager;
@@ -337,16 +339,22 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         if (!isLogging) {
             if (!loggedIn)
                 logOut(false);
-            if (userId == null)
+            if (userId == null) {
+                Log.i(Constants.LOG_TAG, "NOT isLogging userId null checkUser");
                 checkUser();
+            }
             else
                 showLoggedInFragment();
         }
         else {
-            if (userId != null)
+            if (userId != null) {
+                Log.i(Constants.LOG_TAG, "onResume setupUser");
                 setupUser();
-            else
+            }
+            else if (!facebookLogin){
+                Log.i(Constants.LOG_TAG, "isLogging userId null checkUser");
                 checkUser();
+            }
         }
         ApplicationEx.setActive();
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
@@ -438,8 +446,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             userId = user.getObjectId();
         if (!loggedIn && !isLogging && (user == null || userId == null))
             logOut(true);
-        else
+        else {
+            Log.i(Constants.LOG_TAG, "checkUser setupUser");
             setupUser();
+        }
     }
     
     @Override
@@ -558,6 +568,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     private void facebookLogin() {
+        facebookLogin = true;
         ParseFacebookUtils.logIn(this, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException err) {
@@ -586,6 +597,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         facebookTask.executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR);
+                    facebookLogin = false;
                 }
             }
         });
@@ -646,8 +658,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected void onPostExecute(Void nothing) {
-            if (isLogging)
+            if (isLogging) {
+                Log.i(Constants.LOG_TAG, "FacebookTask setupUser");
                 setupUser();
+            }
         }
     }
     
@@ -846,6 +860,20 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                     DatabaseHelper.COL_LOGGED_IN, userId);
             ApplicationEx.dbHelper.setOffset(0, userId);
+            ApplicationEx.dbHelper.setUserValue("", DatabaseHelper.COL_ANSWER,
+                    userId);
+            ApplicationEx.dbHelper.setUserValue(-1,
+                    DatabaseHelper.COL_SKIP_TICK, userId);
+            ApplicationEx.dbHelper.setUserValue(-1,
+                    DatabaseHelper.COL_HINT_TICK, userId);
+            ApplicationEx.dbHelper.setUserValue(0,
+                    DatabaseHelper.COL_HINT_PRESSED, userId);
+            ApplicationEx.dbHelper.setUserValue(0,
+                    DatabaseHelper.COL_SKIP_PRESSED, userId);
+            ApplicationEx.dbHelper.setUserValue("",
+                    DatabaseHelper.COL_HINT, userId);
+            ApplicationEx.dbHelper.setUserValue(0,
+                    DatabaseHelper.COL_IS_CORRECT, userId);
         }
         ParseUser.logOut();
         user = null;
@@ -2006,6 +2034,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     public void addAnswerId(String answerId) {
         answerIds.add(answerId);
     }
+    
+    @Override
+    public boolean hasAnswerId(String answerId) {
+        return answerIds.contains(answerId);
+    }
 
     @Override
     public boolean isNewQuestion() {
@@ -2056,6 +2089,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void setDisplayName(String displayName) {
+        currFrag.setDisplayName(displayName);
         this.displayName = displayName;
         if (user != null) {
             user.put("displayName", displayName);

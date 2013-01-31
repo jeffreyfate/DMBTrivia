@@ -75,6 +75,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public String getDisplayName();
         public ArrayList<String> getAnswerIds();
         public void addAnswerId(String answerId);
+        public boolean hasAnswerId(String answerId);
         public boolean isNewQuestion();
         public void setIsNewQuestion(boolean isNewQuestion);
         public int getCurrentScore();
@@ -273,5 +274,8 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     @Override
     public void enableButton(boolean isRetry) {}
+    
+    @Override
+    public void setDisplayName(String displayName) {}
     
 }

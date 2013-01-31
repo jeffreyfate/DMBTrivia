@@ -265,6 +265,10 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+        case R.id.NameMenu:
+            if (mCallback != null)
+                mCallback.showNameDialog();
+            break;
         case R.id.ScreenMenu:
             if (mCallback != null)
                 mCallback.shareScreenshot();
@@ -283,6 +287,12 @@ public class FragmentLeaders extends FragmentBase {
             break;
         }
         return true;
+    }
+    
+    @Override
+    public void setDisplayName(String displayName) {
+        if (userName != null)
+            userName.setText(displayName);
     }
     
 }

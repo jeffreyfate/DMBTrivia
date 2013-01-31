@@ -2,6 +2,9 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
+        android:id="@+id/NameMenu"
+        android:title="@string/NameTitle" />
+    <item
         android:id="@+id/ScreenMenu"
         android:title="@string/ShareScreen" />
     <item

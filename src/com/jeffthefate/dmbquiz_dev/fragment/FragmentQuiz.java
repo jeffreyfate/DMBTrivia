@@ -117,6 +117,8 @@ public class FragmentQuiz extends FragmentBase {
             if (mCallback.getUserId() != null) {
                 savedAnswer = ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_ANSWER, mCallback.getUserId());
+                if (savedAnswer != null && savedAnswer.equals(""))
+                    savedAnswer = null;
                 savedHint = ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 skipTick = ApplicationEx.dbHelper.getUserIntValue(
@@ -537,6 +539,11 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
+        if (mCallback != null && mCallback.hasAnswerId(
+                mCallback.getQuestionId())) {
+            mCallback.nextQuestion();
+            return;
+        }
         Log.d(Constants.LOG_TAG, mCallback.getCorrectAnswer());
         answerText.setVisibility(View.VISIBLE);
         if (mCallback.getQuestion() != null) {
