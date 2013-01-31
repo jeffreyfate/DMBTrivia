@@ -339,22 +339,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         if (!isLogging) {
             if (!loggedIn)
                 logOut(false);
-            if (userId == null) {
-                Log.i(Constants.LOG_TAG, "NOT isLogging userId null checkUser");
+            if (userId == null)
                 checkUser();
-            }
             else
                 showLoggedInFragment();
         }
         else {
-            if (userId != null) {
-                Log.i(Constants.LOG_TAG, "onResume setupUser");
+            if (userId != null)
                 setupUser();
-            }
-            else if (!facebookLogin){
-                Log.i(Constants.LOG_TAG, "isLogging userId null checkUser");
+            else if (!facebookLogin)
                 checkUser();
-            }
         }
         ApplicationEx.setActive();
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
@@ -446,10 +440,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             userId = user.getObjectId();
         if (!loggedIn && !isLogging && (user == null || userId == null))
             logOut(true);
-        else {
-            Log.i(Constants.LOG_TAG, "checkUser setupUser");
+        else
             setupUser();
-        }
     }
     
     @Override
@@ -658,10 +650,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected void onPostExecute(Void nothing) {
-            if (isLogging) {
-                Log.i(Constants.LOG_TAG, "FacebookTask setupUser");
+            if (isLogging)
                 setupUser();
-            }
         }
     }
     
