@@ -556,7 +556,10 @@ public class FragmentQuiz extends FragmentBase {
                 *0.99);
         if (tempScore < 100)
             tempScore = 100;
-        answerText.setHint(Integer.toString(tempScore) + " points");
+        if (!hintPressed)
+            answerText.setHint(Integer.toString(tempScore) + " points");
+        else
+            answerText.setHint(Integer.toString(tempScore/2) + " points");
         if (!isCorrect) {
             if (!hintPressed)
                 savedHint = "";
