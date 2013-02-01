@@ -462,6 +462,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     private void showLoggedInFragment() {
+        fetchDisplayName();
         getQuestionCountFromParse(false);
         if (user == null)
             user = ParseUser.getCurrentUser();
@@ -482,6 +483,20 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 answerIds = ApplicationEx.dbHelper.readAnswers(userId);
             showQuiz();
         }
+    }
+    
+    private void fetchDisplayName() {
+        if (userId == null)
+            return;
+        ParseQuery query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", userId);
+        query.getInBackground("displayName", new GetCallback() {
+            @Override
+            public void done(ParseObject user, ParseException e) {
+                if (user != null)
+                    displayName = user.getString("displayName");
+            }
+        });
     }
     
     @Override
