@@ -540,7 +540,7 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void resumeQuestion() {
         if (mCallback != null && mCallback.hasAnswerId(
-                mCallback.getQuestionId())) {
+                mCallback.getQuestionId()) && !mCallback.isNewQuestion()) {
             mCallback.nextQuestion();
             return;
         }
