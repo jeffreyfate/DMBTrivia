@@ -30,6 +30,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -84,28 +86,6 @@ import com.parse.facebook.FacebookError;
 import com.parse.facebook.Util;
 
 public class ActivityMain extends FragmentActivity implements OnButtonListener {
-    
-    /*
-     * Fresh login scenario:
-     * 
-     * Set to isLogging
-     * Login fragment shown
-     * Background Parse login process started
-     * When finished, userId and display name saved
-     * Login timer started
-     * Check for a user
-     * Check for a userId
-     * Get all state values from userId
-     * Check for display name and get from user if necessary
-     * Get user score from database and save to user object
-     * Get answer hint map and answer list from database
-     * If answer list is empty, get answers from Parse
-     * Grab all persisted question values
-     *      Get question count if necessary
-     *      Get next question if necessary
-     * Start question screen if necessary
-     * Setup the UI for the current question
-    */
     
     FragmentManager fMan;
     
@@ -350,6 +330,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             else if (!facebookLogin)
                 checkUser();
         }
+        if (inInfo)
+            onInfoPressed();
         ApplicationEx.setActive();
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
         registerReceiver(connReceiver,
@@ -418,7 +400,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             currentBackground = res.getResourceEntryName(currentId);
             ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
             if (currentId != resourceId)
-                background.setImageResource(currentId);
+                // background.setImageResource(currentId);
+                setImageDrawableWithFade(background,
+                        res.getDrawable(currentId));
             else
                 setBackground(currentBackground, showNew);
         }
@@ -431,6 +415,22 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         return currentBackground;
     }
     
+    private void setImageDrawableWithFade(final ImageView imageView,
+            final Drawable drawable) {
+        Drawable currentDrawable = imageView.getDrawable();
+        if (currentDrawable != null) {
+            Drawable [] arrayDrawable = new Drawable[2];
+            arrayDrawable[0] = currentDrawable;
+            arrayDrawable[1] = drawable;
+            TransitionDrawable transitionDrawable =
+                new TransitionDrawable(arrayDrawable);
+            transitionDrawable.setCrossFadeEnabled(true);
+            imageView.setImageDrawable(transitionDrawable);
+            transitionDrawable.startTransition(500);
+        } else
+            imageView.setImageDrawable(drawable);
+    }
+
     private void checkUser() {
         noConnection.setVisibility(View.INVISIBLE);
         user = ParseUser.getCurrentUser();
