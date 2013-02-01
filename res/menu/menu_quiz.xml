@@ -7,12 +7,17 @@
     <item
         android:id="@+id/SwitchBackground"
         android:title="@string/SwitchBackground" />
-    <item
-        android:id="@+id/SoundMenu"
-        android:title="@string/SoundTitle" />
-    <item
-        android:id="@+id/Notifications"
-        android:title="@string/NotificationTitle" />
+    <group
+        android:id="@+id/Settings"
+        android:title="@string/Settings"
+        android:checkableBehavior="all">
+        <item
+	        android:id="@+id/SoundMenu"
+	        android:title="@string/SoundTitle" />
+        <item
+	        android:id="@+id/Notifications"
+	        android:title="@string/NotificationTitle" />
+    </group>
     <item
         android:id="@+id/FollowMenu"
         android:title="@string/FollowTitle" />

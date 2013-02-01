@@ -998,12 +998,10 @@ public class FragmentQuiz extends FragmentBase {
             menu.findItem(R.id.LeadersMenu).setVisible(true).setEnabled(true);
             menu.findItem(R.id.NameMenu).setVisible(true).setEnabled(true);
         }
-        menu.findItem(R.id.SoundMenu).setTitle(sharedPrefs.getBoolean(
-                getString(R.string.sound_key), true) ? "Disable sounds" :
-                    "Enable sounds");
-        menu.findItem(R.id.Notifications).setTitle(sharedPrefs.getBoolean(
-                getString(R.string.notification_key), true) ?
-                        "Disable Notifications" : "Enable Notifications");
+        menu.findItem(R.id.SoundMenu).setChecked(sharedPrefs.getBoolean(
+                getString(R.string.sound_key), true));
+        menu.findItem(R.id.Notifications).setChecked(sharedPrefs.getBoolean(
+                getString(R.string.notification_key), true));
         super.onPrepareOptionsMenu(menu);
     }
     
@@ -1023,12 +1021,14 @@ public class FragmentQuiz extends FragmentBase {
                 mCallback.onStatsPressed();
             break;
         case R.id.SoundMenu:
+            item.setChecked(!item.isChecked());
             sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
                     !sharedPrefs.getBoolean(getString(R.string.sound_key),
                             true))
                 .commit();
             break;
         case R.id.Notifications:
+            item.setChecked(!item.isChecked());
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
                     !sharedPrefs.getBoolean(
                             getString(R.string.notification_key), true))

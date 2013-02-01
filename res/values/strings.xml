@@ -12,6 +12,7 @@
     <string name="NoConnection">Unable to connect to service</string>
     <string name="StatsLoading">Calculating stats&#8230;</string>
     <string name="LoginLoading">Fetching user info&#8230;</string>
+    <string name="Settings">Settings</string>
     
     <string name="enter">ENTER</string>
     <string name="done">DONE</string>
@@ -36,7 +37,7 @@
     <string name="passwordHint">password</string>
     
     <string name="SwitchBackground">Switch Background</string>
-    <string name="SoundTitle">Toggle Sounds</string>
+    <string name="SoundTitle">Sounds</string>
     <string name="LeadersTitle">Stats &amp; Standings</string>
     <string name="LogoutTitle">Logout</string>
     <string name="ExitTitle">Exit</string>
@@ -46,7 +47,7 @@
     <string name="LikeTitle">DMB Trivia on Facebook</string>
     <string name="ReportTitle">Report Question</string>
     <string name="ShareScreen">Share Screenshot</string>
-    <string name="NotificationTitle">Toggle Notifications</string>
+    <string name="NotificationTitle">Notifications</string>
     <string name="NameTitle">Edit Display Name</string>
     
     <string name="ScoreDialogTitle">Scoring Notes</string>
