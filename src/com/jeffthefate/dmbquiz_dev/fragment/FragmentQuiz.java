@@ -695,8 +695,17 @@ public class FragmentQuiz extends FragmentBase {
                         else {
                             if (mCallback.getQuestionId() != null)
                                 resumeQuestion();
-                            else
+                            else {
+                                showNoMoreQuestions();
+                                answerButton.setBackgroundResource(
+                                        R.drawable.button_disabled);
+                                answerButton.setTextColor(
+                                        res.getColor(R.color.light_gray));
+                                answerButton.setText("LOADING");
+                                answerButton.setVisibility(View.VISIBLE);
+                                answerButton.setEnabled(false);
                                 mCallback.nextQuestion();
+                            }
                         }
                     }
                 }

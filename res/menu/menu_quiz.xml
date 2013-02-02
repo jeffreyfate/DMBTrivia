@@ -10,7 +10,7 @@
     <group
         android:id="@+id/Settings"
         android:title="@string/Settings"
-        android:checkableBehavior="all">
+        android:checkableBehavior="all" >
         <item
 	        android:id="@+id/SoundMenu"
 	        android:title="@string/SoundTitle" />

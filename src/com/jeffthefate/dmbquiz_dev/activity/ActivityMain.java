@@ -122,8 +122,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private String thirdQuestionCategory;
     private String thirdQuestionScore;
     
-    private int questionCount = -1;
-    
     private boolean newQuestion = false;
     
     private boolean leaderDone = false;
@@ -241,7 +239,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "thirdQuestionScore");
             thirdQuestionCategory = savedInstanceState.getString(
                     "thirdQuestionCategory");
-            questionCount = savedInstanceState.getInt("questionCount");
             newQuestion = savedInstanceState.getBoolean("newQuestion");
             answerIds = savedInstanceState.getStringArrayList("answerIds");
             displayName = savedInstanceState.getString("displayName");
@@ -298,7 +295,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         outState.putString("thirdCorrectAnswer", thirdCorrectAnswer);
         outState.putString("thirdQuestionCategory", thirdQuestionCategory);
         outState.putString("thirdQuestionScore", thirdQuestionScore);
-        outState.putInt("questionCount", questionCount);
         outState.putBoolean("newQuestion", newQuestion);
         outState.putStringArrayList("answerIds", answerIds);
         outState.putString("displayName", displayName);
@@ -316,19 +312,27 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             getScoreTask.cancel(true);
         if (getParseTask != null)
             getParseTask.cancel(true);
-        if (!isLogging) {
-            if (!loggedIn)
-                logOut(false);
-            if (userId == null)
-                checkUser();
-            else
-                showLoggedInFragment();
+        if (ApplicationEx.getQuestionCount() < 0) {
+            showLoad();
+            getQuestionCountFromParse(false, true);
         }
         else {
-            if (userId != null)
-                setupUser();
-            else if (!facebookLogin)
-                checkUser();
+            if (!isLogging) {
+                if (!loggedIn)
+                    logOut(false);
+                if (userId == null)
+                    checkUser();
+                else
+                    showLoggedInFragment();
+            }
+            else {
+                if (userId != null)
+                    setupUser();
+                else if (!facebookLogin)
+                    checkUser();
+            }
+            if (inInfo)
+                onInfoPressed();
         }
         if (inInfo)
             onInfoPressed();
@@ -400,7 +404,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             currentBackground = res.getResourceEntryName(currentId);
             ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
             if (currentId != resourceId)
-                // background.setImageResource(currentId);
                 setImageDrawableWithFade(background,
                         res.getDrawable(currentId));
             else
@@ -419,15 +422,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             final Drawable drawable) {
         Drawable currentDrawable = imageView.getDrawable();
         if (currentDrawable != null) {
-            Drawable [] arrayDrawable = new Drawable[2];
+            Drawable[] arrayDrawable = new Drawable[2];
             arrayDrawable[0] = currentDrawable;
             arrayDrawable[1] = drawable;
             TransitionDrawable transitionDrawable =
-                new TransitionDrawable(arrayDrawable);
+                    new TransitionDrawable(arrayDrawable);
             transitionDrawable.setCrossFadeEnabled(true);
             imageView.setImageDrawable(transitionDrawable);
             transitionDrawable.startTransition(500);
-        } else
+        }
+        else
             imageView.setImageDrawable(drawable);
     }
 
@@ -463,7 +467,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private void showLoggedInFragment() {
         fetchDisplayName();
-        getQuestionCountFromParse(false);
+        getQuestionCountFromParse(false, false);
         if (user == null)
             user = ParseUser.getCurrentUser();
         if (displayName == null) {
@@ -1001,7 +1005,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             else
                 getParseTask.executeOnExecutor(
                         AsyncTask.THREAD_POOL_EXECUTOR);
-            getQuestionCountFromParse(false);
+            getQuestionCountFromParse(false, false);
         }
         ApplicationEx.setInactive();
         super.onPause();
@@ -1200,9 +1204,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 public void done(int correctCount, ParseException e) {
                     if (answerIds != null && !isCancelled()) {
                         if (answerIds.size() != correctCount) {
-                            if (questionCount > answerIds.size() &&
-                                    answerIds.size() < correctCount &&
-                                    !isCancelled())
+                            if (ApplicationEx.getQuestionCount() >
+                                    answerIds.size() && answerIds.size() <
+                                    correctCount && !isCancelled())
                                 getCorrectAnswers(userId);
                             else if (!isCancelled()) {
                                 correctAnswers =
@@ -1408,17 +1412,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
     }
     
-    private void getQuestionCountFromParse(final boolean getQuestions) {
+    private void getQuestionCountFromParse(final boolean getQuestions,
+            final boolean isResume) {
         final long perfTime = System.currentTimeMillis();
         ParseCloud.callFunctionInBackground("getQuestionCount", null,
                 new FunctionCallback<Map<String, Object>>() {
             @Override
             public void done(Map<String, Object> count, ParseException e) {
                 if (e == null) {
-                    questionCount = Integer.parseInt(count.get("total")
-                            .toString());
-                    ApplicationEx.dbHelper.setUserValue(questionCount,
-                            DatabaseHelper.COL_QUESTION_COUNT, userId);
+                    ApplicationEx.setQuestionCount(
+                            Integer.parseInt(count.get("total").toString()));
                     if (getQuestions) {
                         if (ApplicationEx.dbHelper.getUserType(userId)
                                 .equalsIgnoreCase("Anonymous")) {
@@ -1433,6 +1436,22 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             else
                                 getParseTask.executeOnExecutor(
                                         AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
+                    }
+                    if (isResume) {
+                        if (!isLogging) {
+                            if (!loggedIn)
+                                logOut(false);
+                            if (userId == null)
+                                checkUser();
+                            else
+                                showLoggedInFragment();
+                        }
+                        else {
+                            if (userId != null)
+                                setupUser();
+                            else if (!facebookLogin)
+                                checkUser();
                         }
                     }
                 }
@@ -1455,8 +1474,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 publishProgress();
                 return null;
             }
-            if (questionCount < 0 && !isCancelled())
-                getQuestionCountFromParse(true);
+            if (ApplicationEx.getQuestionCount() < 0 && !isCancelled())
+                getQuestionCountFromParse(true, false);
             else if (!isCancelled()) {
                 if (ApplicationEx.dbHelper.isAnonUser(userId) &&
                         !isCancelled()) {
@@ -1605,7 +1624,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         questionScore = nextQuestionScore;
         nextQuestionScore = thirdQuestionScore;
         thirdQuestionScore = null;
-        if (answerIds.size() >= questionCount) {
+        if (answerIds.size() >= ApplicationEx.getQuestionCount()) {
             questionId = null;
             nextQuestionId = null;
             thirdQuestionId = null;
@@ -1621,6 +1640,12 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             questionScore = null;
             nextQuestionScore = null;
             thirdQuestionScore = null;
+            ApplicationEx.dbHelper.setQuestions(userId, questionId, question,
+                    correctAnswer, questionCategory, questionScore,
+                    nextQuestionId, nextQuestion, nextCorrectAnswer,
+                    nextQuestionCategory, nextQuestionScore, thirdQuestionId,
+                    thirdQuestion, thirdCorrectAnswer, thirdQuestionCategory,
+                    thirdQuestionScore);
             if (!loggedIn) {
                 try {
                     goToQuiz();
@@ -1650,11 +1675,12 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     ApplicationEx.dbHelper.getSkipQuestions(userId);
             tempList.removeAll(skipList);
             tempList.addAll(skipList);
-            if (tempList.size() == questionCount &&
-                    answerIds.size() < questionCount)
+            if (tempList.size() == ApplicationEx.getQuestionCount() &&
+                    answerIds.size() < ApplicationEx.getQuestionCount())
                 tempList = new ArrayList<String>(answerIds);
             ParseQuery query = new ParseQuery("Question");
-            int skip = (int) (Math.random()*(questionCount-answerIds.size()));
+            int skip = (int) (Math.random()*(ApplicationEx.getQuestionCount()-
+                    answerIds.size()));
             int total = 0;
             if (questionId != null && !tempList.contains(questionId))
                 tempList.add(questionId);
@@ -1663,7 +1689,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             if (thirdQuestion != null && !tempList.contains(thirdQuestionId))
                 tempList.add(thirdQuestionId);
             if (questionId == null) {
-                total = questionCount-answerIds.size()-3;
+                total = ApplicationEx.getQuestionCount()-answerIds.size()-3;
                 if (total < 0)
                     total = 0;
                 query.setSkip(total < skip ? total : skip);
@@ -1672,7 +1698,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             }
             else if (nextQuestionId == null) {
                 if (thirdQuestionId == null) {
-                    total = questionCount-tempList.size()-2;
+                    total = ApplicationEx.getQuestionCount()-tempList.size()-2;
                     if (total < 0)
                         total = 0;
                     query.setSkip(total < skip ? total : skip);
@@ -1680,7 +1706,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     query.whereNotContainedIn("objectId", tempList);
                 }
                 else {
-                    total = questionCount-tempList.size()-1;
+                    total = ApplicationEx.getQuestionCount()-tempList.size()-1;
                     if (total < 0)
                         total = 0;
                     query.setSkip(total < skip ? total : skip);
@@ -1689,7 +1715,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 }
             }
             else {
-                total = questionCount-tempList.size()-1;
+                total = ApplicationEx.getQuestionCount()-tempList.size()-1;
                 if (total < 0)
                     total = 0;
                 query.setSkip(total < skip ? total : skip);
@@ -1740,22 +1766,58 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             }
                             else if (questions.size() == 2) {
                                 ParseObject currQuestion = questions.get(0);
-                                nextQuestionId = currQuestion.getObjectId();
-                                nextQuestion = currQuestion.getString(
-                                        "question");
-                                nextCorrectAnswer = currQuestion.getString(
-                                        "answer");
-                                nextQuestionCategory = currQuestion.getString(
-                                        "category");
-                                score = currQuestion.getNumber("score");
-                                nextQuestionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
+                                if (questionId == null) {
+                                    questionId = currQuestion.getObjectId();
+                                    question = currQuestion.getString(
+                                            "question");
+                                    correctAnswer = currQuestion.getString(
+                                            "answer");
+                                    questionCategory = currQuestion.getString(
+                                            "category");
+                                    score = currQuestion.getNumber("score");
+                                    questionScore = score == null ? "1011" :
+                                    Integer.toString(score.intValue());
+                                }
+                                else {
+                                    nextQuestionId = currQuestion.getObjectId();
+                                    nextQuestion = currQuestion.getString(
+                                            "question");
+                                    nextCorrectAnswer = currQuestion.getString(
+                                            "answer");
+                                    nextQuestionCategory = 
+                                            currQuestion.getString("category");
+                                    score = currQuestion.getNumber("score");
+                                    nextQuestionScore = score == null ? "1011" :
+                                            Integer.toString(score.intValue());
+                                }
                                 followQuestion = questions.get(1);
                             }
                             else {
                                 followQuestion = questions.get(0);
                             }
-                            if (nextQuestionId == null) {
+                            if (questionId == null) {
+                                questionId = followQuestion.getObjectId();
+                                question = followQuestion.getString(
+                                        "question");
+                                correctAnswer = followQuestion.getString(
+                                        "answer");
+                                questionCategory = followQuestion.getString(
+                                        "category");
+                                score = followQuestion.getNumber("score");
+                                questionScore = score == null ? "1011" :
+                                        Integer.toString(score.intValue());
+                                if (questionId != null && userId != null) {
+                                    if (!loggedIn) {
+                                        try {
+                                            goToQuiz();
+                                        } catch (
+                                            IllegalStateException exception) {}
+                                    }
+                                    else
+                                        currFrag.resumeQuestion();
+                                }
+                            }
+                            else if (nextQuestionId == null) {
                                 nextQuestionId = followQuestion.getObjectId();
                                 nextQuestion = followQuestion.getString(
                                         "question");
@@ -1862,12 +1924,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         newQuestion = false;
         ApplicationEx.dbHelper.setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
-        if (answerIds != null) {
-            if (answerIds.size() == questionCount)
-                currFrag.showNoMoreQuestions();
-            else
-                nextQuestion();
-        }
+        if (answerIds != null)
+            nextQuestion();
+        else
+            currFrag.showNetworkProblem();
     }
 
     @Override
@@ -2087,9 +2147,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public int getQuestionsLeft() {
         if (answerIds == null)
-            return questionCount;
+            return ApplicationEx.getQuestionCount();
         else
-            return questionCount-answerIds.size();
+            return ApplicationEx.getQuestionCount()-answerIds.size();
     }
     
     @Override
@@ -2182,8 +2242,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 userId);
         thirdQuestionCategory =
                 ApplicationEx.dbHelper.getThirdQuestionCategory(userId);
-        questionCount = ApplicationEx.dbHelper.getUserIntValue(
-                DatabaseHelper.COL_QUESTION_COUNT, userId);
         newQuestion = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_NEW_QUESTION, userId) == 1 ? true : false;
         displayName = ApplicationEx.dbHelper.getUserStringValue(

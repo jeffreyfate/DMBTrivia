@@ -264,7 +264,6 @@ public class FragmentLeaders extends FragmentBase {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Test
         switch(item.getItemId()) {
         case R.id.NameMenu:
             if (mCallback != null)

@@ -35,6 +35,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static boolean mIsActive = false;
     private static ConnectivityManager connMan;
     public static String cacheLocation = null;
+    private static int questionCount = -1;
     
     @Override
     public void onCreate() {
@@ -157,6 +158,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     
     public static void setInactive() {
         mIsActive = false;
+    }
+    
+    public static int getQuestionCount() {
+        return questionCount;
+    }
+    
+    public static void setQuestionCount(int newQuestionCount) {
+        questionCount = newQuestionCount;
     }
     
 }

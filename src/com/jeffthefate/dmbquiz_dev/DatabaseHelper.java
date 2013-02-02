@@ -71,7 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_IN_LOAD = "InLoad";
     public static final String COL_IN_STATS = "InStats";
     public static final String COL_IN_INFO = "InInfo";
-    public static final String COL_QUESTION_COUNT = "QuestionCount";
     public static final String COL_NEW_QUESTION = "NewQuestion";
     public static final String COL_DISPLAY_NAME = "DisplayName";
     public static final String COL_NETWORK_PROBLEM = "NetworkProblem";
@@ -122,14 +121,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " INTEGER DEFAULT 0, " + COL_LOGGED_IN + " INTEGER DEFAULT 0, " +
             COL_LOGGING + " INTEGER DEFAULT 0, " + COL_IN_LOAD +
             " INTEGER DEFAULT 0, " + COL_IN_STATS + " INTEGER DEFAULT 0, " +
-            COL_IN_INFO + " INTEGER DEFAULT 0, " + COL_QUESTION_COUNT +
-            " INTEGER DEFAULT -1, " + COL_NEW_QUESTION + " INTEGER DEFAULT 0, "
-            + COL_DISPLAY_NAME + " TEXT, " + COL_USER_TEXT + " TEXT, " +
-            COL_USER_ANSWER_TEXT + " TEXT, " + COL_USER_ANSWERS + " TEXT, " +
-            COL_USER_HINT_TEXT + " TEXT, " + COL_USER_HINTS + " TEXT, " +
-            COL_USER_NAME_TEXT + " TEXT, " + COL_USER_SCORE_TEXT + " TEXT, " +
-            COL_LEADER_TEXT + " TEXT, " + COL_CREATED_TEXT + " TEXT, " +
-            COL_CREATED_DATE + " TEXT)";
+            COL_IN_INFO + " INTEGER DEFAULT 0, " + COL_NEW_QUESTION +
+            " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME + " TEXT, " +
+            COL_USER_TEXT + " TEXT, " + COL_USER_ANSWER_TEXT + " TEXT, " +
+            COL_USER_ANSWERS + " TEXT, " + COL_USER_HINT_TEXT + " TEXT, " +
+            COL_USER_HINTS + " TEXT, " + COL_USER_NAME_TEXT + " TEXT, " +
+            COL_USER_SCORE_TEXT + " TEXT, " + COL_LEADER_TEXT + " TEXT, " +
+            COL_CREATED_TEXT + " TEXT, " + COL_CREATED_DATE + " TEXT)";
     /**
      * Create Question table string
      */
@@ -1054,15 +1052,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!colList.contains(COL_IN_INFO)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_INFO +
                     " INTEGER DEFAULT 0";
-            try {
-                db.execSQL(sqlString);
-            } catch (SQLException e) {
-                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
-            }
-        }
-        if (!colList.contains(COL_QUESTION_COUNT)) {
-            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
-                    COL_QUESTION_COUNT + " INTEGER DEFAULT -1";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {
