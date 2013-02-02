@@ -1,17 +1,17 @@
 # view AndroidManifest.xml #generated:16
--keep class com.jeffthefate.dmbquiz_dev.ApplicationEx { <init>(...); }
+-keep class com.jeffthefate.dmbquiz.ApplicationEx { <init>(...); }
 
 # view AndroidManifest.xml #generated:21
--keep class com.jeffthefate.dmbquiz_dev.activity.ActivityMain { <init>(...); }
+-keep class com.jeffthefate.dmbquiz.activity.ActivityMain { <init>(...); }
 
 # view AndroidManifest.xml #generated:45
--keep class com.jeffthefate.dmbquiz_dev.receiver.ConnectivityReceiver { <init>(...); }
+-keep class com.jeffthefate.dmbquiz.receiver.ConnectivityReceiver { <init>(...); }
 
 # view AndroidManifest.xml #generated:52
--keep class com.jeffthefate.dmbquiz_dev.receiver.ExternalStorageReceiver { <init>(...); }
+-keep class com.jeffthefate.dmbquiz.receiver.ExternalStorageReceiver { <init>(...); }
 
 # view AndroidManifest.xml #generated:38
--keep class com.jeffthefate.dmbquiz_dev.receiver.PushReceiver { <init>(...); }
+-keep class com.jeffthefate.dmbquiz.receiver.PushReceiver { <init>(...); }
 
 # view AndroidManifest.xml #generated:32
 -keep class com.parse.ParseBroadcastReceiver { <init>(...); }
