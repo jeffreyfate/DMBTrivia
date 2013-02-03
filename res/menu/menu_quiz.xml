@@ -13,10 +13,12 @@
         android:checkableBehavior="all" >
         <item
 	        android:id="@+id/SoundMenu"
-	        android:title="@string/SoundTitle" />
+	        android:title="@string/SoundTitle"
+	        android:checkable="true" />
         <item
 	        android:id="@+id/Notifications"
-	        android:title="@string/NotificationTitle" />
+	        android:title="@string/NotificationTitle"
+	        android:checkable="true" />
     </group>
     <item
         android:id="@+id/FollowMenu"
