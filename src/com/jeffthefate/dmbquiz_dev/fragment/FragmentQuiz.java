@@ -1007,10 +1007,26 @@ public class FragmentQuiz extends FragmentBase {
             menu.findItem(R.id.LeadersMenu).setVisible(true).setEnabled(true);
             menu.findItem(R.id.NameMenu).setVisible(true).setEnabled(true);
         }
-        menu.findItem(R.id.SoundMenu).setChecked(sharedPrefs.getBoolean(
-                getString(R.string.sound_key), true));
-        menu.findItem(R.id.Notifications).setChecked(sharedPrefs.getBoolean(
-                getString(R.string.notification_key), true));
+        menu.findItem(R.id.SoundMenu)
+                .setCheckable(true)
+                .setChecked(sharedPrefs.getBoolean(
+                        getString(R.string.sound_key), true));
+        menu.findItem(R.id.Notifications)
+                .setCheckable(true)
+                .setChecked(sharedPrefs.getBoolean(
+                        getString(R.string.notification_key), true));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            if (sharedPrefs.getBoolean(getString(R.string.sound_key), true))
+                menu.findItem(R.id.SoundMenu).setTitle("\u2714  Sound");
+            else
+                menu.findItem(R.id.SoundMenu).setTitle("Sound");
+            if (sharedPrefs.getBoolean(
+                    getString(R.string.notification_key), true))
+                menu.findItem(R.id.Notifications).setTitle(
+                        "\u2714  Notifications");
+            else
+                menu.findItem(R.id.Notifications).setTitle("Notifications");
+        }
         super.onPrepareOptionsMenu(menu);
     }
     
