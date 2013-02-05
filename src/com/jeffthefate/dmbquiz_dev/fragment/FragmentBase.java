@@ -2,7 +2,6 @@ package com.jeffthefate.dmbquiz_dev.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
