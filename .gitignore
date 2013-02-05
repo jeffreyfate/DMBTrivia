@@ -2,3 +2,7 @@ gen
 bin
 gen
 bin
+gen
+bin
+bin/jarlist.cache
+bin/res

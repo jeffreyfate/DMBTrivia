@@ -16,6 +16,7 @@
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentLeaders.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />

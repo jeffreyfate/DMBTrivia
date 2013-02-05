@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DMB Trivia Dev</string>
+    <string name="app_name">DMB Trivia</string>
     
     <string name="MyStats">Stats</string>
     <string name="CorrectAnswers">My Correct Answers</string>
