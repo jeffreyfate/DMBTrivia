@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/LeadersMenu"
+        android:title="@string/LeadersTitle" />
+    <item
+        android:id="@+id/SwitchBackground"
+        android:title="@string/SwitchBackground" />
+    <group
+        android:id="@+id/Settings"
+        android:title="@string/Settings"
+        android:checkableBehavior="all" >
+        <item
+	        android:id="@+id/SoundMenu"
+	        android:title="@string/SoundTitle"
+	        android:checkable="true" />
+        <item
+	        android:id="@+id/Notifications"
+	        android:title="@string/NotificationTitle"
+	        android:checkable="true" />
+    </group>
+    <item
+        android:id="@+id/FollowMenu"
+        android:title="@string/FollowTitle" />
+    <item
+        android:id="@+id/LikeMenu"
+        android:title="@string/LikeTitle" />
+    <item
+        android:id="@+id/ReportMenu"
+        android:title="@string/ReportTitle" />
+    <item
+        android:id="@+id/ScreenMenu"
+        android:title="@string/ShareScreen" />
+    <item
+        android:id="@+id/NameMenu"
+        android:title="@string/NameTitle" />
+    <item
+        android:id="@+id/LogoutMenu"
+        android:title="@string/LogoutTitle" />
+    <item
+        android:id="@+id/ExitMenu"
+        android:title="@string/ExitTitle" />
+</menu>

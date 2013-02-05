@@ -379,10 +379,7 @@ public class FragmentQuiz extends FragmentBase {
         protected void onProgressUpdate(Void... nothing) {
             answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
             answerPlace.setVisibility(View.VISIBLE);
-            hintButton.setEnabled(false);
             answerText.setHint(answerTextHint);
-            hintText.setTextColor(res.getColor(R.color.light_gray));
-            hintText.setBackgroundResource(R.drawable.button_disabled);
         }
         
         @Override
@@ -508,6 +505,9 @@ public class FragmentQuiz extends FragmentBase {
         hintButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                hintButton.setEnabled(false);
+                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setBackgroundResource(R.drawable.button_disabled);
                 hintTick = 0;
                 ApplicationEx.dbHelper.setUserValue((int) hintTick,
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
