@@ -314,6 +314,8 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private void indicateHint() {
+        if (hintTask != null)
+            hintTask.cancel(true);
         hintTask = new HintTask();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             hintTask.execute();
@@ -325,14 +327,20 @@ public class FragmentQuiz extends FragmentBase {
         
         @Override
         protected Void doInBackground(Void... nothing) {
+            if (isCancelled())
+                return null;
             StringBuilder sb = new StringBuilder(mCallback.getCorrectAnswer()
                     .replaceAll("\\s+", " "));
+            if (isCancelled())
+                return null;
             int textSize = mCallback.getCorrectAnswer().replaceAll("\\s+", " ")
                     .length();
             int replaceSize = textSize / 2;
             int currIndex = -1;
             int replacements = 0;
-            while (replacements < replaceSize) {
+            if (isCancelled())
+                return null;
+            while (replacements < replaceSize && !isCancelled()) {
                 currIndex = (int) (Math.random()*textSize);
                 if (sb.substring(currIndex, currIndex+1)
                         .matches("[0-9a-zA-Z]") && 
@@ -341,11 +349,15 @@ public class FragmentQuiz extends FragmentBase {
                     replacements++;
                 }
             }
+            if (isCancelled())
+                return null;
             ApplicationEx.dbHelper.setQuestionHint(mCallback.getQuestionId(),
                     true, mCallback.getUserId(),
                     ApplicationEx.dbHelper.getQuestionSkip(
                             mCallback.getQuestionId(), mCallback.getUserId()));
             hintPressed = true;
+            if (isCancelled())
+                return null;
             ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
             if (mCallback.getQuestionScore() != null)
@@ -355,9 +367,13 @@ public class FragmentQuiz extends FragmentBase {
                                 " points";
             else
                 answerTextHint = "";
+            if (isCancelled())
+                return null;
             savedHint = sb.toString();
             ApplicationEx.dbHelper.setUserValue(savedHint,
                     DatabaseHelper.COL_HINT, mCallback.getUserId());
+            if (isCancelled())
+                return null;
             publishProgress();
             return null;
         }
@@ -369,6 +385,10 @@ public class FragmentQuiz extends FragmentBase {
             answerText.setHint(answerTextHint);
             hintText.setTextColor(res.getColor(R.color.light_gray));
             hintText.setBackgroundResource(R.drawable.button_disabled);
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
         }
     }
     
