@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.jeffthefate.dmbquiz.R;
 import com.parse.ParseObject;
 
 public class QuestionAdapter extends BaseAdapter {

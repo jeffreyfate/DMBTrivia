@@ -2,7 +2,6 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,8 +19,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
-import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
 import com.parse.Parse;
 
 public class FragmentBase extends Fragment implements UiCallback {

@@ -17,8 +17,8 @@ import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
-import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;

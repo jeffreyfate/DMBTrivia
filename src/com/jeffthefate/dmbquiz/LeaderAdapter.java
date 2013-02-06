@@ -2,8 +2,6 @@ package com.jeffthefate.dmbquiz;
 
 import java.util.ArrayList;
 
-import com.jeffthefate.dmbquiz.R;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;

@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.fragment.FragmentQuiz;
-import com.jeffthefate.dmbquiz.R;
 
 public class CategoryAdapter extends ArrayAdapter  {
     

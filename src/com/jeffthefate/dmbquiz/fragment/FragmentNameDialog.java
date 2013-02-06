@@ -16,8 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.activity.ActivityMain;
 
 public class FragmentNameDialog extends DialogFragment {
     
