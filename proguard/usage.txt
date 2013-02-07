@@ -1475,8 +1475,8 @@ com.facebook.android.Util:
     35:35:public Util()
     293:297:public static void showAlert(android.content.Context,java.lang.String,java.lang.String)
 com.jeffthefate.dmbquiz.ApplicationEx:
-    128:137:public void clearApplicationData()
-    140:148:public static boolean deleteDir(java.io.File)
+    137:146:public void clearApplicationData()
+    149:157:public static boolean deleteDir(java.io.File)
 com.jeffthefate.dmbquiz.BuildConfig
 com.jeffthefate.dmbquiz.CategoryAdapter
 com.jeffthefate.dmbquiz.CategoryAdapter$1

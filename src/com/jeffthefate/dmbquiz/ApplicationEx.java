@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.widget.Toast;
@@ -40,6 +41,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        // make sure AsyncTask is loaded in the Main thread
+        // https://code.google.com/p/android/issues/detail?id=20915
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                return null;
+            }
+        };
         app = this;
         dbHelper = DatabaseHelper.getInstance();
         String state = Environment.getExternalStorageState();
