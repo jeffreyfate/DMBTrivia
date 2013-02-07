@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -64,8 +66,8 @@ public class FragmentQuiz extends FragmentBase {
     private WrongTimer wrongTimer;
     
     private HintTask hintTask;
-    
-    private String savedAnswer;
+    // TODO: Revisit when Smart Keyboard fixes text issue on rotate
+    //private String savedAnswer;
     private String savedHint;
     
     private boolean hintPressed = false;
@@ -74,6 +76,8 @@ public class FragmentQuiz extends FragmentBase {
     private boolean isCorrect = false;
     
     private String answerTextHint = null;
+    
+    private InputMethodManager imm;
     
     public FragmentQuiz() {
     }
@@ -87,11 +91,15 @@ public class FragmentQuiz extends FragmentBase {
         if (!sharedPrefs.contains(getString(R.string.notification_key)))
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
                     true).commit();
+        imm = (InputMethodManager) getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
+            /*
             savedAnswer = savedInstanceState.getString("answer");
             ApplicationEx.dbHelper.setUserValue(savedAnswer,
                     DatabaseHelper.COL_ANSWER, mCallback.getUserId());
+            */
             savedHint = savedInstanceState.getString("hint");
             ApplicationEx.dbHelper.setUserValue(savedHint,
                     DatabaseHelper.COL_HINT, mCallback.getUserId());
@@ -113,10 +121,12 @@ public class FragmentQuiz extends FragmentBase {
         }
         else {
             if (mCallback.getUserId() != null) {
+                /*
                 savedAnswer = ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_ANSWER, mCallback.getUserId());
                 if (savedAnswer != null && savedAnswer.equals(""))
                     savedAnswer = null;
+                */
                 savedHint = ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 skipTick = ApplicationEx.dbHelper.getUserIntValue(
@@ -245,7 +255,7 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         protected Void doInBackground(Void... nothing) {
             publishProgress();
-            savedAnswer = null;
+            //savedAnswer = null;
             ApplicationEx.dbHelper.setUserValue("",
                     DatabaseHelper.COL_ANSWER, mCallback.getUserId());
             skipTick = 17000;
@@ -275,6 +285,7 @@ public class FragmentQuiz extends FragmentBase {
             answerButton.setText("LOADING");
             answerButton.setEnabled(false);
             answerText.setText("");
+            //imm.restartInput(answerText);
         }
         
         @Override
@@ -354,10 +365,10 @@ public class FragmentQuiz extends FragmentBase {
                     ApplicationEx.dbHelper.getQuestionSkip(
                             mCallback.getQuestionId(), mCallback.getUserId()));
             hintPressed = true;
-            if (isCancelled())
-                return null;
             ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
+            if (isCancelled())
+                return null;
             if (mCallback.getQuestionScore() != null)
                 answerTextHint = Integer.toString(((int)((int)(
                         Integer.parseInt(
@@ -380,6 +391,7 @@ public class FragmentQuiz extends FragmentBase {
             answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
             answerPlace.setVisibility(View.VISIBLE);
             answerText.setHint(answerTextHint);
+            imm.restartInput(answerText);
         }
         
         @Override
@@ -417,9 +429,6 @@ public class FragmentQuiz extends FragmentBase {
                     else
                         new VerifyTask().executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR, entry);
-                    InputMethodManager imm = 
-                        (InputMethodManager) getActivity().getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     return true;
                 }
@@ -427,6 +436,19 @@ public class FragmentQuiz extends FragmentBase {
                     return false;
             } 
         });
+        answerText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after){}
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count){
+                /*
+                savedAnswer = s == null ? "" : s.toString();
+                ApplicationEx.dbHelper.setUserValue(savedAnswer,
+                        DatabaseHelper.COL_ANSWER, mCallback.getUserId());
+                */
+            }
+        }); 
         answerPlace = (TextView) v.findViewById(R.id.AnswerText);
         answerButton = (Button) v.findViewById(R.id.QuestionButton);
         answerButton.setOnClickListener(new OnClickListener() {
@@ -568,16 +590,23 @@ public class FragmentQuiz extends FragmentBase {
             questionText.setText(mCallback.getQuestion());
             questionText.setVisibility(View.VISIBLE);
         }
+        /*
         if (savedAnswer != null)
             answerText.setText(savedAnswer);
+        */
         int tempScore = (int)(Integer.parseInt(mCallback.getQuestionScore())
                 *0.99);
         if (tempScore < 100)
             tempScore = 100;
-        if (!hintPressed)
-            answerText.setHint(Integer.toString(tempScore) + " points");
-        else
+        if (mCallback != null && ApplicationEx.dbHelper.getQuestionHint(
+                mCallback.getQuestionId(), mCallback.getUserId())) {
             answerText.setHint(Integer.toString(tempScore/2) + " points");
+            imm.restartInput(answerText);
+        }
+        else {
+            answerText.setHint(Integer.toString(tempScore) + " points");
+            imm.restartInput(answerText);
+        }
         if (!isCorrect) {
             if (!hintPressed)
                 savedHint = "";
@@ -744,10 +773,6 @@ public class FragmentQuiz extends FragmentBase {
             hintTimer.cancel();
         if (hintTask != null)
             hintTask.cancel(true);
-        savedAnswer = answerText.getText() == null ? "" :
-                answerText.getText().toString();
-        ApplicationEx.dbHelper.setUserValue(savedAnswer,
-                DatabaseHelper.COL_ANSWER, mCallback.getUserId());
         savedHint = answerPlace.getText() == null ? "" :
                 answerPlace.getText().toString();
         ApplicationEx.dbHelper.setUserValue(savedHint,
@@ -867,6 +892,7 @@ public class FragmentQuiz extends FragmentBase {
                 answerImage.setVisibility(View.VISIBLE);
                 questionText.setTextColor(Color.GREEN);
                 answerText.setText("");
+                //imm.restartInput(answerText);
                 answerButton.setText("NEXT");
                 answerButton.setEnabled(true);
                 hintText.setTextColor(res.getColor(R.color.light_gray));
@@ -939,7 +965,7 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("answer", savedAnswer);
+        //outState.putString("answer", savedAnswer);
         outState.putString("hint", savedHint);
         outState.putLong("skipTick", skipTick);
         outState.putLong("hintTick", hintTick);
@@ -1120,6 +1146,10 @@ public class FragmentQuiz extends FragmentBase {
             break;
         case R.id.LikeMenu:
             startActivity(getOpenFacebookIntent());
+            break;
+        case R.id.Crash:
+            String crash = null;
+            crash.length();
             break;
         default:
             super.onOptionsItemSelected(item);

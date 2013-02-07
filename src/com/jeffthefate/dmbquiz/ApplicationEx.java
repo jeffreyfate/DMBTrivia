@@ -59,7 +59,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         */
         Parse.initialize(this, "ImI8mt1EM3NhZNRqYZOyQpNSwlfsswW73mHsZV3R",
                 "hpTbnpuJ34zAFLnpOAXjH583rZGiYQVBWWvuXsTo");
-        ParseFacebookUtils.initialize("463296083721286", true);
+        ParseFacebookUtils.initialize("463296083721286");
         ParseTwitterUtils.initialize("xWnkCrbGRNGMVs2HDyShQ",
                 "xaDerd1mUtfmjyuANARkuvNBrQFgsVpQmhYWDjnirOw");
         ExceptionHandler.register(this);

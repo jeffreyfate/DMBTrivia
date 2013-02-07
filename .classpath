@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry exported="true" kind="lib" path="D:/workspace/DMBTrivia/libs/android-support-v4.jar"/>
-    <classpathentry exported="true" kind="lib" path="D:/workspace/DMBTrivia/libs/Parse-1.1.6.jar"/>
-    <classpathentry exported="true" kind="lib" path="D:/workspace/DMBTrivia/libs/facebooksdk.jar"/>
-    <classpathentry exported="true" kind="lib" path="D:/workspace/DMBTrivia/libs/stacktrace.jar"/>
-    <classpathentry kind="src" path="src"/>
-    <classpathentry kind="src" path="gen"/>
-    <classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-    <classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-    <classpathentry kind="output" path="bin/classes"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

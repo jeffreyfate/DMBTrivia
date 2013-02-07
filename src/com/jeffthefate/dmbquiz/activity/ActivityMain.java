@@ -46,6 +46,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
@@ -78,8 +80,6 @@ import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
-import com.parse.facebook.FacebookError;
-import com.parse.facebook.Util;
 
 public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
@@ -308,8 +308,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             getScoreTask.cancel(true);
         if (getParseTask != null)
             getParseTask.cancel(true);
+        if (user == null)
+            user = ParseUser.getCurrentUser();
+        if (userId == null && user != null)
+            userId = user.getObjectId();
         if (ApplicationEx.getQuestionCount() < 0) {
             showLoad();
+            if (user != null && userId != null)
+                loggedIn = true;
             getQuestionCountFromParse(false, true);
         }
         else {
