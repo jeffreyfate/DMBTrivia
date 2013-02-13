@@ -942,10 +942,12 @@ public class FragmentQuiz extends FragmentBase {
                     }
                     else
                         currScore = "1000";
-                    question.put("score", Integer.parseInt(currScore));
-                    try {
-                        question.saveEventually();
-                    } catch (RuntimeException err) {}
+                    if (number != null || (number == null && !isSkip)) {
+                        question.put("score", Integer.parseInt(currScore));
+                        try {
+                            question.saveEventually();
+                        } catch (RuntimeException err) {}
+                    }
                 }
                 else {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
