@@ -1,14 +1,22 @@
 package com.jeffthefate.dmbquiz;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.jeffthefate.stacktrace.ExceptionHandler;
@@ -25,6 +33,7 @@ import com.parse.SaveCallback;
  * 
  * @author Jeff Fate
  */
+@SuppressLint("ShowToast")
 public class ApplicationEx extends Application implements OnStacktraceListener {
     /**
      * The application's context
@@ -36,7 +45,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static boolean mIsActive = false;
     private static ConnectivityManager connMan;
     public static String cacheLocation = null;
-    private static int questionCount = -1;
+    public static Toast mToast;
     
     @Override
     public void onCreate() {
@@ -50,6 +59,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             }
         };
         app = this;
+        mToast = Toast.makeText(app, "", Toast.LENGTH_LONG);
         dbHelper = DatabaseHelper.getInstance();
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -115,14 +125,15 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             object.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException arg0) {
-                    Toast.makeText(app, "Report sent, thank you",
-                            Toast.LENGTH_LONG).show();
+                    mToast.setText("Report sent, thank you");
+                    mToast.show();
                 }
             });
         }
-        else
-            Toast.makeText(app, "Report sent, thank you",
-                    Toast.LENGTH_LONG).show();
+        else {
+            mToast.setText("Report sent, thank you");
+            mToast.show();
+        }
     }
     
     public static void setConnection(boolean hasConnection) {
@@ -169,12 +180,36 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         mIsActive = false;
     }
     
-    public static int getQuestionCount() {
-        return questionCount;
+    public static void setStringArrayPref(String key,
+            ArrayList<String> answers) {
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(app);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        JSONArray array = new JSONArray(answers);
+        if (!answers.isEmpty())
+            editor.putString(key, array.toString());
+        else
+            editor.putString(key, null);
+        editor.commit();
     }
-    
-    public static void setQuestionCount(int newQuestionCount) {
-        questionCount = newQuestionCount;
+
+    public static ArrayList<String> getStringArrayPref(String key) {
+        long perfTime = System.currentTimeMillis();
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(app);
+        String json = sharedPrefs.getString(key, null);
+        ArrayList<String> answers = new ArrayList<String>();
+        if (json != null) {
+            try {
+                JSONArray array = new JSONArray(json);
+                for (int i = 0; i < array.length(); i++) {
+                    answers.add(array.optString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return answers;
     }
     
 }

@@ -41,7 +41,4 @@
     <item
         android:id="@+id/ExitMenu"
         android:title="@string/ExitTitle" />
-    <item
-        android:id="@+id/Crash"
-        android:title="@string/Crash" />
 </menu>

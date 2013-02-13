@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.json.JSONException;
@@ -28,6 +27,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
@@ -65,12 +64,10 @@ import com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentSplash;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -83,12 +80,13 @@ import com.parse.SignUpCallback;
 
 public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
-    FragmentManager fMan;
+    private ParseUser user;
+    private String userId;
     
     private ImageView background;
     private TextView noConnection;
-    private ParseUser user;
-    private String userId;
+    
+    FragmentManager fMan;
     private FragmentBase currFrag;
     
     private int rawIndex = -1;
@@ -107,30 +105,31 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private String correctAnswer;
     private String questionCategory;
     private String questionScore;
+    private boolean questionHint = false;
+    private boolean questionSkip = false;
     private String nextQuestionId;
     private String nextQuestion;
     private String nextCorrectAnswer;
     private String nextQuestionCategory;
     private String nextQuestionScore;
+    private boolean nextQuestionHint = false;
+    private boolean nextQuestionSkip = false;
     private String thirdQuestionId;
     private String thirdQuestion;
     private String thirdCorrectAnswer;
     private String thirdQuestionCategory;
     private String thirdQuestionScore;
+    private boolean thirdQuestionHint = false;
+    private boolean thirdQuestionSkip = false;
     
     private boolean newQuestion = false;
     
-    private boolean leaderDone = false;
-    private boolean questionDone = false;
-    
-    private ShowStatsTask showStatsTask;
     private GetStatsTask getStatsTask;
-    private GetParseTask getParseTask;
-    private com.jeffthefate.dmbquiz.activity.ActivityMain.GetParseTask.GetAnswersTask getAnswersTask;
-    private com.jeffthefate.dmbquiz.activity.ActivityMain.GetParseTask.GetScoreTask getScoreTask;
-    private SetupQuestionTask setupQuestionTask;
+    private GetScoreTask getScoreTask;
+    private GetNextQuestionsTask getNextQuestionsTask;
+    private GetStageTask getStageTask;
+    
     private Bundle leadersBundle;
-    private ArrayList<String> answerIds = null;
     private ArrayList<String> rankList = new ArrayList<String>();
     private ArrayList<String> userList = new ArrayList<String>();
     private ArrayList<String> scoreList = new ArrayList<String>();
@@ -138,10 +137,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private String displayName;
     private int currScore = -1;
+    private int tempScore = 0;
+    private Number score;
     
     private UserTask userTask;
     
-    private boolean isPersisted = false;
+    private ArrayList<String> correctAnswers;
+    private ArrayList<String> tempAnswers;
+    
     private boolean networkProblem = false;
     private boolean facebookLogin = false;
     
@@ -162,6 +165,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private ConnectionReceiver connReceiver;
     
+    private Resources res;
+    
+    private Drawable backgroundDrawable;
+    private Drawable tempDrawable;
+    private Drawable[] arrayDrawable = new Drawable[2];
+    private TransitionDrawable transitionDrawable;
+    private BitmapDrawable oldBitmapDrawable = null;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         /*
@@ -178,6 +189,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 .build());
         */
         super.onCreate(savedInstanceState);
+        res = getResources();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         else
@@ -219,6 +231,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             correctAnswer = savedInstanceState.getString("correctAnswer");
             questionScore = savedInstanceState.getString("questionScore");
             questionCategory = savedInstanceState.getString("questionCategory");
+            questionHint = savedInstanceState.getBoolean("questionHint");
+            questionSkip = savedInstanceState.getBoolean("questionSkip");
             nextQuestionId = savedInstanceState.getString("nextQuestionId");
             nextQuestion = savedInstanceState.getString("nextQuestion");
             nextCorrectAnswer = savedInstanceState.getString(
@@ -227,6 +241,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "nextQuestionScore");
             nextQuestionCategory = savedInstanceState.getString(
                     "nextQuestionCategory");
+            nextQuestionHint = savedInstanceState.getBoolean(
+                    "nextQuestionHint");
+            nextQuestionSkip = savedInstanceState.getBoolean(
+                    "nextQuestionSkip");
             thirdQuestionId = savedInstanceState.getString("thirdQuestionId");
             thirdQuestion = savedInstanceState.getString("thirdQuestion");
             thirdCorrectAnswer = savedInstanceState.getString(
@@ -235,29 +253,33 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "thirdQuestionScore");
             thirdQuestionCategory = savedInstanceState.getString(
                     "thirdQuestionCategory");
+            thirdQuestionHint = savedInstanceState.getBoolean(
+                    "thirdQuestionHint");
+            thirdQuestionSkip = savedInstanceState.getBoolean(
+                    "thirdQuestionSkip");
             newQuestion = savedInstanceState.getBoolean("newQuestion");
-            answerIds = savedInstanceState.getStringArrayList("answerIds");
             displayName = savedInstanceState.getString("displayName");
             currScore = savedInstanceState.getInt("currScore");
-            isPersisted = true;
+            correctAnswers = savedInstanceState.getStringArrayList(
+                    "correctAnswers");
             networkProblem = savedInstanceState.getBoolean("networkProblem");
             ApplicationEx.dbHelper.setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
         }
         else {
             userId = ApplicationEx.dbHelper.getCurrUser();
-            if (userId != null) {
-                getPersistedData();
-                isPersisted = true;
-            }
+            if (userId != null)
+                getPersistedData(userId);
         }
-        if (userId == null)
+        if (userId == null) {
             userId = ApplicationEx.dbHelper.getCurrUser();
+            if (userId != null)
+                getUserData(userId);
+        }
         if (currentBackground == null && userId != null)
             currentBackground =
                     ApplicationEx.dbHelper.getCurrBackground(userId);
         if (currentBackground != null) {
-            Resources res = getResources();
             int resourceId = res.getIdentifier(currentBackground, "drawable",
                     getPackageName());
             background.setImageResource(resourceId);
@@ -281,20 +303,26 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         outState.putString("correctAnswer", correctAnswer);
         outState.putString("questionCategory", questionCategory);
         outState.putString("questionScore", questionScore);
+        outState.putBoolean("questionHint", questionHint);
+        outState.putBoolean("questionSkip", questionSkip);
         outState.putString("nextQuestionId", nextQuestionId);
         outState.putString("nextQuestion", nextQuestion);
         outState.putString("nextCorrectAnswer", nextCorrectAnswer);
         outState.putString("nextQuestionCategory", nextQuestionCategory);
         outState.putString("nextQuestionScore", nextQuestionScore);
+        outState.putBoolean("nextQuestionHint", nextQuestionHint);
+        outState.putBoolean("nextQuestionSkip", nextQuestionSkip);
         outState.putString("thirdQuestionId", thirdQuestionId);
         outState.putString("thirdQuestion", thirdQuestion);
         outState.putString("thirdCorrectAnswer", thirdCorrectAnswer);
         outState.putString("thirdQuestionCategory", thirdQuestionCategory);
         outState.putString("thirdQuestionScore", thirdQuestionScore);
+        outState.putBoolean("thirdQuestionHint", thirdQuestionHint);
+        outState.putBoolean("thirdQuestionSkip", thirdQuestionSkip);
         outState.putBoolean("newQuestion", newQuestion);
-        outState.putStringArrayList("answerIds", answerIds);
         outState.putString("displayName", displayName);
         outState.putInt("currScore", currScore);
+        outState.putStringArrayList("correctAnswers", correctAnswers);
         outState.putBoolean("networkProblem", networkProblem);
         super.onSaveInstanceState(outState);
     }
@@ -302,39 +330,48 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public void onResume() {
         super.onResume();
-        if (getAnswersTask != null)
-            getAnswersTask.cancel(true);
         if (getScoreTask != null)
             getScoreTask.cancel(true);
-        if (getParseTask != null)
-            getParseTask.cancel(true);
+        /*
+        if (correctAnswers == null) {
+            if (tempAnswers != null)
+                tempAnswers.clear();
+            else
+                tempAnswers = new ArrayList<String>();
+            getScore(userId, false, false);
+        }
+        */
         if (user == null)
             user = ParseUser.getCurrentUser();
-        if (userId == null && user != null)
+        if (userId == null && user != null) {
             userId = user.getObjectId();
-        if (ApplicationEx.getQuestionCount() < 0) {
-            showLoad();
-            if (user != null && userId != null)
-                loggedIn = true;
-            getQuestionCountFromParse(false, true);
+            if (userId != null)
+                getUserData(userId);
         }
-        else {
-            if (!isLogging) {
-                if (!loggedIn)
-                    logOut(false);
-                if (userId == null)
-                    checkUser();
+        if (!isLogging) {
+            if (!loggedIn)
+                logOut(false);
+            if (userId == null)
+                checkUser();
+            else {
+                if (correctAnswers == null) {
+                    isLogging = true;
+                    showLogin();
+                    if (tempAnswers != null)
+                        tempAnswers.clear();
+                    else
+                        tempAnswers = new ArrayList<String>();
+                    getScore(false, true, userId);
+                }
                 else
                     showLoggedInFragment();
             }
-            else {
-                if (userId != null)
-                    setupUser();
-                else if (!facebookLogin)
-                    checkUser();
-            }
-            if (inInfo)
-                onInfoPressed();
+        }
+        else {
+            if (userId != null)
+                setupUser();
+            else if (!facebookLogin)
+                checkUser();
         }
         if (inInfo)
             onInfoPressed();
@@ -346,12 +383,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void onBackPressed() {
+        long perfTime = System.currentTimeMillis();
         if (!inStats && !inLoad && !isLogging && !inInfo)
             moveTaskToBack(true);
         else {
             if (inLoad) {
-                if (showStatsTask != null)
-                    showStatsTask.cancel(true);
                 if (getStatsTask != null)
                     getStatsTask.cancel(true);
                 inLoad = false;
@@ -376,65 +412,125 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     userTask.cancel(true);
                 if (facebookTask != null)
                     facebookTask.cancel(true);
-                if (getAnswersTask != null)
-                    getAnswersTask.cancel(true);
                 if (getScoreTask != null)
                     getScoreTask.cancel(true);
-                if (getParseTask != null)
-                    getParseTask.cancel(true);
-                if (setupQuestionTask != null)
-                    setupQuestionTask.cancel(true);
                 logOut(true);
             }
-        }   
+        }
+        Log.i(Constants.LOG_TAG, "perfTime: " + (System.currentTimeMillis()-perfTime));
+    }
+    
+    @Override
+    public void onPause() {
+        unregisterReceiver(connReceiver);
+        if (getStageTask != null)
+            getStageTask.cancel(true);
+        if (getNextQuestionsTask != null)
+            getNextQuestionsTask.cancel(true);
+        if (userTask != null)
+            userTask.cancel(true);
+        if (facebookTask != null)
+            facebookTask.cancel(true);
+        if (getStatsTask != null)
+            getStatsTask.cancel(true);
+        if (!isLogging && userId != null) {
+            if (getScoreTask != null)
+                getScoreTask.cancel(true);
+            if (tempAnswers != null)
+                tempAnswers.clear();
+            else
+                tempAnswers = new ArrayList<String>();
+            getScore(false, false, userId);
+        }
+        ApplicationEx.setInactive();
+        super.onPause();
     }
 
     @Override
-    public String setBackground(String name, boolean showNew) {
-        Resources res = getResources();
-        if (name == null)
-            name = "splash8";
-        int resourceId = res.getIdentifier(name, "drawable", getPackageName());
-        if (showNew) {
-            rawIndex = fieldsList.indexOf(resourceId);
-            if (rawIndex < 0)
-                rawIndex = fieldsList.indexOf(R.drawable.splash8);
-            rawIndex++;
-            if (rawIndex >= fieldsList.size())
-                rawIndex = 0;
-            int currentId = fieldsList.get(rawIndex);
-            currentBackground = res.getResourceEntryName(currentId);
-            ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
-            if (currentId != resourceId)
-                setImageDrawableWithFade(background,
-                        res.getDrawable(currentId));
-            else
-                setBackground(currentBackground, showNew);
-        }
-        else {
-            if (fieldsList.indexOf(resourceId) >= 0)
-                background.setImageResource(resourceId);
-            else
-                background.setImageResource(R.drawable.splash8);
-        }
-        return currentBackground;
+    public void setBackground(String name, boolean showNew) {
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+            new SetBackgroundTask(name, showNew).execute();
+        else
+            new SetBackgroundTask(name, showNew).executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
-    private void setImageDrawableWithFade(final ImageView imageView,
-            final Drawable drawable) {
-        Drawable currentDrawable = imageView.getDrawable();
-        if (currentDrawable != null) {
-            Drawable[] arrayDrawable = new Drawable[2];
-            arrayDrawable[0] = currentDrawable;
-            arrayDrawable[1] = drawable;
-            TransitionDrawable transitionDrawable =
-                    new TransitionDrawable(arrayDrawable);
-            transitionDrawable.setCrossFadeEnabled(true);
-            imageView.setImageDrawable(transitionDrawable);
-            transitionDrawable.startTransition(500);
+    public class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
+        private String name;
+        private boolean showNew;
+        private int resourceId;
+        
+        private SetBackgroundTask(String name, boolean showNew) {
+            this.name = name;
+            this.showNew = showNew;
         }
-        else
-            imageView.setImageDrawable(drawable);
+        
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            if (name == null)
+                name = "splash8";
+            resourceId = res.getIdentifier(name, "drawable", getPackageName());
+            if (showNew) {
+                rawIndex = fieldsList.indexOf(resourceId);
+                if (rawIndex < 0)
+                    rawIndex = fieldsList.indexOf(R.drawable.splash8);
+                rawIndex++;
+                if (rawIndex >= fieldsList.size())
+                    rawIndex = 0;
+                int currentId = fieldsList.get(rawIndex);
+                currentBackground = res.getResourceEntryName(currentId);
+                ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
+                if (currentId != resourceId) {
+                    try {
+                        tempDrawable = res.getDrawable(currentId);
+                        backgroundDrawable = background.getDrawable();
+                        oldBitmapDrawable = null;
+                        if (backgroundDrawable instanceof TransitionDrawable) {
+                            transitionDrawable = (TransitionDrawable) backgroundDrawable;
+                            oldBitmapDrawable = (BitmapDrawable)(
+                                    transitionDrawable.getDrawable(1));
+                        }
+                        else if (backgroundDrawable instanceof BitmapDrawable)
+                            oldBitmapDrawable = (BitmapDrawable) backgroundDrawable;
+                        if (backgroundDrawable != null) {
+                            arrayDrawable[0] = oldBitmapDrawable;
+                            arrayDrawable[1] = tempDrawable;
+                        }
+                    } catch (Resources.NotFoundException e) {
+                        setBackground(currentBackground, showNew);
+                    }
+                }
+                else
+                    setBackground(currentBackground, showNew);
+            }
+            ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            if (showNew) {
+                if (backgroundDrawable != null) {
+                    transitionDrawable = new TransitionDrawable(arrayDrawable);
+                    transitionDrawable.setCrossFadeEnabled(true);
+                    background.setImageDrawable(transitionDrawable);
+                    transitionDrawable.startTransition(500);
+                }
+                else
+                    background.setImageDrawable(tempDrawable);
+            }
+            else {
+                if (fieldsList.indexOf(resourceId) >= 0)
+                    background.setImageResource(resourceId);
+                else
+                    background.setImageResource(R.drawable.splash8);
+            }
+        }
     }
 
     private void checkUser() {
@@ -442,8 +538,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         user = ParseUser.getCurrentUser();
         if (user == null)
             userId = null;
-        else
+        else {
             userId = user.getObjectId();
+            if (userId != null)
+                getUserData(userId);
+        }
         if (!loggedIn && !isLogging && (user == null || userId == null))
             logOut(true);
         else
@@ -456,7 +555,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             showSplash();
             return;
         }
-        showLogin();
+        if (userId != null)
+            getUserData(userId);
+        if (fMan.findFragmentByTag("fLogin") == null)
+            showLogin();
         if (userTask != null)
             userTask.cancel(true);
         userTask = new UserTask();
@@ -464,12 +566,187 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             userTask.execute();
         else
             userTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        currFrag.showLoading("Syncing account...");
+    }
+    
+    private class UserTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            user = ParseUser.getCurrentUser();
+            if (user == null) {
+                publishProgress();
+                return null;
+            }
+            if (userId == null) {
+                publishProgress();
+                return null;
+            }
+            if (getScoreTask != null)
+                getScoreTask.cancel(true);
+            if (ApplicationEx.dbHelper.isAnonUser(userId)) {
+                if (correctAnswers != null)
+                    correctAnswers.clear();
+                else
+                    correctAnswers = new ArrayList<String>();
+                getNextQuestions(false);
+            }
+            else {
+                if (tempAnswers != null)
+                    tempAnswers.clear();
+                else
+                    tempAnswers = new ArrayList<String>();
+                publishProgress();
+            }
+            if (displayName == null && !isCancelled()) {
+                displayName = user.getString("displayName");
+                ApplicationEx.dbHelper.setUserValue(displayName, 
+                        DatabaseHelper.COL_DISPLAY_NAME, userId);
+            }
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+            if (userId == null || user == null) {
+                logOut(true);
+                ApplicationEx.mToast.setText("Login failed, try again");
+                ApplicationEx.mToast.show();
+            }
+            else
+                getScore(true, false, userId);
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            if (userId != null)
+                setBackground(ApplicationEx.dbHelper.getCurrBackground(userId),
+                        false);
+        }
+    }
+    
+    private void getScore(boolean show, boolean restore, String userId) {
+        if (getScoreTask != null)
+            getScoreTask.cancel(true);
+        getScoreTask = new GetScoreTask(show, restore, userId);
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+            getScoreTask.execute();
+        else
+            getScoreTask.executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    
+    public class GetScoreTask extends AsyncTask<Void, Void, Void> {
+        private boolean show;
+        private boolean restore;
+        private String userId;
+        private List<ParseObject> scoreList;
+        private List<ParseObject> deleteList;
+        private Number number;
+        
+        private GetScoreTask(boolean show, boolean restore, String userId) {
+            this.show = show;
+            this.restore = restore;
+            this.userId = userId;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            currFrag.showLoading("Calculating score...");
+        }
+        
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            ParseQuery correctQuery = new ParseQuery("CorrectAnswers");
+            correctQuery.whereEqualTo("userId", userId);
+            correctQuery.setLimit(1000);
+            ParseQuery query = new ParseQuery("Question");
+            query.setLimit(1000);
+            ParseQuery deleteQuery = new ParseQuery("CorrectAnswers");
+            deleteQuery.whereEqualTo("userId", userId);
+            do {
+                correctQuery.whereNotContainedIn("questionId", tempAnswers);
+                query.whereMatchesKeyInQuery("objectId", "questionId", correctQuery);
+                try {
+                    scoreList = query.find();
+                    int index = -1;
+                    for (ParseObject score : scoreList) {
+                        if (isCancelled())
+                            return null;
+                        if (tempAnswers.contains(score.getObjectId()) &&
+                                userId != null) {
+                            deleteQuery.whereEqualTo("questionId",
+                                    score.getObjectId());
+                            deleteList = deleteQuery.find();
+                            for (int i = 1; i < deleteList.size(); i++) {
+                                try {
+                                    deleteList.get(i).deleteEventually();
+                                } catch (RuntimeException exception) {}
+                            }
+                        }
+                        else {
+                            number = score.getNumber("score");
+                            tempScore += number == null ? 1000 :
+                                    number.intValue();
+                            tempAnswers.add(score.getObjectId());
+                        }
+                    }
+                } catch (ParseException e) {
+                    Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                    if (userTask != null)
+                        userTask.cancel(true);
+                    if (getScoreTask != null)
+                        getScoreTask.cancel(true);
+                    if (show && currFrag != null)
+                        currFrag.showNetworkProblem();
+                }
+            } while (scoreList.size() == 1000 & !isCancelled());
+            if (!isCancelled()) {
+                currScore = tempScore;
+                tempScore = 0;
+                saveUserScore(currScore);
+                correctAnswers = new ArrayList<String>(tempAnswers);
+                ApplicationEx.setStringArrayPref(
+                        getString(R.string.correct_key), correctAnswers);
+                publishProgress();
+            }
+            
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+            if (show) {
+                if (questionId != null) {
+                    try {
+                        goToQuiz();
+                    } catch (IllegalStateException exception) {}
+                }
+                else
+                    getNextQuestions(false);
+            }
+            if (restore && !isLogging) {
+                if (!loggedIn)
+                    logOut(false);
+                if (userId == null)
+                    checkUser();
+                else
+                    showLoggedInFragment();
+            }
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+        }
     }
     
     private void showLoggedInFragment() {
         fetchDisplayName();
-        getQuestionCountFromParse(false, false);
         if (user == null)
             user = ParseUser.getCurrentUser();
         if (displayName == null) {
@@ -485,8 +762,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             loggedIn = true;
             ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                     DatabaseHelper.COL_LOGGED_IN, userId);
-            if (answerIds == null)
-                answerIds = ApplicationEx.dbHelper.readAnswers(userId);
             showQuiz();
         }
     }
@@ -547,7 +822,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public void onLoginPressed(int loginType, String user, String pass) {
         isLogging = true;
-        isPersisted = false;
         showLogin();
         switch(loginType) {
         case FragmentBase.LOGIN_FACEBOOK:
@@ -587,13 +861,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
                     if (err != null) {
-                        if (err.getCode() == ParseException.CONNECTION_FAILED)
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Network error", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Login failed, try again",
-                                    Toast.LENGTH_LONG).show();
+                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
+                            ApplicationEx.mToast.setText("Network error");
+                            ApplicationEx.mToast.show();
+                        }
+                        else {
+                            ApplicationEx.mToast.setText(
+                                    "Login failed, try again");
+                            ApplicationEx.mToast.show();
+                        }
                         logOut(false);
                     }
                     else
@@ -661,6 +937,28 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 catch (RuntimeException e) {}
                 ApplicationEx.dbHelper.setUserValue(displayName, 
                         DatabaseHelper.COL_DISPLAY_NAME, userId);
+                /*
+                String response;
+                String firstName = null;
+                String lastName = null;
+                Request.newMeRequest(ParseFacebookUtils.getSession(),
+                    new GraphUserCallback() {
+                        @Override
+                        public void onCompleted(GraphUser graphUser,
+                                Response response) {
+                            displayName = graphUser.getFirstName() + " " +
+                                    graphUser.getLastName().substring(0, 1)
+                                    + ".";
+                            user.put("displayName", displayName);
+                            try {
+                                user.saveEventually();
+                            }
+                            catch (RuntimeException e) {}
+                            ApplicationEx.dbHelper.setUserValue(displayName, 
+                                    DatabaseHelper.COL_DISPLAY_NAME, userId);
+                        }
+                });
+                 */
             }
             return null;
         }
@@ -682,13 +980,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
                     if (err != null) {
-                        if (err.getCode() == ParseException.CONNECTION_FAILED)
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Network error", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Login failed, try again",
-                                    Toast.LENGTH_LONG).show();
+                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
+                            ApplicationEx.mToast.setText("Network error");
+                            ApplicationEx.mToast.show();
+                        }
+                        else {
+                            ApplicationEx.mToast.setText(
+                                    "Login failed, try again");
+                            ApplicationEx.mToast.show();
+                        }
                         logOut(false);
                     }
                     else
@@ -721,13 +1021,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             @Override
             public void done(final ParseUser user, ParseException e) {
                 if (e != null) {
-                    if (e.getCode() == ParseException.CONNECTION_FAILED)
-                        Toast.makeText(ApplicationEx.getApp(),
-                                "Network error", Toast.LENGTH_LONG).show();
-                    else
-                        Toast.makeText(ApplicationEx.getApp(),
-                                "Login failed, try again", Toast.LENGTH_LONG)
-                            .show();
+                    if (e.getCode() == ParseException.CONNECTION_FAILED) {
+                        ApplicationEx.mToast.setText("Network error");
+                        ApplicationEx.mToast.show();
+                    }
+                    else {
+                        ApplicationEx.mToast.setText(
+                                "Login failed, try again");
+                        ApplicationEx.mToast.show();
+                    }
                     logOut(false);
                 }
                 else {
@@ -778,13 +1080,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         setupUser();
                 }
                 else {
-                    if (err.getCode() == ParseException.CONNECTION_FAILED)
-                        Toast.makeText(ApplicationEx.getApp(), "Network error",
-                                Toast.LENGTH_LONG).show();
-                    else if (err.getCode() != 202)
-                        Toast.makeText(ApplicationEx.getApp(),
-                                "Sign up failed: " + err.getCode(),
-                                Toast.LENGTH_LONG).show();
+                    if (err.getCode() == ParseException.CONNECTION_FAILED) {
+                        ApplicationEx.mToast.setText("Network error");
+                        ApplicationEx.mToast.show();
+                    }
+                    else if (err.getCode() != 202) {
+                        ApplicationEx.mToast.setText(
+                                "Sign up failed: " + err.getCode());
+                        ApplicationEx.mToast.show();
+                    }
                     logOut(false);
                 }
             }
@@ -799,14 +1103,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     if (err != null) {
                         Log.e(Constants.LOG_TAG, "Login failed: " +
                                 err.getCode());
-                        if (err.getCode() == ParseException.CONNECTION_FAILED)
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Network error", Toast.LENGTH_LONG).show();
+                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
+                            ApplicationEx.mToast.setText("Network error");
+                            ApplicationEx.mToast.show();
+                        }
                         else if (err.getCode() ==
-                                ParseException.OBJECT_NOT_FOUND)
-                            Toast.makeText(ApplicationEx.getApp(),
-                                    "Invalid password", Toast.LENGTH_LONG)
-                                .show();
+                                ParseException.OBJECT_NOT_FOUND) {
+                            ApplicationEx.mToast.setText("Invalid password");
+                            ApplicationEx.mToast.show();
+                        }
                         logOut(false);
                     }
                     else
@@ -852,70 +1157,59 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
 
     @Override
     public void logOut(boolean force) {
-        loggedIn = false;
-        if (userTask != null)
-            userTask.cancel(true);
-        if (setupQuestionTask != null)
-            setupQuestionTask.cancel(true);
-        if (facebookTask != null)
-            facebookTask.cancel(true);
-        if (getParseTask != null)
-            getParseTask.cancel(true);
-        if (!getNetworkProblem() || force) {
-            isLogging = false;
-            showSplash();
-        }
-        if (userId != null) {
-            ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
-                    DatabaseHelper.COL_LOGGING, userId);
-            ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
-                    DatabaseHelper.COL_LOGGED_IN, userId);
-            ApplicationEx.dbHelper.setOffset(0, userId);
-            ApplicationEx.dbHelper.setUserValue("", DatabaseHelper.COL_ANSWER,
-                    userId);
-            ApplicationEx.dbHelper.setUserValue(-1,
-                    DatabaseHelper.COL_SKIP_TICK, userId);
-            ApplicationEx.dbHelper.setUserValue(-1,
-                    DatabaseHelper.COL_HINT_TICK, userId);
-            ApplicationEx.dbHelper.setUserValue(0,
-                    DatabaseHelper.COL_HINT_PRESSED, userId);
-            ApplicationEx.dbHelper.setUserValue(0,
-                    DatabaseHelper.COL_SKIP_PRESSED, userId);
-            ApplicationEx.dbHelper.setUserValue("",
-                    DatabaseHelper.COL_HINT, userId);
-            ApplicationEx.dbHelper.setUserValue(0,
-                    DatabaseHelper.COL_IS_CORRECT, userId);
-        }
-        ParseUser.logOut();
-        user = null;
-        userId = null;
-        displayName = null;
-        if (answerIds != null) {
-            answerIds.clear();
-            answerIds = null;
-        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+            new LogOutTask(force).execute();
+        else
+            new LogOutTask(force).executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
-    private class ShowStatsTask extends AsyncTask<Void, Void, Void> {
-        int loadSec = 0;
+    private class LogOutTask extends AsyncTask<Void, Void, Void> {
+        boolean force;
+        
+        private LogOutTask(boolean force) {
+            this.force = force;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            showLogin();
+        }
         
         @Override
         protected Void doInBackground(Void... nothing) {
-            do {
-                publishProgress();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {}
-                loadSec++;
-            } while (!isCancelled() && (!leaderDone || !questionDone));
-            if (!isCancelled()) {
-                inStats = true;
-                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
-                        DatabaseHelper.COL_IN_STATS, userId);
-                inLoad = false;
-                ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
-                        DatabaseHelper.COL_IN_LOAD, userId);
+            loggedIn = false;
+            if (userTask != null)
+                userTask.cancel(true);
+            if (facebookTask != null)
+                facebookTask.cancel(true);
+            if (getScoreTask != null)
+                getScoreTask.cancel(true);
+            if (userId != null) {
+                ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+                        DatabaseHelper.COL_LOGGING, userId);
+                ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
+                        DatabaseHelper.COL_LOGGED_IN, userId);
+                ApplicationEx.dbHelper.setOffset(0, userId);
+                ApplicationEx.dbHelper.setUserValue("", DatabaseHelper.COL_ANSWER,
+                        userId);
+                ApplicationEx.dbHelper.setUserValue(-1,
+                        DatabaseHelper.COL_SKIP_TICK, userId);
+                ApplicationEx.dbHelper.setUserValue(-1,
+                        DatabaseHelper.COL_HINT_TICK, userId);
+                ApplicationEx.dbHelper.setUserValue(0,
+                        DatabaseHelper.COL_HINT_PRESSED, userId);
+                ApplicationEx.dbHelper.setUserValue(0,
+                        DatabaseHelper.COL_SKIP_PRESSED, userId);
+                ApplicationEx.dbHelper.setUserValue("",
+                        DatabaseHelper.COL_HINT, userId);
+                ApplicationEx.dbHelper.setUserValue(0,
+                        DatabaseHelper.COL_IS_CORRECT, userId);
             }
+            ParseUser.logOut();
+            user = null;
+            userId = null;
+            displayName = null;
             return null;
         }
         
@@ -924,13 +1218,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            if (loadSec == 5)
-                currFrag.showLoading("Downloading standings...");
         }
         
         @Override
         protected void onPostExecute(Void nothing) {
-            showLeaders();
+            if (!getNetworkProblem() || force) {
+                isLogging = false;
+                showSplash();
+            }
         }
     }
     
@@ -984,127 +1279,105 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         } catch (IllegalStateException e) {}
     }
     
-    @Override
-    public void onPause() {
-        unregisterReceiver(connReceiver);
-        if (userTask != null)
-            userTask.cancel(true);
-        if (setupQuestionTask != null)
-            setupQuestionTask.cancel(true);
-        if (showStatsTask != null)
-            showStatsTask.cancel(true);
-        if (facebookTask != null)
-            facebookTask.cancel(true);
-        if (getStatsTask != null)
-            getStatsTask.cancel(true);
-        if (getAnswersTask != null)
-            getAnswersTask.cancel(true);
-        if (!isLogging) {
-            getParseTask = new GetParseTask(false, userId);
-            if (Build.VERSION.SDK_INT <
-                    Build.VERSION_CODES.HONEYCOMB)
-                getParseTask.execute();
-            else
-                getParseTask.executeOnExecutor(
-                        AsyncTask.THREAD_POOL_EXECUTOR);
-            getQuestionCountFromParse(false, false);
-        }
-        ApplicationEx.setInactive();
-        super.onPause();
-    }
-    
     private class GetStatsTask extends AsyncTask<Void, Void, Void> {
         int currScore;
         ParseException error;
+        int hints;
         
         private GetStatsTask(int currScore) {
             this.currScore = currScore;
         }
         
         @Override
+        protected void onPreExecute() {
+            currFrag.showLoading("Downloading standings...");
+        }
+        
+        @Override
         protected Void doInBackground(Void... nothing) {
-            leaderDone = false;
-            questionDone = false;
             leadersBundle = new Bundle();
             leadersBundle.putString("userId", userId);
             leadersBundle.putString("userName", displayName);
             leadersBundle.putString("userScore", Integer.toString(currScore));
             leadersBundle.putString("userAnswers",
-                    Integer.toString(answerIds.size()));
-            leadersBundle.putString("userHints",
-                    Integer.toString(
-                            ApplicationEx.dbHelper.getHintCount(userId)));
+                    Integer.toString(correctAnswers.size()));
             if (isCancelled())
                 return null;
             ApplicationEx.dbHelper.clearLeaders();
-            showStatsTask = new ShowStatsTask();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                showStatsTask.execute();
-            else
-                showStatsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             ArrayList<String> devList = new ArrayList<String>();
             devList.add("unPF5wRxnK");
             devList.add("LuzjEBVnC8");
             devList.add("8aLb2I0fQA");
             devList.add("krEPKBuzFN");
             devList.add("k5VoRhL5BQ");
+            devList.add("9LvKnpSEqu");
+            if (isCancelled())
+                return null;
+            ParseQuery hintsQuery = new ParseQuery("CorrectAnswers");
+            hintsQuery.whereEqualTo("userId", userId)
+                      .whereEqualTo("hint", true);
+            try {
+                hints = hintsQuery.count();
+                leadersBundle.putString("userHints", Integer.toString(
+                        hints));
+            } catch (ParseException e) {
+                if (e.getCode() == 101)
+                    leadersBundle.putString("userHints", Integer.toString(
+                            hints));
+                else {
+                    error = e;
+                    publishProgress();
+                }
+            }
             if (isCancelled())
                 return null;
             ParseQuery leadersQuery = ParseUser.getQuery();
             leadersQuery.whereExists("displayName").whereExists("score")
                     .whereNotContainedIn("objectId", devList)
                     .orderByDescending("score").setLimit(50);
-            leadersQuery.findInBackground(new FindCallback() {
-                @Override
-                public void done(List<ParseObject> leaders, ParseException e) {
-                    if (e == null) {
-                        if (Build.VERSION.SDK_INT <
-                                Build.VERSION_CODES.HONEYCOMB)
-                            new GetLeadersTask(leaders).execute();
-                        else
-                            new GetLeadersTask(leaders).executeOnExecutor(
-                                    AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
-                        error = e;
-                        publishProgress();
-                    }
-                }
-            });
+            try {
+                getLeaders(leadersQuery.find());
+            } catch (ParseException e) {
+                error = e;
+                publishProgress();
+            }
             if (isCancelled())
                 return null;
             ParseQuery questionQuery = new ParseQuery("Question");
             questionQuery.orderByDescending("createdAt");
-            questionQuery.getFirstInBackground(new GetCallback() {
-                @Override
-                public void done(ParseObject question, ParseException e) {
-                    if (e == null) {
-                        Date questionDate = question.getCreatedAt();
-                        Calendar cal = new GregorianCalendar(
-                                TimeZone.getTimeZone("GMT"));
-                        cal.setTime(questionDate);
-                        cal.setTimeZone(TimeZone.getDefault());
-                        String lastQuestionDate = DateFormat.getDateFormat(
-                                ApplicationEx.getApp()).format(cal.getTime());
-                        leadersBundle.putString("lastQuestion",
-                                lastQuestionDate);
-                    }
-                    else {
-                        error = e;
-                        publishProgress();
-                    }
-                    questionDone = true;
-                }
-            });
+            try {
+                ParseObject question = questionQuery.getFirst();
+                Date questionDate = question.getCreatedAt();
+                Calendar cal = new GregorianCalendar(
+                        TimeZone.getTimeZone("GMT"));
+                cal.setTime(questionDate);
+                cal.setTimeZone(TimeZone.getDefault());
+                String lastQuestionDate = DateFormat.getDateFormat(
+                        ApplicationEx.getApp()).format(cal.getTime());
+                leadersBundle.putString("lastQuestion",
+                        lastQuestionDate);
+            } catch (ParseException e) {
+                error = e;
+                publishProgress();
+            }
+            if (!isCancelled()) {
+                inStats = true;
+                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
+                        DatabaseHelper.COL_IN_STATS, userId);
+                inLoad = false;
+                ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
+                        DatabaseHelper.COL_IN_LOAD, userId);
+            }
             return null;
         }
         
         protected void onProgressUpdate(Void... nothing) {
+            if (error != null)
+                Log.e(Constants.LOG_TAG, "Error getting stats: " +
+                        error.getMessage());
             currFrag.showNetworkProblem();
             if (getStatsTask != null)
                 getStatsTask.cancel(true);
-            if (showStatsTask != null)
-                showStatsTask.cancel(true);
         }
         
         @Override
@@ -1113,411 +1386,52 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected void onPostExecute(Void nothing) {
-            
+            showLeaders();
         }
         
-        private class GetLeadersTask extends AsyncTask<Void, Void, Void> {
-            List<ParseObject> leaders;
-            
-            private GetLeadersTask(List<ParseObject> leaders) {
-                this.leaders = leaders;
+        private void getLeaders(List<ParseObject> leaders) {
+            rankList = new ArrayList<String>();
+            userList = new ArrayList<String>();
+            scoreList = new ArrayList<String>();
+            userIdList = new ArrayList<String>();
+            Number tempNum = 0;
+            int tempInt = 0;
+            int limit = 0;
+            for (ParseObject leader : leaders) {
+                if (isCancelled())
+                    return;
+                if (limit >= 50)
+                    break;
+                userIdList.add(leader.getObjectId());
+                if (limit+1 < 10)
+                    rankList.add("0" + Integer.toString(limit+1));
+                else
+                    rankList.add(Integer.toString(limit+1));
+                userList.add(leader.getString("displayName"));
+                tempNum = leader.getNumber("score");
+                tempInt = tempNum == null ? 0 : tempNum.intValue();
+                scoreList.add(Integer.toString(tempInt));
+                if (leader.getObjectId().equals(userId))
+                    leadersBundle.putString("userScore",
+                            Integer.toString(tempInt));
+                limit++;
+                ApplicationEx.dbHelper.addLeader(userId,
+                        rankList.get(rankList.size()-1),
+                        userList.get(userList.size()-1),
+                        scoreList.get(scoreList.size()-1),
+                        userIdList.get(userIdList.size()-1));
             }
-            
-            @Override
-            protected Void doInBackground(Void... nothing) {
-                rankList = new ArrayList<String>();
-                userList = new ArrayList<String>();
-                scoreList = new ArrayList<String>();
-                userIdList = new ArrayList<String>();
-                Number tempNum = 0;
-                int tempInt = 0;
-                int limit = 0;
-                for (ParseObject leader : leaders) {
-                    if (isCancelled())
-                        return null;
-                    if (limit >= 50)
-                        break;
-                    userIdList.add(leader.getObjectId());
-                    if (limit+1 < 10)
-                        rankList.add("0" + Integer.toString(limit+1));
-                    else
-                        rankList.add(Integer.toString(limit+1));
-                    userList.add(leader.getString("displayName"));
-                    tempNum = leader.getNumber("score");
-                    tempInt = tempNum == null ? 0 : tempNum.intValue();
-                    scoreList.add(Integer.toString(tempInt));
-                    if (leader.getObjectId().equals(userId))
-                        leadersBundle.putString("userScore",
-                                Integer.toString(tempInt));
-                    limit++;
-                    ApplicationEx.dbHelper.addLeader(userId,
-                            rankList.get(rankList.size()-1),
-                            userList.get(userList.size()-1),
-                            scoreList.get(scoreList.size()-1),
-                            userIdList.get(userIdList.size()-1));
-                }
-                leadersBundle.putStringArrayList("rank", rankList);
-                leadersBundle.putStringArrayList("user", userList);
-                leadersBundle.putStringArrayList("score", scoreList);
-                leadersBundle.putStringArrayList("userIdList",
-                        userIdList);
-                leaderDone = true;
-                return null;
-            }
-            
-            protected void onProgressUpdate(Void... nothing) {
-                
-            }
-            
-            @Override
-            protected void onCancelled(Void nothing) {
-            }
-            
-            @Override
-            protected void onPostExecute(Void nothing) {
-                
-            }
+            leadersBundle.putStringArrayList("rank", rankList);
+            leadersBundle.putStringArrayList("user", userList);
+            leadersBundle.putStringArrayList("score", scoreList);
+            leadersBundle.putStringArrayList("userIdList",
+                    userIdList);
         }
     }
 
     @Override
     public Bundle getLeadersState() {
         return leadersBundle;
-    }
-    
-    private class GetParseTask extends AsyncTask<Void, Void, Void> {
-        private ArrayList<String> correctAnswers = new ArrayList<String>();
-        private String answerId;
-        private int sum = 0;
-        private Number score;
-        private boolean show = false;
-        private String userId;
-        
-        private GetParseTask(boolean show, String userId) {
-            this.show = show;
-            this.userId = userId;
-        }
-        
-        private void getAnswerCount(final String userId) {
-            ParseQuery query = new ParseQuery("CorrectAnswers");
-            query.whereEqualTo("userId", userId);
-            query.countInBackground(new CountCallback() {
-                @Override
-                public void done(int correctCount, ParseException e) {
-                    if (answerIds != null && !isCancelled()) {
-                        if (answerIds.size() != correctCount) {
-                            if (ApplicationEx.getQuestionCount() >
-                                    answerIds.size() && answerIds.size() <
-                                    correctCount && !isCancelled())
-                                getCorrectAnswers(userId);
-                            else if (!isCancelled()) {
-                                correctAnswers =
-                                        new ArrayList<String>(answerIds);
-                                getScore(userId);
-                            }
-                        }
-                        else if (!isCancelled()) {
-                            correctAnswers =
-                                new ArrayList<String>(answerIds);
-                            getScore(userId);
-                        }
-                    }
-                    else if (!isCancelled())
-                        getCorrectAnswers(userId);
-                }
-            });
-        }
-        
-        private void getCorrectAnswers(final String userId) {
-            ParseQuery query = new ParseQuery("CorrectAnswers");
-            query.whereContains("userId", userId);
-            query.whereNotContainedIn("questionId", correctAnswers);
-            query.setLimit(1000);
-            query.findInBackground(new FindCallback() {
-                @Override
-                public void done(List<ParseObject> answerList,
-                        ParseException e) {
-                    if (e == null && !isCancelled()) {
-                        if (getAnswersTask != null)
-                            getAnswersTask.cancel(true);
-                        getAnswersTask = new GetAnswersTask(answerList);
-                        if (Build.VERSION.SDK_INT <
-                                Build.VERSION_CODES.HONEYCOMB)
-                            getAnswersTask.execute();
-                        else
-                            getAnswersTask.executeOnExecutor(
-                                    AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else if (!isCancelled()) {
-                        Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
-                        if (userTask != null)
-                            userTask.cancel(true);
-                        if (show && currFrag != null)
-                            currFrag.showNetworkProblem();
-                    }
-                }
-            });
-        }
-        
-        public class GetAnswersTask extends AsyncTask<Void, Void, Void> {
-            private List<ParseObject> answerList;
-            
-            private GetAnswersTask(List<ParseObject> answerList) {
-                this.answerList = answerList;
-            }
-            
-            @Override
-            protected Void doInBackground(Void... nothing) {
-                for (ParseObject answer : answerList) {
-                    if (isCancelled())
-                        return null;
-                    answerId = answer.getString("questionId");
-                    if (answerId != null && userId != null) {
-                        if (answer.getBoolean("hint") && !isCancelled())
-                            ApplicationEx.dbHelper.markAnswerCorrect(
-                                    answerId, userId, true, true);
-                        else if (!isCancelled())
-                            ApplicationEx.dbHelper.markAnswerCorrect(
-                                    answerId, userId, true, false);
-                        if (!correctAnswers.contains(answerId) &&
-                                !isCancelled())
-                            correctAnswers.add(answerId);
-                    }
-                }
-                if (answerList.size() == 1000 && !isCancelled())
-                    getCorrectAnswers(userId);
-                else if (!isCancelled()) {
-                    answerIds = new ArrayList<String>(correctAnswers);
-                    if (!isCancelled())
-                        publishProgress();
-                    if (!isCancelled())
-                        getScore(userId);
-                }
-                return null;
-            }
-            
-            protected void onProgressUpdate(Void... nothing) {
-                if (show && !isCancelled())
-                    currFrag.showLoading("Calculating score...");
-            }
-            
-            @Override
-            protected void onCancelled(Void nothing) {
-            }
-            
-            @Override
-            protected void onPostExecute(Void nothing) {
-            }
-        }
-        
-        private void getScore(final String userId) {
-            ParseQuery query = new ParseQuery("Question");
-            query.whereContainedIn("objectId", correctAnswers);
-            query.setLimit(1000);
-            query.findInBackground(new FindCallback() {
-                @Override
-                public void done(List<ParseObject> questionList,
-                        ParseException e) {
-                    if (e == null && !isCancelled()) {
-                        if (getScoreTask != null)
-                            getScoreTask.cancel(true);
-                        getScoreTask = new GetScoreTask(questionList);
-                        if (Build.VERSION.SDK_INT <
-                                Build.VERSION_CODES.HONEYCOMB)
-                            getScoreTask.execute();
-                        else
-                            getScoreTask.executeOnExecutor(
-                                    AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else if (!isCancelled()) {
-                        Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
-                        if (userTask != null)
-                            userTask.cancel(true);
-                        if (show && currFrag != null)
-                            currFrag.showNetworkProblem();
-                    }
-                }
-            });
-        }
-        
-        public class GetScoreTask extends AsyncTask<Void, Void, Void> {
-            private List<ParseObject> questionList;
-            
-            private GetScoreTask(List<ParseObject> questionList) {
-                this.questionList = questionList;
-            }
-            
-            @Override
-            protected Void doInBackground(Void... nothing) {
-                int index = -1;
-                for (ParseObject question : questionList) {
-                    if (isCancelled())
-                        return null;
-                    score = question.getNumber("score");
-                    sum += score == null ? 1000 : score.intValue();
-                    correctAnswers.remove(question.getObjectId());
-                }
-                if (questionList.size() == 1000 && !isCancelled())
-                    getScore(userId);
-                else if (!isCancelled()) {
-                    currScore = sum;
-                    saveUserScore(currScore);
-                    if (show && !isCancelled())
-                        publishProgress();
-                }
-                return null;
-            }
-            
-            protected void onProgressUpdate(Void... nothing) {
-                if (userId != null && !isCancelled()) {
-                    setupQuestionTask = new SetupQuestionTask(userId);
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                        setupQuestionTask.execute();
-                    else
-                        setupQuestionTask.executeOnExecutor(
-                                AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-            }
-            
-            @Override
-            protected void onCancelled(Void nothing) {
-            }
-            
-            @Override
-            protected void onPostExecute(Void nothing) {
-            }
-        }
-        
-        @Override
-        protected Void doInBackground(Void... nothing) {
-            if (getAnswersTask != null)
-                getAnswersTask.cancel(true);
-            if (getScoreTask != null)
-                getScoreTask.cancel(true);
-            if (userId == null)
-                return null;
-            if (isCancelled())
-                return null;
-            getAnswerCount(userId);
-            return null;
-        }
-        
-        protected void onProgressUpdate(Void... nothing) {
-        }
-        
-        @Override
-        protected void onCancelled(Void nothing) {
-        }
-        
-        @Override
-        protected void onPostExecute(Void nothing) {
-        }
-    }
-    
-    private void getQuestionCountFromParse(final boolean getQuestions,
-            final boolean isResume) {
-        final long perfTime = System.currentTimeMillis();
-        ParseCloud.callFunctionInBackground("getQuestionCount", null,
-                new FunctionCallback<Map<String, Object>>() {
-            @Override
-            public void done(Map<String, Object> count, ParseException e) {
-                if (e == null) {
-                    ApplicationEx.setQuestionCount(
-                            Integer.parseInt(count.get("total").toString()));
-                    if (getQuestions) {
-                        if (ApplicationEx.dbHelper.getUserType(userId)
-                                .equalsIgnoreCase("Anonymous")) {
-                            answerIds = new ArrayList<String>();
-                            nextQuestion();
-                        }
-                        else {
-                            getParseTask = new GetParseTask(true, userId);
-                            if (Build.VERSION.SDK_INT <
-                                    Build.VERSION_CODES.HONEYCOMB)
-                                getParseTask.execute();
-                            else
-                                getParseTask.executeOnExecutor(
-                                        AsyncTask.THREAD_POOL_EXECUTOR);
-                        }
-                    }
-                    if (isResume) {
-                        if (!isLogging) {
-                            if (!loggedIn)
-                                logOut(false);
-                            if (userId == null)
-                                checkUser();
-                            else
-                                showLoggedInFragment();
-                        }
-                        else {
-                            if (userId != null)
-                                setupUser();
-                            else if (!facebookLogin)
-                                checkUser();
-                        }
-                    }
-                }
-                else
-                    Log.e(Constants.LOG_TAG, "Error getting question count: " +
-                            e.getMessage());
-            }
-        });
-    }
-    
-    private class UserTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... nothing) {
-            user = ParseUser.getCurrentUser();
-            if (user == null) {
-                publishProgress();
-                return null;
-            }
-            if (userId == null) {
-                publishProgress();
-                return null;
-            }
-            if (ApplicationEx.getQuestionCount() < 0 && !isCancelled())
-                getQuestionCountFromParse(true, false);
-            else if (!isCancelled()) {
-                if (ApplicationEx.dbHelper.isAnonUser(userId) &&
-                        !isCancelled()) {
-                    answerIds = new ArrayList<String>();
-                    nextQuestion();
-                }
-                else if (!isCancelled()) {
-                    getParseTask = new GetParseTask(true, userId);
-                    if (Build.VERSION.SDK_INT <
-                            Build.VERSION_CODES.HONEYCOMB)
-                        getParseTask.execute();
-                    else
-                        getParseTask.executeOnExecutor(
-                                AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-            }
-            if (displayName == null && !isCancelled()) {
-                displayName = user.getString("displayName");
-                ApplicationEx.dbHelper.setUserValue(displayName, 
-                        DatabaseHelper.COL_DISPLAY_NAME, userId);
-            }
-            return null;
-        }
-        
-        protected void onProgressUpdate(Void... nothing) {
-            logOut(true);
-            Toast.makeText(ApplicationEx.getApp(), "Login failed, try again",
-                    Toast.LENGTH_LONG).show();
-        }
-        
-        @Override
-        protected void onCancelled(Void nothing) {
-        }
-        
-        @Override
-        protected void onPostExecute(Void nothing) {
-            if (userId != null)
-                setBackground(ApplicationEx.dbHelper.getCurrBackground(userId),
-                        false);
-        }
     }
     
     @Override
@@ -1530,231 +1444,97 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         ApplicationEx.dbHelper.setScore(currTemp, userId);
     }
     
-    private class SetupQuestionTask extends AsyncTask<Void, Void, Void> {
-        private String userId;
+    @Override
+    public void getNextQuestions(boolean force) {
+        if (getNextQuestionsTask != null)
+            getNextQuestionsTask.cancel(true);
+        getNextQuestionsTask = new GetNextQuestionsTask(force);
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+            getNextQuestionsTask.execute();
+        else
+            getNextQuestionsTask.executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    
+    private class GetNextQuestionsTask extends AsyncTask<Void, Void, Void> {
+        int count = -1;
+        List<ParseObject> questionList;
+        ParseException error;
+        boolean questionNull = false;
+        ArrayList<String> stageList;
+        boolean force;
         
-        private SetupQuestionTask(String userId) {
-            this.userId = userId;
+        private GetNextQuestionsTask(boolean force) {
+            this.force = force;
         }
         
         @Override
         protected Void doInBackground(Void... nothing) {
-            if (questionId == null && !isCancelled()) {
-                questionId = ApplicationEx.dbHelper.getCurrQuestionId(userId);
-                question = ApplicationEx.dbHelper.getCurrQuestionQuestion(
-                        userId);
-                correctAnswer = ApplicationEx.dbHelper.getCurrQuestionAnswer(
-                        userId);
-                questionCategory = 
-                        ApplicationEx.dbHelper.getCurrQuestionCategory(userId);
-                questionScore = ApplicationEx.dbHelper.getCurrQuestionScore(
-                        userId);
-                currFrag.resetHint();
-            }
-            if (nextQuestionId == null && !isCancelled()) {
-                nextQuestionId = ApplicationEx.dbHelper.getNextQuestionId(
-                        userId);
-                nextQuestion = ApplicationEx.dbHelper.getNextQuestionQuestion(
-                        userId);
-                nextCorrectAnswer = 
-                        ApplicationEx.dbHelper.getNextQuestionAnswer(userId);
-                nextQuestionCategory = 
-                        ApplicationEx.dbHelper.getNextQuestionCategory(userId);
-                nextQuestionScore = ApplicationEx.dbHelper.getNextQuestionScore(
-                        userId);
-            }
-            if (thirdQuestionId == null && !isCancelled()) {
-                thirdQuestionId = ApplicationEx.dbHelper.getThirdQuestionId(
-                        userId);
-                thirdQuestion = ApplicationEx.dbHelper.getThirdQuestionQuestion(
-                        userId);
-                thirdCorrectAnswer =
-                        ApplicationEx.dbHelper.getThirdQuestionAnswer(userId);
-                thirdQuestionCategory = 
-                        ApplicationEx.dbHelper.getThirdQuestionCategory(userId);
-                thirdQuestionScore =
-                        ApplicationEx.dbHelper.getThirdQuestionScore(userId);
-            }
-            return null;
-        }
-        
-        protected void onProgressUpdate(Void... nothing) {
-        }
-        
-        @Override
-        protected void onCancelled(Void nothing) {
-        }
-        
-        @Override
-        protected void onPostExecute(Void nothing) {
-            if (questionId == null && !isCancelled()) {
-                if (answerIds != null && !isCancelled())
-                    nextQuestion();
+            if (((nextQuestionId == null && thirdQuestionId != null) || 
+                    correctAnswers.contains(nextQuestionId)) &&
+                        !isCancelled() && !force) {
+                updateIds();
+                getNextQuestions(force);
             }
             else if (!isCancelled()) {
-                if (!loggedIn) {
-                    try {
-                        goToQuiz();
-                    } catch (IllegalStateException exception) {}
-                }
+                if (!force)
+                    updateIds();
+                publishProgress();
+                if (tempAnswers == null)
+                    tempAnswers = new ArrayList<String>();
                 else
-                    currFrag.resumeQuestion();
-            }
-        }
-    }
-    
-    @Override
-    public void nextQuestion() {
-        questionId = nextQuestionId;
-        nextQuestionId = thirdQuestionId;
-        thirdQuestionId = null;
-        question = nextQuestion != null ? nextQuestion.trim() :
-                nextQuestion;
-        nextQuestion = thirdQuestion != null ? thirdQuestion.trim() :
-                thirdQuestion;
-        thirdQuestion = null;
-        correctAnswer = nextCorrectAnswer != null ?
-                nextCorrectAnswer.trim() : nextCorrectAnswer;
-        nextCorrectAnswer = thirdCorrectAnswer != null ?
-                        thirdCorrectAnswer.trim() : thirdCorrectAnswer;
-        thirdCorrectAnswer = null;
-        questionCategory = nextQuestionCategory != null ?
-                nextQuestionCategory.trim() : nextQuestionCategory;
-        nextQuestionCategory = thirdQuestionCategory != null ?
-                        thirdQuestionCategory.trim() : thirdQuestionCategory;
-        thirdQuestionCategory = null;
-        questionScore = nextQuestionScore;
-        nextQuestionScore = thirdQuestionScore;
-        thirdQuestionScore = null;
-        if (answerIds.size() >= ApplicationEx.getQuestionCount()) {
-            questionId = null;
-            nextQuestionId = null;
-            thirdQuestionId = null;
-            question = null;
-            nextQuestion = null;
-            thirdQuestion = null;
-            correctAnswer = null;
-            nextCorrectAnswer = null;
-            thirdCorrectAnswer = null;
-            questionCategory = null;
-            nextQuestionCategory = null;
-            thirdQuestionCategory = null;
-            questionScore = null;
-            nextQuestionScore = null;
-            thirdQuestionScore = null;
-            ApplicationEx.dbHelper.setQuestions(userId, questionId, question,
-                    correctAnswer, questionCategory, questionScore,
-                    nextQuestionId, nextQuestion, nextCorrectAnswer,
-                    nextQuestionCategory, nextQuestionScore, thirdQuestionId,
-                    thirdQuestion, thirdCorrectAnswer, thirdQuestionCategory,
-                    thirdQuestionScore);
-            if (!loggedIn) {
+                    tempAnswers.clear();
+                tempAnswers.addAll(correctAnswers);
+                if (questionId != null)
+                    tempAnswers.add(questionId);
+                if (nextQuestionId != null)
+                    tempAnswers.add(nextQuestionId);
+                if (thirdQuestionId != null)
+                    tempAnswers.add(thirdQuestionId);
+                ParseQuery query = new ParseQuery("Question");
+                query.whereNotContainedIn("objectId", tempAnswers);
                 try {
-                    goToQuiz();
-                } catch (IllegalStateException exception) {}
-            }
-            else
-                showQuiz();
-            return;
-        }
-        if ((questionId != null && answerIds.contains(questionId)) ||
-                (questionId == null && (nextQuestionId != null ||
-                thirdQuestionId != null)))
-            nextQuestion();
-        else {
-            currFrag.resetHint();
-            if (userId != null && questionId != null) {
-                if (!loggedIn) {
-                    try {
-                        goToQuiz();
-                    } catch (IllegalStateException exception) {}
-                }
-                else
-                    currFrag.resumeQuestion();
-            }
-            ArrayList<String> tempList = new ArrayList<String>(answerIds);
-            ArrayList<String> skipList =
-                    ApplicationEx.dbHelper.getSkipQuestions(userId);
-            tempList.removeAll(skipList);
-            tempList.addAll(skipList);
-            if (tempList.size() == ApplicationEx.getQuestionCount() &&
-                    answerIds.size() < ApplicationEx.getQuestionCount())
-                tempList = new ArrayList<String>(answerIds);
-            ParseQuery query = new ParseQuery("Question");
-            int skip = (int) (Math.random()*(ApplicationEx.getQuestionCount()-
-                    answerIds.size()));
-            int total = 0;
-            if (questionId != null && !tempList.contains(questionId))
-                tempList.add(questionId);
-            if (nextQuestionId != null && !tempList.contains(nextQuestionId))
-                tempList.add(nextQuestionId);
-            if (thirdQuestion != null && !tempList.contains(thirdQuestionId))
-                tempList.add(thirdQuestionId);
-            if (questionId == null) {
-                total = ApplicationEx.getQuestionCount()-answerIds.size()-3;
-                if (total < 0)
-                    total = 0;
-                query.setSkip(total < skip ? total : skip);
-                query.setLimit(3);
-                query.whereNotContainedIn("objectId", tempList);
-            }
-            else if (nextQuestionId == null) {
-                if (thirdQuestionId == null) {
-                    total = ApplicationEx.getQuestionCount()-tempList.size()-2;
-                    if (total < 0)
-                        total = 0;
-                    query.setSkip(total < skip ? total : skip);
-                    query.setLimit(2);
-                    query.whereNotContainedIn("objectId", tempList);
-                }
-                else {
-                    total = ApplicationEx.getQuestionCount()-tempList.size()-1;
-                    if (total < 0)
-                        total = 0;
-                    query.setSkip(total < skip ? total : skip);
-                    query.setLimit(1);
-                    query.whereNotContainedIn("objectId", tempList);
-                }
-            }
-            else {
-                total = ApplicationEx.getQuestionCount()-tempList.size()-1;
-                if (total < 0)
-                    total = 0;
-                query.setSkip(total < skip ? total : skip);
-                query.setLimit(1);
-                query.whereNotContainedIn("objectId", tempList);
-            }
-            query.findInBackground(new FindCallback() {
-                @Override
-                public void done(List<ParseObject> questions,
-                        ParseException e) {
-                    if (e == null) {
-                        if (!questions.isEmpty()) {
+                    count = query.count();
+                    if (count > 0 && !isCancelled()) {
+                        stageList = new ArrayList<String>();
+                        int skip = (int) (Math.random()*count);
+                        query = new ParseQuery("Question");
+                        query.whereNotContainedIn("objectId", correctAnswers);
+                        if (questionId == null)
+                            query.setLimit(3);
+                        else {
+                            if (nextQuestionId == null) {
+                                if (thirdQuestionId == null)
+                                    query.setLimit(2);
+                                else
+                                    query.setLimit(1);
+                            }
+                            else
+                                query.setLimit(1);
+                        }
+                        if (query.getLimit() > (count-skip))
+                            skip = count-query.getLimit();
+                        query.setSkip(skip);
+                        // TODO set and fetch hint/skip values from new class in Parse
+                        questionList = query.find();
+                        if (!questionList.isEmpty() && !isCancelled()) {
                             Number score;
                             ParseObject followQuestion = null;
-                            if (questions.size() == 3) {
-                                ParseObject currQuestion = questions.get(0);
+                            if (questionList.size() == 3) {
+                                ParseObject currQuestion = questionList.get(0);
                                 questionId = currQuestion.getObjectId();
+                                stageList.add(questionId);
                                 question = currQuestion.getString("question");
-                                correctAnswer =
-                                        currQuestion.getString("answer");
+                                correctAnswer = currQuestion.getString("answer");
                                 questionCategory = currQuestion.getString(
                                         "category");
                                 score = currQuestion.getNumber("score");
                                 questionScore = score == null ? "1011" :
                                         Integer.toString(score.intValue());
-                                if (questionId != null && userId != null) {
-                                    if (!loggedIn) {
-                                        try {
-                                            goToQuiz();
-                                        } catch (
-                                            IllegalStateException exception) {}
-                                    }
-                                    else
-                                        currFrag.resumeQuestion();
-                                }
-                                currQuestion = questions.get(1);
+                                currQuestion = questionList.get(1);
                                 nextQuestionId = currQuestion.getObjectId();
+                                stageList.add(nextQuestionId);
                                 nextQuestion = currQuestion.getString(
                                         "question");
                                 nextCorrectAnswer = currQuestion.getString(
@@ -1764,12 +1544,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 score = currQuestion.getNumber("score");
                                 nextQuestionScore = score == null ? "1011" :
                                         Integer.toString(score.intValue());
-                                followQuestion = questions.get(2);
+                                followQuestion = questionList.get(2);
                             }
-                            else if (questions.size() == 2) {
-                                ParseObject currQuestion = questions.get(0);
+                            else if (questionList.size() == 2 &&
+                                    !isCancelled()) {
+                                ParseObject currQuestion = questionList.get(0);
                                 if (questionId == null) {
                                     questionId = currQuestion.getObjectId();
+                                    stageList.add(questionId);
                                     question = currQuestion.getString(
                                             "question");
                                     correctAnswer = currQuestion.getString(
@@ -1782,6 +1564,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 }
                                 else {
                                     nextQuestionId = currQuestion.getObjectId();
+                                    stageList.add(nextQuestionId);
                                     nextQuestion = currQuestion.getString(
                                             "question");
                                     nextCorrectAnswer = currQuestion.getString(
@@ -1792,13 +1575,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                     nextQuestionScore = score == null ? "1011" :
                                             Integer.toString(score.intValue());
                                 }
-                                followQuestion = questions.get(1);
+                                followQuestion = questionList.get(1);
                             }
                             else {
-                                followQuestion = questions.get(0);
+                                followQuestion = questionList.get(0);
                             }
                             if (questionId == null) {
                                 questionId = followQuestion.getObjectId();
+                                stageList.add(questionId);
                                 question = followQuestion.getString(
                                         "question");
                                 correctAnswer = followQuestion.getString(
@@ -1808,19 +1592,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 score = followQuestion.getNumber("score");
                                 questionScore = score == null ? "1011" :
                                         Integer.toString(score.intValue());
-                                if (questionId != null && userId != null) {
-                                    if (!loggedIn) {
-                                        try {
-                                            goToQuiz();
-                                        } catch (
-                                            IllegalStateException exception) {}
-                                    }
-                                    else
-                                        currFrag.resumeQuestion();
-                                }
                             }
                             else if (nextQuestionId == null) {
                                 nextQuestionId = followQuestion.getObjectId();
+                                stageList.add(nextQuestionId);
                                 nextQuestion = followQuestion.getString(
                                         "question");
                                 nextCorrectAnswer = followQuestion.getString(
@@ -1833,6 +1608,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             }
                             else {
                                 thirdQuestionId = followQuestion.getObjectId();
+                                stageList.add(thirdQuestionId);
                                 thirdQuestion = followQuestion.getString(
                                         "question");
                                 thirdCorrectAnswer = followQuestion.getString(
@@ -1843,70 +1619,244 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 thirdQuestionScore = score == null ? "1011" :
                                         Integer.toString(score.intValue());
                             }
-                            ApplicationEx.dbHelper.setQuestions(userId,
-                                    questionId, question, correctAnswer,
-                                    questionCategory, questionScore,
-                                    nextQuestionId, nextQuestion,
-                                    nextCorrectAnswer, nextQuestionCategory,
-                                    nextQuestionScore, thirdQuestionId,
-                                    thirdQuestion, thirdCorrectAnswer,
-                                    thirdQuestionCategory, thirdQuestionScore);
-                        }
-                        else {
-                            ApplicationEx.dbHelper.setQuestions(userId,
-                                    questionId, question, correctAnswer,
-                                    questionCategory, questionScore,
-                                    nextQuestionId, nextQuestion,
-                                    nextCorrectAnswer, nextQuestionCategory,
-                                    nextQuestionScore, thirdQuestionId,
-                                    thirdQuestion, thirdCorrectAnswer,
-                                    thirdQuestionCategory, thirdQuestionScore);
-                            if (!loggedIn) {
-                                try {
-                                    goToQuiz();
-                                } catch (IllegalStateException exception) {}
-                            }
-                            else
-                                currFrag.resumeQuestion();
+                            getStage(userId, stageList);
+                            if (!isCancelled())
+                                ApplicationEx.dbHelper.setQuestions(userId,
+                                        questionId, question, correctAnswer,
+                                        questionCategory, questionScore,
+                                        questionHint, questionSkip,
+                                        nextQuestionId, nextQuestion,
+                                        nextCorrectAnswer, nextQuestionCategory,
+                                        nextQuestionScore, nextQuestionHint,
+                                        nextQuestionSkip, thirdQuestionId,
+                                        thirdQuestion, thirdCorrectAnswer,
+                                        thirdQuestionCategory,
+                                        thirdQuestionScore, thirdQuestionHint,
+                                        thirdQuestionSkip);
                         }
                     }
-                    else {
-                        Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
-                        if (userTask != null)
-                            userTask.cancel(true);
-                        currFrag.showNetworkProblem();
+                    else if (!isCancelled()) {
+                        ApplicationEx.dbHelper.setQuestions(userId, questionId,
+                                question, correctAnswer, questionCategory,
+                                questionScore, questionHint, questionSkip,
+                                nextQuestionId, nextQuestion, nextCorrectAnswer,
+                                nextQuestionCategory, nextQuestionScore,
+                                nextQuestionHint, nextQuestionSkip,
+                                thirdQuestionId, thirdQuestion,
+                                thirdCorrectAnswer, thirdQuestionCategory,
+                                thirdQuestionScore, thirdQuestionHint,
+                                thirdQuestionSkip);
                     }
+                } catch (ParseException e) {
+                    error = e;
                 }
-            });
+            }
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+            if (questionId != null && !isCancelled() && !force) {
+                if (!loggedIn) {
+                    try {
+                        goToQuiz();
+                    } catch (IllegalStateException exception) {}
+                }
+                else
+                    currFrag.resumeQuestion();
+            }
+            else if (questionId == null)
+                questionNull = true;
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            if (error != null && !isCancelled()) {
+                Log.e(Constants.LOG_TAG, "Error: " + error.getMessage());
+                if (userTask != null)
+                    userTask.cancel(true);
+                currFrag.showNetworkProblem();
+            }
+            else if (!isCancelled() && questionNull) {
+                if (!loggedIn) {
+                    try {
+                        goToQuiz();
+                    } catch (IllegalStateException exception) {}
+                }
+                else {
+                    if (questionId == null)
+                        currFrag.showNoMoreQuestions();
+                    else
+                        currFrag.resumeQuestion();
+                }
+            }
+        }
+        
+        private void updateIds() {
+            questionId = nextQuestionId;
+            nextQuestionId = thirdQuestionId;
+            thirdQuestionId = null;
+            question = nextQuestion != null ? nextQuestion.trim() :
+                    nextQuestion;
+            nextQuestion = thirdQuestion != null ?
+                    thirdQuestion.trim() : thirdQuestion;
+            thirdQuestion = null;
+            correctAnswer = nextCorrectAnswer != null ?
+                    nextCorrectAnswer.trim() : nextCorrectAnswer;
+            nextCorrectAnswer = thirdCorrectAnswer != null ?
+                    thirdCorrectAnswer.trim() : thirdCorrectAnswer;
+            thirdCorrectAnswer = null;
+            questionCategory = nextQuestionCategory != null ?
+                    nextQuestionCategory.trim() :
+                        nextQuestionCategory;
+            nextQuestionCategory = thirdQuestionCategory != null ?
+                    thirdQuestionCategory.trim() :
+                        thirdQuestionCategory;
+            thirdQuestionCategory = null;
+            questionScore = nextQuestionScore;
+            nextQuestionScore = thirdQuestionScore;
+            thirdQuestionScore = null;
+            questionHint = nextQuestionHint;
+            nextQuestionHint = thirdQuestionHint;
+            thirdQuestionHint = false;
         }
     }
     
-    private class BackgroundTask extends AsyncTask<Void, Void, Void> {
+    private void getStage(String userId, ArrayList<String> questionIds) {
+        if (getStageTask != null)
+            getStageTask.cancel(true);
+        getStageTask = new GetStageTask(userId, questionIds);
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+            getStageTask.execute();
+        else
+            getStageTask.executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    
+    private class GetStageTask extends AsyncTask<Void, Void, Void> {
+        private String userId;
+        ArrayList<String> questionIds;
+        
+        private GetStageTask(String userId, ArrayList<String> questionIds) {
+            this.userId = userId;
+            this.questionIds = questionIds;
+        }
         @Override
         protected Void doInBackground(Void... nothing) {
-            int answerCount = ApplicationEx.dbHelper.getAnswerCount(userId);
-            if (questionId != null &&
-                    !ApplicationEx.dbHelper.getQuestionSkip(questionId, userId)
-                    && answerCount > 0 && answerCount % 20 == 0) {
-                if (currentBackground == null) {
-                    if (userId != null) {
-                        currentBackground =
-                            ApplicationEx.dbHelper.getCurrBackground(userId);
-                        if (currentBackground == null)
-                            currentBackground = "splash8";
+            ParseQuery query = new ParseQuery("Stage");
+            query.whereEqualTo("userId", userId);
+            query.whereContainedIn("questionId", questionIds);
+            query.setLimit(questionIds.size());
+            try {
+                List<ParseObject> questionList = query.find();
+                if (!questionList.isEmpty()) {
+                    for (int i = 0; i < questionList.size(); i++) {
+                        if (questionList.get(i).getString("questionId")
+                                .equals(questionIds)) {
+                            questionHint = questionList.get(i).getBoolean("hint");
+                            questionSkip = questionList.get(i).getBoolean("skip");
+                            publishProgress();
+                        }
+                        else if (questionList.get(i).getString("questionId")
+                                .equals(nextQuestionId)) {
+                            nextQuestionHint = questionList.get(i)
+                                    .getBoolean("hint");
+                            nextQuestionSkip = questionList.get(i)
+                                    .getBoolean("skip");
+                            if (!questionIds.contains(questionId))
+                                publishProgress();
+                        }
+                        else if (questionList.get(i).getString("questionId")
+                                .equals(thirdQuestionId)) {
+                            thirdQuestionHint = questionList.get(i)
+                                    .getBoolean("hint");
+                            thirdQuestionSkip = questionList.get(i)
+                                    .getBoolean("skip");
+                            if (!questionIds.contains(questionId) &&
+                                    !questionIds.contains(nextQuestionId))
+                                publishProgress();
+                        }
                     }
-                    else
-                        currentBackground = "splash8";
-                    
                 }
-                publishProgress();
+                else {
+                    for (int i = 0; i < questionIds.size(); i++) {
+                        if (questionIds.get(i).equals(questionId)) {
+                            questionHint = false;
+                            questionSkip = false;
+                            publishProgress();
+                        }
+                        else if (questionIds.get(i).equals(nextQuestionId)) {
+                            nextQuestionHint = false;
+                            nextQuestionSkip = false;
+                            if (!questionIds.contains(questionId))
+                                publishProgress();
+                        }
+                        else if (questionIds.get(i).equals(thirdQuestionId)) {
+                            thirdQuestionHint = false;
+                            thirdQuestionSkip = false;
+                            if (!questionIds.contains(questionId) &&
+                                    !questionIds.contains(nextQuestionId))
+                                publishProgress();
+                        }
+                    }
+                }
+            } catch (ParseException e) {
+                Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                if (currFrag != null)
+                    currFrag.showNetworkProblem();
             }
             return null;
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            ApplicationEx.dbHelper.setCurrBackground(userId,
-                    setBackground(currentBackground, true));
+            if (!loggedIn) {
+                try {
+                    goToQuiz();
+                } catch (IllegalStateException exception) {}
+            }
+            else
+                currFrag.resumeQuestion();
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            
+        }
+    }
+    
+    private class BackgroundTask extends AsyncTask<Void, Void, Void> {
+        private String questionId;
+        
+        private BackgroundTask(String questionId) {
+            this.questionId = questionId;
+        }
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            if (questionId != null && correctAnswers.contains(questionId)) {
+                if (correctAnswers.size() % 20 == 0) {
+                    if (currentBackground == null) {
+                        if (userId != null) {
+                            currentBackground =
+                                ApplicationEx.dbHelper.getCurrBackground(userId);
+                            if (currentBackground == null)
+                                currentBackground = "splash8";
+                        }
+                        else
+                            currentBackground = "splash8";
+                        
+                    }
+                    publishProgress();
+                }
+            }
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+            setBackground(currentBackground, true);
         }
         
         @Override
@@ -1916,20 +1866,17 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     @Override
-    public void next() {
+    public void next(long perfTime) {
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
-            new BackgroundTask().execute();
+            new BackgroundTask(questionId).execute();
         else
-            new BackgroundTask().executeOnExecutor(
+            new BackgroundTask(questionId).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR);
         newQuestion = false;
         ApplicationEx.dbHelper.setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
-        if (answerIds != null)
-            nextQuestion();
-        else
-            currFrag.showNetworkProblem();
+        getNextQuestions(false);
     }
 
     @Override
@@ -1955,6 +1902,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public String getQuestionCategory() {
         return questionCategory;
+    }
+    
+    @Override
+    public boolean getQuestionHint() {
+        return questionHint;
+    }
+    
+    @Override
+    public boolean getQuestionSkip() {
+        return questionSkip;
     }
 
     @Override
@@ -1983,28 +1940,48 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     @Override
+    public boolean getNextQuestionHint() {
+        return nextQuestionHint;
+    }
+    
+    @Override
+    public boolean getNextQuestionSkip() {
+        return nextQuestionSkip;
+    }
+    
+    @Override
     public String getThirdQuestionId() {
-        return nextQuestionId;
+        return thirdQuestionId;
     }
 
     @Override
     public String getThirdQuestion() {
-        return nextQuestion;
+        return thirdQuestion;
     }
 
     @Override
     public String getThirdCorrectAnswer() {
-        return nextCorrectAnswer;
+        return thirdCorrectAnswer;
     }
 
     @Override
     public String getThirdQuestionScore() {
-        return nextQuestionScore;
+        return thirdQuestionScore;
     }
 
     @Override
     public String getThirdQuestionCategory() {
-        return nextQuestionCategory;
+        return thirdQuestionCategory;
+    }
+    
+    @Override
+    public boolean getThirdQuestionHint() {
+        return thirdQuestionHint;
+    }
+    
+    @Override
+    public boolean getThirdQuestionSkip() {
+        return thirdQuestionSkip;
     }
 
     @Override
@@ -2030,6 +2007,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public void setQuestionCategory(String questionCategory) {
         this.questionCategory = questionCategory;
+    }
+    
+    @Override
+    public void setQuestionHint(boolean questionHint) {
+        this.questionHint = questionHint;
     }
 
     @Override
@@ -2058,6 +2040,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     @Override
+    public void setNextQuestionHint(boolean nextQuestionHint) {
+        this.nextQuestionHint = nextQuestionHint;
+    }
+    
+    @Override
     public void setThirdQuestionId(String thirdQuestionId) {
         this.thirdQuestionId = thirdQuestionId;
     }
@@ -2081,6 +2068,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     public void setThirdQuestionCategory(String thirdQuestionCategory) {
         this.thirdQuestionCategory = thirdQuestionCategory;
     }
+    
+    @Override
+    public void setThirdQuestionHint(boolean thirdQuestionHint) {
+        this.thirdQuestionHint = thirdQuestionHint;
+    }
 
     @Override
     public String getUserId() {
@@ -2090,21 +2082,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public String getDisplayName() {
         return displayName;
-    }
-
-    @Override
-    public ArrayList<String> getAnswerIds() {
-        return answerIds;
-    }
-
-    @Override
-    public void addAnswerId(String answerId) {
-        answerIds.add(answerId);
-    }
-    
-    @Override
-    public boolean hasAnswerId(String answerId) {
-        return answerIds.contains(answerId);
     }
 
     @Override
@@ -2144,14 +2121,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         boolean isIntentSafe = activities.size() > 0;
         if (isIntentSafe)
             startActivity(Intent.createChooser(share, "Share screenshot with"));
-    }
-    
-    @Override
-    public int getQuestionsLeft() {
-        if (answerIds == null)
-            return ApplicationEx.getQuestionCount();
-        else
-            return ApplicationEx.getQuestionCount()-answerIds.size();
     }
     
     @Override
@@ -2210,7 +2179,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         return path;
     }
     
-    private void getPersistedData() {
+    private void getPersistedData(String userId) {
         loggedIn = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_LOGGED_IN, userId) == 1 ? true : false;
         isLogging = ApplicationEx.dbHelper.getUserIntValue(
@@ -2221,6 +2190,12 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 DatabaseHelper.COL_IN_STATS, userId) == 1 ? true : false;
         inInfo = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_IN_INFO, userId) == 1 ? true : false;
+        getUserData(userId);
+        networkProblem = ApplicationEx.dbHelper.getUserIntValue(
+                DatabaseHelper.COL_NETWORK_PROBLEM, userId) == 1 ? true : false;
+    }
+    
+    private void getUserData(String userId) {
         currentBackground = ApplicationEx.dbHelper.getUserStringValue(
                 DatabaseHelper.COL_CURR_BACKGROUND, userId);
         questionId = ApplicationEx.dbHelper.getCurrQuestionId(userId);
@@ -2229,6 +2204,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         questionScore = ApplicationEx.dbHelper.getCurrQuestionScore(userId);
         questionCategory =
                 ApplicationEx.dbHelper.getCurrQuestionCategory(userId);
+        questionHint = ApplicationEx.dbHelper.getCurrQuestionHint(userId);
+        questionSkip = ApplicationEx.dbHelper.getCurrQuestionSkip(userId);
         nextQuestionId = ApplicationEx.dbHelper.getNextQuestionId(userId);
         nextQuestion = ApplicationEx.dbHelper.getNextQuestionQuestion(userId);
         nextCorrectAnswer =
@@ -2236,6 +2213,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         nextQuestionScore = ApplicationEx.dbHelper.getNextQuestionScore(userId);
         nextQuestionCategory =
                 ApplicationEx.dbHelper.getNextQuestionCategory(userId);
+        nextQuestionHint = ApplicationEx.dbHelper.getNextQuestionHint(userId);
+        nextQuestionSkip = ApplicationEx.dbHelper.getNextQuestionSkip(userId);
         thirdQuestionId = ApplicationEx.dbHelper.getThirdQuestionId(userId);
         thirdQuestion = ApplicationEx.dbHelper.getThirdQuestionQuestion(userId);
         thirdCorrectAnswer =
@@ -2244,15 +2223,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 userId);
         thirdQuestionCategory =
                 ApplicationEx.dbHelper.getThirdQuestionCategory(userId);
+        thirdQuestionHint = ApplicationEx.dbHelper.getThirdQuestionHint(userId);
+        thirdQuestionSkip = ApplicationEx.dbHelper.getThirdQuestionSkip(userId);
         newQuestion = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_NEW_QUESTION, userId) == 1 ? true : false;
         displayName = ApplicationEx.dbHelper.getUserStringValue(
                 DatabaseHelper.COL_DISPLAY_NAME, userId);
         currScore = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_SCORE, userId);
-        networkProblem = ApplicationEx.dbHelper.getUserIntValue(
-                DatabaseHelper.COL_NETWORK_PROBLEM, userId) == 1 ? true : false;
-        answerIds = ApplicationEx.dbHelper.readAnswers(userId);
+        correctAnswers = ApplicationEx.getStringArrayPref(
+                getString(R.string.correct_key));
     }
     
     private class ConnectionReceiver extends BroadcastReceiver {
@@ -2281,6 +2261,30 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public void setNetworkProblem(boolean networkProblem) {
         this.networkProblem = networkProblem;
+    }
+
+    @Override
+    public void addCorrectAnswer(String correctId) {
+        if (correctAnswers == null) {
+            correctAnswers = new ArrayList<String>();
+            correctAnswers.add(correctId);
+        }
+        else
+            correctAnswers.add(correctId);
+        ApplicationEx.setStringArrayPref(
+                getString(R.string.correct_key), correctAnswers);
+    }
+    
+    @Override
+    public boolean isCorrectAnswer(String correctId) {
+        if (correctAnswers == null)
+            return false;
+        else {
+            if (correctAnswers.contains(correctId))
+                return true;
+            else
+                return false;
+        }
     }
     
 }

@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.R;
@@ -195,14 +194,16 @@ public class FragmentSplash extends FragmentBase {
                                 username, password);
                 }
             }
-            else
-                Toast.makeText(ApplicationEx.getApp(),
-                        "Password must be at least 4 characters",
-                        Toast.LENGTH_LONG).show();
+            else {
+                ApplicationEx.mToast.setText(
+                        "Password must be at least 4 characters");
+                ApplicationEx.mToast.show();
+            }
         }
-        else
-            Toast.makeText(ApplicationEx.getApp(), "Enter valid email",
-                    Toast.LENGTH_LONG).show();
+        else {
+            ApplicationEx.mToast.setText("Enter valid email");
+            ApplicationEx.mToast.show();
+        }
     }
     /*
     private TranslateAnimation createAnimation(long offset, boolean right) {
@@ -268,12 +269,8 @@ public class FragmentSplash extends FragmentBase {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
         case R.id.SwitchBackground:
-            if (mCallback != null) {
-                String newBackground = mCallback.setBackground(
-                        mCallback.getBackground(), true);
-                ApplicationEx.dbHelper.setCurrBackground(mCallback.getUserId(),
-                        newBackground);
-            }
+            if (mCallback != null)
+                mCallback.setBackground(mCallback.getBackground(), true);
             break;
         case R.id.Notifications:
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),

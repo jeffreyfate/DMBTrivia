@@ -27,11 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "dmbquizDb";
     
     public static final String USER_TABLE = "User";
-    public static final String ANSWER_TABLE = "Answer";
     public static final String LEADER_TABLE = "Leader";
     
     public static final String COL_USER_ID = "UserId";
-    public static final String COL_USER_NAME = "Name";
     public static final String COL_USER_TYPE = "Type";
     public static final String COL_SCORE = "Score";
     public static final String COL_OFFSET = "Offset";
@@ -42,6 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CURR_QUESTION_CATEGORY =
         "CurrQuestionCategory";
     public static final String COL_CURR_QUESTION_SCORE = "CurrQuestionScore";
+    public static final String COL_CURR_QUESTION_HINT = "CurrQuestionHint";
+    public static final String COL_CURR_QUESTION_SKIP = "CurrQuestionSkip";
     public static final String COL_NEXT_QUESTION_ID = "NextQuestionId";
     public static final String COL_NEXT_QUESTION_QUESTION =
         "NextQuestionQuestion";
@@ -49,6 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_NEXT_QUESTION_CATEGORY =
         "NextQuestionCategory";
     public static final String COL_NEXT_QUESTION_SCORE = "NextQuestionScore";
+    public static final String COL_NEXT_QUESTION_HINT = "NextQuestionHint";
+    public static final String COL_NEXT_QUESTION_SKIP = "NextQuestionSkip";
     public static final String COL_THIRD_QUESTION_ID = "ThirdQuestionId";
     public static final String COL_THIRD_QUESTION_QUESTION =
         "ThirdQuestionQuestion";
@@ -57,6 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_THIRD_QUESTION_CATEGORY =
         "ThirdQuestionCategory";
     public static final String COL_THIRD_QUESTION_SCORE = "ThirdQuestionScore";
+    public static final String COL_THIRD_QUESTION_HINT = "ThirdQuestionHint";
+    public static final String COL_THIRD_QUESTION_SKIP = "ThirdQuestionSkip";
     public static final String COL_CURR_BACKGROUND = "CurrentBackground";
     public static final String COL_ANSWER = "Answer";
     public static final String COL_HINT = "Hint";
@@ -73,6 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_NEW_QUESTION = "NewQuestion";
     public static final String COL_DISPLAY_NAME = "DisplayName";
     public static final String COL_NETWORK_PROBLEM = "NetworkProblem";
+    public static final String COL_SKIP_VIS = "SkipVis";
     
     public static final String COL_USER_TEXT = "UserText";
     public static final String COL_USER_ANSWER_TEXT = "UserAnswerText";
@@ -85,12 +90,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CREATED_TEXT = "CreatedText";
     public static final String COL_CREATED_DATE = "CreatedDate";
     
-    public static final String COL_QUESTION_USER = "QuestionUser";
-    public static final String COL_QUESTION_ID = "QuestionId";
-    public static final String COL_QUESTION_HINT = "QuestionHint";
-    public static final String COL_QUESTION_SKIP = "QuestionSkip";
-    public static final String COL_QUESTION_CORRECT = "QuestionCorrect";
-    
     public static final String COL_RANK = "Rank";
     public static final String COL_USER = "User";
     public static final String COL_LEADER_SCORE = "Score";
@@ -98,44 +97,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Create User table string
      */
-    private static final String CREATE_USER_TABLE = "CREATE TABLE " + 
-            USER_TABLE + " (" + COL_USER_ID + " STRING PRIMARY KEY, " +
-            COL_USER_NAME + " TEXT, " + COL_USER_TYPE + " TEXT, " + COL_SCORE +
-            " INTEGER DEFAULT -1, " + COL_OFFSET + " INTEGER DEFAULT 0, " +
-            COL_CURR_QUESTION_ID + " TEXT, " + COL_CURR_QUESTION_QUESTION +
-            " TEXT, " + COL_CURR_QUESTION_ANSWER + " TEXT, " +
-            COL_CURR_QUESTION_CATEGORY + " TEXT, " + COL_CURR_QUESTION_SCORE +
-            " TEXT, " + COL_NEXT_QUESTION_ID + " TEXT, " +
+    private static final String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE
+            + " (" + COL_USER_ID + " STRING PRIMARY KEY, " + COL_USER_TYPE +
+            " TEXT, " + COL_SCORE + " INTEGER DEFAULT -1, " + COL_OFFSET +
+            " INTEGER DEFAULT 0, " + COL_CURR_QUESTION_ID + " TEXT, " +
+            COL_CURR_QUESTION_QUESTION + " TEXT, " + COL_CURR_QUESTION_ANSWER +
+            " TEXT, " + COL_CURR_QUESTION_CATEGORY + " TEXT, " +
+            COL_CURR_QUESTION_SCORE + " TEXT, " + COL_CURR_QUESTION_HINT +
+            " INTEGER DEFAULT 0, " + COL_CURR_QUESTION_SKIP +
+            " INTEGER DEFAULT 0, " + COL_NEXT_QUESTION_ID + " TEXT, " +
             COL_NEXT_QUESTION_QUESTION + " TEXT, " + COL_NEXT_QUESTION_ANSWER +
             " TEXT, " + COL_NEXT_QUESTION_CATEGORY + " TEXT, " +
-            COL_NEXT_QUESTION_SCORE + " TEXT, " + COL_THIRD_QUESTION_ID +
-            " TEXT, " + COL_THIRD_QUESTION_QUESTION + " TEXT, " +
-            COL_THIRD_QUESTION_ANSWER + " TEXT, " + COL_THIRD_QUESTION_CATEGORY
-            + " TEXT, " + COL_THIRD_QUESTION_SCORE + " TEXT, " +
-            COL_CURR_BACKGROUND + " TEXT, " + COL_ANSWER + " TEXT, " + COL_HINT
-            + " TEXT, " + COL_SKIP_TICK + " INTEGER DEFAULT -1, " +
-            COL_HINT_TICK + " INTEGER DEFAULT -1, " + COL_SKIP_PRESSED +
-            " INTEGER DEFAULT 0, " + COL_HINT_PRESSED + " INTEGER DEFAULT 0, " +
-            COL_IS_CORRECT + " INTEGER DEFAULT 0, " + COL_NETWORK_PROBLEM +
-            " INTEGER DEFAULT 0, " + COL_LOGGED_IN + " INTEGER DEFAULT 0, " +
-            COL_LOGGING + " INTEGER DEFAULT 0, " + COL_IN_LOAD +
-            " INTEGER DEFAULT 0, " + COL_IN_STATS + " INTEGER DEFAULT 0, " +
-            COL_IN_INFO + " INTEGER DEFAULT 0, " + COL_NEW_QUESTION +
-            " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME + " TEXT, " +
-            COL_USER_TEXT + " TEXT, " + COL_USER_ANSWER_TEXT + " TEXT, " +
-            COL_USER_ANSWERS + " TEXT, " + COL_USER_HINT_TEXT + " TEXT, " +
-            COL_USER_HINTS + " TEXT, " + COL_USER_NAME_TEXT + " TEXT, " +
-            COL_USER_SCORE_TEXT + " TEXT, " + COL_LEADER_TEXT + " TEXT, " +
-            COL_CREATED_TEXT + " TEXT, " + COL_CREATED_DATE + " TEXT)";
+            COL_NEXT_QUESTION_SCORE + " TEXT, " + COL_NEXT_QUESTION_HINT +
+            " INTEGER DEFAULT 0, " + COL_NEXT_QUESTION_SKIP +
+            " INTEGER DEFAULT 0, " + COL_THIRD_QUESTION_ID + " TEXT, " +
+            COL_THIRD_QUESTION_QUESTION + " TEXT, " + COL_THIRD_QUESTION_ANSWER
+            + " TEXT, " + COL_THIRD_QUESTION_CATEGORY + " TEXT, " +
+            COL_THIRD_QUESTION_SCORE + " TEXT, " + COL_THIRD_QUESTION_HINT +
+            " INTEGER DEFAULT 0, " + COL_THIRD_QUESTION_SKIP +
+            " INTEGER DEFAULT 0, " + COL_CURR_BACKGROUND + " TEXT, " +
+            COL_ANSWER + " TEXT, " + COL_HINT + " TEXT, " + COL_SKIP_TICK +
+            " INTEGER DEFAULT -1, " + COL_HINT_TICK + " INTEGER DEFAULT -1, " +
+            COL_SKIP_PRESSED + " INTEGER DEFAULT 0, " + COL_HINT_PRESSED +
+            " INTEGER DEFAULT 0, " + COL_IS_CORRECT + " INTEGER DEFAULT 0, " +
+            COL_NETWORK_PROBLEM + " INTEGER DEFAULT 0, " + COL_LOGGED_IN +
+            " INTEGER DEFAULT 0, " + COL_LOGGING + " INTEGER DEFAULT 0, " +
+            COL_IN_LOAD + " INTEGER DEFAULT 0, " + COL_IN_STATS +
+            " INTEGER DEFAULT 0, " + COL_IN_INFO + " INTEGER DEFAULT 0, " +
+            COL_NEW_QUESTION + " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME +
+            " TEXT, " + COL_USER_TEXT + " TEXT, " + COL_USER_ANSWER_TEXT +
+            " TEXT, " + COL_USER_ANSWERS + " TEXT, " + COL_USER_HINT_TEXT +
+            " TEXT, " + COL_USER_HINTS + " TEXT, " + COL_USER_NAME_TEXT +
+            " TEXT, " + COL_USER_SCORE_TEXT + " TEXT, " + COL_LEADER_TEXT +
+            " TEXT, " + COL_CREATED_TEXT + " TEXT, " + COL_CREATED_DATE +
+            " TEXT, " + COL_SKIP_VIS + " INTEGER DEFAULT 0)";
     /**
      * Create Question table string
      */
-    private static final String CREATE_ANSWER_TABLE = "CREATE TABLE " + 
-            ANSWER_TABLE + " (" + COL_QUESTION_USER + " TEXT, " +
-            COL_QUESTION_ID + " TEXT, " + COL_QUESTION_HINT +
-            " INTEGER DEFAULT 0, " + COL_QUESTION_SKIP + " INTEGER DEFAULT 0, "
-            + COL_QUESTION_CORRECT + " INTEGER DEFAULT 0)";
-    
     private static final String CREATE_LEADER_TABLE = "CREATE TABLE " +
             LEADER_TABLE + " (" + COL_USER_ID + " TEXT, " + COL_RANK + " TEXT, "
             + COL_USER + " TEXT, " + COL_LEADER_SCORE + " TEXT, " +
@@ -167,47 +165,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
-        db.execSQL(CREATE_ANSWER_TABLE);
         db.execSQL(CREATE_LEADER_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + ANSWER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + LEADER_TABLE);
         onCreate(db);
-    }
-
-    /**
-     * Look for an item in a specific table.
-     * 
-     * @param name
-     *            identifier for the item to lookup
-     * @param table
-     *            the table to look in
-     * @param column
-     *            the column to look under
-     * @return if the item is found
-     */
-    public boolean inDb(String[] values, String table, 
-            String[] columns) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < columns.length; i++) {
-            if (i != 0)
-                sb.append(" AND ");
-            sb.append(columns[i]);
-            sb.append("=?");
-        }
-        Cursor cur = db.query(
-                table, columns, sb.toString(), values, null, null, null);
-        boolean inDb = false;
-        if (cur.moveToFirst())
-            inDb = true;
-        cur.close();
-        return inDb;
-    }
-    
+    }    
     /**
      * Insert a new record into a table in the database.
      * 
@@ -257,7 +223,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addUser(ParseUser user, String type) {
         ContentValues cv = new ContentValues();
         cv.put(COL_USER_ID, user.getObjectId());
-        cv.put(COL_USER_NAME, user.getUsername());
         cv.put(COL_USER_TYPE, type);
         cv.put(COL_SCORE, user.getString("score"));
         cv.put(COL_OFFSET, 1);
@@ -406,26 +371,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return isAnon;
     }
     
-    public String getUserType(String userId) {
-        Cursor cur = db.query(USER_TABLE, new String[] {}, COL_USER_ID + "=?",
-                new String[] {userId}, null, null, null);
-        String type = null;
-        if (cur.moveToFirst())
-            type = cur.getString(cur.getColumnIndex(COL_USER_TYPE));
-        cur.close();
-        return type;
-    }
-    
-    public String getUserName(String userId) {
-        Cursor cur = db.query(USER_TABLE, new String[] {}, COL_USER_ID + "=?",
-                new String[] {userId}, null, null, null);
-        String name = null;
-        if (cur.moveToFirst())
-            name = cur.getString(cur.getColumnIndex(COL_USER_NAME));
-        cur.close();
-        return name;
-    }
-    
     public long setScore(int score, String userId) {
         ContentValues cv = new ContentValues();
         cv.put(COL_SCORE, score);
@@ -455,16 +400,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {userId});
     }
     
-    public int getOffset(String userId) {
-        Cursor cur = db.query(USER_TABLE, new String[] {COL_OFFSET},
-                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
-        int offset = 0;
-        if (cur.moveToFirst())
-            offset = cur.getInt(cur.getColumnIndex(COL_OFFSET));
-        cur.close();
-        return offset;
-    }
-    
     public String getCurrUser() {
         Cursor cur = db.query(USER_TABLE, new String[] {COL_USER_ID},
                 COL_OFFSET + "=?", new String[] {"1"}, null, null, null);
@@ -475,121 +410,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
     
-    public boolean addAnswer(String questionId, String userId, boolean hint,
-            boolean correct, boolean skip) {
-        if (hasAnswer(questionId, userId))
-            return false;
-        else {
-            ContentValues cv = new ContentValues();
-            cv.put(COL_QUESTION_ID, questionId);
-            cv.put(COL_QUESTION_USER, userId);
-            cv.put(COL_QUESTION_HINT, hint ? 1 : 0);
-            cv.put(COL_QUESTION_CORRECT, correct ? 1 : 0);
-            cv.put(COL_QUESTION_SKIP, skip ? 1 : 0);
-            if (insertRecord(cv, ANSWER_TABLE, COL_QUESTION_ID) == -1)
-                return false;
-            else
-                return true;
-        }   
-    }
-    
-    public void markAnswerCorrect(String questionId, String userId,
-            boolean correct, boolean hint) {
-        if (hasAnswer(questionId, userId)) {
-            ContentValues cv = new ContentValues();
-            cv.put(COL_QUESTION_CORRECT, correct ? 1 : 0);
-            updateRecord(cv, ANSWER_TABLE, COL_QUESTION_ID + "=? AND " +
-                    COL_QUESTION_USER + "=?",
-                    new String[] {questionId, userId});
-        }
-        else
-            addAnswer(questionId, userId, hint, correct,
-                    getQuestionSkip(questionId, userId));
-    }
-    
-    public int deleteAnswer(String questionId, String userId) {
-        return db.delete(ANSWER_TABLE, COL_QUESTION_ID + "=? AND " +
-                COL_QUESTION_USER + "=?", new String[] {questionId, userId});
-    }
-    
-    public boolean hasAnswer(String questionId, String userId) {
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=?",
-                new String[] {questionId, userId}, null, null, null);
-        int count = cur.getCount();
-        cur.close();
-        if (count <= 0)
-            return false;
-        else
-            return true;
-    }
-    
-    public boolean hasCorrectAnswer(String questionId, String userId) {
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=? AND " +
-                COL_QUESTION_CORRECT + "=?",
-                new String[] {questionId, userId, "1"}, null, null, null);
-        int count = cur.getCount();
-        cur.close();
-        if (count <= 0)
-            return false;
-        else
-            return true;
-    }
-    
-    public int getAnswerCount(String userId) {
-        int count = 0;
-        if (userId == null)
-            return count;
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_USER + "=? AND " + COL_QUESTION_CORRECT + "=?",
-                new String[] {userId, "1"}, null, null, null);
-        count = cur.getCount();
-        cur.close();
-        return count;
-    }
-    
-    public ArrayList<String> readAnswers(String userId) {
-        if (userId == null)
-            return null;
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_USER + "=? AND " + COL_QUESTION_CORRECT + "=?",
-                new String[] {userId, "1"}, null, null, null);
-        ArrayList<String> answerList = new ArrayList<String>();
-        if (cur.moveToFirst()) {
-            do {
-                answerList.add(
-                        cur.getString(cur.getColumnIndex(COL_QUESTION_ID)));
-            } while (cur.moveToNext());
-        }
-        cur.close();
-        return answerList;
-    }
-    
     public long setQuestions(String userObject, String currQuestionId,
             String currQuestionQuestion, String currQuestionAnswer,
             String currQuestionCategory, String currQuestionScore,
+            boolean currQuestionHint, boolean currQuestionSkip,
             String nextQuestionId, String nextQuestionQuestion,
             String nextQuestionAnswer, String nextQuestionCategory,
-            String nextQuestionScore, String thirdQuestionId,
+            String nextQuestionScore, boolean nextQuestionHint,
+            boolean nextQuestionSkip, String thirdQuestionId,
             String thirdQuestionQuestion, String thirdQuestionAnswer,
-            String thirdQuestionCategory, String thirdQuestionScore) {
+            String thirdQuestionCategory, String thirdQuestionScore,
+            boolean thirdQuestionHint, boolean thirdQuestionSkip) {
         ContentValues cv = new ContentValues();
         cv.put(COL_CURR_QUESTION_ID, currQuestionId);
         cv.put(COL_CURR_QUESTION_QUESTION, currQuestionQuestion);
         cv.put(COL_CURR_QUESTION_ANSWER, currQuestionAnswer);
         cv.put(COL_CURR_QUESTION_CATEGORY, currQuestionCategory);
         cv.put(COL_CURR_QUESTION_SCORE, currQuestionScore);
+        cv.put(COL_CURR_QUESTION_HINT, currQuestionHint ? 1 : 0);
+        cv.put(COL_CURR_QUESTION_SKIP, currQuestionSkip ? 1 : 0);
         cv.put(COL_NEXT_QUESTION_ID, nextQuestionId);
         cv.put(COL_NEXT_QUESTION_QUESTION, nextQuestionQuestion);
         cv.put(COL_NEXT_QUESTION_ANSWER, nextQuestionAnswer);
         cv.put(COL_NEXT_QUESTION_CATEGORY, nextQuestionCategory);
         cv.put(COL_NEXT_QUESTION_SCORE, nextQuestionScore);
+        cv.put(COL_NEXT_QUESTION_HINT, nextQuestionHint ? 1 : 0);
+        cv.put(COL_NEXT_QUESTION_SKIP, nextQuestionSkip ? 1 : 0);
         cv.put(COL_THIRD_QUESTION_ID, thirdQuestionId);
         cv.put(COL_THIRD_QUESTION_QUESTION, thirdQuestionQuestion);
         cv.put(COL_THIRD_QUESTION_ANSWER, thirdQuestionAnswer);
         cv.put(COL_THIRD_QUESTION_CATEGORY, thirdQuestionCategory);
         cv.put(COL_THIRD_QUESTION_SCORE, thirdQuestionScore);
+        cv.put(COL_THIRD_QUESTION_HINT, thirdQuestionHint ? 1 : 0);
+        cv.put(COL_THIRD_QUESTION_SKIP, thirdQuestionSkip ? 1 : 0);
         return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
                 new String[] {userObject});
     }
@@ -654,6 +507,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
+    public boolean getCurrQuestionHint(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_CURR_QUESTION_HINT}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currHint = false;
+        if (cur.moveToFirst())
+            currHint = cur.getInt(cur.getColumnIndex(COL_CURR_QUESTION_HINT))
+                    == 1;
+        cur.close();
+        return currHint;
+    }
+    
+    public boolean getCurrQuestionSkip(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_CURR_QUESTION_SKIP}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currSkip = false;
+        if (cur.moveToFirst())
+            currSkip = cur.getInt(cur.getColumnIndex(COL_CURR_QUESTION_SKIP))
+                    == 1;
+        cur.close();
+        return currSkip;
+    }
+    
     public String getNextQuestionId(String userObject) {
         Cursor cur = db.query(USER_TABLE, new String[] {COL_NEXT_QUESTION_ID},
                 COL_USER_ID + "=?", new String[] {userObject}, null, null,
@@ -712,6 +589,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cur.getColumnIndex(COL_NEXT_QUESTION_SCORE));
         cur.close();
         return currQuestion;
+    }
+    
+    public boolean getNextQuestionHint(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_NEXT_QUESTION_HINT}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currHint = false;
+        if (cur.moveToFirst())
+            currHint = cur.getInt(cur.getColumnIndex(COL_NEXT_QUESTION_HINT))
+                    == 1;
+        cur.close();
+        return currHint;
+    }
+    
+    public boolean getNextQuestionSkip(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_NEXT_QUESTION_SKIP}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currSkip = false;
+        if (cur.moveToFirst())
+            currSkip = cur.getInt(cur.getColumnIndex(COL_NEXT_QUESTION_SKIP))
+                    == 1;
+        cur.close();
+        return currSkip;
     }
     
     public String getThirdQuestionId(String userObject) {
@@ -774,100 +675,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public long setQuestionHint(String questionId, boolean hint,
-            String userId, boolean skip) {
-        long returnValue = -1;
-        ContentValues cv = new ContentValues();
-        cv.put(COL_QUESTION_HINT, hint ? 1 : 0);
-        if (hasAnswer(questionId, userId))
-            returnValue = updateRecord(cv, ANSWER_TABLE,
-                    COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=?",
-                    new String[] {questionId, userId});
-        else
-            addAnswer(questionId, userId, hint, false, skip);
-        return returnValue;
-    }
-    
-    public long setQuestionSkip(String questionId, boolean hint,
-            String userId, boolean skip) {
-        long returnValue = -1;
-        ContentValues cv = new ContentValues();
-        cv.put(COL_QUESTION_SKIP, skip ? 1 : 0);
-        if (hasAnswer(questionId, userId))
-            returnValue = updateRecord(cv, ANSWER_TABLE,
-                    COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=?",
-                    new String[] {questionId, userId});
-        else
-            addAnswer(questionId, userId, hint, false, skip);
-        return returnValue;
-    }
-    
-    public boolean getQuestionHint(String questionId, String userId) {
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_HINT},
-                COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=?",
-                new String[] {questionId, userId}, null, null, null);
-        int hint = 0;
+    public boolean getThirdQuestionHint(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_THIRD_QUESTION_HINT}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currHint = false;
         if (cur.moveToFirst())
-            hint = cur.getInt(cur.getColumnIndex(COL_QUESTION_HINT));
+            currHint = cur.getInt(cur.getColumnIndex(COL_THIRD_QUESTION_HINT))
+                    == 1;
         cur.close();
-        return hint == 0 ? false : true;
+        return currHint;
     }
     
-    public boolean getQuestionSkip(String questionId, String userId) {
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_SKIP},
-                COL_QUESTION_ID + "=? AND " + COL_QUESTION_USER + "=?",
-                new String[] {questionId, userId}, null, null, null);
-        int hint = 0;
+    public boolean getThirdQuestionSkip(String userObject) {
+        Cursor cur = db.query(USER_TABLE,
+                new String[] {COL_THIRD_QUESTION_SKIP}, COL_USER_ID + "=?",
+                new String[] {userObject}, null, null, null);
+        boolean currSkip = false;
         if (cur.moveToFirst())
-            hint = cur.getInt(cur.getColumnIndex(COL_QUESTION_SKIP));
+            currSkip = cur.getInt(cur.getColumnIndex(COL_THIRD_QUESTION_SKIP))
+                    == 1;
         cur.close();
-        return hint == 0 ? false : true;
-    }
-    
-    public ArrayList<String> getHintQuestions(String userId) {
-        ArrayList<String> hints = new ArrayList<String>();
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_HINT + "=? AND " + COL_QUESTION_USER + "=?",
-                new String[] {"1", userId}, null, null, null);
-        if (cur.moveToFirst()) {
-            do {
-                hints.add(cur.getString(cur.getColumnIndex(COL_QUESTION_ID)));
-            } while (cur.moveToNext());
-        }
-        cur.close();
-        return hints;
-    }
-    
-    public ArrayList<String> getSkipQuestions(String userId) {
-        ArrayList<String> skips = new ArrayList<String>();
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                COL_QUESTION_SKIP + "=? AND " + COL_QUESTION_USER + "=?",
-                new String[] {"1", userId}, null, null, null);
-        if (cur.moveToFirst()) {
-            do {
-                skips.add(cur.getString(cur.getColumnIndex(COL_QUESTION_ID)));
-            } while (cur.moveToNext());
-        }
-        cur.close();
-        return skips;
-    }
-    
-    public int getHintCount(String userId) {
-        Cursor cur = db.query(ANSWER_TABLE, new String[] {COL_QUESTION_ID},
-                    COL_QUESTION_USER + "=? AND " + COL_QUESTION_CORRECT +
-                    "=? AND " + COL_QUESTION_HINT + "=?",
-                    new String[] {userId, "1", "1"}, null, null, null);
-        int count = cur.getCount();
-        cur.close();
-        return count;
-    }
-    
-    public int getAccountCount() {
-        Cursor cur = db.query(USER_TABLE, new String[] {COL_USER_ID}, null,
-                null, null, null, null);
-        int count = cur.getCount();
-        cur.close();
-        return count;
+        return currSkip;
     }
     
     public long setCurrBackground(String userId, String currBackground) {
@@ -895,6 +724,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> colList = Arrays.asList(colArray);
         cur.close();
         String sqlString;
+        if (!colList.contains(COL_CURR_QUESTION_HINT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_CURR_QUESTION_HINT + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_NEXT_QUESTION_HINT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_NEXT_QUESTION_HINT + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_THIRD_QUESTION_HINT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_THIRD_QUESTION_HINT + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_THIRD_QUESTION_ID)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_THIRD_QUESTION_ID + " TEXT";
@@ -1159,6 +1015,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!colList.contains(COL_CREATED_DATE)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_CREATED_DATE
                     + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_SKIP_VIS)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_SKIP_VIS
+                    + " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {

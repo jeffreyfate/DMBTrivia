@@ -17,7 +17,7 @@
         android:paddingBottom="5dip"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
-        android:text="@string/NoConnection"
+        android:text="@string/NoService"
         android:layout_centerInParent="true"
         android:background="@drawable/background_text"
         android:textStyle="bold"

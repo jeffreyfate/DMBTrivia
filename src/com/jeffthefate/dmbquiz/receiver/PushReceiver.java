@@ -1,7 +1,5 @@
 package com.jeffthefate.dmbquiz.receiver;
 
-import java.util.Map;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,15 +11,11 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
 
 public class PushReceiver extends BroadcastReceiver {
     
@@ -41,51 +35,31 @@ public class PushReceiver extends BroadcastReceiver {
                 ApplicationEx.getApp());
         String action = intent.getAction();
         if (action.equals(Constants.ACTION_NEW_QUESTIONS)) {
-            ParseCloud.callFunctionInBackground("getQuestionCount", null,
-                    new FunctionCallback<Map<String, Object>>() {
-                @Override
-                public void done(Map<String, Object> count, ParseException e) {
-                    if (e == null) {
-                        ApplicationEx.setQuestionCount(
-                                Integer.parseInt(count.get("total")
-                                        .toString()));
-                        if (!ApplicationEx.isActive() && sharedPrefs.getBoolean(
-                                ApplicationEx.getApp().getString(
-                                        R.string.notification_key), true)) {
-                            // Show notification that starts app
-                            Intent notificationIntent = new Intent(
-                                    ApplicationEx.getApp(), ActivityMain.class);
-                            notificationIntent.setFlags(
-                                    Intent.FLAG_ACTIVITY_CLEAR_TOP | 
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            PendingIntent pendingIntent =
-                                    PendingIntent.getActivity(
-                                        ApplicationEx.getApp(), 0, 
-                                        notificationIntent,
-                                        Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                            nBuilder = new NotificationCompat.Builder(
-                                    ApplicationEx.getApp());
-                            nBuilder.
-                                setLargeIcon(BitmapFactory.decodeResource(res,
-                                        R.drawable.notification_large)).
-                                setSmallIcon(R.drawable.notification_large).
-                                setWhen(System.currentTimeMillis()).
-                                setContentTitle("New questions added").
-                                setContentText("Tap to play DMB Trivia").
-                                setContentIntent(pendingIntent);
-                            nManager.cancel(
-                                    Constants.NOTIFICATION_NEW_QUESTIONS);
-                            notification = nBuilder.build();
-                            nManager.notify(null,
-                                    Constants.NOTIFICATION_NEW_QUESTIONS,
-                                    notification);
-                        }
-                    }
-                    else
-                        Log.e(Constants.LOG_TAG, "Error getting question count: " +
-                                e.getMessage());
-                }
-            });
+            if (!ApplicationEx.isActive() && sharedPrefs.getBoolean(
+                    ApplicationEx.getApp().getString(R.string.notification_key),
+                    true)) {
+                // Show notification that starts app
+                Intent notificationIntent = new Intent(
+                        ApplicationEx.getApp(), ActivityMain.class);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | 
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                            ApplicationEx.getApp(), 0, notificationIntent,
+                            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                nBuilder = new NotificationCompat.Builder(
+                        ApplicationEx.getApp());
+                nBuilder. setLargeIcon(BitmapFactory.decodeResource(res,
+                            R.drawable.notification_large)).
+                    setSmallIcon(R.drawable.notification_large).
+                    setWhen(System.currentTimeMillis()).
+                    setContentTitle("New questions added").
+                    setContentText("Tap to play DMB Trivia").
+                    setContentIntent(pendingIntent);
+                nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
+                notification = nBuilder.build();
+                nManager.notify(null, Constants.NOTIFICATION_NEW_QUESTIONS,
+                        notification);
+            }
         }
     }
 }

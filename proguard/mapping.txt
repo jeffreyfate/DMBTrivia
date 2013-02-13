@@ -27,7 +27,7 @@ android.support.v4.app.ActivityCompatHoneycomb -> a:
     7:10:void notNull(java.lang.Object,java.lang.String) -> a
     28:30:void notEmptyAndContainsNoNulls(java.util.Collection,java.lang.String) -> a
     33:36:void notNullOrEmpty(java.lang.String,java.lang.String) -> a
-    93:103:void callFunctionInBackground(java.lang.String,java.util.Map,com.parse.FunctionCallback) -> a
+    90:100:void callFunctionInBackground(java.lang.String,java.util.Map,com.parse.FunctionCallback) -> a
     153:159:byte[] getBytesUnchecked(java.lang.String,java.lang.String) -> b
     164:164:java.lang.IllegalStateException newIllegalStateException(java.lang.String,java.io.UnsupportedEncodingException) -> a
     187:193:java.lang.String newString(byte[],java.lang.String) -> a
@@ -428,9 +428,12 @@ android.support.v4.app.FragmentTabHost$TabInfo -> z:
     java.lang.Class clss -> b
     android.os.Bundle args -> c
     android.support.v4.app.Fragment fragment -> d
-    com.parse.auth.FacebookAuthenticationProvider provider -> e
-    boolean isInitialized -> f
+    com.parse.facebook.Facebook facebook -> e
+    com.parse.auth.FacebookAuthenticationProvider provider -> f
+    boolean isInitialized -> g
     737:738:void notify(int) -> a
+    33:36:com.parse.facebook.Facebook getFacebook() -> a
+    40:43:com.parse.auth.FacebookAuthenticationProvider getAuthenticationProvider() -> b
 android.support.v4.app.FragmentTransaction -> A:
     android.support.v4.app.FragmentTransaction add(android.support.v4.app.Fragment,java.lang.String) -> a
     android.support.v4.app.FragmentTransaction add(int,android.support.v4.app.Fragment,java.lang.String) -> a
@@ -1411,20 +1414,18 @@ com.facebook.Request -> bZ:
     209:211:com.facebook.Request newPostRequest(com.facebook.Session,java.lang.String,com.facebook.GraphObject,com.facebook.Request$Callback) -> a
     244:252:com.facebook.Request newMeRequest(com.facebook.Session,com.facebook.Request$GraphUserCallback) -> a
     324:324:com.facebook.Request newGraphPathRequest(com.facebook.Session,java.lang.String,com.facebook.Request$Callback) -> a
-    457:457:android.os.Bundle getParameters() -> a
     467:468:void setParameters(android.os.Bundle) -> a
-    495:495:com.facebook.Session getSession() -> b
-    799:799:com.facebook.Response executeAndWait() -> c
-    812:812:com.facebook.RequestAsyncTask executeAsync() -> d
+    495:495:com.facebook.Session getSession() -> a
+    799:799:com.facebook.Response executeAndWait() -> b
     869:899:java.net.HttpURLConnection toHttpConnection(com.facebook.RequestBatch) -> b
     982:994:java.util.List executeBatchAndWait(com.facebook.RequestBatch) -> a
     1012:1014:com.facebook.RequestAsyncTask executeBatchAsync(com.facebook.Request[]) -> a
     1094:1118:java.util.List executeConnectionAndWait(java.net.HttpURLConnection,com.facebook.RequestBatch) -> a
     1175:1175:java.lang.String toString() -> toString
     1182:1211:void runCallbacks(com.facebook.RequestBatch,java.util.List) -> a
-    1226:1233:void addCommonParameters() -> e
+    1226:1233:void addCommonParameters() -> c
     1236:1253:java.lang.String appendParametersToBaseUrl(java.lang.String) -> a
-    1257:1266:java.lang.String getUrlStringForBatchedRequest() -> f
+    1257:1266:java.lang.String getUrlStringForBatchedRequest() -> d
     1282:1332:void serializeToBatch(org.json.JSONArray,android.os.Bundle) -> a
     1418:1430:void processGraphObject(com.facebook.GraphObject,java.lang.String,com.facebook.Request$KeyValueSerializer) -> a
     1434:1483:void processGraphObjectProperty(java.lang.String,java.lang.Object,com.facebook.Request$KeyValueSerializer,boolean) -> a
@@ -1432,24 +1433,22 @@ com.facebook.Request -> bZ:
     1497:1505:void serializeAttachments(android.os.Bundle,com.facebook.Request$Serializer) -> b
     1509:1516:void serializeRequestsAsJSON(com.facebook.Request$Serializer,java.util.Collection,android.os.Bundle) -> a
     1533:1539:java.lang.String getBatchAppId(java.util.Collection) -> a
-com.facebook.Request$1 -> ca:
-    com.facebook.Request$GraphUserCallback val$callback -> a
-    247:250:void onCompleted(com.facebook.Response) -> a
-com.facebook.Request$4 -> cb:
+com.facebook.Request$4 -> ca:
     java.util.ArrayList val$callbacks -> a
     1196:1199:void run() -> run
-com.facebook.Request$5 -> cc:
+com.facebook.Request$5 -> cb:
     java.util.ArrayList val$keysAndValues -> a
     1324:1325:void writeString(java.lang.String,java.lang.String) -> a
-com.facebook.Request$Callback -> cd:
-    void onCompleted(com.facebook.Response) -> a
-com.facebook.Request$GraphUserCallback -> ce:
+com.facebook.Request$Callback -> cc:
+    com.facebook.Request$GraphUserCallback val$callback -> a
+    247:250:void onCompleted(com.facebook.Response) -> a
+com.facebook.Request$GraphUserCallback -> cd:
     com.facebook.LoginButton this$0 -> a
     com.facebook.Session val$currentSession -> b
     420:429:void onCompleted(com.facebook.GraphUser,com.facebook.Response) -> a
-com.facebook.Request$KeyValueSerializer -> cf:
+com.facebook.Request$KeyValueSerializer -> ce:
     void writeString(java.lang.String,java.lang.String) -> a
-com.facebook.Request$Serializer -> cg:
+com.facebook.Request$Serializer -> cf:
     java.io.BufferedOutputStream outputStream -> a
     com.facebook.Logger logger -> b
     boolean firstWrite -> c
@@ -1461,7 +1460,7 @@ com.facebook.Request$Serializer -> cg:
     1656:1664:void write(java.lang.String,java.lang.Object[]) -> a
     1667:1669:void writeLine(java.lang.String,java.lang.Object[]) -> b
     1672:1672:boolean isSupportedAttachmentType(java.lang.Object) -> a
-com.facebook.RequestAsyncTask -> ch:
+com.facebook.RequestAsyncTask -> cg:
     java.lang.String TAG -> a
     java.net.HttpURLConnection connection -> b
     com.facebook.RequestBatch requests -> c
@@ -1471,7 +1470,7 @@ com.facebook.RequestAsyncTask -> ch:
     143:150:java.util.List doInBackground$68cf9880() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.facebook.RequestBatch -> ci:
+com.facebook.RequestBatch -> ch:
     java.util.concurrent.atomic.AtomicInteger idGenerator -> a
     android.os.Handler callbackHandler -> b
     java.util.ArrayList requests -> c
@@ -1492,7 +1491,7 @@ com.facebook.RequestBatch -> ci:
     1:1:boolean add(java.lang.Object) -> add
     1:1:java.lang.Object set(int,java.lang.Object) -> set
     1:1:java.lang.Object remove(int) -> remove
-com.facebook.Response -> cj:
+com.facebook.Response -> ci:
     java.net.HttpURLConnection connection -> a
     com.facebook.GraphObject graphObject -> b
     boolean isFromCache -> c
@@ -1508,10 +1507,10 @@ com.facebook.Response -> cj:
     274:321:java.util.List createResponsesFromObject(java.net.HttpURLConnection,java.util.List,java.lang.Object,boolean) -> a
     359:402:com.facebook.FacebookServiceErrorException checkResponseAndCreateException(org.json.JSONObject) -> a
     407:413:java.util.List constructErrorResponses(java.util.List,java.net.HttpURLConnection,com.facebook.FacebookException) -> a
-com.facebook.ServerProtocol -> ck:
+com.facebook.ServerProtocol -> cj:
     java.util.Collection errorsProxyAuthDisabled -> a
     java.util.Collection errorsUserCanceled -> b
-com.facebook.Session -> cl:
+com.facebook.Session -> ck:
     java.lang.String TAG -> a
     java.lang.Object staticLock -> b
     com.facebook.Session activeSession -> c
@@ -1535,21 +1534,21 @@ com.facebook.Session -> cl:
     302:302:com.facebook.SessionState getState() -> b
     313:313:java.lang.String getApplicationId() -> c
     322:322:java.lang.String getAccessToken() -> d
-    339:339:java.util.Date getExpirationDate() -> e
-    358:358:java.util.List getPermissions() -> f
+    339:339:java.util.Date getExpirationDate() -> m
+    358:358:java.util.List getPermissions() -> e
     393:394:void openForRead(com.facebook.Session$OpenRequest) -> a
     426:427:void openForPublish(com.facebook.Session$OpenRequest) -> b
-    496:499:void open() -> g
+    496:499:void open() -> f
     570:635:boolean onActivityResult(android.app.Activity,int,int,android.content.Intent) -> a
-    644:644:void close() -> h
-    670:675:void closeAndClearTokenInformation() -> i
+    644:644:void close() -> n
+    670:675:void closeAndClearTokenInformation() -> g
     679:679:java.lang.String toString() -> toString
     700:700:void internalRefreshToken(android.os.Bundle) -> a
     739:749:void saveSession(com.facebook.Session,android.os.Bundle) -> a
     769:794:com.facebook.Session restoreSession(android.content.Context,com.facebook.TokenCache,com.facebook.Session$StatusCallback,android.os.Bundle) -> a
-    804:804:com.facebook.Session getActiveSession() -> j
+    804:804:com.facebook.Session getActiveSession() -> h
     826:826:void setActiveSession(com.facebook.Session) -> a
-    974:974:android.content.Context getStaticContext() -> k
+    974:974:android.content.Context getStaticContext() -> i
     978:982:void initializeStaticContext(android.content.Context) -> b
     985:1011:void authorize(com.facebook.Session$AuthorizationRequest) -> a
     1014:1014:void addCallback(com.facebook.Session$StatusCallback) -> a
@@ -1562,14 +1561,14 @@ com.facebook.Session -> cl:
     1306:1336:void postStateChange(com.facebook.SessionState,com.facebook.SessionState,java.lang.Exception) -> a
     1339:1342:void postActiveSessionAction(java.lang.String) -> b
     1345:1350:void runWithHandlerOrExecutor(android.os.Handler,java.lang.Runnable) -> b
-    1353:1356:void extendAccessTokenIfNeeded() -> l
-    1391:1391:com.facebook.AccessToken getTokenInfo() -> m
+    1353:1356:void extendAccessTokenIfNeeded() -> j
+    1391:1391:com.facebook.AccessToken getTokenInfo() -> k
     1403:1404:void setLastAttemptedTokenExtendDate(java.util.Date) -> a
     1412:1421:java.lang.String getMetadataApplicationId(android.content.Context) -> a
     1528:1528:int hashCode() -> hashCode
     1533:1538:boolean equals(java.lang.Object) -> equals
     1545:1548:boolean areEqual(java.lang.Object,java.lang.Object) -> a
-    125:125:android.content.Context access$1() -> n
+    125:125:android.content.Context access$1() -> l
     1252:1252:boolean access$2(com.facebook.Session,java.lang.String) -> a
     159:159:com.facebook.Session$TokenRefreshRequest access$3(com.facebook.Session) -> b
     159:159:void access$4(com.facebook.Session,com.facebook.Session$TokenRefreshRequest) -> a
@@ -1579,82 +1578,71 @@ com.facebook.Session -> cl:
     153:153:java.util.List access$8(com.facebook.Session) -> c
     154:154:android.os.Handler access$9(com.facebook.Session) -> d
     1344:1344:void access$10(android.os.Handler,java.lang.Runnable) -> a
-com.facebook.Session$1 -> cm:
-com.facebook.Session$2 -> cn:
+com.facebook.Session$1 -> cl:
+com.facebook.Session$2 -> cm:
     com.facebook.Session this$0 -> a
     com.facebook.Session$AuthorizationRequest val$request -> b
     1207:1211:void onComplete(android.os.Bundle) -> a
     1214:1221:void onError(com.facebook.android.DialogError) -> a
     1224:1226:void onFacebookError(com.facebook.android.FacebookError) -> a
     1229:1231:void onCancel() -> a
-com.facebook.Session$3 -> co:
+com.facebook.Session$3 -> cn:
     com.facebook.Session this$0 -> a
     com.facebook.SessionState val$newState -> b
     java.lang.Exception val$exception -> c
     1312:1322:void run() -> run
-com.facebook.Session$3$1 -> cp:
+com.facebook.Session$3$1 -> co:
     com.facebook.Session$3 this$1 -> a
     com.facebook.Session$StatusCallback val$callback -> b
     com.facebook.SessionState val$newState -> c
     java.lang.Exception val$exception -> d
     1316:1317:void run() -> run
-com.facebook.Session$AuthorizationRequest -> cq:
+com.facebook.Session$AuthorizationRequest -> cp:
     com.facebook.Session$StartActivityDelegate startActivityDelegate -> a
     com.facebook.SessionLoginBehavior loginBehavior -> b
     int requestCode -> c
-    com.facebook.Session$StatusCallback statusCallback -> d
     boolean suppressLoginActivityVerification -> e
-    java.util.List permissions -> f
-    int[] $SWITCH_TABLE$com$facebook$SessionLoginBehavior -> g
-    1737:1738:void suppressLoginActivityVerification(boolean) -> a
-    1741:1742:com.facebook.Session$AuthorizationRequest setCallback(com.facebook.Session$StatusCallback) -> a
+    java.util.List permissions -> d
+    int[] $SWITCH_TABLE$com$facebook$SessionLoginBehavior -> f
     1750:1753:com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior) -> a
-    1761:1764:com.facebook.Session$AuthorizationRequest setRequestCode(int) -> a
     1772:1775:com.facebook.Session$AuthorizationRequest setPermissions(java.util.List) -> a
     1779:1779:java.util.List getPermissions() -> a
     1668:1668:int[] $SWITCH_TABLE$com$facebook$SessionLoginBehavior() -> b
-com.facebook.Session$AuthorizationRequest$1 -> cr:
+com.facebook.Session$AuthorizationRequest$1 -> cq:
     android.app.Activity val$activity -> a
     1683:1684:void startActivityForResult(android.content.Intent,int) -> a
     1688:1688:android.app.Activity getActivityContext() -> a
-com.facebook.Session$AuthorizationRequest$2 -> cs:
+com.facebook.Session$AuthorizationRequest$2 -> cr:
     android.support.v4.app.Fragment val$fragment -> a
     1697:1698:void startActivityForResult(android.content.Intent,int) -> a
     1702:1702:android.app.Activity getActivityContext() -> a
-com.facebook.Session$AuthorizationType -> ct:
+com.facebook.Session$AuthorizationType -> cs:
     com.facebook.Session$AuthorizationType READ -> a
     com.facebook.Session$AuthorizationType PUBLISH -> b
     com.facebook.Session$AuthorizationType[] ENUM$VALUES -> c
     1:1:com.facebook.Session$AuthorizationType[] values() -> values
     1:1:com.facebook.Session$AuthorizationType valueOf(java.lang.String) -> valueOf
-com.facebook.Session$AutoPublishAsyncTask -> cu:
+com.facebook.Session$AutoPublishAsyncTask -> ct:
     java.lang.String mApplicationId -> a
     android.content.Context mApplicationContext -> b
     com.facebook.Session this$0 -> c
     1652:1656:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.facebook.Session$Builder -> cv:
-    android.content.Context context -> c
-    java.lang.String applicationId -> a
-    com.facebook.TokenCache tokenCache -> b
-    boolean shouldAutoPublishInstall -> d
-    1577:1578:com.facebook.Session$Builder setApplicationId(java.lang.String) -> a
-    1603:1603:com.facebook.Session build() -> a
-com.facebook.Session$OpenRequest -> cw:
-    1869:1870:com.facebook.Session$OpenRequest setCallback(com.facebook.Session$StatusCallback) -> b
-    1898:1899:com.facebook.Session$OpenRequest setRequestCode(int) -> b
+com.facebook.Session$Builder -> cu:
+    android.content.Context context -> a
+    java.lang.String applicationId -> b
+    boolean shouldAutoPublishInstall -> c
+com.facebook.Session$OpenRequest -> cv:
     1912:1913:com.facebook.Session$OpenRequest setPermissions(java.util.List) -> b
     1:1:com.facebook.Session$AuthorizationRequest setPermissions(java.util.List) -> a
-    1:1:com.facebook.Session$AuthorizationRequest setRequestCode(int) -> a
-    1:1:com.facebook.Session$AuthorizationRequest setCallback(com.facebook.Session$StatusCallback) -> a
     1:1:com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior) -> a
-com.facebook.Session$StartActivityDelegate -> cx:
+com.facebook.Session$StartActivityDelegate -> cw:
     void startActivityForResult(android.content.Intent,int) -> a
     android.app.Activity getActivityContext() -> a
-com.facebook.Session$StatusCallback -> cy:
+com.facebook.Session$StatusCallback -> cx:
     void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
-com.facebook.Session$TokenRefreshRequest -> cz:
+com.facebook.Session$TokenRefreshRequest -> cy:
     android.os.Messenger messageReceiver -> a
     android.os.Messenger messageSender -> b
     com.facebook.Session this$0 -> c
@@ -1663,18 +1651,18 @@ com.facebook.Session$TokenRefreshRequest -> cz:
     1452:1457:void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
     1460:1463:void cleanup() -> b
     1459:1459:void access$0(com.facebook.Session$TokenRefreshRequest) -> a
-com.facebook.Session$TokenRefreshRequestHandler -> cA:
+com.facebook.Session$TokenRefreshRequestHandler -> cz:
     java.lang.ref.WeakReference sessionWeakReference -> a
     java.lang.ref.WeakReference refreshRequestWeakReference -> b
     1500:1514:void handleMessage(android.os.Message) -> handleMessage
-com.facebook.SessionLoginBehavior -> cB:
+com.facebook.SessionLoginBehavior -> cA:
     com.facebook.SessionLoginBehavior SSO_WITH_FALLBACK -> a
     com.facebook.SessionLoginBehavior SSO_ONLY -> b
     com.facebook.SessionLoginBehavior SUPPRESS_SSO -> c
     com.facebook.SessionLoginBehavior[] ENUM$VALUES -> d
     1:1:com.facebook.SessionLoginBehavior[] values() -> values
     1:1:com.facebook.SessionLoginBehavior valueOf(java.lang.String) -> valueOf
-com.facebook.SessionState -> cC:
+com.facebook.SessionState -> cB:
     com.facebook.SessionState CREATED -> a
     com.facebook.SessionState CREATED_TOKEN_LOADED -> b
     com.facebook.SessionState OPENING -> c
@@ -1688,14 +1676,14 @@ com.facebook.SessionState -> cC:
     111:111:boolean isClosed() -> b
     1:1:com.facebook.SessionState[] values() -> values
     1:1:com.facebook.SessionState valueOf(java.lang.String) -> valueOf
-com.facebook.SessionState$Category -> cD:
+com.facebook.SessionState$Category -> cC:
     com.facebook.SessionState$Category CREATED_CATEGORY -> a
     com.facebook.SessionState$Category OPENED_CATEGORY -> b
     com.facebook.SessionState$Category CLOSED_CATEGORY -> c
     com.facebook.SessionState$Category[] ENUM$VALUES -> d
     1:1:com.facebook.SessionState$Category[] values() -> values
     1:1:com.facebook.SessionState$Category valueOf(java.lang.String) -> valueOf
-com.facebook.SessionTracker -> cE:
+com.facebook.SessionTracker -> cD:
     com.facebook.Session session -> a
     com.facebook.Session$StatusCallback callback -> b
     android.content.BroadcastReceiver receiver -> d
@@ -1707,14 +1695,14 @@ com.facebook.SessionTracker -> cE:
     144:155:void startTracking() -> c
     162:171:void stopTracking() -> d
     192:199:void addBroadcastReceiver() -> e
-com.facebook.SessionTracker$ActiveSessionBroadcastReceiver -> cF:
+com.facebook.SessionTracker$ActiveSessionBroadcastReceiver -> cE:
     com.facebook.SessionTracker this$0 -> a
     208:214:void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.facebook.SessionTracker$CallbackWrapper -> cG:
+com.facebook.SessionTracker$CallbackWrapper -> cF:
     com.facebook.Session$StatusCallback wrapped -> a
     com.facebook.SessionTracker this$0 -> b
     226:234:void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
-com.facebook.Settings -> cH:
+com.facebook.Settings -> cG:
     java.util.HashSet loggingBehaviors -> a
     java.util.concurrent.Executor executor -> b
     java.lang.Object LOCK -> c
@@ -1725,10 +1713,10 @@ com.facebook.Settings -> cH:
     152:162:java.util.concurrent.Executor getExecutor() -> a
     179:205:java.util.concurrent.Executor getAsyncTaskExecutor() -> b
     217:259:boolean publishInstall(android.content.Context,java.lang.String) -> a
-com.facebook.Settings$1 -> cI:
+com.facebook.Settings$1 -> cH:
     java.util.concurrent.atomic.AtomicInteger counter -> a
     66:66:java.lang.Thread newThread(java.lang.Runnable) -> newThread
-com.facebook.SharedPreferencesTokenCache -> cJ:
+com.facebook.SharedPreferencesTokenCache -> cI:
     java.lang.String TAG -> a
     java.lang.String cacheKey -> b
     android.content.SharedPreferences cache -> c
@@ -1736,63 +1724,31 @@ com.facebook.SharedPreferencesTokenCache -> cJ:
     145:165:void save(android.os.Bundle) -> a
     171:172:void clear() -> b
     286:381:void deserializeKey(java.lang.String,android.os.Bundle) -> a
-com.facebook.TokenCache -> cK:
+com.facebook.TokenCache -> cJ:
     android.os.Bundle load() -> a
     void save(android.os.Bundle) -> a
     void clear() -> b
     363:372:java.util.Date getDate(android.os.Bundle,java.lang.String) -> a
     376:377:void putDate(android.os.Bundle,java.lang.String,java.util.Date) -> a
-com.facebook.Utility$JSONObjectEntry -> cL:
+com.facebook.Utility$JSONObjectEntry -> cK:
     java.lang.String key -> a
     java.lang.Object value -> b
     197:197:java.lang.Object getValue() -> getValue
     202:202:java.lang.Object setValue(java.lang.Object) -> setValue
     1:1:java.lang.Object getKey() -> getKey
-com.facebook.android.DialogError -> cM:
+com.facebook.android.DialogError -> cL:
     int mErrorCode -> a
     java.lang.String mFailingUrl -> b
     44:44:int getErrorCode() -> a
     48:48:java.lang.String getFailingUrl() -> b
-com.facebook.android.Facebook -> cN:
-    java.lang.String GRAPH_BASE_URL -> a
-    java.lang.String RESTSERVER_URL -> b
-    java.lang.Object lock -> c
-    java.lang.String accessToken -> d
-    long accessExpiresMillisecondsAfterEpoch -> e
-    long lastAccessUpdateMillisecondsAfterEpoch -> f
-    java.lang.String mAppId -> g
-    java.lang.String[] pendingAuthorizationPermissions -> h
-    com.facebook.Session session -> i
-    boolean sessionInvalidated -> j
-    com.facebook.android.Facebook$SetterTokenCache tokenCache -> k
-    717:717:java.lang.String request(java.lang.String) -> a
-    895:953:com.facebook.Session getSession() -> a
-    967:971:java.lang.String getAccessToken() -> b
-    982:986:long getAccessExpires() -> c
-    1031:1032:void setAccessToken(java.lang.String) -> b
-    1050:1051:void setAccessExpires(long) -> a
-    78:78:java.lang.String access$0(com.facebook.android.Facebook) -> a
-    79:79:long access$2(com.facebook.android.Facebook) -> b
-    84:84:java.lang.String[] access$3(com.facebook.android.Facebook) -> c
-    1122:1122:java.util.List access$4(java.lang.String[]) -> a
-    80:80:long access$5(com.facebook.android.Facebook) -> d
-    78:78:void access$6(com.facebook.android.Facebook,java.lang.String) -> a
-    79:79:void access$7(com.facebook.android.Facebook,long) -> a
-    1110:1110:java.lang.String[] access$8(java.util.List) -> a
-    84:84:void access$9(com.facebook.android.Facebook,java.lang.String[]) -> a
-    80:80:void access$10(com.facebook.android.Facebook,long) -> b
-com.facebook.android.Facebook$DialogListener -> cO:
+com.facebook.android.Facebook -> cM:
+com.facebook.android.Facebook$DialogListener -> cN:
     void onComplete(android.os.Bundle) -> a
     void onFacebookError(com.facebook.android.FacebookError) -> a
     void onError(com.facebook.android.DialogError) -> a
     void onCancel() -> a
-com.facebook.android.Facebook$SetterTokenCache -> cP:
-    com.facebook.android.Facebook this$0 -> a
-    1134:1144:android.os.Bundle load() -> a
-    1149:1153:void save(android.os.Bundle) -> a
-    1157:1158:void clear() -> b
-com.facebook.android.FacebookError -> cQ:
-com.facebook.android.FbDialog -> cR:
+com.facebook.android.FacebookError -> cO:
+com.facebook.android.FbDialog -> cP:
     android.widget.FrameLayout$LayoutParams FILL -> a
     java.lang.String mUrl -> b
     com.facebook.android.Facebook$DialogListener mListener -> c
@@ -1807,23 +1763,23 @@ com.facebook.android.FbDialog -> cR:
     60:60:android.widget.FrameLayout access$2(com.facebook.android.FbDialog) -> c
     59:59:android.webkit.WebView access$3(com.facebook.android.FbDialog) -> d
     58:58:android.widget.ImageView access$4(com.facebook.android.FbDialog) -> e
-com.facebook.android.FbDialog$1 -> cS:
+com.facebook.android.FbDialog$1 -> cQ:
     com.facebook.android.FbDialog this$0 -> a
     86:87:void onCancel(android.content.DialogInterface) -> onCancel
-com.facebook.android.FbDialog$2 -> cT:
+com.facebook.android.FbDialog$2 -> cR:
     com.facebook.android.FbDialog this$0 -> a
     96:98:void onCancel(android.content.DialogInterface) -> onCancel
-com.facebook.android.FbDialog$3 -> cU:
+com.facebook.android.FbDialog$3 -> cS:
     com.facebook.android.FbDialog this$0 -> a
     129:131:void onClick(android.view.View) -> onClick
-com.facebook.android.FbDialog$FbWebViewClient -> cV:
+com.facebook.android.FbDialog$FbWebViewClient -> cT:
     com.facebook.android.FbDialog this$0 -> a
     163:193:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
     199:203:void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
     207:212:void onReceivedSslError(android.webkit.WebView,android.webkit.SslErrorHandler,android.net.http.SslError) -> onReceivedSslError
     216:219:void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
     223:232:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
-com.facebook.android.FbDialog$SingleDispatchDialogListener -> cW:
+com.facebook.android.FbDialog$SingleDispatchDialogListener -> cU:
     com.facebook.android.Facebook$DialogListener wrapped -> a
     boolean allowDispatch -> b
     252:255:void onComplete(android.os.Bundle) -> a
@@ -1831,14 +1787,10 @@ com.facebook.android.FbDialog$SingleDispatchDialogListener -> cW:
     266:269:void onError(com.facebook.android.DialogError) -> a
     273:276:void onCancel() -> a
     279:283:boolean checkAndSetDispatch(boolean) -> a
-com.facebook.android.Util -> cX:
+com.facebook.android.Util -> cV:
     boolean ENABLE_LOG -> a
-    54:68:java.lang.String encodePostBody(android.os.Bundle,java.lang.String) -> a
-    72:88:java.lang.String encodeUrl(android.os.Bundle) -> a
     92:110:android.os.Bundle decodeUrl(java.lang.String) -> c
     121:128:android.os.Bundle parseUrl(java.lang.String) -> a
-    149:216:java.lang.String openUrl(java.lang.String,java.lang.String,android.os.Bundle) -> a
-    220:226:java.lang.String read(java.io.InputStream) -> a
     250:279:org.json.JSONObject parseJson(java.lang.String) -> b
     308:308:void logd(java.lang.String,java.lang.String) -> a
 com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
@@ -1861,15 +1813,15 @@ com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
     173:173:int getQuestionCount() -> f
     177:178:void setQuestionCount(int) -> a
     32:32:android.content.Context access$0() -> g
-com.jeffthefate.dmbquiz.ApplicationEx$1 -> cY:
+com.jeffthefate.dmbquiz.ApplicationEx$1 -> cW:
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.ApplicationEx$2 -> cZ:
+com.jeffthefate.dmbquiz.ApplicationEx$2 -> cX:
     118:120:void done(com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.Constants -> da:
+com.jeffthefate.dmbquiz.Constants -> cY:
     java.lang.String SCREENS_LOCATION -> a
 com.jeffthefate.dmbquiz.CustomWebView -> com.jeffthefate.dmbquiz.CustomWebView:
     27:31:void onWindowFocusChanged(boolean) -> onWindowFocusChanged
-com.jeffthefate.dmbquiz.DatabaseHelper -> db:
+com.jeffthefate.dmbquiz.DatabaseHelper -> cZ:
     android.database.sqlite.SQLiteDatabase db -> a
     com.jeffthefate.dmbquiz.DatabaseHelper instance -> b
     157:159:com.jeffthefate.dmbquiz.DatabaseHelper getInstance() -> a
@@ -1929,7 +1881,7 @@ com.jeffthefate.dmbquiz.DatabaseHelper -> db:
     874:879:long setCurrBackground(java.lang.String,java.lang.String) -> h
     883:889:java.lang.String getCurrBackground(java.lang.String) -> x
     893:1186:void checkUpgrade() -> i
-com.jeffthefate.dmbquiz.LeaderAdapter -> dc:
+com.jeffthefate.dmbquiz.LeaderAdapter -> da:
     android.content.Context mContext -> a
     java.lang.String userId -> b
     java.util.ArrayList rankList -> c
@@ -1940,11 +1892,11 @@ com.jeffthefate.dmbquiz.LeaderAdapter -> dc:
     50:52:java.lang.Object getItem(int) -> getItem
     57:59:long getItemId(int) -> getItemId
     65:91:android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-com.jeffthefate.dmbquiz.LeaderAdapter$ViewHolder -> dd:
+com.jeffthefate.dmbquiz.LeaderAdapter$ViewHolder -> db:
     android.widget.TextView rank -> a
     android.widget.TextView text1 -> b
     android.widget.TextView text2 -> c
-com.jeffthefate.dmbquiz.R$drawable -> de:
+com.jeffthefate.dmbquiz.R$drawable -> dc:
     int background_text -> background_text
     int button -> button
     int button_default -> button_default
@@ -1983,7 +1935,7 @@ com.jeffthefate.dmbquiz.R$drawable -> de:
     int splash9 -> splash9
     int title -> title
     int wrong -> wrong
-com.jeffthefate.dmbquiz.R$raw -> df:
+com.jeffthefate.dmbquiz.R$raw -> dd:
     int correct1 -> correct1
     int correct10 -> correct10
     int correct11 -> correct11
@@ -2148,13 +2100,13 @@ com.jeffthefate.dmbquiz.ScrollTextView -> com.jeffthefate.dmbquiz.ScrollTextView
     136:143:void computeScroll() -> computeScroll
     146:146:int getRndDuration() -> getRndDuration
     150:151:void setRndDuration(int) -> setRndDuration
-com.jeffthefate.dmbquiz.VersionedActionBar -> dg:
+com.jeffthefate.dmbquiz.VersionedActionBar -> de:
     com.jeffthefate.dmbquiz.VersionedActionBar create(android.app.Activity) -> a
     void setDisplayHome() -> a
-com.jeffthefate.dmbquiz.VersionedActionBar$GingerbreadActionBar -> dh:
+com.jeffthefate.dmbquiz.VersionedActionBar$GingerbreadActionBar -> df:
     28:28:com.jeffthefate.dmbquiz.VersionedActionBar create(android.app.Activity) -> a
     32:32:void setDisplayHome() -> a
-com.jeffthefate.dmbquiz.VersionedActionBar$HoneycombActionBar -> di:
+com.jeffthefate.dmbquiz.VersionedActionBar$HoneycombActionBar -> dg:
     android.app.ActionBar actionBar -> a
     42:43:com.jeffthefate.dmbquiz.VersionedActionBar create(android.app.Activity) -> a
     54:56:void setDisplayHome() -> a
@@ -2225,55 +2177,55 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     531:545:void onStatsPressed() -> f
     549:571:void onLoginPressed(int,java.lang.String,java.lang.String) -> a
     574:581:void goToQuiz() -> A
-    838:838:java.lang.String getBackground() -> g
-    843:845:void showScoreDialog() -> h
-    849:851:void showNameDialog() -> i
-    855:897:void logOut(boolean) -> b
-    939:945:void showLeaders() -> B
-    949:955:void showLogin() -> C
-    959:965:void showSplash() -> D
-    969:975:void showQuiz() -> E
-    979:985:void showLoad() -> F
-    989:1014:void onPause() -> onPause
-    1185:1185:android.os.Bundle getLeadersState() -> j
-    1419:1465:void getQuestionCountFromParse(boolean,boolean) -> a
-    1526:1531:void saveUserScore(int) -> a
-    1608:1882:void nextQuestion() -> k
-    1920:1933:void next() -> l
-    1937:1937:java.lang.String getQuestionId() -> m
-    1942:1942:java.lang.String getQuestion() -> n
-    1947:1947:java.lang.String getCorrectAnswer() -> o
-    1952:1952:java.lang.String getQuestionScore() -> p
-    2012:2013:void setQuestionId(java.lang.String) -> b
-    2017:2018:void setQuestion(java.lang.String) -> c
-    2022:2023:void setCorrectAnswer(java.lang.String) -> d
-    2027:2028:void setQuestionScore(java.lang.String) -> e
-    2032:2033:void setQuestionCategory(java.lang.String) -> f
-    2037:2038:void setNextQuestionId(java.lang.String) -> g
-    2042:2043:void setNextQuestion(java.lang.String) -> h
-    2047:2048:void setNextCorrectAnswer(java.lang.String) -> i
-    2052:2053:void setNextQuestionScore(java.lang.String) -> j
-    2057:2058:void setNextQuestionCategory(java.lang.String) -> k
-    2062:2063:void setThirdQuestionId(java.lang.String) -> l
-    2067:2068:void setThirdQuestion(java.lang.String) -> m
-    2072:2073:void setThirdCorrectAnswer(java.lang.String) -> n
-    2077:2078:void setThirdQuestionScore(java.lang.String) -> o
-    2082:2083:void setThirdQuestionCategory(java.lang.String) -> p
-    2087:2087:java.lang.String getUserId() -> q
-    2092:2092:java.lang.String getDisplayName() -> r
-    2097:2097:java.util.ArrayList getAnswerIds() -> s
-    2102:2103:void addAnswerId(java.lang.String) -> q
-    2107:2107:boolean hasAnswerId(java.lang.String) -> r
-    2112:2112:boolean isNewQuestion() -> t
-    2117:2120:void setIsNewQuestion(boolean) -> c
-    2124:2124:int getCurrentScore() -> u
-    2129:2131:void addCurrentScore(int) -> b
-    2135:2147:void shareScreenshot() -> v
-    2151:2154:int getQuestionsLeft() -> w
-    2159:2171:void setDisplayName(java.lang.String) -> s
-    2174:2210:java.lang.String takeScreenshot() -> G
-    2278:2278:boolean getNetworkProblem() -> x
-    2283:2284:void setNetworkProblem(boolean) -> d
+    860:860:java.lang.String getBackground() -> g
+    865:867:void showScoreDialog() -> h
+    871:873:void showNameDialog() -> i
+    877:919:void logOut(boolean) -> b
+    961:967:void showLeaders() -> B
+    971:977:void showLogin() -> C
+    981:987:void showSplash() -> D
+    991:997:void showQuiz() -> E
+    1001:1007:void showLoad() -> F
+    1011:1036:void onPause() -> onPause
+    1207:1207:android.os.Bundle getLeadersState() -> j
+    1441:1487:void getQuestionCountFromParse(boolean,boolean) -> a
+    1548:1553:void saveUserScore(int) -> a
+    1630:1904:void nextQuestion() -> k
+    1942:1955:void next() -> l
+    1959:1959:java.lang.String getQuestionId() -> m
+    1964:1964:java.lang.String getQuestion() -> n
+    1969:1969:java.lang.String getCorrectAnswer() -> o
+    1974:1974:java.lang.String getQuestionScore() -> p
+    2034:2035:void setQuestionId(java.lang.String) -> b
+    2039:2040:void setQuestion(java.lang.String) -> c
+    2044:2045:void setCorrectAnswer(java.lang.String) -> d
+    2049:2050:void setQuestionScore(java.lang.String) -> e
+    2054:2055:void setQuestionCategory(java.lang.String) -> f
+    2059:2060:void setNextQuestionId(java.lang.String) -> g
+    2064:2065:void setNextQuestion(java.lang.String) -> h
+    2069:2070:void setNextCorrectAnswer(java.lang.String) -> i
+    2074:2075:void setNextQuestionScore(java.lang.String) -> j
+    2079:2080:void setNextQuestionCategory(java.lang.String) -> k
+    2084:2085:void setThirdQuestionId(java.lang.String) -> l
+    2089:2090:void setThirdQuestion(java.lang.String) -> m
+    2094:2095:void setThirdCorrectAnswer(java.lang.String) -> n
+    2099:2100:void setThirdQuestionScore(java.lang.String) -> o
+    2104:2105:void setThirdQuestionCategory(java.lang.String) -> p
+    2109:2109:java.lang.String getUserId() -> q
+    2114:2114:java.lang.String getDisplayName() -> r
+    2119:2119:java.util.ArrayList getAnswerIds() -> s
+    2124:2125:void addAnswerId(java.lang.String) -> q
+    2129:2129:boolean hasAnswerId(java.lang.String) -> r
+    2134:2134:boolean isNewQuestion() -> t
+    2139:2142:void setIsNewQuestion(boolean) -> c
+    2146:2146:int getCurrentScore() -> u
+    2151:2153:void addCurrentScore(int) -> b
+    2157:2169:void shareScreenshot() -> v
+    2173:2176:int getQuestionsLeft() -> w
+    2181:2193:void setDisplayName(java.lang.String) -> s
+    2196:2232:java.lang.String takeScreenshot() -> G
+    2300:2300:boolean getNetworkProblem() -> x
+    2305:2306:void setNetworkProblem(boolean) -> d
     139:139:void access$0(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> a
     139:139:java.lang.String access$1(com.jeffthefate.dmbquiz.activity.ActivityMain) -> a
     91:91:java.lang.String access$2(com.jeffthefate.dmbquiz.activity.ActivityMain) -> b
@@ -2285,7 +2237,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     101:101:void access$8(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> b
     101:101:boolean access$9(com.jeffthefate.dmbquiz.activity.ActivityMain) -> g
     92:92:com.jeffthefate.dmbquiz.fragment.FragmentBase access$10(com.jeffthefate.dmbquiz.activity.ActivityMain) -> h
-    937:937:void access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
+    959:959:void access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
     134:134:void access$12(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> a
     135:135:void access$13(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> b
     136:136:void access$14(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> c
@@ -2314,7 +2266,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     130:130:void access$37(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$GetScoreTask) -> a
     90:90:void access$38(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> a
     90:90:com.parse.ParseUser access$39(com.jeffthefate.dmbquiz.activity.ActivityMain) -> w
-    1417:1417:void access$40(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean) -> a
+    1439:1439:void access$40(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean) -> a
     128:128:void access$41(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask) -> a
     128:128:com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask access$42(com.jeffthefate.dmbquiz.activity.ActivityMain) -> x
     105:105:java.lang.String access$43(com.jeffthefate.dmbquiz.activity.ActivityMain) -> y
@@ -2358,54 +2310,54 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     117:117:java.lang.String access$81(com.jeffthefate.dmbquiz.activity.ActivityMain) -> R
     118:118:java.lang.String access$82(com.jeffthefate.dmbquiz.activity.ActivityMain) -> S
     119:119:java.lang.String access$83(com.jeffthefate.dmbquiz.activity.ActivityMain) -> T
-com.jeffthefate.dmbquiz.activity.ActivityMain$1 -> dj:
+com.jeffthefate.dmbquiz.activity.ActivityMain$1 -> dh:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     502:504:void done(com.parse.ParseObject,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$2 -> dk:
+com.jeffthefate.dmbquiz.activity.ActivityMain$2 -> di:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     588:615:void done(com.parse.ParseUser,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$3 -> dl:
+com.jeffthefate.dmbquiz.activity.ActivityMain$3 -> dj:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    683:715:void done(com.parse.ParseUser,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$4 -> dm:
+    705:737:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$4 -> dk:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    723:755:void done(com.parse.ParseUser,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$4$1 -> dn:
+    745:777:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$4$1 -> dl:
     com.jeffthefate.dmbquiz.activity.ActivityMain$4 this$1 -> a
     com.parse.ParseUser val$user -> b
-    739:750:void done(com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$5 -> do:
+    761:772:void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$5 -> dm:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     com.parse.ParseUser val$user -> b
-    771:790:void done(com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$6 -> dp:
+    793:812:void done(com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$6 -> dn:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     java.lang.String val$username -> b
-    798:832:void done(com.parse.ParseUser,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$7 -> dq:
+    820:854:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$7 -> do:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     boolean val$getQuestions -> b
     boolean val$isResume -> c
     1:1:void done(java.lang.Object,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$8 -> dr:
+com.jeffthefate.dmbquiz.activity.ActivityMain$8 -> dp:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    1731:1879:void done(java.util.List,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> ds:
+    1753:1901:void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> dq:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver -> dt:
+com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver -> dr:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    2265:2272:void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask -> du:
+    2287:2294:void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask -> ds:
     com.parse.ParseUser user -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
-    630:665:java.lang.Void doInBackground$10299ca() -> a
+    630:687:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask -> dv:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask -> dt:
     java.util.ArrayList correctAnswers -> a
     java.lang.String answerId -> b
     int sum -> c
@@ -2417,83 +2369,83 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask -> dv:
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-    1231:1231:void access$8(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.lang.String) -> a
-    1313:1313:void access$9(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.lang.String) -> b
-    1193:1193:boolean access$10(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask) -> a
-    1189:1189:void access$15(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.util.ArrayList) -> a
-    1188:1188:com.jeffthefate.dmbquiz.activity.ActivityMain access$17(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask) -> b
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$1 -> dw:
+    1253:1253:void access$8(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.lang.String) -> a
+    1335:1335:void access$9(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.lang.String) -> b
+    1215:1215:boolean access$10(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask) -> a
+    1211:1211:void access$15(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask,java.util.ArrayList) -> a
+    1210:1210:com.jeffthefate.dmbquiz.activity.ActivityMain access$17(com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask) -> b
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$1 -> du:
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask this$1 -> a
     java.lang.String val$userId -> b
-    1207:1227:void done$73a16137(int) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$2 -> dx:
+    1229:1249:void done$73a16137(int) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$2 -> dv:
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask this$1 -> a
-    1240:1258:void done(java.util.List,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$3 -> dy:
+    1262:1280:void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$3 -> dw:
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask this$1 -> a
-    1321:1339:void done(java.util.List,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$GetAnswersTask -> dz:
+    1343:1361:void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$GetAnswersTask -> dx:
     java.util.List answerList -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask this$1 -> b
-    1271:1296:java.lang.Void doInBackground$10299ca() -> a
+    1293:1318:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$GetScoreTask -> dA:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask$GetScoreTask -> dy:
     java.util.List questionList -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetParseTask this$1 -> b
-    1352:1368:java.lang.Void doInBackground$10299ca() -> a
+    1374:1390:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> dB:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> dz:
     int currScore -> c
     com.parse.ParseException error -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
-    1026:1099:java.lang.Void doInBackground$10299ca() -> a
+    1048:1121:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
     1:1:void access$4(com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask,java.lang.Object[]) -> a
-    1016:1016:com.jeffthefate.dmbquiz.activity.ActivityMain access$6(com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$1 -> dC:
+    1038:1038:com.jeffthefate.dmbquiz.activity.ActivityMain access$6(com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$1 -> dA:
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask this$1 -> a
-    1060:1072:void done(java.util.List,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$2 -> dD:
+    1082:1094:void done(java.util.List,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$2 -> dB:
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask this$1 -> a
-    1081:1097:void done(com.parse.ParseObject,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$GetLeadersTask -> dE:
+    1103:1119:void done(com.parse.ParseObject,com.parse.ParseException) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask$GetLeadersTask -> dC:
     java.util.List leaders -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask this$1 -> b
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$SetupQuestionTask -> dF:
+com.jeffthefate.dmbquiz.activity.ActivityMain$SetupQuestionTask -> dD:
     java.lang.String userId -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$ShowStatsTask -> dG:
+com.jeffthefate.dmbquiz.activity.ActivityMain$ShowStatsTask -> dE:
     int loadSec -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
-    905:919:java.lang.Void doInBackground$10299ca() -> a
+    927:941:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask -> dH:
+com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask -> dF:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.fragment.FragmentBase -> dI:
+com.jeffthefate.dmbquiz.fragment.FragmentBase -> dG:
     com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener mCallback -> N
     android.content.res.Resources res -> O
     android.content.SharedPreferences sharedPrefs -> P
@@ -2519,16 +2471,16 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase -> dI:
     278:278:void setDisplayName(java.lang.String) -> c
     243:243:android.media.MediaPlayer access$0(com.jeffthefate.dmbquiz.fragment.FragmentBase) -> a
     244:244:android.media.AudioManager access$1(com.jeffthefate.dmbquiz.fragment.FragmentBase) -> b
-com.jeffthefate.dmbquiz.fragment.FragmentBase$1 -> dJ:
+com.jeffthefate.dmbquiz.fragment.FragmentBase$1 -> dH:
     com.jeffthefate.dmbquiz.fragment.FragmentBase this$0 -> a
     159:183:void onAudioFocusChange(int) -> onAudioFocusChange
-com.jeffthefate.dmbquiz.fragment.FragmentBase$2 -> dK:
+com.jeffthefate.dmbquiz.fragment.FragmentBase$2 -> dI:
     com.jeffthefate.dmbquiz.fragment.FragmentBase this$0 -> a
     205:206:void onCompletion(android.media.MediaPlayer) -> onCompletion
-com.jeffthefate.dmbquiz.fragment.FragmentBase$3 -> dL:
+com.jeffthefate.dmbquiz.fragment.FragmentBase$3 -> dJ:
     com.jeffthefate.dmbquiz.fragment.FragmentBase this$0 -> a
     212:215:boolean onError(android.media.MediaPlayer,int,int) -> onError
-com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener -> dM:
+com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener -> dK:
     java.lang.String setBackground(java.lang.String,boolean) -> a
     java.lang.String getBackground() -> g
     void onInfoPressed() -> e
@@ -2574,15 +2526,15 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener -> dM:
     boolean getNetworkProblem() -> x
     void setNetworkProblem(boolean) -> d
     void saveUserScore(int) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentInfo -> dN:
+com.jeffthefate.dmbquiz.fragment.FragmentInfo -> dL:
     android.widget.TextView infoText -> R
     android.widget.Button doneButton -> S
     23:24:void onCreate(android.os.Bundle) -> a
     29:39:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentInfo$1 -> dO:
+com.jeffthefate.dmbquiz.fragment.FragmentInfo$1 -> dM:
     com.jeffthefate.dmbquiz.fragment.FragmentInfo this$0 -> a
     36:37:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> dP:
+com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> dN:
     java.lang.String userId -> R
     android.view.ViewGroup leadersLayout -> S
     android.widget.TextView userText -> T
@@ -2612,7 +2564,7 @@ com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> dP:
     259:263:void onPrepareOptionsMenu(android.view.Menu) -> a
     267:289:boolean onOptionsItemSelected(android.view.MenuItem) -> a
     294:296:void setDisplayName(java.lang.String) -> c
-com.jeffthefate.dmbquiz.fragment.FragmentLoad -> dQ:
+com.jeffthefate.dmbquiz.fragment.FragmentLoad -> dO:
     android.widget.ProgressBar progress -> R
     android.widget.TextView networkText -> S
     android.widget.TextView loadingText -> T
@@ -2623,10 +2575,10 @@ com.jeffthefate.dmbquiz.fragment.FragmentLoad -> dQ:
     91:95:void showLoading(java.lang.String) -> b
     99:104:void disableButton(boolean) -> b
     108:113:void enableButton(boolean) -> c
-com.jeffthefate.dmbquiz.fragment.FragmentLoad$1 -> dR:
+com.jeffthefate.dmbquiz.fragment.FragmentLoad$1 -> dP:
     com.jeffthefate.dmbquiz.fragment.FragmentLoad this$0 -> a
     38:50:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentLogin -> dS:
+com.jeffthefate.dmbquiz.fragment.FragmentLogin -> dQ:
     android.widget.ProgressBar progress -> R
     android.widget.TextView networkText -> S
     android.widget.TextView loadingText -> T
@@ -2640,24 +2592,24 @@ com.jeffthefate.dmbquiz.fragment.FragmentLogin -> dS:
     20:20:android.widget.TextView access$0(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> a
     22:22:android.widget.Button access$1(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> b
     19:19:android.widget.ProgressBar access$2(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> c
-com.jeffthefate.dmbquiz.fragment.FragmentLogin$1 -> dT:
+com.jeffthefate.dmbquiz.fragment.FragmentLogin$1 -> dR:
     com.jeffthefate.dmbquiz.fragment.FragmentLogin this$0 -> a
     38:53:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog -> dU:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog -> dS:
     com.jeffthefate.dmbquiz.activity.ActivityMain mActivity -> N
     28:30:void onAttach(android.app.Activity) -> a
     33:70:android.app.Dialog onCreateDialog$5709b310() -> b
     24:24:com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.fragment.FragmentNameDialog) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$1 -> dV:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$1 -> dT:
     com.jeffthefate.dmbquiz.fragment.FragmentNameDialog this$0 -> a
     42:54:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$2 -> dW:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$2 -> dU:
     60:60:void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$3 -> dX:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$3 -> dV:
     com.jeffthefate.dmbquiz.fragment.FragmentNameDialog this$0 -> a
     android.widget.EditText val$newName -> b
     66:68:void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> dY:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> dW:
     android.widget.TextView scoreText -> R
     android.widget.TextView questionText -> S
     android.widget.EditText answerText -> T
@@ -2734,71 +2686,71 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> dY:
     44:44:android.widget.TextView access$31(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> w
     928:928:void access$32(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,boolean) -> d
     325:325:void access$33(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> x
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$1 -> dZ:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$1 -> dX:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     410:412:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$2 -> ea:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$2 -> dY:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     421:436:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$3 -> eb:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$3 -> dZ:
     440:440:void afterTextChanged(android.text.Editable) -> afterTextChanged
     442:442:void beforeTextChanged(java.lang.CharSequence,int,int,int) -> beforeTextChanged
     450:450:void onTextChanged(java.lang.CharSequence,int,int,int) -> onTextChanged
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$4 -> ec:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$4 -> ea:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     457:474:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$5 -> ed:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$5 -> eb:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     480:520:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$6 -> ee:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$6 -> ec:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     530:538:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$7 -> ef:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$7 -> ed:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     551:568:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$8 -> eg:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$8 -> ee:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     boolean val$isSkip -> b
     933:960:void done(com.parse.ParseObject,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTask -> eh:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTask -> ef:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer -> ei:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer -> eg:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     225:231:void onTick(long) -> onTick
     235:251:void onFinish() -> onFinish
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$NextTask -> ej:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$NextTask -> eh:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$SkipTimer -> ek:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$SkipTimer -> ei:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     184:197:void onTick(long) -> onTick
     201:204:void onFinish() -> onFinish
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask -> el:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask -> ej:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     814:876:java.lang.Void doInBackground(java.lang.String[]) -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
     783:783:com.jeffthefate.dmbquiz.fragment.FragmentQuiz access$4(com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask$1 -> em:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask$1 -> ek:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask this$1 -> a
     java.lang.String val$questionId -> b
     java.lang.String val$userId -> c
     792:808:void done(com.parse.ParseObject,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer -> en:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer -> el:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     163:163:void onTick(long) -> onTick
     167:169:void onFinish() -> onFinish
-com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog -> eo:
+com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog -> em:
     18:29:android.app.Dialog onCreateDialog$5709b310() -> b
-com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog$1 -> ep:
+com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog$1 -> en:
     26:26:void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash -> eq:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash -> eo:
     android.widget.EditText loginUsername -> R
     android.widget.EditText loginPassword -> S
     android.widget.RelativeLayout emailButtonLayout -> T
@@ -2830,34 +2782,34 @@ com.jeffthefate.dmbquiz.fragment.FragmentSplash -> eq:
     42:42:android.widget.TextView access$8(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> g
     43:43:android.widget.TextView access$9(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> h
     53:53:void access$10(com.jeffthefate.dmbquiz.fragment.FragmentSplash,boolean) -> b
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$1 -> er:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$1 -> ep:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     67:71:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$10 -> es:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$10 -> eq:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     236:250:void done(java.util.List,com.parse.ParseException) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$2 -> et:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$2 -> er:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     77:81:void onFocusChange(android.view.View,boolean) -> onFocusChange
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$3 -> eu:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$3 -> es:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     88:97:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$4 -> ev:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$4 -> et:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     108:112:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$5 -> ew:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$5 -> eu:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     119:123:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$6 -> ex:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$6 -> ev:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     129:132:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$7 -> ey:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$7 -> ew:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     138:141:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$8 -> ez:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$8 -> ex:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     147:150:void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSplash$9 -> eA:
+com.jeffthefate.dmbquiz.fragment.FragmentSplash$9 -> ey:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
     157:164:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.receiver.ConnectivityReceiver -> com.jeffthefate.dmbquiz.receiver.ConnectivityReceiver:
@@ -2879,47 +2831,47 @@ com.jeffthefate.dmbquiz.receiver.PushReceiver -> com.jeffthefate.dmbquiz.receive
     29:29:android.app.NotificationManager access$4(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> d
     30:30:void access$5(com.jeffthefate.dmbquiz.receiver.PushReceiver,android.app.Notification) -> a
     30:30:android.app.Notification access$6(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> e
-com.jeffthefate.dmbquiz.receiver.PushReceiver$1 -> eB:
+com.jeffthefate.dmbquiz.receiver.PushReceiver$1 -> ez:
     com.jeffthefate.dmbquiz.receiver.PushReceiver this$0 -> a
     1:1:void done(java.lang.Object,com.parse.ParseException) -> a
-com.jeffthefate.stacktrace.DefaultExceptionHandler -> eC:
+com.jeffthefate.stacktrace.DefaultExceptionHandler -> eA:
     java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler -> a
     59:82:void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
-com.jeffthefate.stacktrace.ExceptionHandler -> eD:
+com.jeffthefate.stacktrace.ExceptionHandler -> eB:
     java.lang.String TAG -> a
     java.lang.String[] stackTraceFileList -> b
     com.jeffthefate.stacktrace.ExceptionHandler$OnStacktraceListener mCallback -> c
     73:120:boolean register(android.app.Application) -> a
     129:140:java.lang.String[] searchForStackTraces() -> b
     149:198:void submitStackTraces() -> a
-com.jeffthefate.stacktrace.ExceptionHandler$1 -> eE:
+com.jeffthefate.stacktrace.ExceptionHandler$1 -> eC:
     106:117:void run() -> run
-com.jeffthefate.stacktrace.ExceptionHandler$2 -> eF:
+com.jeffthefate.stacktrace.ExceptionHandler$2 -> eD:
     137:137:boolean accept(java.io.File,java.lang.String) -> accept
-com.jeffthefate.stacktrace.ExceptionHandler$OnStacktraceListener -> eG:
+com.jeffthefate.stacktrace.ExceptionHandler$OnStacktraceListener -> eE:
     void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
-com.jeffthefate.stacktrace.G -> eH:
+com.jeffthefate.stacktrace.G -> eF:
     java.lang.String FILES_PATH -> a
     java.lang.String APP_VERSION -> b
     java.lang.String APP_PACKAGE -> c
     java.lang.String PHONE_MODEL -> d
     java.lang.String ANDROID_VERSION -> e
-com.parse.BackgroundTask -> eI:
+com.parse.BackgroundTask -> eG:
     com.parse.ParseCallback callback -> a
     java.lang.Object result -> b
     com.parse.ParseException exception -> c
     java.lang.Object run() -> a
     39:43:java.lang.Void doInBackground$10299ca() -> b
     64:65:int executeTask(com.parse.BackgroundTask) -> a
-    1:1:void onPostExecute(java.lang.Object) -> onPostExecute
-    1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.parse.CountCallback -> eJ:
+    16:16:void onPostExecute(java.lang.Object) -> onPostExecute
+    16:16:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.CountCallback -> eH:
     void done$73a16137(int) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.CountingMultipartEntity -> eK:
+    31:31:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.CountingMultipartEntity -> eI:
     com.parse.ParseCallback progressCallback$138625ed -> a
     38:40:void writeTo(java.io.OutputStream) -> writeTo
-com.parse.CountingMultipartEntity$CountingOutputStream -> eL:
+com.parse.CountingMultipartEntity$CountingOutputStream -> eJ:
     com.parse.ParseCallback progressCallback$138625ed -> a
     long uploadedSize -> b
     long totalSize -> c
@@ -2927,19 +2879,19 @@ com.parse.CountingMultipartEntity$CountingOutputStream -> eL:
     59:62:void write(byte[],int,int) -> write
     66:69:void write(int) -> write
     72:90:void notifyCallback() -> a
-com.parse.CountingMultipartEntity$CountingOutputStream$1 -> eM:
+com.parse.CountingMultipartEntity$CountingOutputStream$1 -> eK:
     int val$progressToReport -> a
-    1:1:java.lang.Object run() -> a
-com.parse.FindCallback -> eN:
+    78:78:java.lang.Object run() -> a
+com.parse.FindCallback -> eL:
     void done(java.util.List,com.parse.ParseException) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.FunctionCallback -> eO:
+    33:33:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.FunctionCallback -> eM:
     void done(java.lang.Object,com.parse.ParseException) -> a
     48:49:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.GetCallback -> eP:
+com.parse.GetCallback -> eN:
     void done(com.parse.ParseObject,com.parse.ParseException) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.LocalIdManager -> eQ:
+    31:31:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.LocalIdManager -> eO:
     com.parse.LocalIdManager defaultInstance -> a
     java.io.File diskPath -> b
     java.util.Random random -> c
@@ -2953,13 +2905,13 @@ com.parse.LocalIdManager -> eQ:
     158:166:void releaseLocalIdOnDisk(java.lang.String) -> b
     173:174:java.lang.String getObjectId(java.lang.String) -> c
     181:189:void setObjectId(java.lang.String,java.lang.String) -> a
-com.parse.LocalIdManager$MapEntry -> eR:
+com.parse.LocalIdManager$MapEntry -> eP:
     java.lang.String objectId -> a
     int retainCount -> b
-com.parse.LogInCallback -> eS:
+com.parse.LogInCallback -> eQ:
     void done(com.parse.ParseUser,com.parse.ParseException) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.Parse -> eT:
+    30:30:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.Parse -> eR:
     android.content.Context applicationContext -> a
     java.lang.String applicationId -> b
     java.lang.String clientKey -> c
@@ -3006,17 +2958,17 @@ com.parse.Parse -> eT:
     763:764:java.lang.Iterable keys(org.json.JSONObject) -> a
     773:773:boolean isContainerObject(java.lang.Object) -> d
     794:803:java.lang.String join(java.util.Collection,java.lang.String) -> a
-com.parse.Parse$1 -> eU:
+com.parse.Parse$1 -> eS:
     122:123:void run() -> run
-com.parse.Parse$2 -> eV:
+com.parse.Parse$2 -> eT:
     java.lang.String val$suffix -> a
     299:299:boolean accept(java.io.File,java.lang.String) -> accept
-com.parse.Parse$3 -> eW:
-    1:1:int compare(java.lang.Object,java.lang.Object) -> compare
-com.parse.Parse$4 -> eX:
+com.parse.Parse$3 -> eU:
+    361:361:int compare(java.lang.Object,java.lang.Object) -> compare
+com.parse.Parse$4 -> eV:
     org.json.JSONObject val$finalObject -> a
     766:767:java.util.Iterator iterator() -> iterator
-com.parse.ParseACL -> eY:
+com.parse.ParseACL -> eW:
     boolean shared -> a
     com.parse.ParseUser unresolvedUser -> b
     org.json.JSONObject permissionsById -> c
@@ -3024,26 +2976,26 @@ com.parse.ParseACL -> eY:
     90:102:com.parse.ParseACL createACLFromJSONObject(org.json.JSONObject) -> a
     133:133:boolean hasUnresolvedUser() -> b
     139:161:void setAccess(java.lang.String,java.lang.String,boolean) -> a
-com.parse.ParseACL$UserResolutionListener -> eZ:
+com.parse.ParseACL$UserResolutionListener -> eX:
     java.lang.ref.WeakReference parent -> a
-    41:48:void done(com.parse.ParseObject,com.parse.ParseException) -> a
-com.parse.ParseAddUniqueOperation -> fa:
+    41:46:void done(com.parse.ParseObject,com.parse.ParseException) -> a
+com.parse.ParseAddUniqueOperation -> eY:
     java.util.LinkedHashSet objects -> a
     36:62:com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
     67:81:java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
-    1:1:java.lang.Object encode() -> a
-com.parse.ParseAnonymousUtils -> fb:
+    17:17:java.lang.Object encode() -> a
+com.parse.ParseAnonymousUtils -> eZ:
     com.parse.auth.AnonymousAuthenticationProvider provider -> a
     57:57:boolean isLinked(com.parse.ParseUser) -> a
     67:68:void logIn(com.parse.LogInCallback) -> a
 com.parse.ParseBroadcastReceiver -> com.parse.ParseBroadcastReceiver:
     18:20:void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.parse.ParseCallback -> fc:
+com.parse.ParseCallback -> fa:
     void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.ParseCloud$1 -> fd:
+com.parse.ParseCloud$1 -> fb:
     com.parse.ParseCommand val$command -> a
-    98:99:java.lang.Object run() -> a
-com.parse.ParseCommand -> fe:
+    95:96:java.lang.Object run() -> a
+com.parse.ParseCommand -> fc:
     java.lang.String op -> a
     org.json.JSONObject params -> b
     java.lang.String localId -> c
@@ -3070,20 +3022,20 @@ com.parse.ParseCommand -> fe:
     216:246:void addToStringer(org.json.JSONStringer,java.lang.Object) -> a
     250:250:java.lang.Object perform() -> d
     255:255:com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> a
-    261:317:void preparePost() -> h
-    325:326:void setInternalCallback(com.parse.ParseCommand$InternalCallback) -> a
-    340:374:java.lang.Object perform(boolean) -> a
-    378:379:void setCallCallbacksOnFailure(boolean) -> b
-    383:404:org.json.JSONObject sendRequestWithRetries() -> i
-    410:418:void maybeSetupHttpProxy() -> j
-    427:444:org.json.JSONObject sendRequest(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost) -> a
-    452:460:void enableRetrying() -> e
-    474:494:void getLocalPointersIn(java.lang.Object,java.util.ArrayList) -> a
-    556:571:void retainLocalIds() -> f
-    580:595:void releaseLocalIds() -> g
-com.parse.ParseCommand$InternalCallback -> ff:
+    261:318:void preparePost() -> h
+    326:327:void setInternalCallback(com.parse.ParseCommand$InternalCallback) -> a
+    341:375:java.lang.Object perform(boolean) -> a
+    379:380:void setCallCallbacksOnFailure(boolean) -> b
+    384:405:org.json.JSONObject sendRequestWithRetries() -> i
+    411:419:void maybeSetupHttpProxy() -> j
+    428:445:org.json.JSONObject sendRequest(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost) -> a
+    453:461:void enableRetrying() -> e
+    475:495:void getLocalPointersIn(java.lang.Object,java.util.ArrayList) -> a
+    557:572:void retainLocalIds() -> f
+    581:596:void releaseLocalIds() -> g
+com.parse.ParseCommand$InternalCallback -> fd:
     void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseCommandCache -> fg:
+com.parse.ParseCommandCache -> fe:
     java.io.File cachePath -> a
     int timeoutMaxRetries -> b
     double timeoutRetryWaitSeconds -> c
@@ -3098,86 +3050,83 @@ com.parse.ParseCommandCache -> fg:
     java.lang.Object runningLock -> l
     java.util.logging.Logger log -> m
     android.support.v4.app.FragmentTabHost$TabInfo testHelper$5c244f0b -> n
-    220:220:void removeFile(java.io.File) -> a
+    220:255:void removeFile(java.io.File) -> a
     284:285:void runEventually(com.parse.ParseCommand,com.parse.ParseCallback,com.parse.ParseObject) -> a
-    449:449:void setConnected(boolean) -> a
-    468:468:void maybeRunAllCommandsNow(int) -> a
-    640:640:void access$0(com.parse.ParseCommandCache) -> a
-    99:99:android.support.v4.app.FragmentTabHost$TabInfo access$1$3f4fbc0b(com.parse.ParseCommandCache) -> b
-com.parse.ParseCommandCache$1 -> fh:
-    com.parse.ParseCommandCache this$0 -> a
-    android.net.ConnectivityManager val$connectivityManager -> b
+    449:456:void setConnected(boolean) -> a
+    468:628:void maybeRunAllCommandsNow(int) -> a
+    41:41:void access$000(com.parse.ParseCommandCache) -> a
+    41:41:android.support.v4.app.FragmentTabHost$TabInfo access$100$3f4fbc0b(com.parse.ParseCommandCache) -> b
+com.parse.ParseCommandCache$1 -> ff:
+    android.net.ConnectivityManager val$connectivityManager -> a
+    com.parse.ParseCommandCache this$0 -> b
     135:143:void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.parse.ParseCommandCache$2 -> fi:
+com.parse.ParseCommandCache$2 -> fg:
     com.parse.ParseCommandCache this$0 -> a
     178:179:void run() -> run
-com.parse.ParseCommandCache$3 -> fj:
+com.parse.ParseCommandCache$3 -> fh:
     535:544:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseCommandCache$4 -> fk:
-    com.parse.ParseCommandCache this$0 -> a
-    com.parse.ParseCallback val$callback -> b
+com.parse.ParseCommandCache$4 -> fi:
+    com.parse.ParseCallback val$callback -> a
+    com.parse.ParseCommandCache this$0 -> b
     564:568:void run() -> run
-com.parse.ParseDeleteOperation -> fl:
+com.parse.ParseDeleteOperation -> fj:
     27:27:com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
     31:31:java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
-    1:1:java.lang.Object encode() -> a
-com.parse.ParseException -> fm:
+    10:10:java.lang.Object encode() -> a
+com.parse.ParseException -> fk:
     int code -> a
-    277:277:int getCode() -> a
-com.parse.ParseFieldOperation -> fn:
+    272:272:int getCode() -> a
+com.parse.ParseFieldOperation -> fl:
     java.lang.Object encode() -> a
     com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
     java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
-com.parse.ParseFieldOperations -> fo:
+com.parse.ParseFieldOperations -> fm:
     java.util.Map opDecoderMap -> a
     146:151:com.parse.ParseFieldOperation decode(org.json.JSONObject) -> a
     158:167:java.util.ArrayList jsonArrayAsArrayList(org.json.JSONArray) -> a
-com.parse.ParseFile -> fp:
+com.parse.ParseFile -> fn:
     java.lang.String name -> a
     java.lang.String url -> b
     com.parse.ParseCommand currentCommand -> d
     org.apache.http.client.methods.HttpPost fileUploadPost -> e
     com.parse.ParseFile$ParseFileState state -> c
     com.parse.ParseFile$ParseFileState previousState -> f
-    102:102:void setState(com.parse.ParseFile$ParseFileState) -> a
+    102:112:void setState(com.parse.ParseFile$ParseFileState) -> a
     116:117:void revertState() -> b
-    124:124:void assertNotRunning() -> c
+    124:129:void assertNotRunning() -> c
     241:252:void handleFileUploadResult$99f44(org.json.JSONObject,com.parse.ParseCallback) -> a
     258:259:void save() -> a
-com.parse.ParseFile$ParseFileState -> fq:
+com.parse.ParseFile$ParseFileState -> fo:
     com.parse.ParseFile$ParseFileState DIRTY -> a
     com.parse.ParseFile$ParseFileState SAVING -> b
     com.parse.ParseFile$ParseFileState AWAITING_FETCH -> c
     com.parse.ParseFile$ParseFileState FETCHING -> d
     com.parse.ParseFile$ParseFileState DATA_AVAILABLE -> e
-    com.parse.ParseFile$ParseFileState[] ENUM$VALUES -> f
-    1:1:com.parse.ParseFile$ParseFileState[] values() -> values
-    1:1:com.parse.ParseFile$ParseFileState valueOf(java.lang.String) -> valueOf
-com.parse.ParseGeoPoint -> fr:
+    com.parse.ParseFile$ParseFileState[] $VALUES -> f
+    47:47:com.parse.ParseFile$ParseFileState[] values() -> values
+    47:47:com.parse.ParseFile$ParseFileState valueOf(java.lang.String) -> valueOf
+com.parse.ParseGeoPoint -> fp:
     double latitude -> a
     double longitude -> b
     58:58:double getLatitude() -> a
     78:78:double getLongitude() -> b
-com.parse.ParseInstallation -> fs:
+com.parse.ParseInstallation -> fq:
     com.parse.ParseInstallation currentInstallation -> e
     java.util.List readonlyFields -> f
     46:57:com.parse.ParseInstallation getCurrentInstallation() -> a
-    78:109:java.lang.String getOrCreateCurrentInstallationId() -> v
+    78:107:java.lang.String getOrCreateCurrentInstallationId() -> v
     117:117:java.lang.String getInstallationId() -> b
     128:130:void put(java.lang.String,java.lang.Object) -> a
     144:158:void save(boolean) -> a
-    162:171:void saveEventually(com.parse.SaveCallback) -> a
-    179:184:com.parse.ParseObject fetch() -> c
-    192:196:void updateTimezone() -> w
-    200:219:void updateVersionInfo() -> x
-    222:225:void maybeFlushToDisk(com.parse.ParseInstallation) -> a
-com.parse.ParseJSONCacheItem -> ft:
+    166:171:com.parse.ParseObject fetch() -> c
+    209:212:void maybeFlushToDisk(com.parse.ParseInstallation) -> a
+com.parse.ParseJSONCacheItem -> fr:
     org.json.JSONObject json -> b
     java.lang.String hashValue -> a
     29:31:java.lang.Object getJSONObject() -> a
-com.parse.ParseMulticastDelegate -> fu:
+com.parse.ParseMulticastDelegate -> fs:
     java.util.List callbacks -> a
-com.parse.ParseObject -> fv:
+com.parse.ParseObject -> ft:
     java.lang.String server -> a
     java.util.Map objectFactories -> e
     java.text.DateFormat impreciseDateFormat -> f
@@ -3195,94 +3144,94 @@ com.parse.ParseObject -> fv:
     java.util.Date updatedAt -> o
     java.util.Date createdAt -> p
     java.lang.Boolean isRunning -> q
-    191:198:com.parse.ParseObject createWithoutData(java.lang.String,java.lang.String) -> a
-    202:203:void registerFactory(java.lang.String,com.parse.ParseObject$ParseObjectFactory) -> a
-    206:207:java.lang.String getApplicationId() -> d
-    213:217:java.util.Date impreciseParseDate(java.lang.String) -> f
-    226:228:org.json.JSONObject getDiskObject(android.content.Context,java.lang.String) -> a
-    236:257:org.json.JSONObject getDiskObject(java.io.File) -> a
-    266:269:void saveDiskObject(android.content.Context,java.lang.String,org.json.JSONObject) -> a
-    277:283:void saveDiskObject(java.io.File,org.json.JSONObject) -> a
-    288:293:void deleteDiskObject(android.content.Context,java.lang.String) -> b
-    300:301:void checkIfRunning() -> e
-    308:308:void checkIfRunning(boolean) -> b
-    323:323:void finishedRunning() -> f
-    337:343:void saveToDisk(android.content.Context,java.lang.String) -> c
-    347:349:void addToHashedObjects(java.lang.Object) -> a
-    364:375:com.parse.ParseObject getFromDisk(android.content.Context,java.lang.String) -> d
-    383:383:java.lang.String getClassName() -> g
-    416:416:java.util.Date getCreatedAt() -> h
-    424:426:void clearChanges() -> i
-    433:437:void copyChangesFrom(com.parse.ParseObject) -> a
-    440:455:void mergeFromObject(com.parse.ParseObject) -> b
-    458:462:void mergeAfterFetch(org.json.JSONObject) -> a
-    491:597:void mergeFromServer(org.json.JSONObject) -> b
-    609:609:boolean isDirty() -> j
-    613:614:boolean isDirty(boolean) -> c
-    622:631:void checkpointMutableContainer(java.lang.Object) -> b
-    664:668:void checkForChangesToMutableContainers() -> k
-    678:678:java.lang.String getObjectId() -> l
-    686:692:java.lang.String getOrCreateLocalId() -> m
-    709:714:void setObjectIdInternal(java.lang.String) -> g
-    717:736:void findUnsavedChildren(java.lang.Object,java.util.List) -> a
-    739:761:com.parse.ParseCommand constructSaveCommand() -> n
-    775:821:org.json.JSONObject toJSONObjectForDataFile() -> o
-    835:868:org.json.JSONObject toJSONObjectForSaving() -> p
-    876:879:void handleSaveResult(java.lang.String,org.json.JSONObject) -> a
-    882:883:void startSave() -> q
-    886:886:void validateSave() -> r
-    898:899:void save() -> s
-    906:941:void save(boolean) -> a
-    952:962:void saveInBackground(com.parse.SaveCallback) -> b
-    969:970:void saveInBackground() -> t
-    988:989:void saveEventually() -> u
-    1015:1036:void saveEventually(com.parse.SaveCallback) -> a
-    1091:1093:void handleFetchResult(org.json.JSONObject) -> c
-    1135:1135:com.parse.ParseObject fetch() -> c
-    1143:1169:com.parse.ParseObject fetch(boolean) -> d
-    1340:1419:void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List,java.util.IdentityHashMap,java.util.IdentityHashMap) -> a
-    1444:1492:boolean canBeSerializedAsValue(java.lang.Object) -> c
-    1522:1603:void deepSave(java.lang.Object) -> d
-    1819:1819:java.util.Map currentOperations() -> a
-    1826:1836:void applyOperations(java.util.Map,java.util.Map) -> a
-    1842:1847:void rebuildEstimatedData() -> b
-    1854:1868:void performOperation(java.lang.String,com.parse.ParseFieldOperation) -> a
-    1883:1903:void put(java.lang.String,java.lang.Object) -> a
-    1968:1969:void addUnique(java.lang.String,java.lang.Object) -> b
-    1982:1985:void addAllUnique(java.lang.String,java.util.Collection) -> a
-    2001:2004:void removeAll(java.lang.String,java.util.Collection) -> b
-    2025:2033:java.lang.String getString(java.lang.String) -> a
-    2064:2072:java.lang.Number getNumber(java.lang.String) -> b
-    2111:2126:java.util.List getList(java.lang.String) -> c
-    2235:2243:boolean getBoolean(java.lang.String) -> d
-    2329:2343:com.parse.ParseACL getACL(boolean) -> e
-    2364:2364:boolean isDataAvailable(java.lang.String) -> h
-    2398:2421:java.lang.Object get(java.lang.String) -> e
-    2425:2429:void checkGetAccess(java.lang.String) -> i
-    2438:2439:void registerSaveListener(com.parse.GetCallback) -> a
-    2442:2443:void unregisterSaveListener(com.parse.GetCallback) -> b
-com.parse.ParseObject$1 -> fw:
+    190:197:com.parse.ParseObject createWithoutData(java.lang.String,java.lang.String) -> a
+    201:202:void registerFactory(java.lang.String,com.parse.ParseObject$ParseObjectFactory) -> a
+    205:206:java.lang.String getApplicationId() -> d
+    212:216:java.util.Date impreciseParseDate(java.lang.String) -> f
+    225:227:org.json.JSONObject getDiskObject(android.content.Context,java.lang.String) -> a
+    235:256:org.json.JSONObject getDiskObject(java.io.File) -> a
+    265:268:void saveDiskObject(android.content.Context,java.lang.String,org.json.JSONObject) -> a
+    276:282:void saveDiskObject(java.io.File,org.json.JSONObject) -> a
+    287:292:void deleteDiskObject(android.content.Context,java.lang.String) -> b
+    299:300:void checkIfRunning() -> e
+    307:314:void checkIfRunning(boolean) -> b
+    322:324:void finishedRunning() -> f
+    336:342:void saveToDisk(android.content.Context,java.lang.String) -> c
+    346:348:void addToHashedObjects(java.lang.Object) -> a
+    363:374:com.parse.ParseObject getFromDisk(android.content.Context,java.lang.String) -> d
+    382:382:java.lang.String getClassName() -> g
+    415:415:java.util.Date getCreatedAt() -> h
+    423:425:void clearChanges() -> i
+    432:436:void copyChangesFrom(com.parse.ParseObject) -> a
+    439:454:void mergeFromObject(com.parse.ParseObject) -> b
+    457:461:void mergeAfterFetch(org.json.JSONObject) -> a
+    490:596:void mergeFromServer(org.json.JSONObject) -> b
+    608:608:boolean isDirty() -> j
+    612:613:boolean isDirty(boolean) -> c
+    621:630:void checkpointMutableContainer(java.lang.Object) -> b
+    663:667:void checkForChangesToMutableContainers() -> k
+    677:677:java.lang.String getObjectId() -> l
+    685:691:java.lang.String getOrCreateLocalId() -> m
+    708:713:void setObjectIdInternal(java.lang.String) -> g
+    716:735:void findUnsavedChildren(java.lang.Object,java.util.List) -> a
+    738:760:com.parse.ParseCommand constructSaveCommand() -> n
+    774:820:org.json.JSONObject toJSONObjectForDataFile() -> o
+    834:867:org.json.JSONObject toJSONObjectForSaving() -> p
+    875:878:void handleSaveResult(java.lang.String,org.json.JSONObject) -> a
+    881:882:void startSave() -> q
+    885:885:void validateSave() -> r
+    897:898:void save() -> s
+    905:938:void save(boolean) -> a
+    951:961:void saveInBackground(com.parse.SaveCallback) -> a
+    968:969:void saveInBackground() -> t
+    987:988:void saveEventually() -> u
+    1014:1035:void saveEventually(com.parse.SaveCallback) -> b
+    1090:1092:void handleFetchResult(org.json.JSONObject) -> c
+    1134:1134:com.parse.ParseObject fetch() -> c
+    1142:1167:com.parse.ParseObject fetch(boolean) -> d
+    1339:1418:void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List,java.util.IdentityHashMap,java.util.IdentityHashMap) -> a
+    1443:1491:boolean canBeSerializedAsValue(java.lang.Object) -> c
+    1521:1602:void deepSave(java.lang.Object) -> d
+    1818:1818:java.util.Map currentOperations() -> a
+    1825:1835:void applyOperations(java.util.Map,java.util.Map) -> a
+    1841:1846:void rebuildEstimatedData() -> b
+    1853:1867:void performOperation(java.lang.String,com.parse.ParseFieldOperation) -> a
+    1882:1902:void put(java.lang.String,java.lang.Object) -> a
+    1967:1968:void addUnique(java.lang.String,java.lang.Object) -> b
+    1981:1984:void addAllUnique(java.lang.String,java.util.Collection) -> a
+    2000:2003:void removeAll(java.lang.String,java.util.Collection) -> b
+    2024:2032:java.lang.String getString(java.lang.String) -> a
+    2063:2071:java.lang.Number getNumber(java.lang.String) -> b
+    2110:2125:java.util.List getList(java.lang.String) -> c
+    2234:2242:boolean getBoolean(java.lang.String) -> d
+    2328:2342:com.parse.ParseACL getACL(boolean) -> e
+    2363:2363:boolean isDataAvailable(java.lang.String) -> h
+    2397:2420:java.lang.Object get(java.lang.String) -> e
+    2424:2428:void checkGetAccess(java.lang.String) -> i
+    2437:2438:void registerSaveListener(com.parse.GetCallback) -> a
+    2441:2442:void unregisterSaveListener(com.parse.GetCallback) -> b
+com.parse.ParseObject$1 -> fu:
     63:63:java.lang.Class getExpectedType() -> a
-    1:1:com.parse.ParseObject getNew(boolean) -> a
-com.parse.ParseObject$2 -> fx:
+    57:57:com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$2 -> fv:
     72:72:java.lang.Class getExpectedType() -> a
-    1:1:com.parse.ParseObject getNew(boolean) -> a
-com.parse.ParseObject$3 -> fy:
+    66:66:com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$3 -> fw:
     81:81:java.lang.Class getExpectedType() -> a
-    1:1:com.parse.ParseObject getNew(boolean) -> a
-com.parse.ParseObject$4 -> fz:
+    75:75:com.parse.ParseObject getNew(boolean) -> a
+com.parse.ParseObject$4 -> fx:
     com.parse.ParseObject this$0 -> a
-    934:935:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseObject$5 -> fA:
+    933:934:void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseObject$5 -> fy:
     com.parse.ParseObject this$0 -> a
-    1:1:java.lang.Object run() -> a
-com.parse.ParseObject$6 -> fB:
+    953:953:java.lang.Object run() -> a
+com.parse.ParseObject$6 -> fz:
     com.parse.ParseObject this$0 -> a
-    1032:1033:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseObject$ParseObjectFactory -> fC:
+    1031:1032:void perform(com.parse.ParseCommand,java.lang.Object) -> a
+com.parse.ParseObject$ParseObjectFactory -> fA:
     com.parse.ParseObject getNew(boolean) -> a
     java.lang.Class getExpectedType() -> a
-com.parse.ParsePushRouter -> fD:
+com.parse.ParsePushRouter -> fB:
     java.util.regex.Pattern CHANNEL_PATTERN -> b
     java.util.Map channelRoutes -> c
     com.parse.ParsePushRouter$CallbackFactory defaultRoute -> d
@@ -3308,29 +3257,29 @@ com.parse.ParsePushRouter -> fD:
     531:610:void routePush(com.parse.PushService,org.json.JSONObject) -> a
     614:620:boolean isSubscribedToChannel$5ffc0101(java.lang.String) -> a
     653:677:org.json.JSONObject getPushRequestJSON(android.content.Context) -> c
-    297:297:void access$0(android.content.Context) -> d
-    612:612:boolean access$1(android.content.Context,java.lang.String) -> a
-com.parse.ParsePushRouter$1 -> fE:
+    25:25:void access$000(android.content.Context) -> d
+    25:25:boolean access$100(android.content.Context,java.lang.String) -> a
+com.parse.ParsePushRouter$1 -> fC:
     android.content.Context val$context -> a
     com.parse.ParseInstallation val$installation -> b
     95:117:void done(com.parse.ParseException) -> a
-com.parse.ParsePushRouter$1$1 -> fF:
-    android.content.Context val$context -> a
-    1:1:java.lang.Object run() -> a
-com.parse.ParsePushRouter$2 -> fG:
+com.parse.ParsePushRouter$1$1 -> fD:
+    com.parse.ParsePushRouter$1 this$0 -> a
+    110:110:java.lang.Object run() -> a
+com.parse.ParsePushRouter$2 -> fE:
     com.parse.PushService val$service -> a
     org.json.JSONObject val$message -> b
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.ParsePushRouter$3 -> fH:
+    551:551:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.ParsePushRouter$3 -> fF:
     java.lang.String val$channel -> a
     com.parse.PushService val$service -> b
     566:580:java.lang.Boolean run() -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParsePushRouter$CallbackFactory -> fI:
+    561:561:java.lang.Object run() -> a
+com.parse.ParsePushRouter$CallbackFactory -> fG:
     java.lang.Class klass -> a
     org.json.JSONObject contextData -> b
     58:64:org.json.JSONObject toJSON() -> a
-com.parse.ParseQuery -> fJ:
+com.parse.ParseQuery -> fH:
     java.lang.String className -> c
     java.util.HashMap where -> d
     java.util.ArrayList include -> e
@@ -3344,84 +3293,83 @@ com.parse.ParseQuery -> fJ:
     long objectsParsed -> m
     com.parse.ParseCommand currentCommand -> a
     java.lang.Boolean isRunning -> n
-    java.util.HashMap extraOptions -> o
     com.parse.ParseQuery$CachePolicy cachePolicy -> b
-    long maxCacheAge -> p
-    int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy -> q
-    168:168:void checkIfRunning(boolean) -> a
-    179:179:void finishedRunning() -> d
-    187:211:java.lang.Object maybeEncodeSubQueries(java.lang.Object) -> a
-    216:280:org.json.JSONObject getFindParams() -> e
-    286:297:com.parse.ParseCommand makeFindCommand() -> f
-    303:329:java.util.List convertFindResponse(org.json.JSONObject) -> a
-    345:371:java.lang.Object runCommandWithPolicy(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy) -> a
-    389:398:java.util.List findWithCachePolicy(com.parse.ParseQuery$CachePolicy) -> a
-    431:441:java.util.List find(boolean) -> d
-    459:468:com.parse.ParseObject getFirst(boolean) -> e
-    480:498:java.util.List findFromNetwork(boolean) -> b
-    543:555:java.util.List findFromCache() -> a
-    568:580:java.lang.Integer countFromCache() -> b
-    593:622:void findInBackground(com.parse.FindCallback) -> a
-    634:648:void getFirstInBackground(com.parse.GetCallback) -> a
-    651:654:com.parse.ParseCommand makeCountCommand() -> c
-    670:680:int count(boolean) -> c
-    731:735:com.parse.ParseObject get(java.lang.String,boolean) -> a
-    779:792:void getInBackground(java.lang.String,com.parse.GetCallback) -> a
-    805:812:com.parse.ParseQuery whereEqualTo(java.lang.String,java.lang.Object) -> a
-    817:841:void addCondition(java.lang.String,java.lang.String,java.lang.Object) -> a
-    1032:1037:com.parse.ParseQuery whereNotContainedIn(java.lang.String,java.util.Collection) -> a
-    1142:1143:com.parse.ParseQuery whereMatches(java.lang.String,java.lang.String) -> b
-    1179:1181:com.parse.ParseQuery whereContains(java.lang.String,java.lang.String) -> a
-    1235:1236:com.parse.ParseQuery whereExists(java.lang.String) -> a
-    1301:1304:com.parse.ParseQuery orderByDescending(java.lang.String) -> b
-    1333:1336:void setLimit(int) -> a
-    1360:1363:void setSkip(int) -> b
-    79:79:int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy() -> g
-com.parse.ParseQuery$1 -> fK:
+    long maxCacheAge -> o
+    166:173:void checkIfRunning(boolean) -> a
+    177:181:void finishedRunning() -> d
+    185:209:java.lang.Object maybeEncodeSubQueries(java.lang.Object) -> a
+    214:274:org.json.JSONObject getFindParams() -> e
+    280:291:com.parse.ParseCommand makeFindCommand() -> f
+    297:319:java.util.List convertFindResponse(org.json.JSONObject) -> a
+    335:361:java.lang.Object runCommandWithPolicy(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy) -> a
+    379:388:java.util.List findWithCachePolicy(com.parse.ParseQuery$CachePolicy) -> a
+    421:431:java.util.List find(boolean) -> d
+    449:458:com.parse.ParseObject getFirst(boolean) -> e
+    470:488:java.util.List findFromNetwork(boolean) -> b
+    533:545:java.util.List findFromCache() -> a
+    558:570:java.lang.Integer countFromCache() -> b
+    583:612:void findInBackground(com.parse.FindCallback) -> a
+    624:638:void getFirstInBackground(com.parse.GetCallback) -> a
+    641:644:com.parse.ParseCommand makeCountCommand() -> c
+    660:670:int count(boolean) -> c
+    721:725:com.parse.ParseObject get(java.lang.String,boolean) -> a
+    769:782:void getInBackground(java.lang.String,com.parse.GetCallback) -> a
+    795:802:com.parse.ParseQuery whereEqualTo(java.lang.String,java.lang.Object) -> a
+    807:831:void addCondition(java.lang.String,java.lang.String,java.lang.Object) -> a
+    1001:1006:com.parse.ParseQuery whereNotContainedIn(java.lang.String,java.util.Collection) -> a
+    1111:1112:com.parse.ParseQuery whereMatches(java.lang.String,java.lang.String) -> b
+    1148:1150:com.parse.ParseQuery whereContains(java.lang.String,java.lang.String) -> a
+    1204:1205:com.parse.ParseQuery whereExists(java.lang.String) -> a
+    1266:1269:com.parse.ParseQuery orderByDescending(java.lang.String) -> b
+    1298:1301:void setLimit(int) -> a
+    1325:1328:void setSkip(int) -> b
+com.parse.ParseQuery$1 -> fI:
     com.parse.ParseQuery this$0 -> a
-    1:1:java.lang.Object runOnNetwork(boolean) -> a
-    1:1:java.lang.Object runFromCache() -> a
-com.parse.ParseQuery$2 -> fL:
+    366:366:java.lang.Object runFromCache() -> a
+    366:366:java.lang.Object runOnNetwork(boolean) -> a
+com.parse.ParseQuery$2 -> fJ:
     com.parse.ParseQuery this$0 -> a
-    1:1:java.lang.Object runOnNetwork(boolean) -> a
-    1:1:java.lang.Object runFromCache() -> a
-com.parse.ParseQuery$3 -> fM:
-    com.parse.ParseQuery this$0 -> a
-    com.parse.ParseQuery$CachePolicy val$callbackCachePolicy -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseQuery$4 -> fN:
+    379:379:java.lang.Object runFromCache() -> a
+    379:379:java.lang.Object runOnNetwork(boolean) -> a
+com.parse.ParseQuery$3 -> fK:
+    com.parse.ParseQuery$CachePolicy val$callbackCachePolicy -> a
+    com.parse.ParseQuery this$0 -> b
+    602:602:java.lang.Object run() -> a
+com.parse.ParseQuery$4 -> fL:
     com.parse.GetCallback val$callback -> a
-    638:646:void done(java.util.List,com.parse.ParseException) -> a
-com.parse.ParseQuery$5 -> fO:
+    628:636:void done(java.util.List,com.parse.ParseException) -> a
+com.parse.ParseQuery$5 -> fM:
     com.parse.ParseQuery this$0 -> a
-    1:1:java.lang.Object run() -> a
-com.parse.ParseQuery$6 -> fP:
-    com.parse.ParseQuery this$0 -> a
-    java.lang.String val$finalObjectId -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseQuery$CachePolicy -> fQ:
+    694:694:java.lang.Object run() -> a
+com.parse.ParseQuery$6 -> fN:
+    java.lang.String val$finalObjectId -> a
+    com.parse.ParseQuery this$0 -> b
+    772:772:java.lang.Object run() -> a
+com.parse.ParseQuery$7 -> fO:
+    int[] $SwitchMap$com$parse$ParseQuery$CachePolicy -> a
+com.parse.ParseQuery$CachePolicy -> fP:
     com.parse.ParseQuery$CachePolicy IGNORE_CACHE -> a
     com.parse.ParseQuery$CachePolicy CACHE_ONLY -> b
     com.parse.ParseQuery$CachePolicy NETWORK_ONLY -> c
     com.parse.ParseQuery$CachePolicy CACHE_ELSE_NETWORK -> d
     com.parse.ParseQuery$CachePolicy NETWORK_ELSE_CACHE -> e
     com.parse.ParseQuery$CachePolicy CACHE_THEN_NETWORK -> f
-    com.parse.ParseQuery$CachePolicy[] ENUM$VALUES -> g
-    1:1:com.parse.ParseQuery$CachePolicy[] values() -> values
-    1:1:com.parse.ParseQuery$CachePolicy valueOf(java.lang.String) -> valueOf
-com.parse.ParseQuery$CommandDelegate -> fR:
+    com.parse.ParseQuery$CachePolicy[] $VALUES -> g
+    101:101:com.parse.ParseQuery$CachePolicy[] values() -> values
+    101:101:com.parse.ParseQuery$CachePolicy valueOf(java.lang.String) -> valueOf
+com.parse.ParseQuery$CommandDelegate -> fQ:
     java.lang.Object runOnNetwork(boolean) -> a
     java.lang.Object runFromCache() -> a
-com.parse.ParseRelation -> fS:
+com.parse.ParseRelation -> fR:
     com.parse.ParseObject parent -> a
     java.lang.String key -> b
     java.lang.String targetClass -> c
-com.parse.ParseRemoveOperation -> fT:
+com.parse.ParseRemoveOperation -> fS:
     java.util.HashSet objects -> a
     36:58:com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
     63:75:java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
-    1:1:java.lang.Object encode() -> a
-com.parse.ParseRequestRetryer -> fU:
+    17:17:java.lang.Object encode() -> a
+com.parse.ParseRequestRetryer -> fT:
     org.apache.http.client.HttpClient client -> a
     org.apache.http.client.methods.HttpUriRequest request -> b
     long delay -> c
@@ -3431,25 +3379,25 @@ com.parse.ParseRequestRetryer -> fU:
     53:105:byte[] sendOneRequest$3f932915(com.parse.ParseCallback) -> b
     112:134:byte[] go$3f932915(com.parse.ParseCallback) -> a
     138:138:com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> a
-com.parse.ParseRequestRetryer$1 -> fV:
+com.parse.ParseRequestRetryer$1 -> fU:
     int val$progressToReport -> a
-    1:1:java.lang.Object run() -> a
-com.parse.ParseRole -> fW:
+    77:77:java.lang.Object run() -> a
+com.parse.ParseRole -> fV:
     java.util.regex.Pattern NAME_PATTERN -> e
     104:108:void validateSave() -> r
     112:126:void put(java.lang.String,java.lang.Object) -> a
-com.parse.ParseSetOperation -> fX:
+com.parse.ParseSetOperation -> fW:
     java.lang.Object value -> a
     21:21:java.lang.Object encode() -> a
     25:25:com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> a
     29:29:java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> a
-com.parse.ParseTwitterUtils -> fY:
+com.parse.ParseTwitterUtils -> fX:
     com.parse.twitter.Twitter twitter -> b
     com.parse.auth.TwitterAuthenticationProvider provider -> c
     boolean isInitialized -> a
     16:19:com.parse.auth.TwitterAuthenticationProvider getAuthenticationProvider() -> a
     26:29:com.parse.twitter.Twitter getTwitter() -> b
-com.parse.ParseUser -> fZ:
+com.parse.ParseUser -> fY:
     java.lang.String password -> e
     java.lang.String sessionToken -> f
     org.json.JSONObject authData -> g
@@ -3477,7 +3425,7 @@ com.parse.ParseUser -> fZ:
     352:362:void save(boolean) -> a
     388:401:com.parse.ParseCommand constructSaveCommand() -> n
     411:440:com.parse.ParseCommand constructSignUpOrLoginCommand() -> E
-    471:550:void signUp(boolean) -> c
+    471:548:void signUp(boolean) -> c
     571:581:void signUpInBackground(com.parse.SignUpCallback) -> a
     610:628:com.parse.ParseUser logIn(java.lang.String,java.lang.String) -> b
     650:658:void logInInBackground(java.lang.String,java.lang.String,com.parse.LogInCallback) -> a
@@ -3491,61 +3439,61 @@ com.parse.ParseUser -> fZ:
     875:880:void registerAuthenticationProvider(com.parse.auth.ParseAuthenticationProvider) -> a
     883:887:void logInWith(java.lang.String,com.parse.LogInCallback) -> a
     891:969:void logInWith(java.lang.String,org.json.JSONObject,com.parse.LogInCallback) -> a
-    972:1008:void resolveLaziness(boolean) -> d
+    972:1006:void resolveLaziness(boolean) -> d
     1098:1098:boolean isNew() -> z
     1125:1125:com.parse.ParseQuery getQuery() -> A
-    1:1:com.parse.ParseObject fetch() -> c
-    23:23:org.json.JSONObject access$2(com.parse.ParseUser) -> a
-    24:24:java.util.Set access$3(com.parse.ParseUser) -> b
-    30:30:java.util.Map access$4() -> B
-    410:410:com.parse.ParseCommand access$5(com.parse.ParseUser) -> c
-    797:797:void access$6(com.parse.ParseUser,java.lang.String) -> a
-    695:695:void access$7(com.parse.ParseUser) -> d
-    307:307:void access$8(com.parse.ParseUser) -> e
-    319:319:void access$9(com.parse.ParseUser,org.json.JSONObject) -> a
-    971:971:void access$10(com.parse.ParseUser,boolean) -> a
-com.parse.ParseUser$1 -> ga:
+    18:18:com.parse.ParseObject fetch() -> c
+    18:18:org.json.JSONObject access$000(com.parse.ParseUser) -> a
+    18:18:java.util.Set access$100(com.parse.ParseUser) -> b
+    18:18:java.util.Map access$200() -> B
+    18:18:com.parse.ParseCommand access$300(com.parse.ParseUser) -> c
+    18:18:void access$400(com.parse.ParseUser,java.lang.String) -> a
+    18:18:void access$500(com.parse.ParseUser) -> d
+    18:18:void access$600(com.parse.ParseUser) -> e
+    18:18:void access$700(com.parse.ParseUser,boolean) -> a
+    18:18:void access$800(com.parse.ParseUser,org.json.JSONObject) -> a
+com.parse.ParseUser$1 -> fZ:
     com.parse.ParseUser this$0 -> a
     539:540:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseUser$11 -> gb:
-    com.parse.ParseUser this$0 -> a
-    java.lang.String val$authType -> b
-    org.json.JSONObject val$authData -> c
+com.parse.ParseUser$11 -> ga:
+    java.lang.String val$authType -> a
+    org.json.JSONObject val$authData -> b
+    com.parse.ParseUser this$0 -> c
     1032:1054:java.lang.Void run() -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseUser$2 -> gc:
+    1028:1028:java.lang.Object run() -> a
+com.parse.ParseUser$2 -> gb:
     com.parse.ParseUser this$0 -> a
-    1:1:java.lang.Object run() -> a
-com.parse.ParseUser$3 -> gd:
+    573:573:java.lang.Object run() -> a
+com.parse.ParseUser$3 -> gc:
     java.lang.String val$username -> a
     java.lang.String val$password -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseUser$5 -> ge:
-    com.parse.ParseUser this$0 -> a
-    java.lang.String val$authType -> b
-    com.parse.SaveCallback val$callback -> c
+    650:650:java.lang.Object run() -> a
+com.parse.ParseUser$5 -> gd:
+    java.lang.String val$authType -> a
+    com.parse.SaveCallback val$callback -> b
+    com.parse.ParseUser this$0 -> c
     840:850:void done(com.parse.ParseException) -> a
-com.parse.ParseUser$6 -> gf:
+com.parse.ParseUser$6 -> ge:
     java.lang.String val$authType -> a
     org.json.JSONObject val$authData -> b
     894:911:com.parse.ParseUser run() -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseUser$6$1 -> gg:
+    891:891:java.lang.Object run() -> a
+com.parse.ParseUser$6$1 -> gf:
     com.parse.ParseUser val$user -> a
     905:906:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.ParseUser$7 -> gh:
+com.parse.ParseUser$7 -> gg:
     java.lang.String val$authType -> a
     org.json.JSONObject val$authData -> b
-    921:941:com.parse.ParseUser run() -> b
-    1:1:java.lang.Object run() -> a
-com.parse.ParseUser$8 -> gi:
+    921:939:com.parse.ParseUser run() -> b
+    918:918:java.lang.Object run() -> a
+com.parse.ParseUser$8 -> gh:
     com.parse.BackgroundTask val$logInWithTask -> a
     com.parse.LogInCallback val$callback -> b
     949:963:void done(com.parse.ParseException) -> a
-com.parse.ParseUser$9 -> gj:
+com.parse.ParseUser$9 -> gi:
     com.parse.ParseUser this$0 -> a
     989:990:void perform(com.parse.ParseCommand,java.lang.Object) -> a
-com.parse.PushCallback -> gk:
+com.parse.PushCallback -> gj:
     org.json.JSONObject localData -> a
     org.json.JSONObject pushData -> b
     android.app.Service service -> c
@@ -3569,7 +3517,7 @@ com.parse.PushService -> com.parse.PushService:
     158:168:void subscribe(android.content.Context,java.lang.String,java.lang.Class) -> a
     201:203:void subscribe(android.content.Context,java.lang.String,java.lang.Class,int) -> a
     236:246:void setDefaultPushCallback(android.content.Context,java.lang.Class) -> a
-    294:298:void sleep(int) -> a
+    294:302:void sleep(int) -> a
     319:321:void resetDelay() -> a
     339:366:void onCreate() -> onCreate
     369:386:boolean sendMessage(java.lang.String) -> a
@@ -3577,98 +3525,102 @@ com.parse.PushService -> com.parse.PushService:
     423:558:void readInBackground(java.io.BufferedReader) -> a
     565:565:android.os.IBinder onBind(android.content.Intent) -> onBind
     579:603:void onDestroy() -> onDestroy
-    405:405:void access$0(com.parse.PushService) -> a
-    89:89:int access$1() -> b
-    97:97:com.parse.PushService$ServiceState access$2(com.parse.PushService) -> b
-    324:324:void access$3(com.parse.PushService) -> c
-    73:73:java.lang.String access$4() -> c
-    75:75:int access$5(com.parse.PushService) -> d
-    391:391:boolean access$6(android.content.Context) -> b
-    97:97:void access$7(com.parse.PushService,com.parse.PushService$ServiceState) -> a
-    422:422:void access$8(com.parse.PushService,java.io.BufferedReader) -> a
-com.parse.PushService$1 -> gl:
+    71:71:void access$000(com.parse.PushService) -> a
+    71:71:int access$100() -> b
+    71:71:com.parse.PushService$ServiceState access$200(com.parse.PushService) -> b
+    71:71:void access$300(com.parse.PushService) -> c
+    71:71:java.lang.String access$400() -> c
+    71:71:int access$500(com.parse.PushService) -> d
+    71:71:boolean access$600(android.content.Context) -> b
+    71:71:com.parse.PushService$ServiceState access$202(com.parse.PushService,com.parse.PushService$ServiceState) -> a
+    71:71:void access$700(com.parse.PushService,java.io.BufferedReader) -> a
+com.parse.PushService$1 -> gk:
     com.parse.PushService this$0 -> a
     360:361:void run() -> run
-com.parse.PushService$2 -> gm:
+com.parse.PushService$2 -> gl:
     java.io.BufferedReader reader -> a
-    com.parse.PushService this$0 -> b
-    java.io.BufferedReader val$initialReader -> c
-    com.parse.PushService val$finalService -> d
+    java.io.BufferedReader val$initialReader -> b
+    com.parse.PushService val$finalService -> c
+    com.parse.PushService this$0 -> d
     433:525:java.lang.String doInBackground$606be067() -> d
-    1:1:void onPostExecute(java.lang.Object) -> a
-    1:1:java.lang.Object doInBackground(java.lang.Object[]) -> a
-com.parse.PushService$ServiceState -> gn:
+    428:428:void onPostExecute(java.lang.Object) -> a
+    428:428:java.lang.Object doInBackground(java.lang.Object[]) -> a
+com.parse.PushService$ServiceState -> gm:
     com.parse.PushService$ServiceState STOPPED -> a
     com.parse.PushService$ServiceState ABORTING -> b
     com.parse.PushService$ServiceState DESTRUCTING -> c
     com.parse.PushService$ServiceState RUNNING -> d
-    com.parse.PushService$ServiceState[] ENUM$VALUES -> e
-    1:1:com.parse.PushService$ServiceState[] values() -> values
-    1:1:com.parse.PushService$ServiceState valueOf(java.lang.String) -> valueOf
-com.parse.SaveCallback -> go:
+    com.parse.PushService$ServiceState[] $VALUES -> e
+    91:91:com.parse.PushService$ServiceState[] values() -> values
+    91:91:com.parse.PushService$ServiceState valueOf(java.lang.String) -> valueOf
+com.parse.SaveCallback -> gn:
     void done(com.parse.ParseException) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.SignUpCallback -> gp:
+    29:29:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.SignUpCallback -> go:
     void done(com.parse.ParseException) -> a
-    1:1:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
-com.parse.StandardPushCallback -> gq:
+    29:29:void internalDone(java.lang.Object,com.parse.ParseException) -> a_
+com.parse.StandardPushCallback -> gp:
     int totalNotifications -> e
     boolean disableNotifications -> f
     27:30:android.os.Bundle makeBundle() -> a
     34:90:void run() -> run
-com.parse.auth.AnonymousAuthenticationProvider -> gr:
+com.parse.auth.AnonymousAuthenticationProvider -> gq:
     16:18:void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
     23:25:org.json.JSONObject getAuthData() -> a
     29:29:void deauthenticate() -> b
     32:32:boolean restoreAuthentication(org.json.JSONObject) -> a
     39:39:java.lang.String getAuthType() -> c
-com.parse.auth.FacebookAuthenticationProvider -> gs:
+com.parse.auth.FacebookAuthenticationProvider -> gr:
     java.text.DateFormat preciseDateFormat -> a
-    com.facebook.android.Facebook facebook -> b
-    com.facebook.Session session -> c
-    java.lang.String applicationId -> f
-    int activityCode -> g
-    java.lang.ref.WeakReference baseActivity -> d
-    android.content.Context applicationContext -> h
-    java.util.Collection permissions -> i
-    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback currentOperationCallback -> e
-    103:157:void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
-    171:172:void cancel() -> d
-    182:182:java.lang.String getAuthType() -> c
-    201:208:void handleCancel() -> a
-    211:218:void handleError(java.lang.Throwable) -> a
-    255:256:void setActivity(android.app.Activity) -> a
-    270:271:void setActivityCode(int) -> a
-    274:275:void setPermissions(java.util.Collection) -> a
-    279:316:boolean restoreAuthentication(org.json.JSONObject) -> a
-    322:323:void deauthenticate() -> b
-com.parse.auth.FacebookAuthenticationProvider$2 -> gt:
+    com.parse.facebook.Facebook facebook -> b
+    boolean useSingleSignOn -> d
+    int activityCode -> e
+    java.lang.ref.WeakReference baseActivity -> f
+    java.util.Collection permissions -> g
+    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback currentOperationCallback -> c
+    110:142:void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
+    153:154:void cancel() -> d
+    164:164:java.lang.String getAuthType() -> c
+    176:181:void handleCancel() -> a
+    186:191:void handleError(java.lang.Throwable) -> a
+    230:231:void setActivity(android.app.Activity) -> a
+    245:246:void setActivityCode(int) -> a
+    249:250:void setPermissions(java.util.Collection) -> a
+    253:254:void setSingleSignOn(boolean) -> a
+    257:268:boolean restoreAuthentication(org.json.JSONObject) -> a
+    274:276:void deauthenticate() -> b
+com.parse.auth.FacebookAuthenticationProvider$2 -> gs:
     com.parse.auth.FacebookAuthenticationProvider this$0 -> a
-    126:154:void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception) -> a
-com.parse.auth.FacebookAuthenticationProvider$2$1 -> gu:
-    com.parse.auth.FacebookAuthenticationProvider$2 this$1 -> a
-    135:145:void onCompleted(com.facebook.Response) -> a
-com.parse.auth.ParseAuthenticationProvider -> gv:
+    125:126:void onCancel() -> a
+    129:132:void onComplete(android.os.Bundle) -> a
+    135:136:void onError(com.parse.facebook.DialogError) -> a
+    139:140:void onFacebookError(com.parse.facebook.FacebookError) -> a
+com.parse.auth.FacebookAuthenticationProvider$GetUserIdBackgroundTask -> gt:
+    com.parse.auth.FacebookAuthenticationProvider this$0 -> a
+    34:41:java.lang.Object doInBackground$532ebdd5() -> a
+    47:54:void onPostExecute(java.lang.Object) -> onPostExecute
+    30:30:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.auth.ParseAuthenticationProvider -> gu:
     void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
     void deauthenticate() -> b
     boolean restoreAuthentication(org.json.JSONObject) -> a
     java.lang.String getAuthType() -> c
-com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback -> gw:
+com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback -> gv:
     com.parse.auth.ParseAuthenticationProvider val$authenticator -> a
     com.parse.LogInCallback val$callback -> b
     1014:1015:void onSuccess(org.json.JSONObject) -> a
     1018:1019:void onCancel() -> a
     1022:1023:void onError(java.lang.Throwable) -> a
-com.parse.auth.TwitterAuthenticationProvider -> gx:
+com.parse.auth.TwitterAuthenticationProvider -> gw:
     java.lang.ref.WeakReference baseContext -> a
     com.parse.twitter.Twitter twitter -> b
     com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback currentOperationCallback -> c
     29:74:void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> a
     93:97:void deauthenticate() -> b
     100:100:java.lang.String getAuthType() -> c
-    111:119:void handleCancel(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> b
+    111:117:void handleCancel(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> b
     122:138:boolean restoreAuthentication(org.json.JSONObject) -> a
-com.parse.codec.binary.Base64 -> gy:
+com.parse.codec.binary.Base64 -> gx:
     byte[] CHUNK_SEPARATOR -> g
     byte[] STANDARD_ENCODE_TABLE -> h
     byte[] URL_SAFE_ENCODE_TABLE -> i
@@ -3684,7 +3636,7 @@ com.parse.codec.binary.Base64 -> gy:
     551:551:java.lang.String encodeBase64String(byte[]) -> a
     668:668:byte[] decodeBase64(java.lang.String) -> a
     753:753:boolean isInAlphabet(byte) -> a
-com.parse.codec.binary.BaseNCodec -> gz:
+com.parse.codec.binary.BaseNCodec -> gy:
     int unencodedBlockSize -> g
     int encodedBlockSize -> h
     int lineLength -> a
@@ -3705,26 +3657,26 @@ com.parse.codec.binary.BaseNCodec -> gz:
     boolean isInAlphabet(byte) -> a
     416:424:boolean containsAlphabetOrPad(byte[]) -> d
     438:443:long getEncodedLength(byte[]) -> e
-com.parse.codec.binary.Hex -> gA:
+com.parse.codec.binary.Hex -> gz:
     char[] DIGITS_LOWER -> a
     char[] DIGITS_UPPER -> b
     java.lang.String charsetName -> c
     99:99:char[] encodeHex(byte[]) -> b
     151:151:java.lang.String encodeHexString(byte[]) -> a
     300:300:java.lang.String toString() -> toString
-com.parse.entity.mime.FormBodyPart -> gB:
+com.parse.entity.mime.FormBodyPart -> gA:
     java.lang.String name -> c
     com.parse.entity.mime.Header header -> a
     com.parse.entity.mime.content.ContentDescriptor body$73bbee5 -> b
     77:81:void addField(java.lang.String,java.lang.String) -> a
-com.parse.entity.mime.Header -> gC:
+com.parse.entity.mime.Header -> gB:
     java.util.List fields -> a
     java.util.Map fieldMap -> b
     55:66:void addField(com.parse.entity.mime.MinimalField) -> a
     73:81:com.parse.entity.mime.MinimalField getField(java.lang.String) -> a
     137:137:java.util.Iterator iterator() -> iterator
     142:142:java.lang.String toString() -> toString
-com.parse.entity.mime.HttpMultipart -> gD:
+com.parse.entity.mime.HttpMultipart -> gC:
     org.apache.http.util.ByteArrayBuffer FIELD_SEP -> a
     org.apache.http.util.ByteArrayBuffer CR_LF -> b
     org.apache.http.util.ByteArrayBuffer TWO_DASHES -> c
@@ -3732,7 +3684,6 @@ com.parse.entity.mime.HttpMultipart -> gD:
     java.lang.String boundary -> e
     java.util.List parts -> f
     com.parse.entity.mime.HttpMultipartMode mode -> g
-    int[] $SWITCH_TABLE$com$parse$entity$mime$HttpMultipartMode -> h
     55:58:org.apache.http.util.ByteArrayBuffer encode(java.nio.charset.Charset,java.lang.String) -> a
     63:64:void writeBytes(org.apache.http.util.ByteArrayBuffer,java.io.OutputStream) -> a
     68:70:void writeBytes(java.lang.String,java.nio.charset.Charset,java.io.OutputStream) -> a
@@ -3743,13 +3694,14 @@ com.parse.entity.mime.HttpMultipart -> gD:
     179:216:void doWriteTo(com.parse.entity.mime.HttpMultipartMode,java.io.OutputStream,boolean) -> a
     226:227:void writeTo(java.io.OutputStream) -> a
     243:260:long getTotalLength() -> b
-    51:51:int[] $SWITCH_TABLE$com$parse$entity$mime$HttpMultipartMode() -> c
+com.parse.entity.mime.HttpMultipart$1 -> gD:
+    int[] $SwitchMap$com$parse$entity$mime$HttpMultipartMode -> a
 com.parse.entity.mime.HttpMultipartMode -> gE:
     com.parse.entity.mime.HttpMultipartMode STRICT -> a
     com.parse.entity.mime.HttpMultipartMode BROWSER_COMPATIBLE -> b
-    com.parse.entity.mime.HttpMultipartMode[] ENUM$VALUES -> c
-    1:1:com.parse.entity.mime.HttpMultipartMode[] values() -> values
-    1:1:com.parse.entity.mime.HttpMultipartMode valueOf(java.lang.String) -> valueOf
+    com.parse.entity.mime.HttpMultipartMode[] $VALUES -> c
+    34:34:com.parse.entity.mime.HttpMultipartMode[] values() -> values
+    34:34:com.parse.entity.mime.HttpMultipartMode valueOf(java.lang.String) -> valueOf
 com.parse.entity.mime.MIME -> gF:
     java.nio.charset.Charset DEFAULT_CHARSET -> a
 com.parse.entity.mime.MinimalField -> gG:
@@ -3797,7 +3749,85 @@ com.parse.entity.mime.content.StringBody -> gK:
     158:158:java.lang.String getCharset() -> b
     162:162:long getContentLength() -> d
     166:166:java.lang.String getFilename() -> a
-com.parse.gdata.PercentEscaper -> gL:
+com.parse.facebook.DialogError -> gL:
+com.parse.facebook.Facebook -> gM:
+    java.lang.String DIALOG_BASE_URL -> a
+    java.lang.String GRAPH_BASE_URL -> b
+    java.lang.String RESTSERVER_URL -> c
+    java.lang.String mAccessToken -> d
+    long mAccessExpires -> e
+    java.lang.String mAppId -> f
+    android.app.Activity mAuthActivity -> g
+    java.lang.String[] mAuthPermissions -> h
+    int mAuthActivityCode -> i
+    com.parse.facebook.Facebook$DialogListener mAuthDialogListener -> j
+    196:209:void authorize(android.app.Activity,java.lang.String[],int,com.parse.facebook.Facebook$DialogListener) -> a
+    227:253:boolean startSingleSignOn(android.app.Activity,java.lang.String,java.lang.String[],int) -> a
+    312:323:boolean validateAppSignatureForPackage(android.content.Context,java.lang.String) -> a
+    339:377:void startDialogAuth(android.app.Activity,java.lang.String[]) -> a
+    393:461:void authorizeCallback(int,int,android.content.Intent) -> a
+    687:687:java.lang.String request(java.lang.String) -> a
+    714:714:java.lang.String request(java.lang.String,android.os.Bundle) -> a
+    744:750:java.lang.String request(java.lang.String,android.os.Bundle,java.lang.String) -> a
+    835:835:boolean isSessionValid() -> a
+    847:847:java.lang.String getAccessToken() -> b
+    857:857:long getAccessExpires() -> c
+    866:868:void setAccessToken(java.lang.String) -> b
+    877:878:void setAccessExpires(long) -> a
+    888:894:void setAccessExpiresIn(java.lang.String) -> c
+    901:902:void setAppId(java.lang.String) -> d
+    55:55:com.parse.facebook.Facebook$DialogListener access$000(com.parse.facebook.Facebook) -> a
+com.parse.facebook.Facebook$1 -> gN:
+    com.parse.facebook.Facebook this$0 -> a
+    348:360:void onComplete(android.os.Bundle) -> a
+    363:365:void onError(com.parse.facebook.DialogError) -> a
+    368:370:void onFacebookError(com.parse.facebook.FacebookError) -> a
+    373:375:void onCancel() -> a
+com.parse.facebook.Facebook$2 -> gO:
+    797:797:void onFacebookError(com.parse.facebook.FacebookError) -> a
+    799:799:void onError(com.parse.facebook.DialogError) -> a
+    801:801:void onComplete(android.os.Bundle) -> a
+    803:803:void onCancel() -> a
+com.parse.facebook.Facebook$DialogListener -> gP:
+    void onComplete(android.os.Bundle) -> a
+    void onFacebookError(com.parse.facebook.FacebookError) -> a
+    void onError(com.parse.facebook.DialogError) -> a
+    void onCancel() -> a
+com.parse.facebook.FacebookError -> gQ:
+com.parse.facebook.FbDialog -> gR:
+    android.widget.FrameLayout$LayoutParams FILL -> a
+    java.lang.String mUrl -> b
+    com.parse.facebook.Facebook$DialogListener mListener -> c
+    android.app.ProgressDialog mSpinner -> d
+    android.widget.ImageView mCrossImage -> e
+    android.webkit.WebView mWebView -> f
+    android.widget.FrameLayout mContent -> g
+    69:94:void onCreate(android.os.Bundle) -> onCreate
+    41:41:com.parse.facebook.Facebook$DialogListener access$000(com.parse.facebook.FbDialog) -> a
+    41:41:android.app.ProgressDialog access$200(com.parse.facebook.FbDialog) -> b
+    41:41:android.widget.FrameLayout access$300(com.parse.facebook.FbDialog) -> c
+    41:41:android.webkit.WebView access$400(com.parse.facebook.FbDialog) -> d
+    41:41:android.widget.ImageView access$500(com.parse.facebook.FbDialog) -> e
+com.parse.facebook.FbDialog$1 -> gS:
+    com.parse.facebook.FbDialog this$0 -> a
+    101:103:void onClick(android.view.View) -> onClick
+com.parse.facebook.FbDialog$FbWebViewClient -> gT:
+    com.parse.facebook.FbDialog this$0 -> a
+    133:163:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    169:173:void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
+    177:180:void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
+    184:198:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+com.parse.facebook.Util -> gU:
+    boolean ENABLE_LOG -> a
+    66:80:java.lang.String encodePostBody(android.os.Bundle,java.lang.String) -> a
+    84:100:java.lang.String encodeUrl(android.os.Bundle) -> a
+    104:115:android.os.Bundle decodeUrl(java.lang.String) -> b
+    126:133:android.os.Bundle parseUrl(java.lang.String) -> a
+    154:221:java.lang.String openUrl(java.lang.String,java.lang.String,android.os.Bundle) -> a
+    225:231:java.lang.String read(java.io.InputStream) -> a
+    311:315:void showAlert(android.content.Context,java.lang.String,java.lang.String) -> a
+    326:326:void logd(java.lang.String,java.lang.String) -> a
+com.parse.gdata.PercentEscaper -> gV:
     char[] URI_ESCAPED_SPACE -> a
     char[] UPPER_HEX_DIGITS -> b
     boolean plusForSpace -> c
@@ -3806,7 +3836,7 @@ com.parse.gdata.PercentEscaper -> gL:
     170:176:int nextEscapeIndex(java.lang.CharSequence,int,int) -> a
     186:193:java.lang.String escape(java.lang.String) -> a
     203:272:char[] escape(int) -> a
-com.parse.gdata.UnicodeEscaper -> gM:
+com.parse.gdata.UnicodeEscaper -> gW:
     java.lang.ThreadLocal DEST_TL -> a
     char[] escape(int) -> a
     109:117:int nextEscapeIndex(java.lang.CharSequence,int,int) -> a
@@ -3814,15 +3844,15 @@ com.parse.gdata.UnicodeEscaper -> gM:
     167:217:java.lang.String escapeSlow(java.lang.String,int) -> a
     409:434:int codePointAt(java.lang.CharSequence,int,int) -> b
     443:447:char[] growBuffer(char[],int,int) -> a
-com.parse.gdata.UnicodeEscaper$1 -> gN:
-    1:1:java.lang.Object initialValue() -> initialValue
-com.parse.internal.AsyncCallback -> gO:
-    com.parse.auth.TwitterAuthenticationProvider this$0 -> a
-    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback val$callback -> b
-    56:72:void onSuccess$5d527811() -> a
+com.parse.gdata.UnicodeEscaper$2 -> gX:
+    455:455:java.lang.Object initialValue() -> initialValue
+com.parse.internal.AsyncCallback -> gY:
+    com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback val$callback -> a
+    com.parse.auth.TwitterAuthenticationProvider this$0 -> b
+    56:70:void onSuccess$5d527811() -> a
     41:42:void onCancel() -> b
-    45:53:void onFailure(java.lang.Throwable) -> a
-com.parse.oauth.OAuth1FlowDialog -> gP:
+    45:51:void onFailure(java.lang.Throwable) -> a
+com.parse.oauth.OAuth1FlowDialog -> gZ:
     android.widget.FrameLayout$LayoutParams FILL -> a
     java.lang.String callbackUrl -> b
     java.lang.String requestUrl -> c
@@ -3833,31 +3863,32 @@ com.parse.oauth.OAuth1FlowDialog -> gP:
     android.webkit.WebView webView -> h
     android.widget.FrameLayout content -> i
     55:73:void onCreate(android.os.Bundle) -> onCreate
-    29:29:java.lang.String access$0(com.parse.oauth.OAuth1FlowDialog) -> a
-    32:32:com.parse.oauth.OAuth1FlowDialog$FlowResultHandler access$1(com.parse.oauth.OAuth1FlowDialog) -> b
-    31:31:java.lang.String access$2(com.parse.oauth.OAuth1FlowDialog) -> c
-    33:33:android.app.ProgressDialog access$3(com.parse.oauth.OAuth1FlowDialog) -> d
-    36:36:android.widget.FrameLayout access$4(com.parse.oauth.OAuth1FlowDialog) -> e
-    35:35:android.webkit.WebView access$5(com.parse.oauth.OAuth1FlowDialog) -> f
-    34:34:android.widget.ImageView access$6(com.parse.oauth.OAuth1FlowDialog) -> g
-com.parse.oauth.OAuth1FlowDialog$1 -> gQ:
+    26:26:com.parse.oauth.OAuth1FlowDialog$FlowResultHandler access$000(com.parse.oauth.OAuth1FlowDialog) -> a
+    26:26:java.lang.String access$200(com.parse.oauth.OAuth1FlowDialog) -> b
+    26:26:java.lang.String access$300(com.parse.oauth.OAuth1FlowDialog) -> c
+    26:26:android.app.ProgressDialog access$400(com.parse.oauth.OAuth1FlowDialog) -> d
+    26:26:android.widget.FrameLayout access$500(com.parse.oauth.OAuth1FlowDialog) -> e
+    26:26:android.webkit.WebView access$600(com.parse.oauth.OAuth1FlowDialog) -> f
+    26:26:android.widget.ImageView access$700(com.parse.oauth.OAuth1FlowDialog) -> g
+com.parse.oauth.OAuth1FlowDialog$1 -> ha:
     com.parse.oauth.OAuth1FlowDialog this$0 -> a
     48:49:void onCancel(android.content.DialogInterface) -> onCancel
-com.parse.oauth.OAuth1FlowDialog$2 -> gR:
+com.parse.oauth.OAuth1FlowDialog$2 -> hb:
     com.parse.oauth.OAuth1FlowDialog this$0 -> a
     80:81:void onClick(android.view.View) -> onClick
-com.parse.oauth.OAuth1FlowDialog$FlowResultHandler -> gS:
-    void onCancel() -> a
-    void onError(int,java.lang.String,java.lang.String) -> a
-    void onComplete(java.lang.String) -> a
-com.parse.oauth.OAuth1FlowDialog$OAuth1WebViewClient -> gT:
+com.parse.oauth.OAuth1FlowDialog$FlowResultHandler -> hc:
+    com.parse.twitter.Twitter$1 this$1 -> a
+    191:192:void onCancel() -> a
+    134:135:void onError(int,java.lang.String,java.lang.String) -> a
+    138:188:void onComplete(java.lang.String) -> a
+com.parse.oauth.OAuth1FlowDialog$OAuth1WebViewClient -> hd:
     com.parse.oauth.OAuth1FlowDialog this$0 -> a
     130:139:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
     144:147:void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
     151:153:void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
     157:172:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
-com.parse.oauth.OAuth1FlowException -> gU:
-com.parse.os.ParseAsyncTask -> gV:
+com.parse.oauth.OAuth1FlowException -> he:
+com.parse.os.ParseAsyncTask -> hf:
     java.util.concurrent.BlockingQueue sWorkQueue -> a
     java.util.concurrent.ThreadFactory sThreadFactory -> b
     java.util.concurrent.ThreadPoolExecutor sExecutor -> c
@@ -3865,40 +3896,40 @@ com.parse.os.ParseAsyncTask -> gV:
     com.parse.os.ParseAsyncTask$WorkerRunnable mWorker -> e
     java.util.concurrent.FutureTask mFuture -> f
     com.parse.os.ParseAsyncTask$Status mStatus -> g
-    int[] $SWITCH_TABLE$com$parse$os$ParseAsyncTask$Status -> h
     java.lang.Object doInBackground(java.lang.Object[]) -> a
     295:295:void onPostExecute(java.lang.Object) -> a
     307:307:void onProgressUpdate$1b4f7664() -> a
     316:316:void onCancelled() -> b
     347:347:boolean cancel(boolean) -> a
     403:420:com.parse.os.ParseAsyncTask execute(java.lang.Object[]) -> b
-    439:439:void access$0(com.parse.os.ParseAsyncTask,java.lang.Object) -> a
-    181:181:com.parse.os.ParseAsyncTask$InternalHandler access$1() -> c
-    157:157:int[] $SWITCH_TABLE$com$parse$os$ParseAsyncTask$Status() -> d
-com.parse.os.ParseAsyncTask$1 -> gW:
+    157:157:com.parse.os.ParseAsyncTask$InternalHandler access$200() -> c
+    157:157:void access$300(com.parse.os.ParseAsyncTask,java.lang.Object) -> a
+com.parse.os.ParseAsyncTask$1 -> hg:
     java.util.concurrent.atomic.AtomicInteger mCount -> a
     170:170:java.lang.Thread newThread(java.lang.Runnable) -> newThread
-com.parse.os.ParseAsyncTask$2 -> gX:
+com.parse.os.ParseAsyncTask$2 -> hh:
     com.parse.os.ParseAsyncTask this$0 -> b
     214:215:java.lang.Object call() -> call
-com.parse.os.ParseAsyncTask$3 -> gY:
+com.parse.os.ParseAsyncTask$3 -> hi:
     com.parse.os.ParseAsyncTask this$0 -> a
     224:247:void done() -> done
-com.parse.os.ParseAsyncTask$InternalHandler -> gZ:
+com.parse.os.ParseAsyncTask$4 -> hj:
+    int[] $SwitchMap$com$parse$os$ParseAsyncTask$Status -> a
+com.parse.os.ParseAsyncTask$InternalHandler -> hk:
     451:464:void handleMessage(android.os.Message) -> handleMessage
-com.parse.os.ParseAsyncTask$ParseAsyncTaskResult -> ha:
+com.parse.os.ParseAsyncTask$ParseAsyncTaskResult -> hl:
     com.parse.os.ParseAsyncTask mTask -> a
     java.lang.Object[] mData -> b
-com.parse.os.ParseAsyncTask$Status -> hb:
+com.parse.os.ParseAsyncTask$Status -> hm:
     com.parse.os.ParseAsyncTask$Status PENDING -> a
     com.parse.os.ParseAsyncTask$Status RUNNING -> b
     com.parse.os.ParseAsyncTask$Status FINISHED -> c
-    com.parse.os.ParseAsyncTask$Status[] ENUM$VALUES -> d
-    1:1:com.parse.os.ParseAsyncTask$Status[] values() -> values
-    1:1:com.parse.os.ParseAsyncTask$Status valueOf(java.lang.String) -> valueOf
-com.parse.os.ParseAsyncTask$WorkerRunnable -> hc:
+    com.parse.os.ParseAsyncTask$Status[] $VALUES -> d
+    192:192:com.parse.os.ParseAsyncTask$Status[] values() -> values
+    192:192:com.parse.os.ParseAsyncTask$Status valueOf(java.lang.String) -> valueOf
+com.parse.os.ParseAsyncTask$WorkerRunnable -> hn:
     java.lang.Object[] mParams -> a
-com.parse.signpost.AbstractOAuthConsumer -> hd:
+com.parse.signpost.AbstractOAuthConsumer -> ho:
     java.lang.String consumerKey -> a
     java.lang.String consumerSecret -> b
     java.lang.String token -> c
@@ -3915,7 +3946,7 @@ com.parse.signpost.AbstractOAuthConsumer -> hd:
     160:160:java.lang.String getTokenSecret() -> b
     164:164:java.lang.String getConsumerKey() -> c
     168:168:java.lang.String getConsumerSecret() -> d
-com.parse.signpost.AbstractOAuthProvider -> he:
+com.parse.signpost.AbstractOAuthProvider -> hp:
     java.lang.String requestTokenEndpointUrl -> a
     java.lang.String accessTokenEndpointUrl -> b
     java.lang.String authorizationWebsiteUrl -> c
@@ -3929,7 +3960,7 @@ com.parse.signpost.AbstractOAuthProvider -> he:
     com.parse.signpost.http.HttpResponse sendRequest(com.parse.signpost.http.HttpRequest) -> a
     286:286:void closeConnection$723f2095(com.parse.signpost.http.HttpResponse) -> a
     289:289:com.parse.signpost.http.HttpParameters getResponseParameters() -> a
-com.parse.signpost.OAuth -> hf:
+com.parse.signpost.OAuth -> hq:
     com.parse.gdata.PercentEscaper percentEncoder -> a
     80:83:java.lang.String percentEncode(java.lang.String) -> a
     88:94:java.lang.String percentDecode(java.lang.String) -> b
@@ -3939,7 +3970,7 @@ com.parse.signpost.OAuth -> hf:
     273:283:com.parse.signpost.http.HttpParameters oauthHeaderToParamsMap(java.lang.String) -> d
     298:298:java.lang.String toHeaderElement(java.lang.String,java.lang.String) -> a
     302:305:void debugOut(java.lang.String,java.lang.String) -> b
-com.parse.signpost.OAuthConsumer -> hg:
+com.parse.signpost.OAuthConsumer -> hr:
     void setAdditionalParameters(com.parse.signpost.http.HttpParameters) -> a
     com.parse.signpost.http.HttpRequest sign(com.parse.signpost.http.HttpRequest) -> a
     com.parse.signpost.http.HttpRequest sign(java.lang.Object) -> a
@@ -3948,23 +3979,23 @@ com.parse.signpost.OAuthConsumer -> hg:
     java.lang.String getTokenSecret() -> b
     java.lang.String getConsumerKey() -> c
     java.lang.String getConsumerSecret() -> d
-com.parse.signpost.OAuthProvider -> hh:
+com.parse.signpost.OAuthProvider -> hs:
     java.lang.String retrieveRequestToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> a
     void retrieveAccessToken(com.parse.signpost.OAuthConsumer,java.lang.String) -> b
     com.parse.signpost.http.HttpParameters getResponseParameters() -> a
-com.parse.signpost.commonshttp.CommonsHttpOAuthConsumer -> hi:
+com.parse.signpost.commonshttp.CommonsHttpOAuthConsumer -> ht:
     36:42:com.parse.signpost.http.HttpRequest wrap(java.lang.Object) -> b
-com.parse.signpost.commonshttp.CommonsHttpOAuthProvider -> hj:
+com.parse.signpost.commonshttp.CommonsHttpOAuthProvider -> hu:
     org.apache.http.client.HttpClient httpClient -> a
     59:60:com.parse.signpost.http.HttpRequest createRequest(java.lang.String) -> a
     65:66:com.parse.signpost.http.HttpResponse sendRequest(com.parse.signpost.http.HttpRequest) -> a
     72:84:void closeConnection$723f2095(com.parse.signpost.http.HttpResponse) -> a
-com.parse.signpost.exception.OAuthCommunicationException -> hk:
-com.parse.signpost.exception.OAuthException -> hl:
-com.parse.signpost.exception.OAuthExpectationFailedException -> hm:
-com.parse.signpost.exception.OAuthMessageSignerException -> hn:
-com.parse.signpost.exception.OAuthNotAuthorizedException -> ho:
-com.parse.signpost.http.HttpParameters -> hp:
+com.parse.signpost.exception.OAuthCommunicationException -> hv:
+com.parse.signpost.exception.OAuthException -> hw:
+com.parse.signpost.exception.OAuthExpectationFailedException -> hx:
+com.parse.signpost.exception.OAuthMessageSignerException -> hy:
+com.parse.signpost.exception.OAuthNotAuthorizedException -> hz:
+com.parse.signpost.http.HttpParameters -> hA:
     java.util.TreeMap wrappedMap -> a
     72:72:java.lang.String put(java.lang.String,java.lang.String) -> a
     89:99:java.lang.String put(java.lang.String,java.lang.String,boolean) -> a
@@ -3984,10 +4015,10 @@ com.parse.signpost.http.HttpParameters -> hp:
     260:260:java.util.Set keySet() -> keySet
     264:264:java.util.Collection values() -> values
     268:268:java.util.Set entrySet() -> entrySet
-    1:1:java.lang.Object get(java.lang.Object) -> get
-    1:1:java.lang.Object remove(java.lang.Object) -> remove
-    1:1:java.lang.Object put(java.lang.Object,java.lang.Object) -> put
-com.parse.signpost.http.HttpRequest -> hq:
+    40:40:java.lang.Object remove(java.lang.Object) -> remove
+    40:40:java.lang.Object put(java.lang.Object,java.lang.Object) -> put
+    40:40:java.lang.Object get(java.lang.Object) -> get
+com.parse.signpost.http.HttpRequest -> hB:
     org.apache.http.client.methods.HttpUriRequest request -> a
     org.apache.http.HttpEntity entity -> b
     28:28:java.lang.String getMethod() -> a
@@ -3997,29 +4028,29 @@ com.parse.signpost.http.HttpRequest -> hq:
     72:75:java.io.InputStream getMessagePayload() -> c
     61:68:java.lang.String getContentType() -> d
     79:79:java.lang.Object unwrap() -> e
-com.parse.signpost.http.HttpResponse -> hr:
+com.parse.signpost.http.HttpResponse -> hC:
     org.apache.http.HttpResponse response -> a
     22:22:int getStatusCode() -> a
     26:26:java.lang.String getReasonPhrase() -> b
     18:18:java.io.InputStream getContent() -> c
     30:30:java.lang.Object unwrap() -> d
-com.parse.signpost.signature.HmacSha1MessageSigner -> hs:
+com.parse.signpost.signature.HmacSha1MessageSigner -> hD:
     37:37:java.lang.String getSignatureMethod() -> a
     44:60:java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
-com.parse.signpost.signature.OAuthMessageSigner -> ht:
+com.parse.signpost.signature.OAuthMessageSigner -> hE:
     com.parse.codec.binary.Base64 base64 -> a
     java.lang.String consumerSecret -> b
     java.lang.String tokenSecret -> c
     java.lang.String sign(com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
     java.lang.String getSignatureMethod() -> a
-com.parse.signpost.signature.SignatureBaseString -> hu:
+com.parse.signpost.signature.SignatureBaseString -> hF:
     com.parse.signpost.http.HttpRequest request -> a
     com.parse.signpost.http.HttpParameters requestParameters -> b
     55:61:java.lang.String generate() -> a
     96:116:java.lang.String normalizeRequestParameters() -> b
-com.parse.signpost.signature.SigningStrategy -> hv:
+com.parse.signpost.signature.SigningStrategy -> hG:
     19:53:java.lang.String writeSignature(java.lang.String,com.parse.signpost.http.HttpRequest,com.parse.signpost.http.HttpParameters) -> a
-com.parse.twitter.Twitter -> hw:
+com.parse.twitter.Twitter -> hH:
     com.parse.signpost.OAuthProvider PROVIDER -> a
     java.lang.String consumerKey -> b
     java.lang.String consumerSecret -> c
@@ -4040,34 +4071,23 @@ com.parse.twitter.Twitter -> hw:
     91:91:java.lang.String getScreenName() -> f
     95:96:void setScreenName(java.lang.String) -> f
     109:217:void authorize(android.content.Context,com.parse.internal.AsyncCallback) -> a
-    30:30:com.parse.signpost.OAuthProvider access$0() -> g
-com.parse.twitter.Twitter$1 -> hx:
-    java.lang.Throwable error -> b
-    com.parse.twitter.Twitter this$0 -> a
+    21:21:com.parse.signpost.OAuthProvider access$000() -> g
+com.parse.twitter.Twitter$1 -> hI:
+    java.lang.Throwable error -> e
+    com.parse.internal.AsyncCallback val$callback -> a
+    android.content.Context val$context -> f
+    com.parse.signpost.OAuthConsumer val$consumer -> b
     android.app.ProgressDialog val$progress -> c
-    com.parse.internal.AsyncCallback val$callback -> d
-    android.content.Context val$context -> e
-    com.parse.signpost.OAuthConsumer val$consumer -> f
+    com.parse.twitter.Twitter this$0 -> d
     202:204:void onPreExecute() -> onPreExecute
     209:213:java.lang.String doInBackground$606be067() -> a
-    1:1:void onPostExecute(java.lang.Object) -> onPostExecute
-    1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.parse.twitter.Twitter$1$1 -> hy:
-    com.parse.twitter.Twitter$1 this$1 -> a
-    com.parse.internal.AsyncCallback val$callback -> b
-    com.parse.signpost.OAuthConsumer val$consumer -> c
-    android.app.ProgressDialog val$progress -> d
-    134:135:void onError(int,java.lang.String,java.lang.String) -> a
-    138:188:void onComplete(java.lang.String) -> a
-    191:192:void onCancel() -> a
-com.parse.twitter.Twitter$1$1$1 -> hz:
+    118:118:void onPostExecute(java.lang.Object) -> onPostExecute
+    118:118:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+com.parse.twitter.Twitter$1$1$1 -> hJ:
     java.lang.Throwable error -> a
-    com.parse.twitter.Twitter$1$1 this$2 -> b
-    com.parse.signpost.OAuthConsumer val$consumer -> c
-    java.lang.String val$verifier -> d
-    android.app.ProgressDialog val$progress -> e
-    com.parse.internal.AsyncCallback val$callback -> f
+    java.lang.String val$verifier -> b
+    com.parse.oauth.OAuth1FlowDialog$FlowResultHandler this$2$225f7840 -> c
     151:155:com.parse.signpost.http.HttpParameters doInBackground$49a5fd33() -> a
     160:162:void onPreExecute() -> onPreExecute
-    1:1:void onPostExecute(java.lang.Object) -> onPostExecute
-    1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
+    145:145:void onPostExecute(java.lang.Object) -> onPostExecute
+    145:145:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground

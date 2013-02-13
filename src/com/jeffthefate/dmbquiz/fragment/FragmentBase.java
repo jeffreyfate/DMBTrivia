@@ -1,7 +1,6 @@
 package com.jeffthefate.dmbquiz.fragment;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,7 +27,7 @@ public class FragmentBase extends Fragment implements UiCallback {
     OnButtonListener mCallback;
     
     public interface OnButtonListener {
-        public String setBackground(String name, boolean showNew);
+        public void setBackground(String name, boolean showNew);
         public String getBackground();
         public void onInfoPressed();
         public void onStatsPressed();
@@ -38,7 +37,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void showNameDialog();
         public void logOut(boolean force);
         public Bundle getLeadersState();
-        public void next();
+        public void next(long perfTime);
         public String getQuestionId();
         public void setQuestionId(String questionId);
         public String getQuestion();
@@ -49,6 +48,9 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void setQuestionScore(String questionScore);
         public String getQuestionCategory();
         public void setQuestionCategory(String questionCategory);
+        public boolean getQuestionHint();
+        public void setQuestionHint(boolean questionHint);
+        public boolean getQuestionSkip();
         public String getNextQuestionId();
         public void setNextQuestionId(String nextQuestionId);
         public String getNextQuestion();
@@ -58,6 +60,9 @@ public class FragmentBase extends Fragment implements UiCallback {
         public String getNextQuestionScore();
         public void setNextQuestionScore(String nextQuestionScore);
         public String getNextQuestionCategory();
+        public boolean getNextQuestionHint();
+        public void setNextQuestionHint(boolean nextQuestionHint);
+        public boolean getNextQuestionSkip();
         public void setNextQuestionCategory(String nextQuestionCategory);
         public String getThirdQuestionId();
         public void setThirdQuestionId(String thirdQuestionId);
@@ -69,22 +74,23 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void setThirdQuestionScore(String thirdQuestionScore);
         public String getThirdQuestionCategory();
         public void setThirdQuestionCategory(String thirdQuestionCategory);
-        public void nextQuestion();
+        public boolean getThirdQuestionHint();
+        public void setThirdQuestionHint(boolean thirdQuestionHint);
+        public boolean getThirdQuestionSkip();
+        public void getNextQuestions(boolean force);
         public String getUserId();
         public String getDisplayName();
-        public ArrayList<String> getAnswerIds();
-        public void addAnswerId(String answerId);
-        public boolean hasAnswerId(String answerId);
         public boolean isNewQuestion();
         public void setIsNewQuestion(boolean isNewQuestion);
         public int getCurrentScore();
         public void addCurrentScore(int addValue);
         public void shareScreenshot();
-        public int getQuestionsLeft();
         public void setDisplayName(String displayName);
         public boolean getNetworkProblem();
         public void setNetworkProblem(boolean networkProblem);
         public void saveUserScore(final int currTemp);
+        public void addCorrectAnswer(String correctId);
+        public boolean isCorrectAnswer(String correctId);
     }
     
     public static final int LOGIN_FACEBOOK = 0;

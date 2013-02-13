@@ -2,10 +2,8 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.ArrayList;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +21,6 @@ import com.parse.ParseUser;
 
 public class FragmentLeaders extends FragmentBase {
     
-    private String userId;
     private int answerCount = 0;
     private int hintCount = 0;
     
@@ -50,7 +47,6 @@ public class FragmentLeaders extends FragmentBase {
     private ArrayList<String> userIdList;
     
     private Resources res;
-    private SharedPreferences sharedPrefs;
     
     public FragmentLeaders() {}
     
@@ -58,8 +54,6 @@ public class FragmentLeaders extends FragmentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         res = getResources();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
-                ApplicationEx.getApp());
         setHasOptionsMenu(true);
     }
     
@@ -91,17 +85,17 @@ public class FragmentLeaders extends FragmentBase {
             userName.setText(savedInstanceState.getString("userName"));
             userScore.setText(savedInstanceState.getString("userScore"));
             leaderText.setText(savedInstanceState.getString("leaderText"));
-            userId = savedInstanceState.getString("userId");
             rankList = savedInstanceState.getStringArrayList("rank");
             userList = savedInstanceState.getStringArrayList("user");
             scoreList = savedInstanceState.getStringArrayList("score");
             userIdList = savedInstanceState.getStringArrayList("userIdList");
             createdText.setText(savedInstanceState.getString("createdText"));
             createdDate.setText(savedInstanceState.getString("createdDate"));
-            if (userId != null && rankList != null && userList != null &&
-                    scoreList != null && userIdList != null) {
+            if (mCallback != null && mCallback.getUserId() != null &&
+                    rankList != null && userList != null && scoreList != null &&
+                    userIdList != null) {
                 leaderList.setAdapter(new LeaderAdapter(ApplicationEx.getApp(),
-                        userId, rankList, userList, scoreList, userIdList,
+                        mCallback.getUserId(), rankList, userList, scoreList, userIdList,
                         R.layout.row_standings, new String[] {"name", "score"},
                         new int[] {R.id.text1, R.id.text2}));
                 leadersLayout.setBackgroundColor(
@@ -109,40 +103,48 @@ public class FragmentLeaders extends FragmentBase {
                 isRestored = true;
             }
         }
-        else if (mCallback.getLeadersState() == null ||
-                mCallback.getLeadersState().isEmpty()) {
-            userId = ApplicationEx.dbHelper.getLeaderUserId();
-            if (userId != null) {
+        else if (mCallback != null && (mCallback.getLeadersState() == null ||
+                mCallback.getLeadersState().isEmpty())) {
+            if (mCallback.getUserId() != null) {
                 userText.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_TEXT, userId));
+                        DatabaseHelper.COL_USER_TEXT, mCallback.getUserId()));
                 userAnswerText.setText(
                         ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_ANSWER_TEXT, userId));
+                                DatabaseHelper.COL_USER_ANSWER_TEXT,
+                                mCallback.getUserId()));
                 userAnswers.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_ANSWERS, userId));
+                        DatabaseHelper.COL_USER_ANSWERS,
+                                mCallback.getUserId()));
                 userHintText.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_HINT_TEXT, userId));
+                        DatabaseHelper.COL_USER_HINT_TEXT,
+                                mCallback.getUserId()));
                 userHints.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_HINTS, userId));
+                        DatabaseHelper.COL_USER_HINTS, mCallback.getUserId()));
                 userName.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_NAME_TEXT, userId));
+                        DatabaseHelper.COL_USER_NAME_TEXT,
+                                mCallback.getUserId()));
                 userScore.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_USER_SCORE_TEXT, userId));
+                        DatabaseHelper.COL_USER_SCORE_TEXT,
+                                mCallback.getUserId()));
                 leaderText.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_LEADER_TEXT, userId));
+                        DatabaseHelper.COL_LEADER_TEXT, mCallback.getUserId()));
                 createdText.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_CREATED_TEXT, userId));
+                        DatabaseHelper.COL_CREATED_TEXT,
+                                mCallback.getUserId()));
                 createdDate.setText(ApplicationEx.dbHelper.getUserStringValue(
-                        DatabaseHelper.COL_CREATED_DATE, userId));
+                        DatabaseHelper.COL_CREATED_DATE,
+                                mCallback.getUserId()));
                 rankList = ApplicationEx.dbHelper.getLeaderRanks();
                 userList = ApplicationEx.dbHelper.getLeaderUsers();
                 scoreList = ApplicationEx.dbHelper.getLeaderScores();
                 userIdList = ApplicationEx.dbHelper.getLeaderIds();
-                if (userId != null && rankList != null && userList != null &&
-                        scoreList != null && userIdList != null) {
+                if (mCallback.getUserId() != null && rankList != null &&
+                        userList != null && scoreList != null &&
+                        userIdList != null) {
                     leaderList.setAdapter(new LeaderAdapter(
-                            ApplicationEx.getApp(), userId, rankList, userList,
-                            scoreList, userIdList, R.layout.row_standings,
+                            ApplicationEx.getApp(), mCallback.getUserId(),
+                            rankList, userList, scoreList, userIdList,
+                            R.layout.row_standings,
                             new String[] {"name", "score"},
                             new int[] {R.id.text1, R.id.text2}));
                     leadersLayout.setBackgroundColor(
@@ -165,7 +167,6 @@ public class FragmentLeaders extends FragmentBase {
         outState.putString("userName", userName.getText().toString());
         outState.putString("userScore", userScore.getText().toString());
         outState.putString("leaderText", leaderText.getText().toString());
-        outState.putString("userId", userId);
         outState.putStringArrayList("rank", rankList);
         outState.putStringArrayList("user", userList);
         outState.putStringArrayList("score", scoreList);
@@ -182,25 +183,25 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public void onPause() {
         ApplicationEx.dbHelper.setUserValue(userText.getText().toString(),
-                DatabaseHelper.COL_USER_TEXT, userId);
+                DatabaseHelper.COL_USER_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userAnswerText.getText().toString(),
-                DatabaseHelper.COL_USER_ANSWER_TEXT, userId);
+                DatabaseHelper.COL_USER_ANSWER_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userAnswers.getText().toString(),
-                DatabaseHelper.COL_USER_ANSWERS, userId);
+                DatabaseHelper.COL_USER_ANSWERS, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userHintText.getText().toString(),
-                DatabaseHelper.COL_USER_HINT_TEXT, userId);
+                DatabaseHelper.COL_USER_HINT_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userHints.getText().toString(),
-                DatabaseHelper.COL_USER_HINTS, userId);
+                DatabaseHelper.COL_USER_HINTS, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userName.getText().toString(),
-                DatabaseHelper.COL_USER_NAME_TEXT, userId);
+                DatabaseHelper.COL_USER_NAME_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userScore.getText().toString(),
-                DatabaseHelper.COL_USER_SCORE_TEXT, userId);
+                DatabaseHelper.COL_USER_SCORE_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(leaderText.getText().toString(),
-                DatabaseHelper.COL_LEADER_TEXT, userId);
+                DatabaseHelper.COL_LEADER_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(createdText.getText().toString(),
-                DatabaseHelper.COL_CREATED_TEXT, userId);
+                DatabaseHelper.COL_CREATED_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(createdDate.getText().toString(),
-                DatabaseHelper.COL_CREATED_DATE, userId);
+                DatabaseHelper.COL_CREATED_DATE, mCallback.getUserId());
         super.onPause();
     }
     
@@ -220,32 +221,23 @@ public class FragmentLeaders extends FragmentBase {
             userHints.setText(leadersBundle.getString("userHints"));
             userName.setText(leadersBundle.getString("userName"));
             userScore.setText(leadersBundle.getString("userScore"));
-            userId = leadersBundle.getString("userId");
             rankList = leadersBundle.getStringArrayList("rank");
             userList = leadersBundle.getStringArrayList("user");
             scoreList = leadersBundle.getStringArrayList("score");
             userIdList = leadersBundle.getStringArrayList("userIdList");
             createdText.setText("Latest question");
             createdDate.setText(leadersBundle.getString("lastQuestion"));
-            if (userId != null && rankList != null && userList != null &&
-                    scoreList != null && userIdList != null) {
+            if (mCallback.getUserId() != null && rankList != null &&
+                    userList != null && scoreList != null &&
+                    userIdList != null) {
                 leaderList.setAdapter(new LeaderAdapter(ApplicationEx.getApp(),
-                        userId, rankList, userList, scoreList, userIdList,
-                        R.layout.row_standings, new String[] {"name", "score"},
+                        mCallback.getUserId(), rankList, userList, scoreList,
+                        userIdList, R.layout.row_standings,
+                        new String[] {"name", "score"},
                         new int[] {R.id.text1, R.id.text2}));
                 leadersLayout.setBackgroundColor(
                         res.getColor(R.color.background_dark));
             }
-        }
-        if (userId == null)
-            userId = mCallback.getUserId();
-        String currBackground = ApplicationEx.dbHelper.getCurrBackground(
-                userId);
-        if (mCallback != null) {
-            if (currBackground != null)
-                mCallback.setBackground(currBackground, false);
-            else
-                mCallback.setBackground("splash8", false);
         }
     }
     

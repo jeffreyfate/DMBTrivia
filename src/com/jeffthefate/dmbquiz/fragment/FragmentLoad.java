@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.R;
@@ -42,8 +41,8 @@ public class FragmentLoad extends FragmentBase {
                         mCallback.onStatsPressed();
                     }
                     else {
-                        Toast.makeText(ApplicationEx.getApp(), "No connection",
-                                Toast.LENGTH_LONG).show();
+                        ApplicationEx.mToast.setText(R.string.NoConnection);
+                        ApplicationEx.mToast.show();
                         showNetworkProblem();
                     }
                 }
@@ -56,21 +55,17 @@ public class FragmentLoad extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (mCallback != null) {
-            if (mCallback.getNetworkProblem())
-                showNetworkProblem();
+            if (ApplicationEx.getConnection()) {
+                mCallback.setNetworkProblem(false);
+                progress.setVisibility(View.VISIBLE);
+                networkText.setVisibility(View.INVISIBLE);
+                loadingText.setVisibility(View.GONE);
+                retryButton.setVisibility(View.INVISIBLE);
+            }
             else {
-                if (ApplicationEx.getConnection()) {
-                    mCallback.setNetworkProblem(false);
-                    progress.setVisibility(View.VISIBLE);
-                    networkText.setVisibility(View.INVISIBLE);
-                    loadingText.setVisibility(View.GONE);
-                    retryButton.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    Toast.makeText(ApplicationEx.getApp(), "No connection",
-                            Toast.LENGTH_LONG).show();
-                    showNetworkProblem();
-                }
+                ApplicationEx.mToast.setText(R.string.NoConnection);
+                ApplicationEx.mToast.show();
+                showNetworkProblem();
             }
         }
     }
@@ -88,6 +83,7 @@ public class FragmentLoad extends FragmentBase {
     
     @Override
     public void showLoading(String message) {
+        progress.setVisibility(View.VISIBLE);
         networkText.setVisibility(View.INVISIBLE);
         retryButton.setVisibility(View.INVISIBLE);
         loadingText.setText(message);

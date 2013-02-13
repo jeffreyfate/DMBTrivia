@@ -50,8 +50,6 @@
     <string name="NotificationTitle">Notifications</string>
     <string name="NameTitle">Edit Display Name</string>
     
-    <string name="Crash">Crash!</string>
-    
     <string name="ScoreDialogTitle">Scoring Notes</string>
     <string name="NameDialogTitle">Edit Display Name</string>
     
@@ -61,7 +59,14 @@
     <string name="sound_key">sound</string>
     <string name="dialog_key">dialog</string>
     <string name="notification_key">notification</string>
+    <string name="correct_key">correct</string>
     
     <string name="leaders">Top Scores</string>
+    
+    <string name="NoService">Service not responding</string>
+    <string name="NoConnection">Can\'t detect connection</string>
+    
+    <string name="app_id">463296083721286</string>
+    <string name="facebook_name">Logging in with Facebook</string>
     
 </resources>
