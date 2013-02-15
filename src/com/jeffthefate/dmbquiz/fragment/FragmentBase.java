@@ -32,7 +32,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void onInfoPressed();
         public void onStatsPressed();
         public void onLoginPressed(int loginType, String user, String pass);
-        public void setupUser();
+        public void setupUser(boolean newUser);
         public void showScoreDialog();
         public void showNameDialog();
         public void logOut(boolean force);
@@ -92,6 +92,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void addCorrectAnswer(String correctId);
         public boolean isCorrectAnswer(String correctId);
         public void setUserName(String userName);
+        public boolean isNewUser();
     }
     
     public static final int LOGIN_FACEBOOK = 0;

@@ -38,7 +38,7 @@ public class FragmentLogin extends FragmentBase {
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {
                         mCallback.setNetworkProblem(false);
-                        mCallback.setupUser();
+                        mCallback.setupUser(mCallback.isNewUser());
                         networkText.setVisibility(View.INVISIBLE);
                         retryButton.setVisibility(View.INVISIBLE);
                         progress.setVisibility(View.VISIBLE);

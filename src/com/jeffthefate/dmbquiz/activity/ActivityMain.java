@@ -145,6 +145,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private boolean networkProblem = false;
     private boolean facebookLogin = false;
+    private boolean newUser = false;
     
     public interface UiCallback {
         public void showNetworkProblem();
@@ -259,6 +260,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             currScore = savedInstanceState.getInt("currScore");
             correctAnswers = savedInstanceState.getStringArrayList(
                     "correctAnswers");
+            newUser = savedInstanceState.getBoolean("newUser");
             networkProblem = savedInstanceState.getBoolean("networkProblem");
             ApplicationEx.dbHelper.setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
@@ -320,6 +322,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         outState.putString("displayName", displayName);
         outState.putInt("currScore", currScore);
         outState.putStringArrayList("correctAnswers", correctAnswers);
+        outState.putBoolean("newUser", newUser);
         outState.putBoolean("networkProblem", networkProblem);
         super.onSaveInstanceState(outState);
     }
@@ -360,7 +363,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         tempAnswers.clear();
                     else
                         tempAnswers = new ArrayList<String>();
-                    getScore(false, true, userId);
+                    getScore(false, true, userId, false);
                 }
                 else
                     showLoggedInFragment();
@@ -368,7 +371,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
         else {
             if (userId != null)
-                setupUser();
+                setupUser(newUser);
             else if (!facebookLogin)
                 checkUser();
         }
@@ -439,7 +442,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 tempAnswers.clear();
             else
                 tempAnswers = new ArrayList<String>();
-            getScore(false, false, userId);
+            getScore(false, false, userId, false);
         }
         ApplicationEx.setInactive();
         super.onPause();
@@ -545,11 +548,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         if (!loggedIn && !isLogging && (user == null || userId == null))
             logOut(true);
         else
-            setupUser();
+            setupUser(newUser);
     }
     
     @Override
-    public void setupUser() {
+    public void setupUser(boolean newUser) {
         if (userId == null && !isLogging) {
             showSplash();
             return;
@@ -560,7 +563,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             showLogin();
         if (userTask != null)
             userTask.cancel(true);
-        userTask = new UserTask();
+        userTask = new UserTask(newUser);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             userTask.execute();
         else
@@ -568,6 +571,18 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     private class UserTask extends AsyncTask<Void, Void, Void> {
+        private boolean newUser;
+        
+        private UserTask(boolean newUser) {
+            this.newUser = newUser;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            if (newUser && currFrag != null)
+                currFrag.showLoading("Creating account...");
+        }
+        
         @Override
         protected Void doInBackground(Void... nothing) {
             user = ParseUser.getCurrentUser();
@@ -610,7 +625,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 ApplicationEx.mToast.show();
             }
             else
-                getScore(true, false, userId);
+                getScore(true, false, userId, newUser);
         }
         
         @Override
@@ -625,10 +640,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
     }
     
-    private void getScore(boolean show, boolean restore, String userId) {
+    private void getScore(boolean show, boolean restore, String userId,
+            boolean newUser) {
         if (getScoreTask != null)
             getScoreTask.cancel(true);
-        getScoreTask = new GetScoreTask(show, restore, userId);
+        getScoreTask = new GetScoreTask(show, restore, userId, newUser);
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
             getScoreTask.execute();
@@ -641,19 +657,23 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         private boolean show;
         private boolean restore;
         private String userId;
+        private boolean newUser;
         private List<ParseObject> scoreList;
         private List<ParseObject> deleteList;
         private Number number;
         
-        private GetScoreTask(boolean show, boolean restore, String userId) {
+        private GetScoreTask(boolean show, boolean restore, String userId,
+                boolean newUser) {
             this.show = show;
             this.restore = restore;
             this.userId = userId;
+            this.newUser = newUser;
         }
         
         @Override
         protected void onPreExecute() {
-            currFrag.showLoading("Calculating score...");
+            if (!newUser && currFrag != null)
+                currFrag.showLoading("Calculating score...");
         }
         
         @Override
@@ -668,7 +688,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             deleteQuery.whereEqualTo("userId", userId);
             do {
                 correctQuery.whereEqualTo("hint", true);
-                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
                 query.whereMatchesKeyInQuery("objectId", "questionId",
                         correctQuery);
@@ -676,7 +695,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     scoreList = query.find();
                     if (scoreList.size() == 0)
                         break;
-                    Log.i(Constants.LOG_TAG, "scoreList size: " + scoreList.size());
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
@@ -708,11 +726,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     if (show && currFrag != null)
                         currFrag.showNetworkProblem();
                 }
-                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
             } while (!isCancelled());
             do {
                 correctQuery.whereEqualTo("hint", false);
-                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
                 query.whereMatchesKeyInQuery("objectId", "questionId",
                         correctQuery);
@@ -720,7 +736,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     scoreList = query.find();
                     if (scoreList.size() == 0)
                         break;
-                    Log.i(Constants.LOG_TAG, "scoreList size: " + scoreList.size());
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
@@ -752,7 +767,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     if (show && currFrag != null)
                         currFrag.showNetworkProblem();
                 }
-                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
             } while (!isCancelled());
             if (!isCancelled()) {
                 currScore = tempScore;
@@ -922,6 +936,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         logOut(false);
                 } else {
+                    newUser = user.isNew();
                     userId = user.getObjectId();
                     if (!ApplicationEx.dbHelper.hasUser(userId))
                         ApplicationEx.dbHelper.addUser(user, "Facebook");
@@ -1017,7 +1032,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         @Override
         protected void onPostExecute(Void nothing) {
             if (isLogging)
-                setupUser();
+                setupUser(newUser);
         }
     }
     
@@ -1041,6 +1056,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         logOut(false);
                 } else {
+                    newUser = user.isNew();
                     userId = user.getObjectId();
                     if (user.getString("displayName") == null ||
                             (user.isNew() && !user.getString("displayName")
@@ -1057,7 +1073,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
                     if (isLogging)
-                        setupUser();
+                        setupUser(newUser);
                 }
             }
         });
@@ -1080,6 +1096,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     logOut(false);
                 }
                 else {
+                    newUser = user.isNew();
                     userId = user.getObjectId();
                     try {
                         user.saveInBackground(new SaveCallback() {
@@ -1094,7 +1111,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                         ApplicationEx.dbHelper.setOffset(1,
                                                 user.getObjectId());
                                     if (isLogging)
-                                        setupUser();
+                                        setupUser(newUser);
                                 }
                             }
                         });
@@ -1118,13 +1135,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             @Override
             public void done(ParseException err) {
                 if (err == null) {
+                    newUser = user.isNew();
                     userId = user.getObjectId();
                     if (!ApplicationEx.dbHelper.hasUser(userId))
                         ApplicationEx.dbHelper.addUser(user, "Email");
                     else
                         ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
                     if (isLogging)
-                        setupUser();
+                        setupUser(newUser);
                 }
                 else {
                     if (err.getCode() == ParseException.CONNECTION_FAILED) {
@@ -1164,6 +1182,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         logOut(false);
                 } else {
+                    newUser = user.isNew();
                     userId = user.getObjectId();
                     if (user.getString("displayName") == null || (user.isNew()
                             && !user.getString("displayName").endsWith("@"))) {
@@ -1179,7 +1198,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     else
                         ApplicationEx.dbHelper.setOffset(1, userId);
                     if (isLogging)
-                        setupUser();
+                        setupUser(newUser);
                 }
             }
         });
@@ -1305,6 +1324,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     private void showQuiz() {
+        newUser = false;
         try {
             FragmentQuiz fQuiz = new FragmentQuiz();
             fMan.beginTransaction().replace(android.R.id.content, fQuiz,
@@ -2337,6 +2357,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     public void setUserName(String userName) {
         if (leadersBundle != null && userName != null)
             leadersBundle.putString("userName", userName);
+    }
+    
+    @Override
+    public boolean isNewUser() {
+        return newUser;
     }
     
 }

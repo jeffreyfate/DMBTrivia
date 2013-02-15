@@ -1364,24 +1364,24 @@ com.jeffthefate.dmbquiz.VersionedNotificationBuilder$HoneycombBuilder
 com.jeffthefate.dmbquiz.VersionedNotificationBuilder$JellyBeanBuilder
 com.jeffthefate.dmbquiz.activity.ActivityMain:
     private java.lang.Number score
-    1950:1950:public java.lang.String getQuestionCategory()
-    1960:1960:public boolean getQuestionSkip()
-    1965:1965:public java.lang.String getNextQuestionId()
-    1970:1970:public java.lang.String getNextQuestion()
-    1975:1975:public java.lang.String getNextCorrectAnswer()
-    1980:1980:public java.lang.String getNextQuestionScore()
-    1985:1985:public java.lang.String getNextQuestionCategory()
-    1990:1990:public boolean getNextQuestionHint()
-    1995:1995:public boolean getNextQuestionSkip()
-    2000:2000:public java.lang.String getThirdQuestionId()
-    2005:2005:public java.lang.String getThirdQuestion()
-    2010:2010:public java.lang.String getThirdCorrectAnswer()
-    2015:2015:public java.lang.String getThirdQuestionScore()
-    2020:2020:public java.lang.String getThirdQuestionCategory()
-    2025:2025:public boolean getThirdQuestionHint()
-    2030:2030:public boolean getThirdQuestionSkip()
-    2090:2091:public void setNextQuestionHint(boolean)
-    2120:2121:public void setThirdQuestionHint(boolean)
+    1970:1970:public java.lang.String getQuestionCategory()
+    1980:1980:public boolean getQuestionSkip()
+    1985:1985:public java.lang.String getNextQuestionId()
+    1990:1990:public java.lang.String getNextQuestion()
+    1995:1995:public java.lang.String getNextCorrectAnswer()
+    2000:2000:public java.lang.String getNextQuestionScore()
+    2005:2005:public java.lang.String getNextQuestionCategory()
+    2010:2010:public boolean getNextQuestionHint()
+    2015:2015:public boolean getNextQuestionSkip()
+    2020:2020:public java.lang.String getThirdQuestionId()
+    2025:2025:public java.lang.String getThirdQuestion()
+    2030:2030:public java.lang.String getThirdCorrectAnswer()
+    2035:2035:public java.lang.String getThirdQuestionScore()
+    2040:2040:public java.lang.String getThirdQuestionCategory()
+    2045:2045:public boolean getThirdQuestionHint()
+    2050:2050:public boolean getThirdQuestionSkip()
+    2110:2111:public void setNextQuestionHint(boolean)
+    2140:2141:public void setThirdQuestionHint(boolean)
 com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver:
     android.net.ConnectivityManager connMan
 com.jeffthefate.dmbquiz.activity.ActivityMain$UiCallback
@@ -1391,7 +1391,7 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_ANON
     public static final int SIGNUP_EMAIL
     public static final int LOGIN_EMAIL
-    273:273:public void resetHint()
+    274:274:public void resetHint()
 com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener:
     public abstract java.lang.String getQuestionCategory()
     public abstract boolean getQuestionSkip()
