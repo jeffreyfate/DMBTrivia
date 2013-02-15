@@ -102,9 +102,10 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:layout_weight="0.4"
+                android:layout_weight="0.45"
                 android:gravity="left"
                 android:textSize="36sp"
+                android:textScaleX="0.9"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="@string/LatestQuestion" />
@@ -115,9 +116,10 @@
                 android:text="@string/Error"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:layout_weight="0.6"
+                android:layout_weight="0.55"
                 android:gravity="right"
-                android:textSize="36sp" />
+                android:textSize="36sp"
+                android:textScaleX="0.9" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/UserScoreLayout"

@@ -100,14 +100,15 @@
                 android:id="@+id/LastQuestionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/LatestQuestion"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:layout_weight="0.4"
+                android:layout_weight="0.45"
                 android:gravity="left"
                 android:textSize="20sp"
+                android:textScaleX="0.9"
                 android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@string/Error" />
+                android:singleLine="true" />
             <TextView
                 android:id="@+id/LastQuestionDate"
                 android:layout_width="match_parent"
@@ -115,9 +116,10 @@
                 android:text="@string/Error"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:layout_weight="0.6"
+                android:layout_weight="0.55"
                 android:gravity="right"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textScaleX="0.9" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/UserScoreLayout"
