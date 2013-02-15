@@ -668,10 +668,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             deleteQuery.whereEqualTo("userId", userId);
             do {
                 correctQuery.whereEqualTo("hint", true);
+                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
-                query.whereMatchesKeyInQuery("objectId", "questionId", correctQuery);
+                query.whereMatchesKeyInQuery("objectId", "questionId",
+                        correctQuery);
                 try {
                     scoreList = query.find();
+                    if (scoreList.size() == 0)
+                        break;
+                    Log.i(Constants.LOG_TAG, "scoreList size: " + scoreList.size());
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
@@ -703,13 +708,19 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     if (show && currFrag != null)
                         currFrag.showNetworkProblem();
                 }
-            } while (scoreList.size() == 1000 & !isCancelled());
+                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
+            } while (!isCancelled());
             do {
                 correctQuery.whereEqualTo("hint", false);
+                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
-                query.whereMatchesKeyInQuery("objectId", "questionId", correctQuery);
+                query.whereMatchesKeyInQuery("objectId", "questionId",
+                        correctQuery);
                 try {
                     scoreList = query.find();
+                    if (scoreList.size() == 0)
+                        break;
+                    Log.i(Constants.LOG_TAG, "scoreList size: " + scoreList.size());
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
@@ -741,7 +752,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     if (show && currFrag != null)
                         currFrag.showNetworkProblem();
                 }
-            } while (scoreList.size() == 1000 & !isCancelled());
+                Log.i(Constants.LOG_TAG, "tempAnswers size: " + tempAnswers.size());
+            } while (!isCancelled());
             if (!isCancelled()) {
                 currScore = tempScore;
                 tempScore = 0;

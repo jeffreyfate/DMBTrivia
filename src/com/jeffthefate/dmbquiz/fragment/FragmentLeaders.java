@@ -250,9 +250,9 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.Notifications)
-        .setCheckable(true)
-        .setChecked(sharedPrefs.getBoolean(
-                getString(R.string.notification_key), true));
+            .setCheckable(true)
+            .setChecked(sharedPrefs.getBoolean(
+                    getString(R.string.notification_key), true));
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             if (sharedPrefs.getBoolean(
                     getString(R.string.notification_key), true))

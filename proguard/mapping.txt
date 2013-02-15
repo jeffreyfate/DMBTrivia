@@ -3300,21 +3300,21 @@ com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
     android.net.ConnectivityManager connMan -> g
     java.lang.String cacheLocation -> b
     android.widget.Toast mToast -> c
-    52:93:void onCreate() -> onCreate
-    99:99:android.content.Context getApp() -> a
-    105:114:void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
-    118:137:void reportQuestion(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
-    140:141:void setConnection(boolean) -> a
-    144:144:boolean getConnection() -> b
-    172:172:boolean isActive() -> c
-    176:177:void setActive() -> d
-    180:181:void setInactive() -> e
-    186:198:void setStringArrayPref(java.lang.String,java.util.ArrayList) -> a
-    202:216:java.util.ArrayList getStringArrayPref(java.lang.String) -> a
+    51:92:void onCreate() -> onCreate
+    98:98:android.content.Context getApp() -> a
+    104:113:void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    117:136:void reportQuestion(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    139:140:void setConnection(boolean) -> a
+    143:143:boolean getConnection() -> b
+    171:171:boolean isActive() -> c
+    175:176:void setActive() -> d
+    179:180:void setInactive() -> e
+    185:197:void setStringArrayPref(java.lang.String,java.util.ArrayList) -> a
+    201:215:java.util.ArrayList getStringArrayPref(java.lang.String) -> a
 com.jeffthefate.dmbquiz.ApplicationEx$1 -> dF:
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.jeffthefate.dmbquiz.ApplicationEx$2 -> dG:
-    128:130:void done(com.parse.ParseException) -> a
+    127:129:void done(com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.Constants -> dH:
     java.lang.String SCREENS_LOCATION -> a
 com.jeffthefate.dmbquiz.DatabaseHelper -> dI:
@@ -3689,198 +3689,198 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     android.graphics.drawable.TransitionDrawable transitionDrawable -> am
     android.graphics.drawable.BitmapDrawable oldBitmapDrawable -> an
     com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask facebookTask -> ao
-    190:289:void onCreate(android.os.Bundle) -> onCreate
-    293:327:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    331:383:void onResume() -> onResume
-    387:420:void onBackPressed() -> onBackPressed
-    425:448:void onPause() -> onPause
-    452:458:void setBackground(java.lang.String,boolean) -> a
-    538:551:void checkUser() -> w
-    555:570:void setupUser() -> d
-    631:640:void getScore(boolean,boolean,java.lang.String) -> a
-    783:804:void showLoggedInFragment() -> x
-    823:825:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    830:839:void onInfoPressed() -> e
-    843:857:void onStatsPressed() -> f
-    861:882:void onLoginPressed(int,java.lang.String,java.lang.String) -> a
-    1180:1180:java.lang.String getBackground() -> g
-    1185:1187:void showScoreDialog() -> h
-    1191:1193:void showNameDialog() -> i
-    1197:1202:void logOut(boolean) -> b
-    1269:1275:void showLeaders() -> y
-    1279:1285:void showLogin() -> z
-    1289:1295:void showSplash() -> A
-    1299:1305:void showQuiz() -> B
-    1469:1469:android.os.Bundle getLeadersState() -> j
-    1475:1480:void saveUserScore(int) -> b
-    1484:1493:void getNextQuestions(boolean) -> c
-    1906:1916:void next() -> k
-    1920:1920:java.lang.String getQuestionId() -> l
-    1925:1925:java.lang.String getQuestion() -> m
-    1930:1930:java.lang.String getCorrectAnswer() -> n
-    1935:1935:java.lang.String getQuestionScore() -> o
-    1945:1945:boolean getQuestionHint() -> p
-    2025:2026:void setQuestionId(java.lang.String) -> a
-    2030:2031:void setQuestion(java.lang.String) -> b
-    2035:2036:void setCorrectAnswer(java.lang.String) -> c
-    2040:2041:void setQuestionScore(java.lang.String) -> d
-    2045:2046:void setQuestionCategory(java.lang.String) -> e
-    2050:2051:void setQuestionHint(boolean) -> d
-    2055:2056:void setNextQuestionId(java.lang.String) -> f
-    2060:2061:void setNextQuestion(java.lang.String) -> g
-    2065:2066:void setNextCorrectAnswer(java.lang.String) -> h
-    2070:2071:void setNextQuestionScore(java.lang.String) -> i
-    2075:2076:void setNextQuestionCategory(java.lang.String) -> j
-    2085:2086:void setThirdQuestionId(java.lang.String) -> k
-    2090:2091:void setThirdQuestion(java.lang.String) -> l
-    2095:2096:void setThirdCorrectAnswer(java.lang.String) -> m
-    2100:2101:void setThirdQuestionScore(java.lang.String) -> n
-    2105:2106:void setThirdQuestionCategory(java.lang.String) -> o
-    2115:2115:java.lang.String getUserId() -> q
-    2120:2120:java.lang.String getDisplayName() -> r
-    2125:2125:boolean isNewQuestion() -> s
-    2130:2133:void setIsNewQuestion(boolean) -> e
-    2137:2137:int getCurrentScore() -> t
-    2142:2144:void addCurrentScore(int) -> c
-    2148:2160:void shareScreenshot() -> u
-    2164:2176:void setDisplayName(java.lang.String) -> p
-    2179:2215:java.lang.String takeScreenshot() -> C
-    2235:2272:void getUserData(java.lang.String) -> t
-    2294:2294:boolean getNetworkProblem() -> v
-    2299:2300:void setNetworkProblem(boolean) -> f
-    2304:2312:void addCorrectAnswer(java.lang.String) -> q
-    2316:2322:boolean isCorrectAnswer(java.lang.String) -> r
-    2328:2330:void setUserName(java.lang.String) -> s
-    167:167:android.content.res.Resources access$0(com.jeffthefate.dmbquiz.activity.ActivityMain) -> a
-    94:94:java.util.ArrayList access$1(com.jeffthefate.dmbquiz.activity.ActivityMain) -> b
-    92:92:void access$2(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> a
-    92:92:int access$3(com.jeffthefate.dmbquiz.activity.ActivityMain) -> c
-    95:95:void access$4(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> a
-    84:84:java.lang.String access$5(com.jeffthefate.dmbquiz.activity.ActivityMain) -> d
-    95:95:java.lang.String access$6(com.jeffthefate.dmbquiz.activity.ActivityMain) -> e
-    170:170:void access$7(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.Drawable) -> a
-    86:86:android.widget.ImageView access$8(com.jeffthefate.dmbquiz.activity.ActivityMain) -> f
-    169:169:void access$9(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.Drawable) -> b
-    173:173:void access$10(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.BitmapDrawable) -> a
-    169:169:android.graphics.drawable.Drawable access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> g
-    172:172:void access$12(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.TransitionDrawable) -> a
-    172:172:android.graphics.drawable.TransitionDrawable access$13(com.jeffthefate.dmbquiz.activity.ActivityMain) -> h
-    171:171:android.graphics.drawable.Drawable[] access$14(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
-    173:173:android.graphics.drawable.BitmapDrawable access$15(com.jeffthefate.dmbquiz.activity.ActivityMain) -> j
-    170:170:android.graphics.drawable.Drawable access$16(com.jeffthefate.dmbquiz.activity.ActivityMain) -> k
-    83:83:void access$17(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> a
-    83:83:com.parse.ParseUser access$18(com.jeffthefate.dmbquiz.activity.ActivityMain) -> l
-    128:128:com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask access$19(com.jeffthefate.dmbquiz.activity.ActivityMain) -> m
-    145:145:java.util.ArrayList access$20(com.jeffthefate.dmbquiz.activity.ActivityMain) -> n
-    145:145:void access$21(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> a
-    146:146:java.util.ArrayList access$22(com.jeffthefate.dmbquiz.activity.ActivityMain) -> o
-    146:146:void access$23(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> b
-    138:138:java.lang.String access$24(com.jeffthefate.dmbquiz.activity.ActivityMain) -> p
-    138:138:void access$25(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> b
-    630:630:void access$26(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean,java.lang.String) -> a
-    90:90:com.jeffthefate.dmbquiz.fragment.FragmentBase access$27(com.jeffthefate.dmbquiz.activity.ActivityMain) -> q
-    140:140:int access$28(com.jeffthefate.dmbquiz.activity.ActivityMain) -> r
-    140:140:void access$29(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> b
-    143:143:com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask access$30(com.jeffthefate.dmbquiz.activity.ActivityMain) -> s
-    139:139:void access$31(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> c
-    139:139:int access$32(com.jeffthefate.dmbquiz.activity.ActivityMain) -> t
-    103:103:java.lang.String access$33(com.jeffthefate.dmbquiz.activity.ActivityMain) -> u
-    884:884:void access$34(com.jeffthefate.dmbquiz.activity.ActivityMain) -> v
-    782:782:void access$35(com.jeffthefate.dmbquiz.activity.ActivityMain) -> w
-    98:98:boolean access$36(com.jeffthefate.dmbquiz.activity.ActivityMain) -> x
-    1277:1277:void access$37(com.jeffthefate.dmbquiz.activity.ActivityMain) -> y
-    97:97:void access$38(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> a
-    932:932:com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask access$39(com.jeffthefate.dmbquiz.activity.ActivityMain) -> z
-    129:129:com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask access$40(com.jeffthefate.dmbquiz.activity.ActivityMain) -> A
-    130:130:com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask access$41(com.jeffthefate.dmbquiz.activity.ActivityMain) -> B
-    127:127:com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask access$42(com.jeffthefate.dmbquiz.activity.ActivityMain) -> C
-    97:97:boolean access$43(com.jeffthefate.dmbquiz.activity.ActivityMain) -> D
-    84:84:void access$44(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> c
-    98:98:void access$45(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> b
-    1287:1287:void access$46(com.jeffthefate.dmbquiz.activity.ActivityMain) -> E
-    132:132:void access$47(com.jeffthefate.dmbquiz.activity.ActivityMain,android.os.Bundle) -> a
-    132:132:android.os.Bundle access$48(com.jeffthefate.dmbquiz.activity.ActivityMain) -> F
-    100:100:void access$49(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> c
-    100:100:boolean access$50(com.jeffthefate.dmbquiz.activity.ActivityMain) -> G
-    99:99:void access$51(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> d
-    99:99:boolean access$52(com.jeffthefate.dmbquiz.activity.ActivityMain) -> H
-    1267:1267:void access$53(com.jeffthefate.dmbquiz.activity.ActivityMain) -> I
-    133:133:void access$54(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> c
-    134:134:void access$55(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> d
-    135:135:void access$56(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> e
-    136:136:void access$57(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> f
-    136:136:java.util.ArrayList access$58(com.jeffthefate.dmbquiz.activity.ActivityMain) -> J
-    133:133:java.util.ArrayList access$59(com.jeffthefate.dmbquiz.activity.ActivityMain) -> K
-    134:134:java.util.ArrayList access$60(com.jeffthefate.dmbquiz.activity.ActivityMain) -> L
-    135:135:java.util.ArrayList access$61(com.jeffthefate.dmbquiz.activity.ActivityMain) -> M
-    110:110:java.lang.String access$62(com.jeffthefate.dmbquiz.activity.ActivityMain) -> N
-    117:117:java.lang.String access$63(com.jeffthefate.dmbquiz.activity.ActivityMain) -> O
-    103:103:void access$64(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> d
-    104:104:void access$65(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> e
-    105:105:void access$66(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> f
-    106:106:void access$67(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> g
-    107:107:void access$68(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> h
-    110:110:void access$69(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> i
-    111:111:void access$70(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> j
-    112:112:void access$71(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> k
-    113:113:void access$72(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> l
-    114:114:void access$73(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> m
-    117:117:void access$74(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> n
-    118:118:void access$75(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> o
-    119:119:void access$76(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> p
-    120:120:void access$77(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> q
-    121:121:void access$78(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> r
-    1764:1764:void access$79(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String,java.util.ArrayList) -> a
-    104:104:java.lang.String access$80(com.jeffthefate.dmbquiz.activity.ActivityMain) -> P
-    105:105:java.lang.String access$81(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Q
-    106:106:java.lang.String access$82(com.jeffthefate.dmbquiz.activity.ActivityMain) -> R
-    107:107:java.lang.String access$83(com.jeffthefate.dmbquiz.activity.ActivityMain) -> S
-    108:108:boolean access$84(com.jeffthefate.dmbquiz.activity.ActivityMain) -> T
-    109:109:boolean access$85(com.jeffthefate.dmbquiz.activity.ActivityMain) -> U
-    111:111:java.lang.String access$86(com.jeffthefate.dmbquiz.activity.ActivityMain) -> V
-    112:112:java.lang.String access$87(com.jeffthefate.dmbquiz.activity.ActivityMain) -> W
-    113:113:java.lang.String access$88(com.jeffthefate.dmbquiz.activity.ActivityMain) -> X
-    114:114:java.lang.String access$89(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Y
-    115:115:boolean access$90(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Z
-    116:116:boolean access$91(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aa
-    118:118:java.lang.String access$92(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ab
-    119:119:java.lang.String access$93(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ac
-    120:120:java.lang.String access$94(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ad
-    121:121:java.lang.String access$95(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ae
-    122:122:boolean access$96(com.jeffthefate.dmbquiz.activity.ActivityMain) -> af
-    123:123:boolean access$97(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ag
-    108:108:void access$98(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> e
-    115:115:void access$99(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> f
-    122:122:void access$100(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> g
-    109:109:void access$101(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> h
-    116:116:void access$102(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> i
-    123:123:void access$103(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> j
-    932:932:void access$104(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask) -> a
-    149:149:void access$105(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> k
+    188:287:void onCreate(android.os.Bundle) -> onCreate
+    291:325:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    329:381:void onResume() -> onResume
+    385:418:void onBackPressed() -> onBackPressed
+    423:446:void onPause() -> onPause
+    450:456:void setBackground(java.lang.String,boolean) -> a
+    536:549:void checkUser() -> w
+    553:568:void setupUser() -> d
+    629:638:void getScore(boolean,boolean,java.lang.String) -> a
+    793:814:void showLoggedInFragment() -> x
+    833:835:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    840:849:void onInfoPressed() -> e
+    853:867:void onStatsPressed() -> f
+    871:892:void onLoginPressed(int,java.lang.String,java.lang.String) -> a
+    1190:1190:java.lang.String getBackground() -> g
+    1195:1197:void showScoreDialog() -> h
+    1201:1203:void showNameDialog() -> i
+    1207:1212:void logOut(boolean) -> b
+    1279:1285:void showLeaders() -> y
+    1289:1295:void showLogin() -> z
+    1299:1305:void showSplash() -> A
+    1309:1315:void showQuiz() -> B
+    1479:1479:android.os.Bundle getLeadersState() -> j
+    1485:1490:void saveUserScore(int) -> b
+    1494:1503:void getNextQuestions(boolean) -> c
+    1916:1926:void next() -> k
+    1930:1930:java.lang.String getQuestionId() -> l
+    1935:1935:java.lang.String getQuestion() -> m
+    1940:1940:java.lang.String getCorrectAnswer() -> n
+    1945:1945:java.lang.String getQuestionScore() -> o
+    1955:1955:boolean getQuestionHint() -> p
+    2035:2036:void setQuestionId(java.lang.String) -> a
+    2040:2041:void setQuestion(java.lang.String) -> b
+    2045:2046:void setCorrectAnswer(java.lang.String) -> c
+    2050:2051:void setQuestionScore(java.lang.String) -> d
+    2055:2056:void setQuestionCategory(java.lang.String) -> e
+    2060:2061:void setQuestionHint(boolean) -> d
+    2065:2066:void setNextQuestionId(java.lang.String) -> f
+    2070:2071:void setNextQuestion(java.lang.String) -> g
+    2075:2076:void setNextCorrectAnswer(java.lang.String) -> h
+    2080:2081:void setNextQuestionScore(java.lang.String) -> i
+    2085:2086:void setNextQuestionCategory(java.lang.String) -> j
+    2095:2096:void setThirdQuestionId(java.lang.String) -> k
+    2100:2101:void setThirdQuestion(java.lang.String) -> l
+    2105:2106:void setThirdCorrectAnswer(java.lang.String) -> m
+    2110:2111:void setThirdQuestionScore(java.lang.String) -> n
+    2115:2116:void setThirdQuestionCategory(java.lang.String) -> o
+    2125:2125:java.lang.String getUserId() -> q
+    2130:2130:java.lang.String getDisplayName() -> r
+    2135:2135:boolean isNewQuestion() -> s
+    2140:2143:void setIsNewQuestion(boolean) -> e
+    2147:2147:int getCurrentScore() -> t
+    2152:2154:void addCurrentScore(int) -> c
+    2158:2170:void shareScreenshot() -> u
+    2174:2186:void setDisplayName(java.lang.String) -> p
+    2189:2225:java.lang.String takeScreenshot() -> C
+    2245:2282:void getUserData(java.lang.String) -> t
+    2304:2304:boolean getNetworkProblem() -> v
+    2309:2310:void setNetworkProblem(boolean) -> f
+    2314:2322:void addCorrectAnswer(java.lang.String) -> q
+    2326:2332:boolean isCorrectAnswer(java.lang.String) -> r
+    2338:2340:void setUserName(java.lang.String) -> s
+    165:165:android.content.res.Resources access$0(com.jeffthefate.dmbquiz.activity.ActivityMain) -> a
+    92:92:java.util.ArrayList access$1(com.jeffthefate.dmbquiz.activity.ActivityMain) -> b
+    90:90:void access$2(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> a
+    90:90:int access$3(com.jeffthefate.dmbquiz.activity.ActivityMain) -> c
+    93:93:void access$4(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> a
+    82:82:java.lang.String access$5(com.jeffthefate.dmbquiz.activity.ActivityMain) -> d
+    93:93:java.lang.String access$6(com.jeffthefate.dmbquiz.activity.ActivityMain) -> e
+    168:168:void access$7(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.Drawable) -> a
+    84:84:android.widget.ImageView access$8(com.jeffthefate.dmbquiz.activity.ActivityMain) -> f
+    167:167:void access$9(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.Drawable) -> b
+    171:171:void access$10(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.BitmapDrawable) -> a
+    167:167:android.graphics.drawable.Drawable access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> g
+    170:170:void access$12(com.jeffthefate.dmbquiz.activity.ActivityMain,android.graphics.drawable.TransitionDrawable) -> a
+    170:170:android.graphics.drawable.TransitionDrawable access$13(com.jeffthefate.dmbquiz.activity.ActivityMain) -> h
+    169:169:android.graphics.drawable.Drawable[] access$14(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
+    171:171:android.graphics.drawable.BitmapDrawable access$15(com.jeffthefate.dmbquiz.activity.ActivityMain) -> j
+    168:168:android.graphics.drawable.Drawable access$16(com.jeffthefate.dmbquiz.activity.ActivityMain) -> k
+    81:81:void access$17(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> a
+    81:81:com.parse.ParseUser access$18(com.jeffthefate.dmbquiz.activity.ActivityMain) -> l
+    126:126:com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask access$19(com.jeffthefate.dmbquiz.activity.ActivityMain) -> m
+    143:143:java.util.ArrayList access$20(com.jeffthefate.dmbquiz.activity.ActivityMain) -> n
+    143:143:void access$21(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> a
+    144:144:java.util.ArrayList access$22(com.jeffthefate.dmbquiz.activity.ActivityMain) -> o
+    144:144:void access$23(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> b
+    136:136:java.lang.String access$24(com.jeffthefate.dmbquiz.activity.ActivityMain) -> p
+    136:136:void access$25(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> b
+    628:628:void access$26(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean,java.lang.String) -> a
+    88:88:com.jeffthefate.dmbquiz.fragment.FragmentBase access$27(com.jeffthefate.dmbquiz.activity.ActivityMain) -> q
+    138:138:int access$28(com.jeffthefate.dmbquiz.activity.ActivityMain) -> r
+    138:138:void access$29(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> b
+    141:141:com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask access$30(com.jeffthefate.dmbquiz.activity.ActivityMain) -> s
+    137:137:void access$31(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> c
+    137:137:int access$32(com.jeffthefate.dmbquiz.activity.ActivityMain) -> t
+    101:101:java.lang.String access$33(com.jeffthefate.dmbquiz.activity.ActivityMain) -> u
+    894:894:void access$34(com.jeffthefate.dmbquiz.activity.ActivityMain) -> v
+    792:792:void access$35(com.jeffthefate.dmbquiz.activity.ActivityMain) -> w
+    96:96:boolean access$36(com.jeffthefate.dmbquiz.activity.ActivityMain) -> x
+    1287:1287:void access$37(com.jeffthefate.dmbquiz.activity.ActivityMain) -> y
+    95:95:void access$38(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> a
+    942:942:com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask access$39(com.jeffthefate.dmbquiz.activity.ActivityMain) -> z
+    127:127:com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask access$40(com.jeffthefate.dmbquiz.activity.ActivityMain) -> A
+    128:128:com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask access$41(com.jeffthefate.dmbquiz.activity.ActivityMain) -> B
+    125:125:com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask access$42(com.jeffthefate.dmbquiz.activity.ActivityMain) -> C
+    95:95:boolean access$43(com.jeffthefate.dmbquiz.activity.ActivityMain) -> D
+    82:82:void access$44(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> c
+    96:96:void access$45(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> b
+    1297:1297:void access$46(com.jeffthefate.dmbquiz.activity.ActivityMain) -> E
+    130:130:void access$47(com.jeffthefate.dmbquiz.activity.ActivityMain,android.os.Bundle) -> a
+    130:130:android.os.Bundle access$48(com.jeffthefate.dmbquiz.activity.ActivityMain) -> F
+    98:98:void access$49(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> c
+    98:98:boolean access$50(com.jeffthefate.dmbquiz.activity.ActivityMain) -> G
+    97:97:void access$51(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> d
+    97:97:boolean access$52(com.jeffthefate.dmbquiz.activity.ActivityMain) -> H
+    1277:1277:void access$53(com.jeffthefate.dmbquiz.activity.ActivityMain) -> I
+    131:131:void access$54(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> c
+    132:132:void access$55(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> d
+    133:133:void access$56(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> e
+    134:134:void access$57(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> f
+    134:134:java.util.ArrayList access$58(com.jeffthefate.dmbquiz.activity.ActivityMain) -> J
+    131:131:java.util.ArrayList access$59(com.jeffthefate.dmbquiz.activity.ActivityMain) -> K
+    132:132:java.util.ArrayList access$60(com.jeffthefate.dmbquiz.activity.ActivityMain) -> L
+    133:133:java.util.ArrayList access$61(com.jeffthefate.dmbquiz.activity.ActivityMain) -> M
+    108:108:java.lang.String access$62(com.jeffthefate.dmbquiz.activity.ActivityMain) -> N
+    115:115:java.lang.String access$63(com.jeffthefate.dmbquiz.activity.ActivityMain) -> O
+    101:101:void access$64(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> d
+    102:102:void access$65(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> e
+    103:103:void access$66(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> f
+    104:104:void access$67(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> g
+    105:105:void access$68(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> h
+    108:108:void access$69(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> i
+    109:109:void access$70(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> j
+    110:110:void access$71(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> k
+    111:111:void access$72(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> l
+    112:112:void access$73(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> m
+    115:115:void access$74(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> n
+    116:116:void access$75(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> o
+    117:117:void access$76(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> p
+    118:118:void access$77(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> q
+    119:119:void access$78(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> r
+    1774:1774:void access$79(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String,java.util.ArrayList) -> a
+    102:102:java.lang.String access$80(com.jeffthefate.dmbquiz.activity.ActivityMain) -> P
+    103:103:java.lang.String access$81(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Q
+    104:104:java.lang.String access$82(com.jeffthefate.dmbquiz.activity.ActivityMain) -> R
+    105:105:java.lang.String access$83(com.jeffthefate.dmbquiz.activity.ActivityMain) -> S
+    106:106:boolean access$84(com.jeffthefate.dmbquiz.activity.ActivityMain) -> T
+    107:107:boolean access$85(com.jeffthefate.dmbquiz.activity.ActivityMain) -> U
+    109:109:java.lang.String access$86(com.jeffthefate.dmbquiz.activity.ActivityMain) -> V
+    110:110:java.lang.String access$87(com.jeffthefate.dmbquiz.activity.ActivityMain) -> W
+    111:111:java.lang.String access$88(com.jeffthefate.dmbquiz.activity.ActivityMain) -> X
+    112:112:java.lang.String access$89(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Y
+    113:113:boolean access$90(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Z
+    114:114:boolean access$91(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aa
+    116:116:java.lang.String access$92(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ab
+    117:117:java.lang.String access$93(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ac
+    118:118:java.lang.String access$94(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ad
+    119:119:java.lang.String access$95(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ae
+    120:120:boolean access$96(com.jeffthefate.dmbquiz.activity.ActivityMain) -> af
+    121:121:boolean access$97(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ag
+    106:106:void access$98(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> e
+    113:113:void access$99(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> f
+    120:120:void access$100(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> g
+    107:107:void access$101(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> h
+    114:114:void access$102(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> i
+    121:121:void access$103(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> j
+    942:942:void access$104(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask) -> a
+    147:147:void access$105(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> k
 com.jeffthefate.dmbquiz.activity.ActivityMain$1 -> dQ:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    814:816:void done(com.parse.ParseObject,com.parse.ParseException) -> a
+    824:826:void done(com.parse.ParseObject,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$2 -> dR:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    899:928:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+    909:938:void done(com.parse.ParseUser,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$3 -> dS:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    1018:1052:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+    1028:1062:void done(com.parse.ParseUser,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$4 -> dT:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    1060:1094:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+    1070:1104:void done(com.parse.ParseUser,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$4$1 -> dU:
     com.jeffthefate.dmbquiz.activity.ActivityMain$4 this$1 -> a
     com.parse.ParseUser val$user -> b
-    1078:1089:void done(com.parse.ParseException) -> a
+    1088:1099:void done(com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$5 -> dV:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     com.parse.ParseUser val$user -> b
-    1110:1131:void done(com.parse.ParseException) -> a
+    1120:1141:void done(com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$6 -> dW:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     java.lang.String val$username -> b
-    1139:1174:void done(com.parse.ParseUser,com.parse.ParseException) -> a
+    1149:1184:void done(com.parse.ParseUser,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> dX:
     java.lang.String questionId -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
@@ -3889,11 +3889,11 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> dX:
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
 com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver -> dY:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
-    2281:2288:void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    2291:2298:void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.jeffthefate.dmbquiz.activity.ActivityMain$FacebookTask -> dZ:
     com.parse.ParseUser user -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
-    943:1000:java.lang.Void doInBackground$10299ca() -> a
+    953:1010:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -3905,8 +3905,8 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask -> ea:
     java.util.ArrayList stageList -> e
     boolean force -> f
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> g
-    1509:1690:java.lang.Void doInBackground$10299ca() -> a
-    1735:1761:void updateIds() -> b
+    1519:1700:java.lang.Void doInBackground$10299ca() -> a
+    1745:1771:void updateIds() -> b
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -3919,8 +3919,8 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask -> eb:
     java.util.List deleteList -> e
     java.lang.Number number -> f
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> g
-    658:659:void onPreExecute() -> onPreExecute
-    663:756:java.lang.Void doInBackground$10299ca() -> a
+    656:657:void onPreExecute() -> onPreExecute
+    661:766:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -3929,7 +3929,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask -> ec:
     java.lang.String userId -> a
     java.util.ArrayList questionIds -> b
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> c
-    1786:1848:java.lang.Void doInBackground$10299ca() -> a
+    1796:1858:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     1:1:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
@@ -3938,9 +3938,9 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> ed:
     com.parse.ParseException error -> b
     int hints -> c
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> d
-    1328:1329:void onPreExecute() -> onPreExecute
-    1333:1406:java.lang.Void doInBackground$10299ca() -> a
-    1428:1464:void getLeaders(java.util.List) -> a
+    1338:1339:void onPreExecute() -> onPreExecute
+    1343:1416:java.lang.Void doInBackground$10299ca() -> a
+    1438:1474:void getLeaders(java.util.List) -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -3948,7 +3948,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> ed:
 com.jeffthefate.dmbquiz.activity.ActivityMain$LogOutTask -> ee:
     boolean force -> a
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
-    1213:1214:void onPreExecute() -> onPreExecute
+    1223:1224:void onPreExecute() -> onPreExecute
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -3958,7 +3958,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask -> ef:
     boolean showNew -> b
     int resourceId -> c
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> d
-    472:509:java.lang.Void doInBackground$10299ca() -> a
+    470:507:java.lang.Void doInBackground$10299ca() -> a
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:void onCancelled(java.lang.Object) -> onCancelled
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -4076,15 +4076,15 @@ com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> eo:
     java.util.ArrayList userIdList -> ad
     android.content.res.Resources res -> ae
     boolean isRestored -> af
-    55:58:void onCreate(android.os.Bundle) -> onCreate
-    65:156:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    161:177:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    185:206:void onPause() -> onPause
-    210:242:void onResume() -> onResume
-    246:247:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
-    251:255:void onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
-    259:281:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    286:291:void setDisplayName(java.lang.String) -> c
+    56:59:void onCreate(android.os.Bundle) -> onCreate
+    66:157:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    162:178:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    186:207:void onPause() -> onPause
+    211:243:void onResume() -> onResume
+    247:248:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
+    252:265:void onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
+    269:291:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    296:301:void setDisplayName(java.lang.String) -> c
 com.jeffthefate.dmbquiz.fragment.FragmentLoad -> ep:
     android.widget.ProgressBar progress -> O
     android.widget.TextView networkText -> P
@@ -4299,53 +4299,53 @@ com.jeffthefate.dmbquiz.fragment.FragmentSplash -> eQ:
     java.lang.String username -> Z
     java.lang.String password -> aa
     boolean isSignedUp -> ab
-    59:165:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    170:175:void onCreate(android.os.Bundle) -> onCreate
-    257:258:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
-    262:266:void onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
-    270:300:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    306:311:android.content.Intent getOpenFacebookIntent(android.content.Context) -> a
-    230:230:void access$0(com.jeffthefate.dmbquiz.fragment.FragmentSplash,java.lang.String) -> a
-    52:52:boolean access$1(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> a
-    177:177:void access$2(com.jeffthefate.dmbquiz.fragment.FragmentSplash,boolean) -> a
-    45:45:android.widget.TextView access$3(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> b
-    46:46:android.widget.TextView access$4(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> c
-    47:47:android.widget.LinearLayout access$5(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> d
-    40:40:android.widget.LinearLayout access$6(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> e
-    39:39:android.widget.RelativeLayout access$7(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> f
-    41:41:android.widget.TextView access$8(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> g
-    42:42:android.widget.TextView access$9(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> h
-    52:52:void access$10(com.jeffthefate.dmbquiz.fragment.FragmentSplash,boolean) -> b
+    60:166:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    171:176:void onCreate(android.os.Bundle) -> onCreate
+    258:259:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
+    263:276:void onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
+    280:310:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    316:321:android.content.Intent getOpenFacebookIntent(android.content.Context) -> a
+    231:231:void access$0(com.jeffthefate.dmbquiz.fragment.FragmentSplash,java.lang.String) -> a
+    53:53:boolean access$1(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> a
+    178:178:void access$2(com.jeffthefate.dmbquiz.fragment.FragmentSplash,boolean) -> a
+    46:46:android.widget.TextView access$3(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> b
+    47:47:android.widget.TextView access$4(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> c
+    48:48:android.widget.LinearLayout access$5(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> d
+    41:41:android.widget.LinearLayout access$6(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> e
+    40:40:android.widget.RelativeLayout access$7(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> f
+    42:42:android.widget.TextView access$8(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> g
+    43:43:android.widget.TextView access$9(com.jeffthefate.dmbquiz.fragment.FragmentSplash) -> h
+    53:53:void access$10(com.jeffthefate.dmbquiz.fragment.FragmentSplash,boolean) -> b
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$1 -> eR:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    66:70:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+    67:71:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$10 -> eS:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    237:251:void done(java.util.List,com.parse.ParseException) -> a
+    238:252:void done(java.util.List,com.parse.ParseException) -> a
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$2 -> eT:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    76:80:void onFocusChange(android.view.View,boolean) -> onFocusChange
+    77:81:void onFocusChange(android.view.View,boolean) -> onFocusChange
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$3 -> eU:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    87:96:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
+    88:97:boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$4 -> eV:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    107:111:void onClick(android.view.View) -> onClick
+    108:112:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$5 -> eW:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    118:122:void onClick(android.view.View) -> onClick
+    119:123:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$6 -> eX:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    128:131:void onClick(android.view.View) -> onClick
+    129:132:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$7 -> eY:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    137:140:void onClick(android.view.View) -> onClick
+    138:141:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$8 -> eZ:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    146:149:void onClick(android.view.View) -> onClick
+    147:150:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSplash$9 -> fa:
     com.jeffthefate.dmbquiz.fragment.FragmentSplash this$0 -> a
-    156:163:void onClick(android.view.View) -> onClick
+    157:164:void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.receiver.ConnectivityReceiver -> com.jeffthefate.dmbquiz.receiver.ConnectivityReceiver:
     android.net.ConnectivityManager connMan -> a
     23:45:void onReceive(android.content.Context,android.content.Intent) -> onReceive
