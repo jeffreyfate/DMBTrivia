@@ -59,7 +59,6 @@ public class FragmentQuiz extends FragmentBase {
     private long skipWaitTick;
     private long skipTick = 17000;
     private long hintTick = 15000;
-    private int skipButtonVis = View.VISIBLE;
     
     private SkipTimer skipTimer;
     private HintTimer hintTimer;
@@ -119,9 +118,6 @@ public class FragmentQuiz extends FragmentBase {
             isCorrect = savedInstanceState.getBoolean("isCorrect");
             ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
                     DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
-            skipButtonVis = savedInstanceState.getInt("skipButtonVis");
-            ApplicationEx.dbHelper.setUserValue(skipButtonVis,
-                    DatabaseHelper.COL_SKIP_VIS, mCallback.getUserId());
         }
         else {
             if (mCallback.getUserId() != null) {
@@ -146,8 +142,6 @@ public class FragmentQuiz extends FragmentBase {
                 isCorrect = ApplicationEx.dbHelper.getUserIntValue(
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId())
                             == 1 ? true : false;
-                skipButtonVis = ApplicationEx.dbHelper.getUserIntValue(
-                        DatabaseHelper.COL_SKIP_VIS, mCallback.getUserId());
             }
         }
         if (hintTick < 0)
@@ -258,18 +252,10 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private class NextTask extends AsyncTask<Void, Void, Void> {
-        private long perfTime;
-        
-        private NextTask(long perfTime) {
-            this.perfTime = perfTime;
-        }
-        
         @Override
         protected Void doInBackground(Void... nothing) {
             publishProgress();
             //savedAnswer = null;
-            ApplicationEx.dbHelper.setUserValue("",
-                    DatabaseHelper.COL_ANSWER, mCallback.getUserId());
             skipTick = 17000;
             ApplicationEx.dbHelper.setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
@@ -293,12 +279,13 @@ public class FragmentQuiz extends FragmentBase {
         
         protected void onProgressUpdate(Void... nothing) {
             answerText.setText("");
+            answerButton.setText("LOADING");
             //imm.restartInput(answerText);
         }
         
         @Override
         protected void onPostExecute(Void nothing) {
-            mCallback.next(perfTime);
+            mCallback.next();
         }
     }
     
@@ -475,9 +462,9 @@ public class FragmentQuiz extends FragmentBase {
                     if (mCallback.isNewQuestion()) {
                         if (Build.VERSION.SDK_INT <
                                 Build.VERSION_CODES.HONEYCOMB)
-                            new NextTask(System.currentTimeMillis()).execute();
+                            new NextTask().execute();
                         else
-                            new NextTask(System.currentTimeMillis()).executeOnExecutor(
+                            new NextTask().executeOnExecutor(
                                     AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                     else {
@@ -527,6 +514,9 @@ public class FragmentQuiz extends FragmentBase {
                     hintTimer.cancel();
                 if (skipTimer != null)
                     skipTimer.cancel();
+                isCorrect = true;
+                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+                        DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
                 hintTick = 0;
                 ApplicationEx.dbHelper.setUserValue((int) hintTick,
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
@@ -598,9 +588,9 @@ public class FragmentQuiz extends FragmentBase {
                 !mCallback.isNewQuestion()) {
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
-                new NextTask(System.currentTimeMillis()).execute();
+                new NextTask().execute();
             else
-                new NextTask(System.currentTimeMillis()).executeOnExecutor(
+                new NextTask().executeOnExecutor(
                         AsyncTask.THREAD_POOL_EXECUTOR);
             return;
         }
@@ -713,7 +703,7 @@ public class FragmentQuiz extends FragmentBase {
         if (skipTimer != null)
             skipTimer.cancel();
         skipButton.setEnabled(false);
-        skipButton.setVisibility(skipButtonVis);
+        skipButton.setVisibility(View.VISIBLE);
         if (skipPressed) {
             skipText.setTextColor(res.getColor(R.color.light_gray));
             skipText.setBackgroundResource(R.drawable.button_disabled);
@@ -736,7 +726,6 @@ public class FragmentQuiz extends FragmentBase {
             }
         }
         updateScoreText();
-        updateTimerButtons();
     }
     
     @Override
@@ -752,13 +741,13 @@ public class FragmentQuiz extends FragmentBase {
                 }
                 else {
                     showNoMoreQuestions();
-                    answerButton.setBackgroundResource(
+                    retryButton.setBackgroundResource(
                             R.drawable.button_disabled);
-                    answerButton.setTextColor(
+                    retryButton.setTextColor(
                             res.getColor(R.color.light_gray));
-                    answerButton.setText("LOADING");
-                    answerButton.setVisibility(View.VISIBLE);
-                    answerButton.setEnabled(false);
+                    retryButton.setText("CHECKING FOR QUESTIONS");
+                    retryButton.setVisibility(View.VISIBLE);
+                    retryButton.setEnabled(false);
                     mCallback.getNextQuestions(false);
                 }
             }
@@ -967,7 +956,6 @@ public class FragmentQuiz extends FragmentBase {
         outState.putBoolean("hintPressed", hintPressed);
         outState.putBoolean("skipPressed", skipPressed);
         outState.putBoolean("isCorrect", isCorrect);
-        outState.putInt("skipButtonVis", skipButtonVis);
         if (!loggingOut)
             super.onSaveInstanceState(outState);
         else
@@ -1012,6 +1000,7 @@ public class FragmentQuiz extends FragmentBase {
             skipTimer.cancel();
         hintButton.setVisibility(View.INVISIBLE);
         skipButton.setVisibility(View.INVISIBLE);
+        retryButton.setText(getString(R.string.retry));
         retryButton.setVisibility(View.VISIBLE);
         scoreText.setVisibility(View.INVISIBLE);
     }
@@ -1146,19 +1135,6 @@ public class FragmentQuiz extends FragmentBase {
             break;
         }
         return true;
-    }
-    
-    @Override
-    public void updateTimerButtons() {
-        if (mCallback != null) {
-            if (mCallback.getNextQuestionId() == null)
-                skipButtonVis = View.INVISIBLE;
-            else
-                skipButtonVis = View.VISIBLE;
-            ApplicationEx.dbHelper.setUserValue(skipButtonVis,
-                    DatabaseHelper.COL_SKIP_VIS, mCallback.getUserId());
-            skipButton.setVisibility(skipButtonVis);
-        }
     }
     
     @Override

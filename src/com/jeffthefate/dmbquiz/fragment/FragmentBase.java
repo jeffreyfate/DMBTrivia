@@ -37,7 +37,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void showNameDialog();
         public void logOut(boolean force);
         public Bundle getLeadersState();
-        public void next(long perfTime);
+        public void next();
         public String getQuestionId();
         public void setQuestionId(String questionId);
         public String getQuestion();
@@ -258,9 +258,6 @@ public class FragmentBase extends Fragment implements UiCallback {
         audioManager.abandonAudioFocus(afChangeListener);
         super.onPause();
     }
-
-    @Override
-    public void updateTimerButtons() {}
 
     @Override
     public void updateScoreText() {}

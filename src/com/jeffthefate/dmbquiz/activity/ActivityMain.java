@@ -153,7 +153,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         public void showLoading(String message);
         public void showNoMoreQuestions();
         public void resumeQuestion();
-        public void updateTimerButtons();
         public void updateScoreText();
         public void resetHint();
         public void disableButton(boolean isRetry);
@@ -349,10 +348,12 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 getUserData(userId);
         }
         if (!isLogging) {
-            if (!loggedIn)
-                logOut(false);
-            if (userId == null)
-                checkUser();
+            if (userId == null) {
+                if (!loggedIn)
+                    logOut(false);
+                else
+                    checkUser();
+            }
             else {
                 if (correctAnswers == null) {
                     isLogging = true;
@@ -383,29 +384,28 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void onBackPressed() {
-        long perfTime = System.currentTimeMillis();
         if (!inStats && !inLoad && !isLogging && !inInfo)
             moveTaskToBack(true);
         else {
             if (inLoad) {
                 if (getStatsTask != null)
                     getStatsTask.cancel(true);
+                showQuiz();
                 inLoad = false;
                 ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
                         DatabaseHelper.COL_IN_LOAD, userId);
-                showQuiz();
             }
             else if (inStats) {
+                showQuiz();
                 inStats = false;
                 ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
                         DatabaseHelper.COL_IN_STATS, userId);
-                showQuiz();
             }
             else if (inInfo) {
+                showSplash();
                 inInfo = false;
                 ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
                         DatabaseHelper.COL_IN_INFO, userId);
-                showSplash();
             }
             else if (isLogging) {
                 if (userTask != null)
@@ -417,12 +417,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 logOut(true);
             }
         }
-        Log.i(Constants.LOG_TAG, "perfTime: " + (System.currentTimeMillis()-perfTime));
     }
     
     @Override
     public void onPause() {
-        unregisterReceiver(connReceiver);
+        try {
+            unregisterReceiver(connReceiver);
+        } catch (IllegalArgumentException e) {}
         if (getStageTask != null)
             getStageTask.cancel(true);
         if (getNextQuestionsTask != null)
@@ -456,7 +457,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
-    public class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
+    private class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
         private String name;
         private boolean showNew;
         private int resourceId;
@@ -659,6 +660,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected Void doInBackground(Void... nothing) {
+            int questionScore = -1;
             ParseQuery correctQuery = new ParseQuery("CorrectAnswers");
             correctQuery.whereEqualTo("userId", userId);
             correctQuery.setLimit(1000);
@@ -667,11 +669,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             ParseQuery deleteQuery = new ParseQuery("CorrectAnswers");
             deleteQuery.whereEqualTo("userId", userId);
             do {
+                correctQuery.whereEqualTo("hint", true);
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
                 query.whereMatchesKeyInQuery("objectId", "questionId", correctQuery);
                 try {
                     scoreList = query.find();
-                    int index = -1;
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
@@ -688,8 +690,47 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         }
                         else {
                             number = score.getNumber("score");
-                            tempScore += number == null ? 1000 :
+                            questionScore = number == null ? 1000 :
                                     number.intValue();
+                            tempScore += questionScore / 2;
+                            tempAnswers.add(score.getObjectId());
+                        }
+                    }
+                } catch (ParseException e) {
+                    Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                    if (userTask != null)
+                        userTask.cancel(true);
+                    if (getScoreTask != null)
+                        getScoreTask.cancel(true);
+                    if (show && currFrag != null)
+                        currFrag.showNetworkProblem();
+                }
+            } while (scoreList.size() == 1000 & !isCancelled());
+            do {
+                correctQuery.whereEqualTo("hint", false);
+                correctQuery.whereNotContainedIn("questionId", tempAnswers);
+                query.whereMatchesKeyInQuery("objectId", "questionId", correctQuery);
+                try {
+                    scoreList = query.find();
+                    for (ParseObject score : scoreList) {
+                        if (isCancelled())
+                            return null;
+                        if (tempAnswers.contains(score.getObjectId()) &&
+                                userId != null) {
+                            deleteQuery.whereEqualTo("questionId",
+                                    score.getObjectId());
+                            deleteList = deleteQuery.find();
+                            for (int i = 1; i < deleteList.size(); i++) {
+                                try {
+                                    deleteList.get(i).deleteEventually();
+                                } catch (RuntimeException exception) {}
+                            }
+                        }
+                        else {
+                            number = score.getNumber("score");
+                            questionScore = number == null ? 1000 :
+                                    number.intValue();
+                            tempScore += questionScore;
                             tempAnswers.add(score.getObjectId());
                         }
                     }
@@ -712,7 +753,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         getString(R.string.correct_key), correctAnswers);
                 publishProgress();
             }
-            
             return null;
         }
         
@@ -730,14 +770,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 else
                     getNextQuestions(false);
             }
-            if (restore && !isLogging) {
-                if (!loggedIn)
-                    logOut(false);
-                if (userId == null)
-                    checkUser();
-                else
-                    showLoggedInFragment();
-            }
+            if (restore)
+                showLoggedInFragment();
         }
         
         @Override
@@ -759,6 +793,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         else if (inLoad)
             onStatsPressed();
         else {
+            isLogging = false;
+            ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+                    DatabaseHelper.COL_LOGGING, userId);
             loggedIn = true;
             ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                     DatabaseHelper.COL_LOGGED_IN, userId);
@@ -1185,31 +1222,29 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 facebookTask.cancel(true);
             if (getScoreTask != null)
                 getScoreTask.cancel(true);
+            if (getNextQuestionsTask != null)
+                getNextQuestionsTask.cancel(true);
+            if (getStageTask != null)
+                getStageTask.cancel(true);
+            if (getStatsTask != null)
+                getStatsTask.cancel(true);
             if (userId != null) {
                 ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
                         DatabaseHelper.COL_LOGGING, userId);
                 ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                         DatabaseHelper.COL_LOGGED_IN, userId);
                 ApplicationEx.dbHelper.setOffset(0, userId);
-                ApplicationEx.dbHelper.setUserValue("", DatabaseHelper.COL_ANSWER,
-                        userId);
-                ApplicationEx.dbHelper.setUserValue(-1,
-                        DatabaseHelper.COL_SKIP_TICK, userId);
-                ApplicationEx.dbHelper.setUserValue(-1,
-                        DatabaseHelper.COL_HINT_TICK, userId);
-                ApplicationEx.dbHelper.setUserValue(0,
-                        DatabaseHelper.COL_HINT_PRESSED, userId);
-                ApplicationEx.dbHelper.setUserValue(0,
-                        DatabaseHelper.COL_SKIP_PRESSED, userId);
-                ApplicationEx.dbHelper.setUserValue("",
-                        DatabaseHelper.COL_HINT, userId);
-                ApplicationEx.dbHelper.setUserValue(0,
-                        DatabaseHelper.COL_IS_CORRECT, userId);
             }
             ParseUser.logOut();
             user = null;
             userId = null;
             displayName = null;
+            if (correctAnswers != null) {
+                correctAnswers.clear();
+                correctAnswers = null;
+                ApplicationEx.setStringArrayPref(
+                        getString(R.string.correct_key), correctAnswers);
+            }
             return null;
         }
         
@@ -1472,8 +1507,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         @Override
         protected Void doInBackground(Void... nothing) {
             if (((nextQuestionId == null && thirdQuestionId != null) || 
-                    correctAnswers.contains(nextQuestionId)) &&
-                        !isCancelled() && !force) {
+                    correctAnswers != null &&
+                        correctAnswers.contains(nextQuestionId)) &&
+                            !isCancelled() && !force) {
                 updateIds();
                 getNextQuestions(force);
             }
@@ -1756,7 +1792,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 if (!questionList.isEmpty()) {
                     for (int i = 0; i < questionList.size(); i++) {
                         if (questionList.get(i).getString("questionId")
-                                .equals(questionIds)) {
+                                .equals(questionId)) {
                             questionHint = questionList.get(i).getBoolean("hint");
                             questionSkip = questionList.get(i).getBoolean("skip");
                             publishProgress();
@@ -1866,7 +1902,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     @Override
-    public void next(long perfTime) {
+    public void next() {
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
             new BackgroundTask(questionId).execute();

@@ -62,7 +62,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_THIRD_QUESTION_HINT = "ThirdQuestionHint";
     public static final String COL_THIRD_QUESTION_SKIP = "ThirdQuestionSkip";
     public static final String COL_CURR_BACKGROUND = "CurrentBackground";
-    public static final String COL_ANSWER = "Answer";
     public static final String COL_HINT = "Hint";
     public static final String COL_SKIP_TICK = "SkipTick";
     public static final String COL_HINT_TICK = "HintTick";
@@ -116,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_THIRD_QUESTION_SCORE + " TEXT, " + COL_THIRD_QUESTION_HINT +
             " INTEGER DEFAULT 0, " + COL_THIRD_QUESTION_SKIP +
             " INTEGER DEFAULT 0, " + COL_CURR_BACKGROUND + " TEXT, " +
-            COL_ANSWER + " TEXT, " + COL_HINT + " TEXT, " + COL_SKIP_TICK +
+            COL_HINT + " TEXT, " + COL_SKIP_TICK +
             " INTEGER DEFAULT -1, " + COL_HINT_TICK + " INTEGER DEFAULT -1, " +
             COL_SKIP_PRESSED + " INTEGER DEFAULT 0, " + COL_HINT_PRESSED +
             " INTEGER DEFAULT 0, " + COL_IS_CORRECT + " INTEGER DEFAULT 0, " +
@@ -733,6 +732,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_CURR_QUESTION_SKIP)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_CURR_QUESTION_SKIP + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_NEXT_QUESTION_HINT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_NEXT_QUESTION_HINT + " INTEGER DEFAULT 0";
@@ -742,9 +750,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_NEXT_QUESTION_SKIP)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_NEXT_QUESTION_SKIP + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_THIRD_QUESTION_HINT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_THIRD_QUESTION_HINT + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_THIRD_QUESTION_SKIP)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_THIRD_QUESTION_SKIP + " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {
@@ -790,15 +816,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!colList.contains(COL_THIRD_QUESTION_SCORE)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_THIRD_QUESTION_SCORE + " TEXT";
-            try {
-                db.execSQL(sqlString);
-            } catch (SQLException e) {
-                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
-            }
-        }
-        if (!colList.contains(COL_ANSWER)) {
-            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_ANSWER +
-                    " TEXT";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {

@@ -185,21 +185,25 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(app);
         SharedPreferences.Editor editor = sharedPrefs.edit();
-        JSONArray array = new JSONArray(answers);
-        if (!answers.isEmpty())
-            editor.putString(key, array.toString());
-        else
-            editor.putString(key, null);
+        if (answers == null)
+            editor.remove(key);
+        else {
+            JSONArray array = new JSONArray(answers);
+            if (!answers.isEmpty())
+                editor.putString(key, array.toString());
+            else
+                editor.putString(key, null);
+        }
         editor.commit();
     }
 
     public static ArrayList<String> getStringArrayPref(String key) {
-        long perfTime = System.currentTimeMillis();
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(app);
         String json = sharedPrefs.getString(key, null);
-        ArrayList<String> answers = new ArrayList<String>();
+        ArrayList<String> answers = null;
         if (json != null) {
+            answers = new ArrayList<String>();
             try {
                 JSONArray array = new JSONArray(json);
                 for (int i = 0; i < array.length(); i++) {
