@@ -91,6 +91,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public void saveUserScore(final int currTemp);
         public void addCorrectAnswer(String correctId);
         public boolean isCorrectAnswer(String correctId);
+        public void setUserName(String userName);
     }
     
     public static final int LOGIN_FACEBOOK = 0;

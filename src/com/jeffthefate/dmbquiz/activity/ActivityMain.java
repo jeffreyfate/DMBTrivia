@@ -2322,5 +2322,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 return false;
         }
     }
+
+    @Override
+    public void setUserName(String userName) {
+        if (leadersBundle != null && userName != null)
+            leadersBundle.putString("userName", userName);
+    }
     
 }

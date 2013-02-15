@@ -283,8 +283,11 @@ public class FragmentLeaders extends FragmentBase {
     
     @Override
     public void setDisplayName(String displayName) {
-        if (userName != null)
+        if (userName != null && displayName != null) {
             userName.setText(displayName);
+            if (mCallback != null)
+                mCallback.setUserName(displayName);
+        }
     }
     
 }
