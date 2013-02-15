@@ -3,6 +3,7 @@ package com.jeffthefate.dmbquiz.fragment;
 import java.util.ArrayList;
 
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -248,9 +249,18 @@ public class FragmentLeaders extends FragmentBase {
     
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.Notifications).setTitle(sharedPrefs.getBoolean(
-                getString(R.string.notification_key), true) ?
-                        "Disable Notifications" : "Enable Notifications");
+        menu.findItem(R.id.Notifications)
+        .setCheckable(true)
+        .setChecked(sharedPrefs.getBoolean(
+                getString(R.string.notification_key), true));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            if (sharedPrefs.getBoolean(
+                    getString(R.string.notification_key), true))
+                menu.findItem(R.id.Notifications).setTitle(
+                "\u2714  Notifications");
+            else
+                menu.findItem(R.id.Notifications).setTitle("Notifications");
+        }
         super.onPrepareOptionsMenu(menu);
     }
     

@@ -62,8 +62,6 @@ import com.jeffthefate.dmbquiz.fragment.FragmentNameDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentQuiz;
 import com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentSplash;
-import com.parse.CountCallback;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
