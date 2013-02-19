@@ -73,6 +73,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.PushService;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
@@ -1199,6 +1200,23 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         ApplicationEx.dbHelper.setOffset(1, userId);
                     if (isLogging)
                         setupUser(newUser);
+                }
+            }
+        });
+    }
+    
+    private void resetPassword(String username) {
+        ParseUser.requestPasswordResetInBackground(username,
+                new RequestPasswordResetCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    ApplicationEx.mToast.setText("A password reset email has " +
+                            "been sent to this address");
+                    ApplicationEx.mToast.show();
+                } else {
+                    ApplicationEx.mToast.setText("An error occurred, " +
+                            "try again");
+                    ApplicationEx.mToast.show();
                 }
             }
         });
