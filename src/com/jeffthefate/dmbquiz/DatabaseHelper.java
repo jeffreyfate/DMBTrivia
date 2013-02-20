@@ -186,6 +186,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public long insertRecord(ContentValues cv, String tableName,
             String columnName) {
+    	if (cv == null || tableName == null || columnName == null)
+    		return -1;
         return db.insert(tableName, columnName, cv);
     }
     
@@ -210,6 +212,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean hasUser(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE, new String[] {}, COL_USER_ID + "=?",
                 new String[] {userId}, null, null, null);
         boolean hasUser = false;
@@ -358,6 +362,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean isAnonUser(String userId) {
+    	if (userId == null)
+    		return true;
         Cursor cur = db.query(USER_TABLE, new String[] {}, COL_USER_ID + "=?",
                 new String[] {userId}, null, null, null);
         boolean isAnon = false;
@@ -393,6 +399,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public long setOffset(int offset, String userId) {
+    	if (userId == null)
+    		return -1;
         ContentValues cv = new ContentValues();
         cv.put(COL_OFFSET, offset);
         return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
@@ -409,7 +417,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
     
-    public long setQuestions(String userObject, String currQuestionId,
+    public long setQuestions(String userId, String currQuestionId,
             String currQuestionQuestion, String currQuestionAnswer,
             String currQuestionCategory, String currQuestionScore,
             boolean currQuestionHint, boolean currQuestionSkip,
@@ -420,6 +428,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String thirdQuestionQuestion, String thirdQuestionAnswer,
             String thirdQuestionCategory, String thirdQuestionScore,
             boolean thirdQuestionHint, boolean thirdQuestionSkip) {
+    	if (userId == null)
+    		return -1;
         ContentValues cv = new ContentValues();
         cv.put(COL_CURR_QUESTION_ID, currQuestionId);
         cv.put(COL_CURR_QUESTION_QUESTION, currQuestionQuestion);
@@ -443,12 +453,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_THIRD_QUESTION_HINT, thirdQuestionHint ? 1 : 0);
         cv.put(COL_THIRD_QUESTION_SKIP, thirdQuestionSkip ? 1 : 0);
         return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
-                new String[] {userObject});
+                new String[] {userId});
     }
     
-    public String getCurrQuestionId(String userObject) {
+    public String getCurrQuestionId(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_CURR_QUESTION_ID},
-                COL_USER_ID + "=?", new String[] {userObject}, null, null,
+                COL_USER_ID + "=?", new String[] {userId}, null, null,
                 null);
         String currQuestionId = null;
         if (cur.moveToFirst())
@@ -458,10 +470,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestionId;
     }
     
-    public String getCurrQuestionQuestion(String userObject) {
+    public String getCurrQuestionQuestion(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_QUESTION}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -470,10 +484,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getCurrQuestionAnswer(String userObject) {
+    public String getCurrQuestionAnswer(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_ANSWER}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -482,10 +498,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getCurrQuestionCategory(String userObject) {
+    public String getCurrQuestionCategory(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_CATEGORY}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -494,10 +512,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getCurrQuestionScore(String userObject) {
+    public String getCurrQuestionScore(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_SCORE}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -506,10 +526,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public boolean getCurrQuestionHint(String userObject) {
+    public boolean getCurrQuestionHint(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_HINT}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currHint = false;
         if (cur.moveToFirst())
             currHint = cur.getInt(cur.getColumnIndex(COL_CURR_QUESTION_HINT))
@@ -518,10 +540,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currHint;
     }
     
-    public boolean getCurrQuestionSkip(String userObject) {
+    public boolean getCurrQuestionSkip(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_SKIP}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currSkip = false;
         if (cur.moveToFirst())
             currSkip = cur.getInt(cur.getColumnIndex(COL_CURR_QUESTION_SKIP))
@@ -530,9 +554,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currSkip;
     }
     
-    public String getNextQuestionId(String userObject) {
+    public String getNextQuestionId(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_NEXT_QUESTION_ID},
-                COL_USER_ID + "=?", new String[] {userObject}, null, null,
+                COL_USER_ID + "=?", new String[] {userId}, null, null,
                 null);
         String nextQuestionId = null;
         if (cur.moveToFirst())
@@ -542,10 +568,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return nextQuestionId;
     }
     
-    public String getNextQuestionQuestion(String userObject) {
+    public String getNextQuestionQuestion(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_QUESTION}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -554,10 +582,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getNextQuestionAnswer(String userObject) {
+    public String getNextQuestionAnswer(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_ANSWER}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -566,10 +596,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getNextQuestionCategory(String userObject) {
+    public String getNextQuestionCategory(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_CATEGORY}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -578,10 +610,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getNextQuestionScore(String userObject) {
+    public String getNextQuestionScore(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_SCORE}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -590,10 +624,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public boolean getNextQuestionHint(String userObject) {
+    public boolean getNextQuestionHint(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_HINT}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currHint = false;
         if (cur.moveToFirst())
             currHint = cur.getInt(cur.getColumnIndex(COL_NEXT_QUESTION_HINT))
@@ -602,10 +638,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currHint;
     }
     
-    public boolean getNextQuestionSkip(String userObject) {
+    public boolean getNextQuestionSkip(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_SKIP}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currSkip = false;
         if (cur.moveToFirst())
             currSkip = cur.getInt(cur.getColumnIndex(COL_NEXT_QUESTION_SKIP))
@@ -614,9 +652,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currSkip;
     }
     
-    public String getThirdQuestionId(String userObject) {
+    public String getThirdQuestionId(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_THIRD_QUESTION_ID},
-                COL_USER_ID + "=?", new String[] {userObject}, null, null,
+                COL_USER_ID + "=?", new String[] {userId}, null, null,
                 null);
         String nextQuestionId = null;
         if (cur.moveToFirst())
@@ -626,10 +666,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return nextQuestionId;
     }
     
-    public String getThirdQuestionQuestion(String userObject) {
+    public String getThirdQuestionQuestion(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_QUESTION}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -638,10 +680,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getThirdQuestionAnswer(String userObject) {
+    public String getThirdQuestionAnswer(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_ANSWER}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -650,10 +694,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getThirdQuestionCategory(String userObject) {
+    public String getThirdQuestionCategory(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_CATEGORY}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -662,10 +708,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public String getThirdQuestionScore(String userObject) {
+    public String getThirdQuestionScore(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_SCORE}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         String currQuestion = null;
         if (cur.moveToFirst())
             currQuestion = cur.getString(
@@ -674,10 +722,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currQuestion;
     }
     
-    public boolean getThirdQuestionHint(String userObject) {
+    public boolean getThirdQuestionHint(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_HINT}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currHint = false;
         if (cur.moveToFirst())
             currHint = cur.getInt(cur.getColumnIndex(COL_THIRD_QUESTION_HINT))
@@ -686,10 +736,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currHint;
     }
     
-    public boolean getThirdQuestionSkip(String userObject) {
+    public boolean getThirdQuestionSkip(String userId) {
+    	if (userId == null)
+    		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_SKIP}, COL_USER_ID + "=?",
-                new String[] {userObject}, null, null, null);
+                new String[] {userId}, null, null, null);
         boolean currSkip = false;
         if (cur.moveToFirst())
             currSkip = cur.getInt(cur.getColumnIndex(COL_THIRD_QUESTION_SKIP))
@@ -699,6 +751,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public long setCurrBackground(String userId, String currBackground) {
+    	if (userId == null)
+    		return -1;
         long returnValue = -1;
         ContentValues cv = new ContentValues();
         cv.put(COL_CURR_BACKGROUND, currBackground);
@@ -708,6 +762,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getCurrBackground(String userId) {
+    	if (userId == null)
+    		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_CURR_BACKGROUND},
                 COL_USER_ID + "=?", new String[] {userId}, null, null, null);
         String background = null;
