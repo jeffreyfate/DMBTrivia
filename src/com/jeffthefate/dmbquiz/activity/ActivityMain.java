@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,9 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -30,7 +26,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -45,8 +40,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.android.FacebookError;
-import com.facebook.android.Util;
+import com.facebook.Request;
+import com.facebook.Request.GraphUserCallback;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
@@ -137,7 +135,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private String displayName;
     private int currScore = -1;
     private int tempScore = 0;
-    private Number score;
     
     private UserTask userTask;
     
@@ -966,62 +963,29 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected Void doInBackground(Void... params) {
-            if (user.getString("displayName") == null ||
-                    (user.isNew() &&
-                            !user.getString("displayName").endsWith(".") &&
-                            !user.getString("displayName").contains(" "))) {
-                String response;
-                String firstName = null;
-                String lastName = null;
-                try {
-                    response = ParseFacebookUtils.getFacebook().request(
-                            "me");
-                    JSONObject json = Util.parseJson(response);
-                    firstName = json.getString("first_name");
-                    lastName = json.getString("last_name");
-                } 
-                catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } 
-                catch (IOException e) {
-                    e.printStackTrace();
-                } 
-                catch (FacebookError e) {
-                    e.printStackTrace();
-                } 
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                displayName = firstName + " " + lastName.substring(0, 1) + ".";
-                user.put("displayName", displayName);
-                try {
-                    user.saveEventually();
-                }
-                catch (RuntimeException e) {}
-                ApplicationEx.dbHelper.setUserValue(displayName, 
-                        DatabaseHelper.COL_DISPLAY_NAME, userId);
-                /*
-                String response;
-                String firstName = null;
-                String lastName = null;
-                Request.newMeRequest(ParseFacebookUtils.getSession(),
-                    new GraphUserCallback() {
-                        @Override
-                        public void onCompleted(GraphUser graphUser,
-                                Response response) {
-                            displayName = graphUser.getFirstName() + " " +
-                                    graphUser.getLastName().substring(0, 1)
-                                    + ".";
-                            user.put("displayName", displayName);
-                            try {
-                                user.saveEventually();
-                            }
-                            catch (RuntimeException e) {}
-                            ApplicationEx.dbHelper.setUserValue(displayName, 
-                                    DatabaseHelper.COL_DISPLAY_NAME, userId);
-                        }
-                });
-                 */
+            if (user.getString("displayName") == null) {
+                Session session = ParseFacebookUtils.getSession();
+            	if (session.getState().isOpened()) {
+            		Request.executeMeRequestAsync(session,
+            				new GraphUserCallback() {
+						@Override
+						public void onCompleted(GraphUser graphUser,
+								Response response) {
+							if (user != null) {
+								displayName = graphUser.getFirstName() + " "
+										+ graphUser.getLastName().substring(
+												0, 1) + ".";
+				                user.put("displayName", displayName);
+				                try {
+				                    user.saveEventually();
+				                }
+				                catch (RuntimeException e) {}
+				                ApplicationEx.dbHelper.setUserValue(displayName, 
+			                        DatabaseHelper.COL_DISPLAY_NAME, userId);
+							}
+						}
+            		});
+            	}
             }
             return null;
         }
@@ -1059,9 +1023,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
-                    if (user.getString("displayName") == null ||
-                            (user.isNew() && !user.getString("displayName")
-                                    .startsWith("@"))) {
+                    if (user.getString("displayName") == null) {
                         user.put("displayName", "@" +
                                 ParseTwitterUtils.getTwitter().getScreenName());
                         try {
@@ -1185,8 +1147,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
-                    if (user.getString("displayName") == null || (user.isNew()
-                            && !user.getString("displayName").endsWith("@"))) {
+                    if (user.getString("displayName") == null) {
                         user.put("displayName", username.substring(0,
                                          username.indexOf("@")+1));
                         try {
@@ -1205,12 +1166,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         });
     }
     
-    private void resetPassword(String username) {
+    @Override
+    public void resetPassword(String username) {
         ParseUser.requestPasswordResetInBackground(username,
                 new RequestPasswordResetCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    ApplicationEx.mToast.setText("A password reset email has " +
+                    ApplicationEx.mToast.setText("Password reset email has " +
                             "been sent to this address");
                     ApplicationEx.mToast.show();
                 } else {
@@ -2320,10 +2282,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     }
     
     private class ConnectionReceiver extends BroadcastReceiver {
-        
-        boolean wifiEnabled = false;
-        ConnectivityManager connMan;
-     
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(
@@ -2334,7 +2292,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 }
             }
         }
-     
     }
 
     @Override

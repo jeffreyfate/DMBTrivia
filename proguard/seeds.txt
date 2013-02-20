@@ -1,80 +1,14 @@
+android.support.v4.app.BackStackState
 android.support.v4.app.BackStackState: android.os.Parcelable$Creator CREATOR
-android.support.v4.app.Fragment: Fragment()
-android.support.v4.app.Fragment: android.support.v4.app.Fragment instantiate(android.content.Context,java.lang.String)
-android.support.v4.app.Fragment: android.support.v4.app.Fragment instantiate(android.content.Context,java.lang.String,android.os.Bundle)
-android.support.v4.app.Fragment: boolean equals(java.lang.Object)
-android.support.v4.app.Fragment: int hashCode()
-android.support.v4.app.Fragment: java.lang.String toString()
-android.support.v4.app.Fragment: int getId()
-android.support.v4.app.Fragment: java.lang.String getTag()
-android.support.v4.app.Fragment: void setArguments(android.os.Bundle)
-android.support.v4.app.Fragment: android.os.Bundle getArguments()
-android.support.v4.app.Fragment: void setInitialSavedState(android.support.v4.app.Fragment$SavedState)
-android.support.v4.app.Fragment: void setTargetFragment(android.support.v4.app.Fragment,int)
-android.support.v4.app.Fragment: android.support.v4.app.Fragment getTargetFragment()
-android.support.v4.app.Fragment: int getTargetRequestCode()
-android.support.v4.app.Fragment: android.support.v4.app.FragmentActivity getActivity()
-android.support.v4.app.Fragment: android.content.res.Resources getResources()
-android.support.v4.app.Fragment: java.lang.CharSequence getText(int)
-android.support.v4.app.Fragment: java.lang.String getString(int)
-android.support.v4.app.Fragment: java.lang.String getString(int,java.lang.Object[])
-android.support.v4.app.Fragment: android.support.v4.app.FragmentManager getFragmentManager()
-android.support.v4.app.Fragment: boolean isAdded()
-android.support.v4.app.Fragment: boolean isDetached()
-android.support.v4.app.Fragment: boolean isRemoving()
-android.support.v4.app.Fragment: boolean isInLayout()
-android.support.v4.app.Fragment: boolean isResumed()
-android.support.v4.app.Fragment: boolean isVisible()
-android.support.v4.app.Fragment: boolean isHidden()
-android.support.v4.app.Fragment: void onHiddenChanged(boolean)
-android.support.v4.app.Fragment: void setRetainInstance(boolean)
-android.support.v4.app.Fragment: boolean getRetainInstance()
-android.support.v4.app.Fragment: void setHasOptionsMenu(boolean)
-android.support.v4.app.Fragment: void setMenuVisibility(boolean)
-android.support.v4.app.Fragment: void setUserVisibleHint(boolean)
-android.support.v4.app.Fragment: boolean getUserVisibleHint()
-android.support.v4.app.Fragment: android.support.v4.app.LoaderManager getLoaderManager()
-android.support.v4.app.Fragment: void startActivity(android.content.Intent)
-android.support.v4.app.Fragment: void startActivityForResult(android.content.Intent,int)
-android.support.v4.app.Fragment: void onActivityResult(int,int,android.content.Intent)
-android.support.v4.app.Fragment: android.view.LayoutInflater getLayoutInflater(android.os.Bundle)
-android.support.v4.app.Fragment: void onInflate(android.app.Activity,android.util.AttributeSet,android.os.Bundle)
-android.support.v4.app.Fragment: void onAttach(android.app.Activity)
-android.support.v4.app.Fragment: android.view.animation.Animation onCreateAnimation(int,boolean,int)
-android.support.v4.app.Fragment: void onCreate(android.os.Bundle)
-android.support.v4.app.Fragment: android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle)
-android.support.v4.app.Fragment: void onViewCreated(android.view.View,android.os.Bundle)
-android.support.v4.app.Fragment: android.view.View getView()
-android.support.v4.app.Fragment: void onActivityCreated(android.os.Bundle)
-android.support.v4.app.Fragment: void onStart()
-android.support.v4.app.Fragment: void onResume()
-android.support.v4.app.Fragment: void onSaveInstanceState(android.os.Bundle)
-android.support.v4.app.Fragment: void onConfigurationChanged(android.content.res.Configuration)
-android.support.v4.app.Fragment: void onPause()
-android.support.v4.app.Fragment: void onStop()
-android.support.v4.app.Fragment: void onLowMemory()
-android.support.v4.app.Fragment: void onDestroyView()
-android.support.v4.app.Fragment: void onDestroy()
-android.support.v4.app.Fragment: void onDetach()
-android.support.v4.app.Fragment: void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater)
-android.support.v4.app.Fragment: void onPrepareOptionsMenu(android.view.Menu)
-android.support.v4.app.Fragment: void onDestroyOptionsMenu()
-android.support.v4.app.Fragment: boolean onOptionsItemSelected(android.view.MenuItem)
-android.support.v4.app.Fragment: void onOptionsMenuClosed(android.view.Menu)
-android.support.v4.app.Fragment: void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo)
-android.support.v4.app.Fragment: void registerForContextMenu(android.view.View)
-android.support.v4.app.Fragment: void unregisterForContextMenu(android.view.View)
-android.support.v4.app.Fragment: boolean onContextItemSelected(android.view.MenuItem)
-android.support.v4.app.Fragment: void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[])
+android.support.v4.app.Fragment$SavedState
 android.support.v4.app.Fragment$SavedState: android.os.Parcelable$Creator CREATOR
-android.support.v4.app.FragmentActivity
 android.support.v4.app.FragmentActivity: FragmentActivity()
+android.support.v4.app.FragmentManagerState
 android.support.v4.app.FragmentManagerState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentState
 android.support.v4.app.FragmentState: android.os.Parcelable$Creator CREATOR
 android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status[] values()
 android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String)
-android.support.v4.view.PagerTabStrip
-android.support.v4.view.PagerTabStrip: PagerTabStrip(android.content.Context,android.util.AttributeSet)
 android.support.v4.view.PagerTabStrip: void setTabIndicatorColor(int)
 android.support.v4.view.PagerTabStrip: void setTabIndicatorColorResource(int)
 android.support.v4.view.PagerTabStrip: int getTabIndicatorColor()
@@ -85,17 +19,13 @@ android.support.v4.view.PagerTabStrip: void setBackgroundResource(int)
 android.support.v4.view.PagerTabStrip: void setDrawFullUnderline(boolean)
 android.support.v4.view.PagerTabStrip: boolean getDrawFullUnderline()
 android.support.v4.view.PagerTabStrip: int getMinHeight()
-android.support.v4.view.PagerTitleStrip
 android.support.v4.view.PagerTitleStrip: void setSingleLineAllCaps(android.widget.TextView)
-android.support.v4.view.PagerTitleStrip: PagerTitleStrip(android.content.Context,android.util.AttributeSet)
 android.support.v4.view.PagerTitleStrip: void setTextSpacing(int)
 android.support.v4.view.PagerTitleStrip: int getTextSpacing()
 android.support.v4.view.PagerTitleStrip: void setNonPrimaryAlpha(float)
 android.support.v4.view.PagerTitleStrip: void setTextColor(int)
 android.support.v4.view.PagerTitleStrip: void setGravity(int)
 android.support.v4.view.PagerTitleStrip: int getMinHeight()
-android.support.v4.view.ViewPager
-android.support.v4.view.ViewPager: ViewPager(android.content.Context,android.util.AttributeSet)
 android.support.v4.view.ViewPager: void setScrollState(int)
 android.support.v4.view.ViewPager: void setAdapter(android.support.v4.view.PagerAdapter)
 android.support.v4.view.ViewPager: android.support.v4.view.PagerAdapter getAdapter()
@@ -110,504 +40,40 @@ android.support.v4.view.ViewPager: int getPageMargin()
 android.support.v4.view.ViewPager: void setPageMarginDrawable(android.graphics.drawable.Drawable)
 android.support.v4.view.ViewPager: void setPageMarginDrawable(int)
 android.support.v4.view.ViewPager: void setScrollingCacheEnabled(boolean)
-android.support.v4.view.ViewPager$LayoutParams
-android.support.v4.view.ViewPager$LayoutParams: ViewPager$LayoutParams(android.content.Context,android.util.AttributeSet)
+android.support.v4.view.ViewPager$SavedState
 android.support.v4.view.ViewPager$SavedState: android.os.Parcelable$Creator CREATOR
-com.facebook.AccessToken
-com.facebook.AccessToken: java.lang.String getToken()
-com.facebook.AccessToken: java.util.Date getExpires()
-com.facebook.AccessToken: java.util.List getPermissions()
-com.facebook.AccessToken: com.facebook.AccessTokenSource getSource()
-com.facebook.AccessToken: java.util.Date getLastRefresh()
-com.facebook.AccessToken: com.facebook.AccessToken createFromExistingAccessToken(java.lang.String,java.util.Date,java.util.Date,com.facebook.AccessTokenSource,java.util.List)
-com.facebook.AccessToken: com.facebook.AccessToken createFromNativeLinkingIntent(android.content.Intent)
-com.facebook.AccessToken: java.lang.String toString()
-com.facebook.AccessTokenSource
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource NONE
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource FACEBOOK_APPLICATION_WEB
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource FACEBOOK_APPLICATION_NATIVE
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource FACEBOOK_APPLICATION_SERVICE
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource WEB_VIEW
-com.facebook.AccessTokenSource: com.facebook.AccessTokenSource TEST_USER
 com.facebook.AccessTokenSource: com.facebook.AccessTokenSource[] values()
 com.facebook.AccessTokenSource: com.facebook.AccessTokenSource valueOf(java.lang.String)
 com.facebook.AuthorizationClient$Result$Code: com.facebook.AuthorizationClient$Result$Code[] values()
 com.facebook.AuthorizationClient$Result$Code: com.facebook.AuthorizationClient$Result$Code valueOf(java.lang.String)
-com.facebook.FacebookAuthorizationException
-com.facebook.FacebookAuthorizationException: FacebookAuthorizationException()
-com.facebook.FacebookAuthorizationException: FacebookAuthorizationException(java.lang.String)
-com.facebook.FacebookAuthorizationException: FacebookAuthorizationException(java.lang.String,java.lang.Throwable)
-com.facebook.FacebookAuthorizationException: FacebookAuthorizationException(java.lang.Throwable)
-com.facebook.FacebookDialogException
-com.facebook.FacebookDialogException: FacebookDialogException(java.lang.String,int,java.lang.String)
-com.facebook.FacebookDialogException: int getErrorCode()
-com.facebook.FacebookDialogException: java.lang.String getFailingUrl()
-com.facebook.FacebookException
-com.facebook.FacebookException: FacebookException()
-com.facebook.FacebookException: FacebookException(java.lang.String)
-com.facebook.FacebookException: FacebookException(java.lang.String,java.lang.Throwable)
-com.facebook.FacebookException: FacebookException(java.lang.Throwable)
-com.facebook.FacebookGraphObjectException
-com.facebook.FacebookGraphObjectException: FacebookGraphObjectException()
-com.facebook.FacebookGraphObjectException: FacebookGraphObjectException(java.lang.String)
-com.facebook.FacebookGraphObjectException: FacebookGraphObjectException(java.lang.String,java.lang.Throwable)
-com.facebook.FacebookGraphObjectException: FacebookGraphObjectException(java.lang.Throwable)
-com.facebook.FacebookOperationCanceledException
-com.facebook.FacebookOperationCanceledException: FacebookOperationCanceledException()
-com.facebook.FacebookOperationCanceledException: FacebookOperationCanceledException(java.lang.String)
-com.facebook.FacebookOperationCanceledException: FacebookOperationCanceledException(java.lang.String,java.lang.Throwable)
-com.facebook.FacebookOperationCanceledException: FacebookOperationCanceledException(java.lang.Throwable)
-com.facebook.FacebookRequestError
-com.facebook.FacebookRequestError: int INVALID_ERROR_CODE
-com.facebook.FacebookRequestError: int INVALID_HTTP_STATUS_CODE
-com.facebook.FacebookRequestError: FacebookRequestError(int,java.lang.String,java.lang.String)
-com.facebook.FacebookRequestError: int getUserActionMessageId()
-com.facebook.FacebookRequestError: boolean shouldNotifyUser()
-com.facebook.FacebookRequestError: com.facebook.FacebookRequestError$Category getCategory()
-com.facebook.FacebookRequestError: int getRequestStatusCode()
-com.facebook.FacebookRequestError: int getErrorCode()
-com.facebook.FacebookRequestError: int getSubErrorCode()
-com.facebook.FacebookRequestError: java.lang.String getErrorType()
-com.facebook.FacebookRequestError: java.lang.String getErrorMessage()
-com.facebook.FacebookRequestError: org.json.JSONObject getRequestResultBody()
-com.facebook.FacebookRequestError: org.json.JSONObject getRequestResult()
-com.facebook.FacebookRequestError: java.lang.Object getBatchRequestResult()
-com.facebook.FacebookRequestError: java.net.HttpURLConnection getConnection()
-com.facebook.FacebookRequestError: com.facebook.FacebookException getException()
-com.facebook.FacebookRequestError: java.lang.String toString()
-com.facebook.FacebookRequestError$Category
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category AUTHENTICATION_RETRY
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category AUTHENTICATION_REOPEN_SESSION
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category PERMISSION
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category SERVER
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category THROTTLING
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category OTHER
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category BAD_REQUEST
-com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category CLIENT
 com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category[] values()
 com.facebook.FacebookRequestError$Category: com.facebook.FacebookRequestError$Category valueOf(java.lang.String)
-com.facebook.FacebookServiceException
-com.facebook.FacebookServiceException: FacebookServiceException(com.facebook.FacebookRequestError,java.lang.String)
-com.facebook.FacebookServiceException: com.facebook.FacebookRequestError getRequestError()
-com.facebook.FacebookServiceException: java.lang.String toString()
-com.facebook.HttpMethod
-com.facebook.HttpMethod: com.facebook.HttpMethod GET
-com.facebook.HttpMethod: com.facebook.HttpMethod POST
-com.facebook.HttpMethod: com.facebook.HttpMethod DELETE
 com.facebook.HttpMethod: com.facebook.HttpMethod[] values()
 com.facebook.HttpMethod: com.facebook.HttpMethod valueOf(java.lang.String)
-com.facebook.LegacyHelper
-com.facebook.LegacyHelper: LegacyHelper()
-com.facebook.LegacyHelper: void extendTokenCompleted(com.facebook.Session,android.os.Bundle)
-com.facebook.LoggingBehavior
-com.facebook.LoggingBehavior: com.facebook.LoggingBehavior REQUESTS
-com.facebook.LoggingBehavior: com.facebook.LoggingBehavior INCLUDE_ACCESS_TOKENS
-com.facebook.LoggingBehavior: com.facebook.LoggingBehavior INCLUDE_RAW_RESPONSES
-com.facebook.LoggingBehavior: com.facebook.LoggingBehavior CACHE
 com.facebook.LoggingBehavior: com.facebook.LoggingBehavior[] values()
 com.facebook.LoggingBehavior: com.facebook.LoggingBehavior valueOf(java.lang.String)
 com.facebook.LoginActivity
 com.facebook.LoginActivity: LoginActivity()
-com.facebook.LoginActivity: void onCreate(android.os.Bundle)
-com.facebook.LoginActivity: void onResume()
-com.facebook.LoginActivity: void onPause()
-com.facebook.LoginActivity: void onSaveInstanceState(android.os.Bundle)
-com.facebook.LoginActivity: void onActivityResult(int,int,android.content.Intent)
-com.facebook.NonCachingTokenCachingStrategy
-com.facebook.NonCachingTokenCachingStrategy: NonCachingTokenCachingStrategy()
-com.facebook.NonCachingTokenCachingStrategy: android.os.Bundle load()
-com.facebook.NonCachingTokenCachingStrategy: void save(android.os.Bundle)
-com.facebook.NonCachingTokenCachingStrategy: void clear()
-com.facebook.Request
-com.facebook.Request: int MAXIMUM_BATCH_SIZE
-com.facebook.Request: Request()
-com.facebook.Request: Request(com.facebook.Session,java.lang.String)
-com.facebook.Request: Request(com.facebook.Session,java.lang.String,android.os.Bundle,com.facebook.HttpMethod)
-com.facebook.Request: Request(com.facebook.Session,java.lang.String,android.os.Bundle,com.facebook.HttpMethod,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newPostRequest(com.facebook.Session,java.lang.String,com.facebook.model.GraphObject,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newRestRequest(com.facebook.Session,java.lang.String,android.os.Bundle,com.facebook.HttpMethod)
-com.facebook.Request: com.facebook.Request newMeRequest(com.facebook.Session,com.facebook.Request$GraphUserCallback)
-com.facebook.Request: com.facebook.Request newMyFriendsRequest(com.facebook.Session,com.facebook.Request$GraphUserListCallback)
-com.facebook.Request: com.facebook.Request newUploadPhotoRequest(com.facebook.Session,android.graphics.Bitmap,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newUploadPhotoRequest(com.facebook.Session,java.io.File,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newUploadVideoRequest(com.facebook.Session,java.io.File,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newGraphPathRequest(com.facebook.Session,java.lang.String,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Request newPlacesSearchRequest(com.facebook.Session,android.location.Location,int,int,java.lang.String,com.facebook.Request$GraphPlaceListCallback)
-com.facebook.Request: com.facebook.Request newStatusUpdateRequest(com.facebook.Session,java.lang.String,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.model.GraphObject getGraphObject()
-com.facebook.Request: void setGraphObject(com.facebook.model.GraphObject)
-com.facebook.Request: java.lang.String getGraphPath()
-com.facebook.Request: void setGraphPath(java.lang.String)
-com.facebook.Request: com.facebook.HttpMethod getHttpMethod()
-com.facebook.Request: void setHttpMethod(com.facebook.HttpMethod)
-com.facebook.Request: android.os.Bundle getParameters()
-com.facebook.Request: void setParameters(android.os.Bundle)
-com.facebook.Request: java.lang.String getRestMethod()
-com.facebook.Request: void setRestMethod(java.lang.String)
-com.facebook.Request: com.facebook.Session getSession()
-com.facebook.Request: void setSession(com.facebook.Session)
-com.facebook.Request: java.lang.String getBatchEntryName()
-com.facebook.Request: void setBatchEntryName(java.lang.String)
-com.facebook.Request: java.lang.String getBatchEntryDependsOn()
-com.facebook.Request: void setBatchEntryDependsOn(java.lang.String)
-com.facebook.Request: boolean getBatchEntryOmitResultOnSuccess()
-com.facebook.Request: void setBatchEntryOmitResultOnSuccess(boolean)
-com.facebook.Request: java.lang.String getDefaultBatchApplicationId()
-com.facebook.Request: void setDefaultBatchApplicationId(java.lang.String)
-com.facebook.Request: com.facebook.Request$Callback getCallback()
-com.facebook.Request: void setCallback(com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.RequestAsyncTask executePostRequestAsync(com.facebook.Session,java.lang.String,com.facebook.model.GraphObject,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeRestRequestAsync(com.facebook.Session,java.lang.String,android.os.Bundle,com.facebook.HttpMethod)
-com.facebook.Request: com.facebook.RequestAsyncTask executeMeRequestAsync(com.facebook.Session,com.facebook.Request$GraphUserCallback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeMyFriendsRequestAsync(com.facebook.Session,com.facebook.Request$GraphUserListCallback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeUploadPhotoRequestAsync(com.facebook.Session,android.graphics.Bitmap,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeUploadPhotoRequestAsync(com.facebook.Session,java.io.File,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeGraphPathRequestAsync(com.facebook.Session,java.lang.String,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.RequestAsyncTask executePlacesSearchRequestAsync(com.facebook.Session,android.location.Location,int,int,java.lang.String,com.facebook.Request$GraphPlaceListCallback)
-com.facebook.Request: com.facebook.RequestAsyncTask executeStatusUpdateRequestAsync(com.facebook.Session,java.lang.String,com.facebook.Request$Callback)
-com.facebook.Request: com.facebook.Response executeAndWait()
-com.facebook.Request: com.facebook.RequestAsyncTask executeAsync()
-com.facebook.Request: java.net.HttpURLConnection toHttpConnection(com.facebook.Request[])
-com.facebook.Request: java.net.HttpURLConnection toHttpConnection(java.util.Collection)
-com.facebook.Request: java.net.HttpURLConnection toHttpConnection(com.facebook.RequestBatch)
-com.facebook.Request: com.facebook.Response executeAndWait(com.facebook.Request)
-com.facebook.Request: java.util.List executeBatchAndWait(com.facebook.Request[])
-com.facebook.Request: java.util.List executeBatchAndWait(java.util.Collection)
-com.facebook.Request: java.util.List executeBatchAndWait(com.facebook.RequestBatch)
-com.facebook.Request: com.facebook.RequestAsyncTask executeBatchAsync(com.facebook.Request[])
-com.facebook.Request: com.facebook.RequestAsyncTask executeBatchAsync(java.util.Collection)
-com.facebook.Request: com.facebook.RequestAsyncTask executeBatchAsync(com.facebook.RequestBatch)
-com.facebook.Request: java.util.List executeConnectionAndWait(java.net.HttpURLConnection,java.util.Collection)
-com.facebook.Request: java.util.List executeConnectionAndWait(java.net.HttpURLConnection,com.facebook.RequestBatch)
-com.facebook.Request: com.facebook.RequestAsyncTask executeConnectionAsync(java.net.HttpURLConnection,com.facebook.RequestBatch)
-com.facebook.Request: com.facebook.RequestAsyncTask executeConnectionAsync(android.os.Handler,java.net.HttpURLConnection,com.facebook.RequestBatch)
-com.facebook.Request: java.lang.String toString()
-com.facebook.Request$Callback
-com.facebook.Request$Callback: void onCompleted(com.facebook.Response)
-com.facebook.Request$GraphPlaceListCallback
-com.facebook.Request$GraphPlaceListCallback: void onCompleted(java.util.List,com.facebook.Response)
-com.facebook.Request$GraphUserCallback
-com.facebook.Request$GraphUserCallback: void onCompleted(com.facebook.model.GraphUser,com.facebook.Response)
-com.facebook.Request$GraphUserListCallback
-com.facebook.Request$GraphUserListCallback: void onCompleted(java.util.List,com.facebook.Response)
-com.facebook.RequestAsyncTask
-com.facebook.RequestAsyncTask: RequestAsyncTask(com.facebook.Request[])
-com.facebook.RequestAsyncTask: RequestAsyncTask(java.util.Collection)
-com.facebook.RequestAsyncTask: RequestAsyncTask(com.facebook.RequestBatch)
-com.facebook.RequestAsyncTask: RequestAsyncTask(java.net.HttpURLConnection,com.facebook.Request[])
-com.facebook.RequestAsyncTask: RequestAsyncTask(java.net.HttpURLConnection,java.util.Collection)
-com.facebook.RequestAsyncTask: RequestAsyncTask(java.net.HttpURLConnection,com.facebook.RequestBatch)
-com.facebook.RequestAsyncTask: java.lang.Exception getException()
-com.facebook.RequestAsyncTask: com.facebook.RequestBatch getRequests()
-com.facebook.RequestAsyncTask: java.lang.String toString()
-com.facebook.RequestAsyncTask: void onPreExecute()
-com.facebook.RequestAsyncTask: void onPostExecute(java.util.List)
-com.facebook.RequestAsyncTask: java.util.List doInBackground(java.lang.Void[])
-com.facebook.RequestAsyncTask: void onPostExecute(java.lang.Object)
-com.facebook.RequestAsyncTask: java.lang.Object doInBackground(java.lang.Object[])
-com.facebook.RequestBatch
-com.facebook.RequestBatch: RequestBatch()
-com.facebook.RequestBatch: RequestBatch(java.util.Collection)
-com.facebook.RequestBatch: RequestBatch(com.facebook.Request[])
-com.facebook.RequestBatch: RequestBatch(com.facebook.RequestBatch)
-com.facebook.RequestBatch: int getTimeout()
-com.facebook.RequestBatch: void setTimeout(int)
-com.facebook.RequestBatch: void addCallback(com.facebook.RequestBatch$Callback)
-com.facebook.RequestBatch: void removeCallback(com.facebook.RequestBatch$Callback)
-com.facebook.RequestBatch: boolean add(com.facebook.Request)
-com.facebook.RequestBatch: void add(int,com.facebook.Request)
-com.facebook.RequestBatch: void clear()
-com.facebook.RequestBatch: com.facebook.Request get(int)
-com.facebook.RequestBatch: com.facebook.Request remove(int)
-com.facebook.RequestBatch: com.facebook.Request set(int,com.facebook.Request)
-com.facebook.RequestBatch: int size()
-com.facebook.RequestBatch: java.util.List executeAndWait()
-com.facebook.RequestBatch: com.facebook.RequestAsyncTask executeAsync()
-com.facebook.RequestBatch: java.lang.Object get(int)
-com.facebook.RequestBatch: void add(int,java.lang.Object)
-com.facebook.RequestBatch: boolean add(java.lang.Object)
-com.facebook.RequestBatch: java.lang.Object set(int,java.lang.Object)
-com.facebook.RequestBatch: java.lang.Object remove(int)
-com.facebook.RequestBatch$Callback
-com.facebook.RequestBatch$Callback: void onBatchCompleted(com.facebook.RequestBatch)
-com.facebook.Response
-com.facebook.Response: java.lang.String NON_JSON_RESPONSE_PROPERTY
-com.facebook.Response: com.facebook.FacebookRequestError getError()
-com.facebook.Response: com.facebook.model.GraphObject getGraphObject()
-com.facebook.Response: com.facebook.model.GraphObject getGraphObjectAs(java.lang.Class)
-com.facebook.Response: com.facebook.model.GraphObjectList getGraphObjectList()
-com.facebook.Response: com.facebook.model.GraphObjectList getGraphObjectListAs(java.lang.Class)
-com.facebook.Response: java.net.HttpURLConnection getConnection()
-com.facebook.Response: com.facebook.Request getRequest()
-com.facebook.Response: com.facebook.Request getRequestForPagedResults(com.facebook.Response$PagingDirection)
-com.facebook.Response: java.lang.String toString()
-com.facebook.Response: boolean getIsFromCache()
-com.facebook.Response$PagingDirection
-com.facebook.Response$PagingDirection: com.facebook.Response$PagingDirection NEXT
-com.facebook.Response$PagingDirection: com.facebook.Response$PagingDirection PREVIOUS
 com.facebook.Response$PagingDirection: com.facebook.Response$PagingDirection[] values()
 com.facebook.Response$PagingDirection: com.facebook.Response$PagingDirection valueOf(java.lang.String)
-com.facebook.Session
-com.facebook.Session: java.lang.String TAG
-com.facebook.Session: int DEFAULT_AUTHORIZE_ACTIVITY_CODE
-com.facebook.Session: java.lang.String WEB_VIEW_ERROR_CODE_KEY
-com.facebook.Session: java.lang.String WEB_VIEW_FAILING_URL_KEY
-com.facebook.Session: java.lang.String ACTION_ACTIVE_SESSION_SET
-com.facebook.Session: java.lang.String ACTION_ACTIVE_SESSION_UNSET
-com.facebook.Session: java.lang.String ACTION_ACTIVE_SESSION_OPENED
-com.facebook.Session: java.lang.String ACTION_ACTIVE_SESSION_CLOSED
-com.facebook.Session: java.lang.String APPLICATION_ID_PROPERTY
-com.facebook.Session: Session(android.content.Context)
-com.facebook.Session: android.os.Bundle getAuthorizationBundle()
-com.facebook.Session: boolean isOpened()
-com.facebook.Session: boolean isClosed()
-com.facebook.Session: com.facebook.SessionState getState()
-com.facebook.Session: java.lang.String getApplicationId()
-com.facebook.Session: java.lang.String getAccessToken()
-com.facebook.Session: java.util.Date getExpirationDate()
-com.facebook.Session: java.util.List getPermissions()
-com.facebook.Session: void openForRead(com.facebook.Session$OpenRequest)
-com.facebook.Session: void openForPublish(com.facebook.Session$OpenRequest)
-com.facebook.Session: void open(com.facebook.AccessToken,com.facebook.Session$StatusCallback)
-com.facebook.Session: void requestNewReadPermissions(com.facebook.Session$NewPermissionsRequest)
-com.facebook.Session: void requestNewPublishPermissions(com.facebook.Session$NewPermissionsRequest)
-com.facebook.Session: boolean onActivityResult(android.app.Activity,int,int,android.content.Intent)
-com.facebook.Session: void close()
-com.facebook.Session: void closeAndClearTokenInformation()
-com.facebook.Session: void addCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session: void removeCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session: java.lang.String toString()
-com.facebook.Session: void saveSession(com.facebook.Session,android.os.Bundle)
-com.facebook.Session: com.facebook.Session restoreSession(android.content.Context,com.facebook.TokenCachingStrategy,com.facebook.Session$StatusCallback,android.os.Bundle)
-com.facebook.Session: com.facebook.Session getActiveSession()
-com.facebook.Session: void setActiveSession(com.facebook.Session)
-com.facebook.Session: com.facebook.Session openActiveSessionFromCache(android.content.Context)
-com.facebook.Session: com.facebook.Session openActiveSession(android.app.Activity,boolean,com.facebook.Session$StatusCallback)
-com.facebook.Session: com.facebook.Session openActiveSession(android.content.Context,android.support.v4.app.Fragment,boolean,com.facebook.Session$StatusCallback)
-com.facebook.Session: com.facebook.Session openActiveSessionWithAccessToken(android.content.Context,com.facebook.AccessToken,com.facebook.Session$StatusCallback)
-com.facebook.Session: int hashCode()
-com.facebook.Session: boolean equals(java.lang.Object)
-com.facebook.Session$AuthorizationRequest
-com.facebook.Session$AuthorizationRequest: void setIsLegacy(boolean)
-com.facebook.Session$Builder
-com.facebook.Session$Builder: Session$Builder(android.content.Context)
-com.facebook.Session$Builder: com.facebook.Session$Builder setApplicationId(java.lang.String)
-com.facebook.Session$Builder: com.facebook.Session$Builder setTokenCachingStrategy(com.facebook.TokenCachingStrategy)
-com.facebook.Session$Builder: com.facebook.Session build()
-com.facebook.Session$NewPermissionsRequest
-com.facebook.Session$NewPermissionsRequest: Session$NewPermissionsRequest(android.app.Activity,java.util.List)
-com.facebook.Session$NewPermissionsRequest: Session$NewPermissionsRequest(android.support.v4.app.Fragment,java.util.List)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$NewPermissionsRequest setCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$NewPermissionsRequest setLoginBehavior(com.facebook.SessionLoginBehavior)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$NewPermissionsRequest setRequestCode(int)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$NewPermissionsRequest setDefaultAudience(com.facebook.SessionDefaultAudience)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$AuthorizationRequest setDefaultAudience(com.facebook.SessionDefaultAudience)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$AuthorizationRequest setRequestCode(int)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$AuthorizationRequest setCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session$NewPermissionsRequest: com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior)
-com.facebook.Session$OpenRequest
-com.facebook.Session$OpenRequest: Session$OpenRequest(android.app.Activity)
-com.facebook.Session$OpenRequest: Session$OpenRequest(android.support.v4.app.Fragment)
-com.facebook.Session$OpenRequest: com.facebook.Session$OpenRequest setCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session$OpenRequest: com.facebook.Session$OpenRequest setLoginBehavior(com.facebook.SessionLoginBehavior)
-com.facebook.Session$OpenRequest: com.facebook.Session$OpenRequest setRequestCode(int)
-com.facebook.Session$OpenRequest: com.facebook.Session$OpenRequest setPermissions(java.util.List)
-com.facebook.Session$OpenRequest: com.facebook.Session$OpenRequest setDefaultAudience(com.facebook.SessionDefaultAudience)
-com.facebook.Session$OpenRequest: com.facebook.Session$AuthorizationRequest setDefaultAudience(com.facebook.SessionDefaultAudience)
-com.facebook.Session$OpenRequest: com.facebook.Session$AuthorizationRequest setPermissions(java.util.List)
-com.facebook.Session$OpenRequest: com.facebook.Session$AuthorizationRequest setRequestCode(int)
-com.facebook.Session$OpenRequest: com.facebook.Session$AuthorizationRequest setCallback(com.facebook.Session$StatusCallback)
-com.facebook.Session$OpenRequest: com.facebook.Session$AuthorizationRequest setLoginBehavior(com.facebook.SessionLoginBehavior)
-com.facebook.Session$StatusCallback
-com.facebook.Session$StatusCallback: void call(com.facebook.Session,com.facebook.SessionState,java.lang.Exception)
-com.facebook.SessionDefaultAudience
-com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience NONE
-com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience ONLY_ME
-com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience FRIENDS
-com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience EVERYONE
 com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience[] values()
 com.facebook.SessionDefaultAudience: com.facebook.SessionDefaultAudience valueOf(java.lang.String)
-com.facebook.SessionLoginBehavior
-com.facebook.SessionLoginBehavior: com.facebook.SessionLoginBehavior SSO_WITH_FALLBACK
-com.facebook.SessionLoginBehavior: com.facebook.SessionLoginBehavior SSO_ONLY
-com.facebook.SessionLoginBehavior: com.facebook.SessionLoginBehavior SUPPRESS_SSO
 com.facebook.SessionLoginBehavior: com.facebook.SessionLoginBehavior[] values()
 com.facebook.SessionLoginBehavior: com.facebook.SessionLoginBehavior valueOf(java.lang.String)
-com.facebook.SessionState
-com.facebook.SessionState: com.facebook.SessionState CREATED
-com.facebook.SessionState: com.facebook.SessionState CREATED_TOKEN_LOADED
-com.facebook.SessionState: com.facebook.SessionState OPENING
-com.facebook.SessionState: com.facebook.SessionState OPENED
-com.facebook.SessionState: com.facebook.SessionState OPENED_TOKEN_UPDATED
-com.facebook.SessionState: com.facebook.SessionState CLOSED_LOGIN_FAILED
-com.facebook.SessionState: com.facebook.SessionState CLOSED
-com.facebook.SessionState: boolean isOpened()
-com.facebook.SessionState: boolean isClosed()
 com.facebook.SessionState: com.facebook.SessionState[] values()
 com.facebook.SessionState: com.facebook.SessionState valueOf(java.lang.String)
 com.facebook.SessionState$Category: com.facebook.SessionState$Category[] values()
 com.facebook.SessionState$Category: com.facebook.SessionState$Category valueOf(java.lang.String)
-com.facebook.Settings
-com.facebook.Settings: Settings()
-com.facebook.Settings: java.util.Set getLoggingBehaviors()
-com.facebook.Settings: void addLoggingBehavior(com.facebook.LoggingBehavior)
-com.facebook.Settings: void removeLoggingBehavior(com.facebook.LoggingBehavior)
-com.facebook.Settings: void clearLoggingBehaviors()
-com.facebook.Settings: boolean isLoggingBehaviorEnabled(com.facebook.LoggingBehavior)
-com.facebook.Settings: java.util.concurrent.Executor getExecutor()
-com.facebook.Settings: void setExecutor(java.util.concurrent.Executor)
-com.facebook.Settings: void publishInstallAsync(android.content.Context,java.lang.String)
-com.facebook.Settings: void setShouldAutoPublishInstall(boolean)
-com.facebook.Settings: boolean getShouldAutoPublishInstall()
-com.facebook.Settings: boolean publishInstallAndWait(android.content.Context,java.lang.String)
-com.facebook.Settings: java.lang.String getAttributionId(android.content.ContentResolver)
-com.facebook.SharedPreferencesTokenCachingStrategy
-com.facebook.SharedPreferencesTokenCachingStrategy: SharedPreferencesTokenCachingStrategy(android.content.Context)
-com.facebook.SharedPreferencesTokenCachingStrategy: SharedPreferencesTokenCachingStrategy(android.content.Context,java.lang.String)
-com.facebook.SharedPreferencesTokenCachingStrategy: android.os.Bundle load()
-com.facebook.SharedPreferencesTokenCachingStrategy: void save(android.os.Bundle)
-com.facebook.SharedPreferencesTokenCachingStrategy: void clear()
-com.facebook.TestSession
-com.facebook.TestSession: com.facebook.TestSession createSessionWithPrivateUser(android.app.Activity,java.util.List)
-com.facebook.TestSession: com.facebook.TestSession createSessionWithSharedUser(android.app.Activity,java.util.List)
-com.facebook.TestSession: com.facebook.TestSession createSessionWithSharedUser(android.app.Activity,java.util.List,java.lang.String)
-com.facebook.TestSession: java.lang.String getTestApplicationId()
-com.facebook.TestSession: void setTestApplicationId(java.lang.String)
-com.facebook.TestSession: java.lang.String getTestApplicationSecret()
-com.facebook.TestSession: void setTestApplicationSecret(java.lang.String)
-com.facebook.TestSession: java.lang.String getTestUserId()
-com.facebook.TestSession: java.lang.String toString()
 com.facebook.TestSession$Mode: com.facebook.TestSession$Mode[] values()
 com.facebook.TestSession$Mode: com.facebook.TestSession$Mode valueOf(java.lang.String)
-com.facebook.TokenCachingStrategy
-com.facebook.TokenCachingStrategy: java.lang.String TOKEN_KEY
-com.facebook.TokenCachingStrategy: java.lang.String EXPIRATION_DATE_KEY
-com.facebook.TokenCachingStrategy: java.lang.String LAST_REFRESH_DATE_KEY
-com.facebook.TokenCachingStrategy: java.lang.String USER_FBID_KEY
-com.facebook.TokenCachingStrategy: java.lang.String TOKEN_SOURCE_KEY
-com.facebook.TokenCachingStrategy: java.lang.String PERMISSIONS_KEY
-com.facebook.TokenCachingStrategy: TokenCachingStrategy()
-com.facebook.TokenCachingStrategy: android.os.Bundle load()
-com.facebook.TokenCachingStrategy: void save(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void clear()
-com.facebook.TokenCachingStrategy: boolean hasTokenInformation(android.os.Bundle)
-com.facebook.TokenCachingStrategy: java.lang.String getToken(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putToken(android.os.Bundle,java.lang.String)
-com.facebook.TokenCachingStrategy: java.util.Date getExpirationDate(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putExpirationDate(android.os.Bundle,java.util.Date)
-com.facebook.TokenCachingStrategy: long getExpirationMilliseconds(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putExpirationMilliseconds(android.os.Bundle,long)
-com.facebook.TokenCachingStrategy: java.util.List getPermissions(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putPermissions(android.os.Bundle,java.util.List)
-com.facebook.TokenCachingStrategy: com.facebook.AccessTokenSource getSource(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putSource(android.os.Bundle,com.facebook.AccessTokenSource)
-com.facebook.TokenCachingStrategy: java.util.Date getLastRefreshDate(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putLastRefreshDate(android.os.Bundle,java.util.Date)
-com.facebook.TokenCachingStrategy: long getLastRefreshMilliseconds(android.os.Bundle)
-com.facebook.TokenCachingStrategy: void putLastRefreshMilliseconds(android.os.Bundle,long)
-com.facebook.UiLifecycleHelper
-com.facebook.UiLifecycleHelper: UiLifecycleHelper(android.app.Activity,com.facebook.Session$StatusCallback)
-com.facebook.UiLifecycleHelper: void onCreate(android.os.Bundle)
-com.facebook.UiLifecycleHelper: void onResume()
-com.facebook.UiLifecycleHelper: void onActivityResult(int,int,android.content.Intent)
-com.facebook.UiLifecycleHelper: void onSaveInstanceState(android.os.Bundle)
-com.facebook.UiLifecycleHelper: void onPause()
-com.facebook.UiLifecycleHelper: void onDestroy()
-com.facebook.android.AsyncFacebookRunner
-com.facebook.android.AsyncFacebookRunner: AsyncFacebookRunner(com.facebook.android.Facebook)
-com.facebook.android.AsyncFacebookRunner: void logout(android.content.Context,com.facebook.android.AsyncFacebookRunner$RequestListener,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner: void logout(android.content.Context,com.facebook.android.AsyncFacebookRunner$RequestListener)
-com.facebook.android.AsyncFacebookRunner: void request(android.os.Bundle,com.facebook.android.AsyncFacebookRunner$RequestListener,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner: void request(android.os.Bundle,com.facebook.android.AsyncFacebookRunner$RequestListener)
-com.facebook.android.AsyncFacebookRunner: void request(java.lang.String,com.facebook.android.AsyncFacebookRunner$RequestListener,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner: void request(java.lang.String,com.facebook.android.AsyncFacebookRunner$RequestListener)
-com.facebook.android.AsyncFacebookRunner: void request(java.lang.String,android.os.Bundle,com.facebook.android.AsyncFacebookRunner$RequestListener,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner: void request(java.lang.String,android.os.Bundle,com.facebook.android.AsyncFacebookRunner$RequestListener)
-com.facebook.android.AsyncFacebookRunner: void request(java.lang.String,android.os.Bundle,java.lang.String,com.facebook.android.AsyncFacebookRunner$RequestListener,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner$RequestListener
-com.facebook.android.AsyncFacebookRunner$RequestListener: void onComplete(java.lang.String,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner$RequestListener: void onIOException(java.io.IOException,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner$RequestListener: void onFileNotFoundException(java.io.FileNotFoundException,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner$RequestListener: void onMalformedURLException(java.net.MalformedURLException,java.lang.Object)
-com.facebook.android.AsyncFacebookRunner$RequestListener: void onFacebookError(com.facebook.android.FacebookError,java.lang.Object)
-com.facebook.android.DialogError
-com.facebook.android.DialogError: DialogError(java.lang.String,int,java.lang.String)
-com.facebook.android.DialogError: int getErrorCode()
-com.facebook.android.DialogError: java.lang.String getFailingUrl()
-com.facebook.android.Facebook
-com.facebook.android.Facebook: java.lang.String REDIRECT_URI
-com.facebook.android.Facebook: java.lang.String CANCEL_URI
-com.facebook.android.Facebook: java.lang.String TOKEN
-com.facebook.android.Facebook: java.lang.String EXPIRES
-com.facebook.android.Facebook: java.lang.String SINGLE_SIGN_ON_DISABLED
-com.facebook.android.Facebook: android.net.Uri ATTRIBUTION_ID_CONTENT_URI
-com.facebook.android.Facebook: java.lang.String ATTRIBUTION_ID_COLUMN_NAME
-com.facebook.android.Facebook: int FORCE_DIALOG_AUTH
-com.facebook.android.Facebook: java.lang.String DIALOG_BASE_URL
-com.facebook.android.Facebook: java.lang.String GRAPH_BASE_URL
-com.facebook.android.Facebook: java.lang.String RESTSERVER_URL
-com.facebook.android.Facebook: java.lang.String FB_APP_SIGNATURE
-com.facebook.android.Facebook: Facebook(java.lang.String)
-com.facebook.android.Facebook: void authorize(android.app.Activity,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.Facebook: void authorize(android.app.Activity,java.lang.String[],com.facebook.android.Facebook$DialogListener)
-com.facebook.android.Facebook: void authorize(android.app.Activity,java.lang.String[],int,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.Facebook: void authorizeCallback(int,int,android.content.Intent)
-com.facebook.android.Facebook: boolean extendAccessToken(android.content.Context,com.facebook.android.Facebook$ServiceListener)
-com.facebook.android.Facebook: boolean extendAccessTokenIfNeeded(android.content.Context,com.facebook.android.Facebook$ServiceListener)
-com.facebook.android.Facebook: boolean shouldExtendAccessToken()
-com.facebook.android.Facebook: java.lang.String logout(android.content.Context)
-com.facebook.android.Facebook: java.lang.String request(android.os.Bundle)
-com.facebook.android.Facebook: java.lang.String request(java.lang.String)
-com.facebook.android.Facebook: java.lang.String request(java.lang.String,android.os.Bundle)
-com.facebook.android.Facebook: java.lang.String request(java.lang.String,android.os.Bundle,java.lang.String)
-com.facebook.android.Facebook: void dialog(android.content.Context,java.lang.String,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.Facebook: void dialog(android.content.Context,java.lang.String,android.os.Bundle,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.Facebook: boolean isSessionValid()
-com.facebook.android.Facebook: void setSession(com.facebook.Session)
-com.facebook.android.Facebook: com.facebook.Session getSession()
-com.facebook.android.Facebook: java.lang.String getAccessToken()
-com.facebook.android.Facebook: long getAccessExpires()
-com.facebook.android.Facebook: long getLastAccessUpdate()
-com.facebook.android.Facebook: void setTokenFromCache(java.lang.String,long,long)
-com.facebook.android.Facebook: void setAccessToken(java.lang.String)
-com.facebook.android.Facebook: void setAccessExpires(long)
-com.facebook.android.Facebook: void setAccessExpiresIn(java.lang.String)
-com.facebook.android.Facebook: java.lang.String getAppId()
-com.facebook.android.Facebook: void setAppId(java.lang.String)
-com.facebook.android.Facebook: java.lang.String getAttributionId(android.content.ContentResolver)
-com.facebook.android.Facebook: boolean getShouldAutoPublishInstall()
-com.facebook.android.Facebook: void setShouldAutoPublishInstall(boolean)
-com.facebook.android.Facebook: boolean publishInstall(android.content.Context)
-com.facebook.android.Facebook$DialogListener
-com.facebook.android.Facebook$DialogListener: void onComplete(android.os.Bundle)
-com.facebook.android.Facebook$DialogListener: void onFacebookError(com.facebook.android.FacebookError)
-com.facebook.android.Facebook$DialogListener: void onError(com.facebook.android.DialogError)
-com.facebook.android.Facebook$DialogListener: void onCancel()
-com.facebook.android.Facebook$ServiceListener
-com.facebook.android.Facebook$ServiceListener: void onComplete(android.os.Bundle)
-com.facebook.android.Facebook$ServiceListener: void onFacebookError(com.facebook.android.FacebookError)
-com.facebook.android.Facebook$ServiceListener: void onError(java.lang.Error)
-com.facebook.android.FacebookError
-com.facebook.android.FacebookError: FacebookError(java.lang.String)
-com.facebook.android.FacebookError: FacebookError(java.lang.String,java.lang.String,int)
-com.facebook.android.FacebookError: int getErrorCode()
-com.facebook.android.FacebookError: java.lang.String getErrorType()
-com.facebook.android.FbDialog
-com.facebook.android.FbDialog: FbDialog(android.content.Context,java.lang.String,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.FbDialog: FbDialog(android.content.Context,java.lang.String,com.facebook.android.Facebook$DialogListener,int)
-com.facebook.android.FbDialog: FbDialog(android.content.Context,java.lang.String,android.os.Bundle,com.facebook.android.Facebook$DialogListener)
-com.facebook.android.FbDialog: FbDialog(android.content.Context,java.lang.String,android.os.Bundle,com.facebook.android.Facebook$DialogListener,int)
-com.facebook.android.R
-com.facebook.android.R: R()
-com.facebook.android.R$attr
 com.facebook.android.R$attr: int preset_size
 com.facebook.android.R$attr: int radius_in_meters
 com.facebook.android.R$attr: int is_cropped
 com.facebook.android.R$attr: int fetch_user_info
 com.facebook.android.R$attr: int show_title_bar
 com.facebook.android.R$attr: int show_search_box
-com.facebook.android.R$attr: int done_button_text
 com.facebook.android.R$attr: int extra_fields
+com.facebook.android.R$attr: int done_button_text
 com.facebook.android.R$attr: int login_text
 com.facebook.android.R$attr: int multi_select
 com.facebook.android.R$attr: int title_text
@@ -618,15 +84,11 @@ com.facebook.android.R$attr: int title_bar_background
 com.facebook.android.R$attr: int logout_text
 com.facebook.android.R$attr: int confirm_logout
 com.facebook.android.R$attr: int done_button_background
-com.facebook.android.R$attr: R$attr()
-com.facebook.android.R$color
 com.facebook.android.R$color: int com_facebook_blue
 com.facebook.android.R$color: int com_facebook_usersettingsfragment_not_connected_text_color
 com.facebook.android.R$color: int com_facebook_usersettingsfragment_connected_text_color
 com.facebook.android.R$color: int com_facebook_usersettingsfragment_connected_shadow_color
 com.facebook.android.R$color: int com_facebook_loginview_text_color
-com.facebook.android.R$color: R$color()
-com.facebook.android.R$dimen
 com.facebook.android.R$dimen: int com_facebook_loginview_text_size
 com.facebook.android.R$dimen: int com_facebook_loginview_padding_right
 com.facebook.android.R$dimen: int com_facebook_profilepictureview_preset_size_normal
@@ -639,8 +101,6 @@ com.facebook.android.R$dimen: int com_facebook_loginview_padding_left
 com.facebook.android.R$dimen: int com_facebook_loginview_height
 com.facebook.android.R$dimen: int com_facebook_loginview_padding_top
 com.facebook.android.R$dimen: int com_facebook_profilepictureview_preset_size_large
-com.facebook.android.R$dimen: R$dimen()
-com.facebook.android.R$drawable
 com.facebook.android.R$drawable: int com_facebook_picker_list_selector
 com.facebook.android.R$drawable: int com_facebook_button_check
 com.facebook.android.R$drawable: int com_facebook_loginbutton_blue_normal
@@ -672,8 +132,6 @@ com.facebook.android.R$drawable: int com_facebook_button_check_off
 com.facebook.android.R$drawable: int com_facebook_loginbutton_blue_pressed
 com.facebook.android.R$drawable: int com_facebook_button_grey_normal
 com.facebook.android.R$drawable: int com_facebook_loginbutton_blue
-com.facebook.android.R$drawable: R$drawable()
-com.facebook.android.R$id
 com.facebook.android.R$id: int com_facebook_picker_title
 com.facebook.android.R$id: int com_facebook_picker_row_activity_circle
 com.facebook.android.R$id: int com_facebook_usersettingsfragment_login_button
@@ -684,73 +142,65 @@ com.facebook.android.R$id: int com_facebook_usersettingsfragment_profile_name
 com.facebook.android.R$id: int picker_subtitle
 com.facebook.android.R$id: int com_facebook_picker_title_bar_stub
 com.facebook.android.R$id: int com_facebook_picker_profile_pic_stub
-com.facebook.android.R$id: int com_facebook_picker_image
 com.facebook.android.R$id: int com_facebook_picker_activity_circle
+com.facebook.android.R$id: int com_facebook_picker_image
 com.facebook.android.R$id: int com_facebook_placepickerfragment_search_box_stub
 com.facebook.android.R$id: int com_facebook_picker_top_bar
 com.facebook.android.R$id: int com_facebook_picker_list_section_header
 com.facebook.android.R$id: int com_facebook_picker_title_bar
 com.facebook.android.R$id: int search_box
-com.facebook.android.R$id: int com_facebook_login_activity_progress_bar
 com.facebook.android.R$id: int com_facebook_picker_checkbox_stub
+com.facebook.android.R$id: int com_facebook_login_activity_progress_bar
 com.facebook.android.R$id: int com_facebook_picker_divider
 com.facebook.android.R$id: int com_facebook_picker_list_view
 com.facebook.android.R$id: int small
 com.facebook.android.R$id: int large
 com.facebook.android.R$id: int com_facebook_picker_done_button
-com.facebook.android.R$id: R$id()
-com.facebook.android.R$layout
-com.facebook.android.R$layout: int com_facebook_picker_checkbox
-com.facebook.android.R$layout: int com_facebook_placepickerfragment
-com.facebook.android.R$layout: int com_facebook_login_activity_layout
-com.facebook.android.R$layout: int com_facebook_picker_activity_circle_row
 com.facebook.android.R$layout: int com_facebook_picker_title_bar_stub
 com.facebook.android.R$layout: int com_facebook_friendpickerfragment
-com.facebook.android.R$layout: int com_facebook_picker_list_row
 com.facebook.android.R$layout: int com_facebook_picker_image
-com.facebook.android.R$layout: int com_facebook_picker_list_section_header
+com.facebook.android.R$layout: int com_facebook_picker_list_row
 com.facebook.android.R$layout: int com_facebook_placepickerfragment_list_row
+com.facebook.android.R$layout: int com_facebook_picker_list_section_header
 com.facebook.android.R$layout: int com_facebook_picker_title_bar
+com.facebook.android.R$layout: int com_facebook_picker_checkbox
+com.facebook.android.R$layout: int com_facebook_placepickerfragment
 com.facebook.android.R$layout: int com_facebook_picker_search_box
+com.facebook.android.R$layout: int com_facebook_login_activity_layout
 com.facebook.android.R$layout: int com_facebook_usersettingsfragment
-com.facebook.android.R$layout: R$layout()
-com.facebook.android.R$string
-com.facebook.android.R$string: int com_facebook_placepicker_subtitle_were_here_only_format
+com.facebook.android.R$layout: int com_facebook_picker_activity_circle_row
 com.facebook.android.R$string: int com_facebook_requesterror_relogin
-com.facebook.android.R$string: int com_facebook_loginview_logged_in_using_facebook
-com.facebook.android.R$string: int com_facebook_dialogloginactivity_ok_button
-com.facebook.android.R$string: int com_facebook_loginview_log_out_button
-com.facebook.android.R$string: int com_facebook_nearby
-com.facebook.android.R$string: int com_facebook_requesterror_permissions
-com.facebook.android.R$string: int com_facebook_placepicker_subtitle_catetory_only_format
-com.facebook.android.R$string: int com_facebook_loginview_log_in_button
+com.facebook.android.R$string: int com_facebook_placepicker_subtitle_were_here_only_format
 com.facebook.android.R$string: int com_facebook_usersettingsfragment_logged_in
+com.facebook.android.R$string: int com_facebook_loginview_log_in_button
 com.facebook.android.R$string: int com_facebook_choose_friends
+com.facebook.android.R$string: int com_facebook_loginview_logged_in_using_facebook
 com.facebook.android.R$string: int com_facebook_placepicker_subtitle_format
 com.facebook.android.R$string: int com_facebook_loginview_logged_in_as
 com.facebook.android.R$string: int com_facebook_requesterror_web_login
 com.facebook.android.R$string: int com_facebook_usersettingsfragment_not_logged_in
-com.facebook.android.R$string: int com_facebook_loginview_log_out_action
 com.facebook.android.R$string: int com_facebook_requesterror_reconnect
+com.facebook.android.R$string: int com_facebook_loginview_log_out_action
+com.facebook.android.R$string: int com_facebook_dialogloginactivity_ok_button
 com.facebook.android.R$string: int com_facebook_internet_permission_error_message
 com.facebook.android.R$string: int com_facebook_internet_permission_error_title
+com.facebook.android.R$string: int com_facebook_loginview_log_out_button
 com.facebook.android.R$string: int com_facebook_requesterror_password_changed
-com.facebook.android.R$string: int com_facebook_logo_content_description
 com.facebook.android.R$string: int com_facebook_usersettingsfragment_log_in_button
+com.facebook.android.R$string: int com_facebook_logo_content_description
+com.facebook.android.R$string: int com_facebook_requesterror_permissions
+com.facebook.android.R$string: int com_facebook_nearby
 com.facebook.android.R$string: int com_facebook_loading
-com.facebook.android.R$string: int com_facebook_loginview_cancel_action
+com.facebook.android.R$string: int com_facebook_placepicker_subtitle_catetory_only_format
 com.facebook.android.R$string: int com_facebook_picker_done_button_text
-com.facebook.android.R$string: R$string()
-com.facebook.android.R$style
-com.facebook.android.R$style: int com_facebook_loginview_default_style
+com.facebook.android.R$string: int com_facebook_loginview_cancel_action
 com.facebook.android.R$style: int com_facebook_loginview_silver_style
-com.facebook.android.R$style: R$style()
-com.facebook.android.R$styleable
+com.facebook.android.R$style: int com_facebook_loginview_default_style
 com.facebook.android.R$styleable: int com_facebook_place_picker_fragment_search_text
 com.facebook.android.R$styleable: int[] com_facebook_friend_picker_fragment
 com.facebook.android.R$styleable: int com_facebook_profile_picture_view_is_cropped
-com.facebook.android.R$styleable: int com_facebook_login_view_logout_text
 com.facebook.android.R$styleable: int com_facebook_login_view_login_text
+com.facebook.android.R$styleable: int com_facebook_login_view_logout_text
 com.facebook.android.R$styleable: int com_facebook_picker_fragment_title_bar_background
 com.facebook.android.R$styleable: int com_facebook_friend_picker_fragment_multi_select
 com.facebook.android.R$styleable: int[] com_facebook_place_picker_fragment
@@ -762,254 +212,17 @@ com.facebook.android.R$styleable: int com_facebook_picker_fragment_title_text
 com.facebook.android.R$styleable: int[] com_facebook_picker_fragment
 com.facebook.android.R$styleable: int com_facebook_picker_fragment_done_button_background
 com.facebook.android.R$styleable: int com_facebook_place_picker_fragment_results_limit
-com.facebook.android.R$styleable: int com_facebook_picker_fragment_done_button_text
 com.facebook.android.R$styleable: int com_facebook_picker_fragment_show_title_bar
+com.facebook.android.R$styleable: int com_facebook_picker_fragment_done_button_text
 com.facebook.android.R$styleable: int[] com_facebook_profile_picture_view
 com.facebook.android.R$styleable: int com_facebook_picker_fragment_show_pictures
 com.facebook.android.R$styleable: int[] com_facebook_login_view
 com.facebook.android.R$styleable: int com_facebook_place_picker_fragment_show_search_box
 com.facebook.android.R$styleable: int com_facebook_place_picker_fragment_radius_in_meters
-com.facebook.android.R$styleable: R$styleable()
-com.facebook.android.Util
-com.facebook.android.Util: Util()
-com.facebook.android.Util: java.lang.String encodePostBody(android.os.Bundle,java.lang.String)
-com.facebook.android.Util: java.lang.String encodeUrl(android.os.Bundle)
-com.facebook.android.Util: android.os.Bundle decodeUrl(java.lang.String)
-com.facebook.android.Util: android.os.Bundle parseUrl(java.lang.String)
-com.facebook.android.Util: java.lang.String openUrl(java.lang.String,java.lang.String,android.os.Bundle)
-com.facebook.android.Util: org.json.JSONObject parseJson(java.lang.String)
-com.facebook.android.Util: void showAlert(android.content.Context,java.lang.String,java.lang.String)
-com.facebook.internal.CacheableRequestBatch
-com.facebook.internal.CacheableRequestBatch: CacheableRequestBatch()
-com.facebook.internal.CacheableRequestBatch: CacheableRequestBatch(com.facebook.Request[])
-com.facebook.internal.CacheableRequestBatch: java.lang.String getCacheKeyOverride()
-com.facebook.internal.CacheableRequestBatch: void setCacheKeyOverride(java.lang.String)
-com.facebook.internal.CacheableRequestBatch: boolean getForceRoundTrip()
-com.facebook.internal.CacheableRequestBatch: void setForceRoundTrip(boolean)
-com.facebook.internal.FileLruCache
-com.facebook.internal.FileLruCache: FileLruCache(android.content.Context,java.lang.String,com.facebook.internal.FileLruCache$Limits)
-com.facebook.internal.FileLruCache: void clearForTest()
-com.facebook.internal.FileLruCache: java.io.InputStream get(java.lang.String)
-com.facebook.internal.FileLruCache: java.io.InputStream get(java.lang.String,java.lang.String)
-com.facebook.internal.FileLruCache: java.io.OutputStream openPutStream(java.lang.String,java.lang.String)
-com.facebook.internal.FileLruCache: java.io.InputStream interceptAndPut(java.lang.String,java.io.InputStream)
-com.facebook.internal.FileLruCache: java.lang.String toString()
-com.facebook.internal.FileLruCache$Limits
-com.facebook.internal.FileLruCache$Limits: FileLruCache$Limits()
-com.facebook.internal.Logger
-com.facebook.internal.Logger: java.lang.String LOG_TAG_BASE
-com.facebook.internal.Logger: void registerStringToReplace(java.lang.String,java.lang.String)
-com.facebook.internal.Logger: void registerAccessToken(java.lang.String)
-com.facebook.internal.Logger: void log(com.facebook.LoggingBehavior,java.lang.String,java.lang.String)
-com.facebook.internal.Logger: void log(com.facebook.LoggingBehavior,java.lang.String,java.lang.String,java.lang.Object[])
-com.facebook.internal.Logger: void log(com.facebook.LoggingBehavior,int,java.lang.String,java.lang.String)
-com.facebook.internal.Logger: Logger(com.facebook.LoggingBehavior,java.lang.String)
-com.facebook.internal.Logger: int getPriority()
-com.facebook.internal.Logger: void setPriority(int)
-com.facebook.internal.Logger: java.lang.String getContents()
-com.facebook.internal.Logger: void log()
-com.facebook.internal.Logger: void logString(java.lang.String)
-com.facebook.internal.Logger: void append(java.lang.StringBuilder)
-com.facebook.internal.Logger: void append(java.lang.String)
-com.facebook.internal.Logger: void append(java.lang.String,java.lang.Object[])
-com.facebook.internal.Logger: void appendKeyValue(java.lang.String,java.lang.Object)
-com.facebook.internal.ServerProtocol
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_AUTHORITY
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PATH
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PARAM_SCOPE
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PARAM_CLIENT_ID
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PARAM_DISPLAY
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PARAM_REDIRECT_URI
-com.facebook.internal.ServerProtocol: java.lang.String DIALOG_PARAM_TYPE
-com.facebook.internal.ServerProtocol: java.lang.String GRAPH_URL
-com.facebook.internal.ServerProtocol: java.lang.String GRAPH_URL_BASE
-com.facebook.internal.ServerProtocol: java.lang.String REST_URL_BASE
-com.facebook.internal.ServerProtocol: java.lang.String BATCHED_REST_METHOD_URL_BASE
-com.facebook.internal.ServerProtocol: java.util.Collection errorsProxyAuthDisabled
-com.facebook.internal.ServerProtocol: java.util.Collection errorsUserCanceled
-com.facebook.internal.ServerProtocol: ServerProtocol()
-com.facebook.internal.SessionAuthorizationType
-com.facebook.internal.SessionAuthorizationType: com.facebook.internal.SessionAuthorizationType READ
-com.facebook.internal.SessionAuthorizationType: com.facebook.internal.SessionAuthorizationType PUBLISH
 com.facebook.internal.SessionAuthorizationType: com.facebook.internal.SessionAuthorizationType[] values()
 com.facebook.internal.SessionAuthorizationType: com.facebook.internal.SessionAuthorizationType valueOf(java.lang.String)
-com.facebook.internal.SessionTracker
-com.facebook.internal.SessionTracker: SessionTracker(android.content.Context,com.facebook.Session$StatusCallback)
-com.facebook.internal.SessionTracker: SessionTracker(android.content.Context,com.facebook.Session$StatusCallback,com.facebook.Session,boolean)
-com.facebook.internal.SessionTracker: com.facebook.Session getSession()
-com.facebook.internal.SessionTracker: com.facebook.Session getOpenSession()
-com.facebook.internal.SessionTracker: void setSession(com.facebook.Session)
-com.facebook.internal.SessionTracker: void startTracking()
-com.facebook.internal.SessionTracker: void stopTracking()
-com.facebook.internal.SessionTracker: boolean isTracking()
-com.facebook.internal.SessionTracker: boolean isTrackingActiveSession()
-com.facebook.internal.Utility
-com.facebook.internal.Utility: int DEFAULT_STREAM_BUFFER_SIZE
-com.facebook.internal.Utility: Utility()
-com.facebook.internal.Utility: boolean isSubset(java.util.Collection,java.util.Collection)
-com.facebook.internal.Utility: boolean isNullOrEmpty(java.util.Collection)
-com.facebook.internal.Utility: boolean isNullOrEmpty(java.lang.String)
-com.facebook.internal.Utility: java.util.Collection unmodifiableCollection(java.lang.Object[])
-com.facebook.internal.Utility: java.util.ArrayList arrayList(java.lang.Object[])
-com.facebook.internal.Utility: android.net.Uri buildUri(java.lang.String,java.lang.String,android.os.Bundle)
-com.facebook.internal.Utility: void putObjectInBundle(android.os.Bundle,java.lang.String,java.lang.Object)
-com.facebook.internal.Utility: void closeQuietly(java.io.Closeable)
-com.facebook.internal.Utility: void disconnectQuietly(java.net.URLConnection)
-com.facebook.internal.Utility: java.lang.String getMetadataApplicationId(android.content.Context)
-com.facebook.internal.Utility: java.lang.Object getStringPropertyAsJSON(org.json.JSONObject,java.lang.String,java.lang.String)
-com.facebook.internal.Utility: java.lang.String readStreamToString(java.io.InputStream)
-com.facebook.internal.Utility: boolean stringsEqualOrEmpty(java.lang.String,java.lang.String)
-com.facebook.internal.Utility: void clearFacebookCookies(android.content.Context)
-com.facebook.internal.Utility: void logd(java.lang.String,java.lang.String)
-com.facebook.internal.Validate
-com.facebook.internal.Validate: Validate()
-com.facebook.internal.Validate: void notNull(java.lang.Object,java.lang.String)
-com.facebook.internal.Validate: void notEmpty(java.util.Collection,java.lang.String)
-com.facebook.internal.Validate: void containsNoNulls(java.util.Collection,java.lang.String)
-com.facebook.internal.Validate: void notEmptyAndContainsNoNulls(java.util.Collection,java.lang.String)
-com.facebook.internal.Validate: void notNullOrEmpty(java.lang.String,java.lang.String)
-com.facebook.internal.Validate: void oneOf(java.lang.Object,java.lang.String,java.lang.Object[])
-com.facebook.model.GraphLocation
-com.facebook.model.GraphLocation: java.lang.String getStreet()
-com.facebook.model.GraphLocation: void setStreet(java.lang.String)
-com.facebook.model.GraphLocation: java.lang.String getCity()
-com.facebook.model.GraphLocation: void setCity(java.lang.String)
-com.facebook.model.GraphLocation: java.lang.String getState()
-com.facebook.model.GraphLocation: void setState(java.lang.String)
-com.facebook.model.GraphLocation: java.lang.String getCountry()
-com.facebook.model.GraphLocation: void setCountry(java.lang.String)
-com.facebook.model.GraphLocation: java.lang.String getZip()
-com.facebook.model.GraphLocation: void setZip(java.lang.String)
-com.facebook.model.GraphLocation: double getLatitude()
-com.facebook.model.GraphLocation: void setLatitude(double)
-com.facebook.model.GraphLocation: double getLongitude()
-com.facebook.model.GraphLocation: void setLongitude(double)
-com.facebook.model.GraphMultiResult
-com.facebook.model.GraphMultiResult: com.facebook.model.GraphObjectList getData()
-com.facebook.model.GraphObject
-com.facebook.model.GraphObject: com.facebook.model.GraphObject cast(java.lang.Class)
-com.facebook.model.GraphObject: java.util.Map asMap()
-com.facebook.model.GraphObject: org.json.JSONObject getInnerJSONObject()
-com.facebook.model.GraphObject: java.lang.Object getProperty(java.lang.String)
-com.facebook.model.GraphObject: void setProperty(java.lang.String,java.lang.Object)
-com.facebook.model.GraphObject: void removeProperty(java.lang.String)
-com.facebook.model.GraphObject$Factory
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObject create(org.json.JSONObject)
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObject create(org.json.JSONObject,java.lang.Class)
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObject create()
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObject create(java.lang.Class)
-com.facebook.model.GraphObject$Factory: boolean hasSameId(com.facebook.model.GraphObject,com.facebook.model.GraphObject)
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObjectList createList(org.json.JSONArray,java.lang.Class)
-com.facebook.model.GraphObject$Factory: com.facebook.model.GraphObjectList createList(java.lang.Class)
-com.facebook.model.GraphObjectList
-com.facebook.model.GraphObjectList: com.facebook.model.GraphObjectList castToListOf(java.lang.Class)
-com.facebook.model.GraphObjectList: org.json.JSONArray getInnerJSONArray()
-com.facebook.model.GraphPlace
-com.facebook.model.GraphPlace: java.lang.String getId()
-com.facebook.model.GraphPlace: void setId(java.lang.String)
-com.facebook.model.GraphPlace: java.lang.String getName()
-com.facebook.model.GraphPlace: void setName(java.lang.String)
-com.facebook.model.GraphPlace: java.lang.String getCategory()
-com.facebook.model.GraphPlace: void setCategory(java.lang.String)
-com.facebook.model.GraphPlace: com.facebook.model.GraphLocation getLocation()
-com.facebook.model.GraphPlace: void setLocation(com.facebook.model.GraphLocation)
-com.facebook.model.GraphUser
-com.facebook.model.GraphUser: java.lang.String getId()
-com.facebook.model.GraphUser: void setId(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getName()
-com.facebook.model.GraphUser: void setName(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getFirstName()
-com.facebook.model.GraphUser: void setFirstName(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getMiddleName()
-com.facebook.model.GraphUser: void setMiddleName(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getLastName()
-com.facebook.model.GraphUser: void setLastName(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getLink()
-com.facebook.model.GraphUser: void setLink(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getUsername()
-com.facebook.model.GraphUser: void setUsername(java.lang.String)
-com.facebook.model.GraphUser: java.lang.String getBirthday()
-com.facebook.model.GraphUser: void setBirthday(java.lang.String)
-com.facebook.model.GraphUser: com.facebook.model.GraphLocation getLocation()
-com.facebook.model.GraphUser: void setLocation(com.facebook.model.GraphLocation)
-com.facebook.model.OpenGraphAction
-com.facebook.model.OpenGraphAction: java.lang.String getId()
-com.facebook.model.OpenGraphAction: void setId(java.lang.String)
-com.facebook.model.OpenGraphAction: java.util.Date getStartTime()
-com.facebook.model.OpenGraphAction: void setStartTime(java.util.Date)
-com.facebook.model.OpenGraphAction: java.util.Date getEndTime()
-com.facebook.model.OpenGraphAction: void setEndTime(java.util.Date)
-com.facebook.model.OpenGraphAction: java.util.Date getPublishTime()
-com.facebook.model.OpenGraphAction: void setPublishTime(java.util.Date)
-com.facebook.model.OpenGraphAction: java.util.Date getCreatedTime()
-com.facebook.model.OpenGraphAction: void setCreatedTime(java.util.Date)
-com.facebook.model.OpenGraphAction: java.util.Date getExpiresTime()
-com.facebook.model.OpenGraphAction: void setExpiresTime(java.util.Date)
-com.facebook.model.OpenGraphAction: java.lang.String getRef()
-com.facebook.model.OpenGraphAction: void setRef(java.lang.String)
-com.facebook.model.OpenGraphAction: java.lang.String getMessage()
-com.facebook.model.OpenGraphAction: void setMessage(java.lang.String)
-com.facebook.model.OpenGraphAction: com.facebook.model.GraphPlace getPlace()
-com.facebook.model.OpenGraphAction: void setPlace(com.facebook.model.GraphPlace)
-com.facebook.model.OpenGraphAction: java.util.List getTags()
-com.facebook.model.OpenGraphAction: void setTags(java.util.List)
-com.facebook.model.OpenGraphAction: java.util.List getImage()
-com.facebook.model.OpenGraphAction: void setImage(java.util.List)
-com.facebook.model.OpenGraphAction: com.facebook.model.GraphUser getFrom()
-com.facebook.model.OpenGraphAction: void setFrom(com.facebook.model.GraphUser)
-com.facebook.model.OpenGraphAction: org.json.JSONObject getLikes()
-com.facebook.model.OpenGraphAction: void setLikes(org.json.JSONObject)
-com.facebook.model.OpenGraphAction: com.facebook.model.GraphObject getApplication()
-com.facebook.model.OpenGraphAction: void setApplication(com.facebook.model.GraphObject)
-com.facebook.model.OpenGraphAction: org.json.JSONObject getComments()
-com.facebook.model.OpenGraphAction: void setComments(org.json.JSONObject)
-com.facebook.model.PropertyName
-com.facebook.model.PropertyName: java.lang.String value()
-com.facebook.widget.FacebookFragment: void onActivityCreated(android.os.Bundle)
-com.facebook.widget.FacebookFragment: void onActivityResult(int,int,android.content.Intent)
-com.facebook.widget.FacebookFragment: void onDestroy()
-com.facebook.widget.FacebookFragment: void setSession(com.facebook.Session)
-com.facebook.widget.FacebookFragment: void onSessionStateChange(com.facebook.SessionState,java.lang.Exception)
-com.facebook.widget.FacebookFragment: com.facebook.Session getSession()
-com.facebook.widget.FacebookFragment: boolean isSessionOpen()
-com.facebook.widget.FacebookFragment: com.facebook.SessionState getSessionState()
-com.facebook.widget.FacebookFragment: java.lang.String getAccessToken()
-com.facebook.widget.FacebookFragment: java.util.Date getExpirationDate()
-com.facebook.widget.FacebookFragment: void closeSession()
-com.facebook.widget.FacebookFragment: void closeSessionAndClearTokenInformation()
-com.facebook.widget.FacebookFragment: java.util.List getSessionPermissions()
-com.facebook.widget.FacebookFragment: void openSession()
-com.facebook.widget.FacebookFragment: void openSessionForRead(java.lang.String,java.util.List)
-com.facebook.widget.FacebookFragment: void openSessionForRead(java.lang.String,java.util.List,com.facebook.SessionLoginBehavior,int)
-com.facebook.widget.FacebookFragment: void openSessionForPublish(java.lang.String,java.util.List)
-com.facebook.widget.FacebookFragment: void openSessionForPublish(java.lang.String,java.util.List,com.facebook.SessionLoginBehavior,int)
-com.facebook.widget.FriendPickerFragment
-com.facebook.widget.FriendPickerFragment: java.lang.String USER_ID_BUNDLE_KEY
-com.facebook.widget.FriendPickerFragment: java.lang.String MULTI_SELECT_BUNDLE_KEY
-com.facebook.widget.FriendPickerFragment: FriendPickerFragment()
-com.facebook.widget.FriendPickerFragment: FriendPickerFragment(android.os.Bundle)
-com.facebook.widget.FriendPickerFragment: java.lang.String getUserId()
-com.facebook.widget.FriendPickerFragment: void setUserId(java.lang.String)
-com.facebook.widget.FriendPickerFragment: boolean getMultiSelect()
-com.facebook.widget.FriendPickerFragment: void setMultiSelect(boolean)
-com.facebook.widget.FriendPickerFragment: java.util.List getSelection()
-com.facebook.widget.FriendPickerFragment: void onInflate(android.app.Activity,android.util.AttributeSet,android.os.Bundle)
-com.facebook.widget.FriendPickerFragment: void setSettingsFromBundle(android.os.Bundle)
-com.facebook.widget.GraphObjectAdapter$DataNeededListener
-com.facebook.widget.GraphObjectAdapter$DataNeededListener: void onDataNeeded()
-com.facebook.widget.GraphObjectAdapter$SectionAndItem
-com.facebook.widget.GraphObjectAdapter$SectionAndItem: java.lang.String sectionKey
-com.facebook.widget.GraphObjectAdapter$SectionAndItem: com.facebook.model.GraphObject graphObject
-com.facebook.widget.GraphObjectAdapter$SectionAndItem: GraphObjectAdapter$SectionAndItem(java.lang.String,com.facebook.model.GraphObject)
-com.facebook.widget.GraphObjectAdapter$SectionAndItem: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type getType()
-com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type
-com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type GRAPH_OBJECT
-com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type SECTION_HEADER
-com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type ACTIVITY_CIRCLE
 com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type[] values()
 com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type: com.facebook.widget.GraphObjectAdapter$SectionAndItem$Type valueOf(java.lang.String)
-com.facebook.widget.GraphObjectPagingLoader$OnErrorListener
-com.facebook.widget.GraphObjectPagingLoader$OnErrorListener: void onError(com.facebook.FacebookException,com.facebook.widget.GraphObjectPagingLoader)
 com.facebook.widget.LoginButton
 com.facebook.widget.LoginButton: LoginButton(android.content.Context)
 com.facebook.widget.LoginButton: LoginButton(android.content.Context,android.util.AttributeSet)
@@ -1020,7 +233,6 @@ com.facebook.widget.LoginButton: void setDefaultAudience(com.facebook.SessionDef
 com.facebook.widget.LoginButton: com.facebook.SessionDefaultAudience getDefaultAudience()
 com.facebook.widget.LoginButton: void setReadPermissions(java.util.List)
 com.facebook.widget.LoginButton: void setPublishPermissions(java.util.List)
-com.facebook.widget.LoginButton: void clearPermissions()
 com.facebook.widget.LoginButton: void setLoginBehavior(com.facebook.SessionLoginBehavior)
 com.facebook.widget.LoginButton: com.facebook.SessionLoginBehavior getLoginBehavior()
 com.facebook.widget.LoginButton: void setApplicationId(java.lang.String)
@@ -1028,190 +240,18 @@ com.facebook.widget.LoginButton: com.facebook.widget.LoginButton$UserInfoChanged
 com.facebook.widget.LoginButton: void setUserInfoChangedCallback(com.facebook.widget.LoginButton$UserInfoChangedCallback)
 com.facebook.widget.LoginButton: void setSessionStatusCallback(com.facebook.Session$StatusCallback)
 com.facebook.widget.LoginButton: com.facebook.Session$StatusCallback getSessionStatusCallback()
-com.facebook.widget.LoginButton: boolean onActivityResult(int,int,android.content.Intent)
 com.facebook.widget.LoginButton: void setSession(com.facebook.Session)
-com.facebook.widget.LoginButton: void onFinishInflate()
 com.facebook.widget.LoginButton: void setFragment(android.support.v4.app.Fragment)
-com.facebook.widget.LoginButton: void onAttachedToWindow()
-com.facebook.widget.LoginButton: void onDetachedFromWindow()
 com.facebook.widget.LoginButton: java.util.List getPermissions()
 com.facebook.widget.LoginButton: void setProperties(com.facebook.widget.LoginButton$LoginButtonProperties)
-com.facebook.widget.LoginButton$OnErrorListener
-com.facebook.widget.LoginButton$OnErrorListener: void onError(com.facebook.FacebookException)
-com.facebook.widget.LoginButton$UserInfoChangedCallback
-com.facebook.widget.LoginButton$UserInfoChangedCallback: void onUserInfoFetched(com.facebook.model.GraphUser)
-com.facebook.widget.PickerFragment
-com.facebook.widget.PickerFragment: java.lang.String SHOW_PICTURES_BUNDLE_KEY
-com.facebook.widget.PickerFragment: java.lang.String EXTRA_FIELDS_BUNDLE_KEY
-com.facebook.widget.PickerFragment: java.lang.String SHOW_TITLE_BAR_BUNDLE_KEY
-com.facebook.widget.PickerFragment: java.lang.String TITLE_TEXT_BUNDLE_KEY
-com.facebook.widget.PickerFragment: java.lang.String DONE_BUTTON_TEXT_BUNDLE_KEY
-com.facebook.widget.PickerFragment: void onCreate(android.os.Bundle)
-com.facebook.widget.PickerFragment: void onInflate(android.app.Activity,android.util.AttributeSet,android.os.Bundle)
-com.facebook.widget.PickerFragment: android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle)
-com.facebook.widget.PickerFragment: void onActivityCreated(android.os.Bundle)
-com.facebook.widget.PickerFragment: void onDetach()
-com.facebook.widget.PickerFragment: void onSaveInstanceState(android.os.Bundle)
-com.facebook.widget.PickerFragment: void setArguments(android.os.Bundle)
-com.facebook.widget.PickerFragment: com.facebook.widget.PickerFragment$OnDataChangedListener getOnDataChangedListener()
-com.facebook.widget.PickerFragment: void setOnDataChangedListener(com.facebook.widget.PickerFragment$OnDataChangedListener)
-com.facebook.widget.PickerFragment: com.facebook.widget.PickerFragment$OnSelectionChangedListener getOnSelectionChangedListener()
-com.facebook.widget.PickerFragment: void setOnSelectionChangedListener(com.facebook.widget.PickerFragment$OnSelectionChangedListener)
-com.facebook.widget.PickerFragment: com.facebook.widget.PickerFragment$OnDoneButtonClickedListener getOnDoneButtonClickedListener()
-com.facebook.widget.PickerFragment: void setOnDoneButtonClickedListener(com.facebook.widget.PickerFragment$OnDoneButtonClickedListener)
-com.facebook.widget.PickerFragment: com.facebook.widget.PickerFragment$OnErrorListener getOnErrorListener()
-com.facebook.widget.PickerFragment: void setOnErrorListener(com.facebook.widget.PickerFragment$OnErrorListener)
-com.facebook.widget.PickerFragment: com.facebook.widget.PickerFragment$GraphObjectFilter getFilter()
-com.facebook.widget.PickerFragment: void setFilter(com.facebook.widget.PickerFragment$GraphObjectFilter)
-com.facebook.widget.PickerFragment: com.facebook.Session getSession()
-com.facebook.widget.PickerFragment: void setSession(com.facebook.Session)
-com.facebook.widget.PickerFragment: boolean getShowPictures()
-com.facebook.widget.PickerFragment: void setShowPictures(boolean)
-com.facebook.widget.PickerFragment: java.util.Set getExtraFields()
-com.facebook.widget.PickerFragment: void setExtraFields(java.util.Collection)
-com.facebook.widget.PickerFragment: void setShowTitleBar(boolean)
-com.facebook.widget.PickerFragment: boolean getShowTitleBar()
-com.facebook.widget.PickerFragment: void setTitleText(java.lang.String)
-com.facebook.widget.PickerFragment: java.lang.String getTitleText()
-com.facebook.widget.PickerFragment: void setDoneButtonText(java.lang.String)
-com.facebook.widget.PickerFragment: java.lang.String getDoneButtonText()
-com.facebook.widget.PickerFragment: void loadData(boolean)
-com.facebook.widget.PickerFragment: void setSettingsFromBundle(android.os.Bundle)
-com.facebook.widget.PickerFragment$GraphObjectFilter
-com.facebook.widget.PickerFragment$GraphObjectFilter: boolean includeItem(java.lang.Object)
-com.facebook.widget.PickerFragment$OnDataChangedListener
-com.facebook.widget.PickerFragment$OnDataChangedListener: void onDataChanged(com.facebook.widget.PickerFragment)
-com.facebook.widget.PickerFragment$OnDoneButtonClickedListener
-com.facebook.widget.PickerFragment$OnDoneButtonClickedListener: void onDoneButtonClicked(com.facebook.widget.PickerFragment)
-com.facebook.widget.PickerFragment$OnErrorListener
-com.facebook.widget.PickerFragment$OnErrorListener: void onError(com.facebook.widget.PickerFragment,com.facebook.FacebookException)
-com.facebook.widget.PickerFragment$OnSelectionChangedListener
-com.facebook.widget.PickerFragment$OnSelectionChangedListener: void onSelectionChanged(com.facebook.widget.PickerFragment)
-com.facebook.widget.PlacePickerFragment
-com.facebook.widget.PlacePickerFragment: java.lang.String RADIUS_IN_METERS_BUNDLE_KEY
-com.facebook.widget.PlacePickerFragment: java.lang.String RESULTS_LIMIT_BUNDLE_KEY
-com.facebook.widget.PlacePickerFragment: java.lang.String SEARCH_TEXT_BUNDLE_KEY
-com.facebook.widget.PlacePickerFragment: java.lang.String LOCATION_BUNDLE_KEY
-com.facebook.widget.PlacePickerFragment: java.lang.String SHOW_SEARCH_BOX_BUNDLE_KEY
-com.facebook.widget.PlacePickerFragment: int DEFAULT_RADIUS_IN_METERS
-com.facebook.widget.PlacePickerFragment: int DEFAULT_RESULTS_LIMIT
-com.facebook.widget.PlacePickerFragment: PlacePickerFragment()
-com.facebook.widget.PlacePickerFragment: PlacePickerFragment(android.os.Bundle)
-com.facebook.widget.PlacePickerFragment: android.location.Location getLocation()
-com.facebook.widget.PlacePickerFragment: void setLocation(android.location.Location)
-com.facebook.widget.PlacePickerFragment: int getRadiusInMeters()
-com.facebook.widget.PlacePickerFragment: void setRadiusInMeters(int)
-com.facebook.widget.PlacePickerFragment: int getResultsLimit()
-com.facebook.widget.PlacePickerFragment: void setResultsLimit(int)
-com.facebook.widget.PlacePickerFragment: java.lang.String getSearchText()
-com.facebook.widget.PlacePickerFragment: void setSearchText(java.lang.String)
-com.facebook.widget.PlacePickerFragment: void onSearchBoxTextChanged(java.lang.String,boolean)
-com.facebook.widget.PlacePickerFragment: com.facebook.model.GraphPlace getSelection()
-com.facebook.widget.PlacePickerFragment: void setSettingsFromBundle(android.os.Bundle)
-com.facebook.widget.PlacePickerFragment: void onInflate(android.app.Activity,android.util.AttributeSet,android.os.Bundle)
-com.facebook.widget.PlacePickerFragment: void onActivityCreated(android.os.Bundle)
-com.facebook.widget.PlacePickerFragment: void onAttach(android.app.Activity)
-com.facebook.widget.PlacePickerFragment: void onDetach()
-com.facebook.widget.ProfilePictureView
-com.facebook.widget.ProfilePictureView: java.lang.String TAG
-com.facebook.widget.ProfilePictureView: int CUSTOM
-com.facebook.widget.ProfilePictureView: int SMALL
-com.facebook.widget.ProfilePictureView: int NORMAL
-com.facebook.widget.ProfilePictureView: int LARGE
-com.facebook.widget.ProfilePictureView: ProfilePictureView(android.content.Context)
-com.facebook.widget.ProfilePictureView: ProfilePictureView(android.content.Context,android.util.AttributeSet)
-com.facebook.widget.ProfilePictureView: ProfilePictureView(android.content.Context,android.util.AttributeSet,int)
 com.facebook.widget.ProfilePictureView: int getPresetSize()
 com.facebook.widget.ProfilePictureView: void setPresetSize(int)
-com.facebook.widget.ProfilePictureView: boolean isCropped()
 com.facebook.widget.ProfilePictureView: void setCropped(boolean)
 com.facebook.widget.ProfilePictureView: java.lang.String getProfileId()
 com.facebook.widget.ProfilePictureView: void setProfileId(java.lang.String)
 com.facebook.widget.ProfilePictureView: com.facebook.widget.ProfilePictureView$OnErrorListener getOnErrorListener()
 com.facebook.widget.ProfilePictureView: void setOnErrorListener(com.facebook.widget.ProfilePictureView$OnErrorListener)
-com.facebook.widget.ProfilePictureView: void onMeasure(int,int)
-com.facebook.widget.ProfilePictureView: void onLayout(boolean,int,int,int,int)
-com.facebook.widget.ProfilePictureView: android.os.Parcelable onSaveInstanceState()
-com.facebook.widget.ProfilePictureView: void onRestoreInstanceState(android.os.Parcelable)
-com.facebook.widget.ProfilePictureView: void onDetachedFromWindow()
 com.facebook.widget.ProfilePictureView: void setImageBitmap(android.graphics.Bitmap)
-com.facebook.widget.ProfilePictureView$OnErrorListener
-com.facebook.widget.ProfilePictureView$OnErrorListener: void onError(com.facebook.FacebookException)
-com.facebook.widget.UserSettingsFragment
-com.facebook.widget.UserSettingsFragment: UserSettingsFragment()
-com.facebook.widget.UserSettingsFragment: android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle)
-com.facebook.widget.UserSettingsFragment: void onCreate(android.os.Bundle)
-com.facebook.widget.UserSettingsFragment: void onResume()
-com.facebook.widget.UserSettingsFragment: void setSession(com.facebook.Session)
-com.facebook.widget.UserSettingsFragment: void setDefaultAudience(com.facebook.SessionDefaultAudience)
-com.facebook.widget.UserSettingsFragment: com.facebook.SessionDefaultAudience getDefaultAudience()
-com.facebook.widget.UserSettingsFragment: void setReadPermissions(java.util.List)
-com.facebook.widget.UserSettingsFragment: void setPublishPermissions(java.util.List)
-com.facebook.widget.UserSettingsFragment: void clearPermissions()
-com.facebook.widget.UserSettingsFragment: void setLoginBehavior(com.facebook.SessionLoginBehavior)
-com.facebook.widget.UserSettingsFragment: com.facebook.SessionLoginBehavior getLoginBehavior()
-com.facebook.widget.UserSettingsFragment: void setOnErrorListener(com.facebook.widget.LoginButton$OnErrorListener)
-com.facebook.widget.UserSettingsFragment: com.facebook.widget.LoginButton$OnErrorListener getOnErrorListener()
-com.facebook.widget.UserSettingsFragment: void setSessionStatusCallback(com.facebook.Session$StatusCallback)
-com.facebook.widget.UserSettingsFragment: com.facebook.Session$StatusCallback getSessionStatusCallback()
-com.facebook.widget.UserSettingsFragment: void onSessionStateChange(com.facebook.SessionState,java.lang.Exception)
-com.facebook.widget.UserSettingsFragment: void onActivityResult(int,int,android.content.Intent)
-com.facebook.widget.UserSettingsFragment: void onDestroy()
-com.facebook.widget.UserSettingsFragment: void onActivityCreated(android.os.Bundle)
-com.facebook.widget.WebDialog
-com.facebook.widget.WebDialog: int DEFAULT_THEME
-com.facebook.widget.WebDialog: WebDialog(android.content.Context,java.lang.String)
-com.facebook.widget.WebDialog: WebDialog(android.content.Context,java.lang.String,int)
-com.facebook.widget.WebDialog: WebDialog(android.content.Context,java.lang.String,android.os.Bundle,int,com.facebook.widget.WebDialog$OnCompleteListener)
-com.facebook.widget.WebDialog: void setOnCompleteListener(com.facebook.widget.WebDialog$OnCompleteListener)
-com.facebook.widget.WebDialog: com.facebook.widget.WebDialog$OnCompleteListener getOnCompleteListener()
-com.facebook.widget.WebDialog: void dismiss()
-com.facebook.widget.WebDialog: void onDetachedFromWindow()
-com.facebook.widget.WebDialog: void onAttachedToWindow()
-com.facebook.widget.WebDialog: void onCreate(android.os.Bundle)
-com.facebook.widget.WebDialog$Builder
-com.facebook.widget.WebDialog$Builder: WebDialog$Builder(android.content.Context,com.facebook.Session,java.lang.String,android.os.Bundle)
-com.facebook.widget.WebDialog$Builder: WebDialog$Builder(android.content.Context,java.lang.String,java.lang.String,android.os.Bundle)
-com.facebook.widget.WebDialog$Builder: com.facebook.widget.WebDialog build()
-com.facebook.widget.WebDialog$Builder: com.facebook.widget.WebDialog$BuilderBase setTheme(int)
-com.facebook.widget.WebDialog$Builder: com.facebook.widget.WebDialog$BuilderBase setOnCompleteListener(com.facebook.widget.WebDialog$OnCompleteListener)
-com.facebook.widget.WebDialog$BuilderBase: java.lang.String ACCESS_TOKEN
-com.facebook.widget.WebDialog$BuilderBase: WebDialog$BuilderBase(android.content.Context,com.facebook.Session,java.lang.String,android.os.Bundle)
-com.facebook.widget.WebDialog$BuilderBase: WebDialog$BuilderBase(android.content.Context,java.lang.String,java.lang.String,android.os.Bundle)
-com.facebook.widget.WebDialog$BuilderBase: com.facebook.widget.WebDialog$BuilderBase setTheme(int)
-com.facebook.widget.WebDialog$BuilderBase: com.facebook.widget.WebDialog$BuilderBase setOnCompleteListener(com.facebook.widget.WebDialog$OnCompleteListener)
-com.facebook.widget.WebDialog$BuilderBase: com.facebook.widget.WebDialog build()
-com.facebook.widget.WebDialog$BuilderBase: java.lang.String getApplicationId()
-com.facebook.widget.WebDialog$BuilderBase: android.content.Context getContext()
-com.facebook.widget.WebDialog$BuilderBase: int getTheme()
-com.facebook.widget.WebDialog$BuilderBase: android.os.Bundle getParameters()
-com.facebook.widget.WebDialog$BuilderBase: com.facebook.widget.WebDialog$OnCompleteListener getListener()
-com.facebook.widget.WebDialog$FeedDialogBuilder
-com.facebook.widget.WebDialog$FeedDialogBuilder: WebDialog$FeedDialogBuilder(android.content.Context,com.facebook.Session)
-com.facebook.widget.WebDialog$FeedDialogBuilder: WebDialog$FeedDialogBuilder(android.content.Context,com.facebook.Session,android.os.Bundle)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setFrom(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setTo(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setLink(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setPicture(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setSource(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setName(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setCaption(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$FeedDialogBuilder setDescription(java.lang.String)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog build()
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$BuilderBase setTheme(int)
-com.facebook.widget.WebDialog$FeedDialogBuilder: com.facebook.widget.WebDialog$BuilderBase setOnCompleteListener(com.facebook.widget.WebDialog$OnCompleteListener)
-com.facebook.widget.WebDialog$OnCompleteListener
-com.facebook.widget.WebDialog$OnCompleteListener: void onComplete(android.os.Bundle,com.facebook.FacebookException)
-com.facebook.widget.WebDialog$RequestsDialogBuilder
-com.facebook.widget.WebDialog$RequestsDialogBuilder: WebDialog$RequestsDialogBuilder(android.content.Context,com.facebook.Session)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: WebDialog$RequestsDialogBuilder(android.content.Context,com.facebook.Session,android.os.Bundle)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$RequestsDialogBuilder setMessage(java.lang.String)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$RequestsDialogBuilder setTo(java.lang.String)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$RequestsDialogBuilder setData(java.lang.String)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$RequestsDialogBuilder setTitle(java.lang.String)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog build()
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$BuilderBase setTheme(int)
-com.facebook.widget.WebDialog$RequestsDialogBuilder: com.facebook.widget.WebDialog$BuilderBase setOnCompleteListener(com.facebook.widget.WebDialog$OnCompleteListener)
 com.jeffthefate.dmbquiz.ApplicationEx
 com.jeffthefate.dmbquiz.ApplicationEx: ApplicationEx()
 com.jeffthefate.dmbquiz.R$attr: int confirm_logout
@@ -1369,6 +409,7 @@ com.jeffthefate.dmbquiz.R$id: int QuestionButton
 com.jeffthefate.dmbquiz.R$id: int QuestionLowerLayout
 com.jeffthefate.dmbquiz.R$id: int QuestionText
 com.jeffthefate.dmbquiz.R$id: int ReportMenu
+com.jeffthefate.dmbquiz.R$id: int ResetButton
 com.jeffthefate.dmbquiz.R$id: int RetryButton
 com.jeffthefate.dmbquiz.R$id: int RetryText
 com.jeffthefate.dmbquiz.R$id: int RowTextView
@@ -1691,6 +732,7 @@ com.jeffthefate.dmbquiz.R$string: int loginEmail
 com.jeffthefate.dmbquiz.R$string: int notification_key
 com.jeffthefate.dmbquiz.R$string: int ok
 com.jeffthefate.dmbquiz.R$string: int passwordHint
+com.jeffthefate.dmbquiz.R$string: int reset
 com.jeffthefate.dmbquiz.R$string: int retry
 com.jeffthefate.dmbquiz.R$string: int signup
 com.jeffthefate.dmbquiz.R$string: int skip

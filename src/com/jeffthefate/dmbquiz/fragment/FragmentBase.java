@@ -93,6 +93,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         public boolean isCorrectAnswer(String correctId);
         public void setUserName(String userName);
         public boolean isNewUser();
+        public void resetPassword(String username);
     }
     
     public static final int LOGIN_FACEBOOK = 0;

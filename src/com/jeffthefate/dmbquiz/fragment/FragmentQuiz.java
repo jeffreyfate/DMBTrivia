@@ -45,8 +45,6 @@ public class FragmentQuiz extends FragmentBase {
     private EditText answerText;
     private TextView answerPlace;
     private Button answerButton;
-    private TextView logoutButton;
-    private TextView userText;
     private RelativeLayout skipButton;
     private TextView skipText;
     private TextView skipTime;
@@ -56,7 +54,6 @@ public class FragmentQuiz extends FragmentBase {
     private ImageView answerImage;
     private TextView retryText;
     private Button retryButton;
-    private long skipWaitTick;
     private long skipTick = 17000;
     private long hintTick = 15000;
     
@@ -615,7 +612,7 @@ public class FragmentQuiz extends FragmentBase {
                 savedHint = "";
         }
         if (savedHint.equals("")) {
-            ArrayList<String> answerStrings = new ArrayList();
+            ArrayList<String> answerStrings = new ArrayList<String>();
             int lastSpace = -1;
             String answer = (mCallback.getCorrectAnswer()
                     .replaceAll("\\s+", " ")).replaceAll("[0-9a-zA-Z#&]", "*");

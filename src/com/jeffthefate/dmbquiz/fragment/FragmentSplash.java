@@ -41,6 +41,7 @@ public class FragmentSplash extends FragmentBase {
     private LinearLayout buttonLayout;
     private TextView loginButton;
     private TextView signupButton;
+    private TextView resetButton;
     private ImageView facebookLogin;
     private ImageView twitterLogin;
     private TextView playButton;
@@ -120,6 +121,19 @@ public class FragmentSplash extends FragmentBase {
                             Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 processLogin(true);
+            } 
+        });
+        resetButton = (TextView) view.findViewById(R.id.ResetButton);
+        resetButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = 
+                    (InputMethodManager) getActivity().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                if (mCallback != null)
+                	mCallback.resetPassword(
+                			loginUsername.getText().toString().trim());
             } 
         });
         facebookLogin = (ImageView) view.findViewById(R.id.FacebookLoginButton);
@@ -241,11 +255,13 @@ public class FragmentSplash extends FragmentBase {
                     if (userList.isEmpty()) {
                         loginButton.setVisibility(View.GONE);
                         signupButton.setVisibility(View.VISIBLE);
+                        resetButton.setVisibility(View.GONE);
                         isSignedUp = false;
                     }
                     else {
                         signupButton.setVisibility(View.GONE);
                         loginButton.setVisibility(View.VISIBLE);
+                        resetButton.setVisibility(View.VISIBLE);
                         isSignedUp = true;
                     }
                 }

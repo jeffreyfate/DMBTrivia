@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class LeaderAdapter extends ArrayAdapter  {
+public class LeaderAdapter extends ArrayAdapter<String>  {
     
     private Context mContext;
     private String userId;
@@ -46,7 +46,7 @@ public class LeaderAdapter extends ArrayAdapter  {
     }
 
     @Override
-    public Object getItem(int position) {
+    public String getItem(int position) {
         if (userIdList != null)
             return userIdList.get(position);
         return null;

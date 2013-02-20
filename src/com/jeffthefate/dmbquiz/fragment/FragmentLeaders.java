@@ -18,12 +18,8 @@ import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.LeaderAdapter;
 import com.jeffthefate.dmbquiz.R;
-import com.parse.ParseUser;
 
 public class FragmentLeaders extends FragmentBase {
-    
-    private int answerCount = 0;
-    private int hintCount = 0;
     
     private ViewGroup leadersLayout;
     
@@ -176,10 +172,6 @@ public class FragmentLeaders extends FragmentBase {
         outState.putString("createdDate", createdDate.getText().toString());
         super.onSaveInstanceState(outState);
     }
-    
-    private String userNameText;
-    private String userScoreText;
-    private ParseUser user;
     
     @Override
     public void onPause() {

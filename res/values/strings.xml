@@ -21,6 +21,7 @@
     <string name="skip">SKIP</string>
     <string name="login">LOGIN</string>
     <string name="signup">SIGNUP</string>
+    <string name="reset">RESET PASSWORD</string>
     <string name="justPlay">JUST PLAY</string>
     <string name="loginEmail">EMAIL LOGIN</string>
     <string name="hintTime">15</string>

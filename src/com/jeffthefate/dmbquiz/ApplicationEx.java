@@ -39,7 +39,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     private static Context app;
     public static DatabaseHelper dbHelper;
-    private static boolean mHasWifi = false;
     private static boolean mHasConnection = false;
     private static boolean mIsActive = false;
     private static ConnectivityManager connMan;
