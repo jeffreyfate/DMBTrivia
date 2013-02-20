@@ -775,11 +775,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         getString(R.string.correct_key), correctAnswers);
                 publishProgress();
             }
+            tempScore = 0;
             return null;
         }
         
         @Override
         protected void onCancelled(Void nothing) {
+        	tempScore = 0;
         }
         
         protected void onProgressUpdate(Void... nothing) {

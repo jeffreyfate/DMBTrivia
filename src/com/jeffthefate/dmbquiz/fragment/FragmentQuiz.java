@@ -453,10 +453,10 @@ public class FragmentQuiz extends FragmentBase {
             public void onClick(View v) {
                 answerButton.setBackgroundResource(R.drawable.button_disabled);
                 answerButton.setTextColor(res.getColor(R.color.light_gray));
-                answerButton.setText("ENTER");
                 answerButton.setEnabled(false);
                 if (mCallback != null) {
                     if (mCallback.isNewQuestion()) {
+                    	answerButton.setText("NEXT");
                         if (Build.VERSION.SDK_INT <
                                 Build.VERSION_CODES.HONEYCOMB)
                             new NextTask().execute();
@@ -465,6 +465,7 @@ public class FragmentQuiz extends FragmentBase {
                                     AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                     else {
+                    	answerButton.setText("ENTER");
                         if (Build.VERSION.SDK_INT <
                                 Build.VERSION_CODES.HONEYCOMB)
                             new VerifyTask(mCallback.getUserId(),
@@ -673,6 +674,9 @@ public class FragmentQuiz extends FragmentBase {
             answerButton.setEnabled(true);
             questionText.setTextColor(Color.WHITE);
             answerImage.setVisibility(View.INVISIBLE);
+            skipPressed = false;
+            ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+                    DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
         }
         hintButton.setEnabled(false);
         hintButton.setVisibility(View.VISIBLE);
