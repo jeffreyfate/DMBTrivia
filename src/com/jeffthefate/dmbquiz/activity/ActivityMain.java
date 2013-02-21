@@ -436,6 +436,23 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         ApplicationEx.setInactive();
         super.onPause();
     }
+    
+    @Override
+    public void onDestroy() {
+    	if (backgroundDrawable instanceof BitmapDrawable)
+    	    ((BitmapDrawable) backgroundDrawable).getBitmap().recycle();
+    	oldBitmapDrawable.getBitmap().recycle();
+    	Drawable drawable = background.getDrawable();
+    	if (drawable instanceof TransitionDrawable) {
+            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(0)))
+            		.getBitmap().recycle();
+            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(1)))
+    				.getBitmap().recycle();
+        }
+        else if (drawable instanceof BitmapDrawable)
+            ((BitmapDrawable) drawable).getBitmap().recycle();
+    	super.onDestroy();
+    }
 
     @Override
     public void setBackground(String name, boolean showNew) {
@@ -475,19 +492,38 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 if (currentId != resourceId) {
                     try {
                         tempDrawable = res.getDrawable(currentId);
+                        if (backgroundDrawable != null &&
+                        		backgroundDrawable instanceof
+                        			TransitionDrawable) {
+                        	((BitmapDrawable)(
+                        			((TransitionDrawable)backgroundDrawable)
+                        			.getDrawable(0))).getBitmap().recycle();
+                        }
+                        if (transitionDrawable != null) {
+                        	((BitmapDrawable)(transitionDrawable.getDrawable(0)))
+		            				.getBitmap().recycle();
+                        }
                         backgroundDrawable = background.getDrawable();
-                        oldBitmapDrawable = null;
-                        if (backgroundDrawable instanceof TransitionDrawable) {
+                        if (oldBitmapDrawable != null)
+                        	oldBitmapDrawable.getBitmap().recycle();
+                        if (backgroundDrawable != null &&
+                        		backgroundDrawable instanceof
+                        			TransitionDrawable) {
                             transitionDrawable = (TransitionDrawable) backgroundDrawable;
                             oldBitmapDrawable = (BitmapDrawable)(
                                     transitionDrawable.getDrawable(1));
+                            ((BitmapDrawable)(transitionDrawable.getDrawable(0)))
+                    				.getBitmap().recycle();
                         }
-                        else if (backgroundDrawable instanceof BitmapDrawable)
+                        else if (backgroundDrawable != null &&
+                        		backgroundDrawable instanceof BitmapDrawable)
                             oldBitmapDrawable = (BitmapDrawable) backgroundDrawable;
                         if (backgroundDrawable != null) {
                             arrayDrawable[0] = oldBitmapDrawable;
                             arrayDrawable[1] = tempDrawable;
                         }
+                    } catch (OutOfMemoryError memErr) {
+                    	setBackground(currentBackground, showNew);
                     } catch (Resources.NotFoundException e) {
                         setBackground(currentBackground, showNew);
                     }
@@ -706,6 +742,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             tempAnswers.add(score.getObjectId());
                         }
                     }
+                } catch (OutOfMemoryError memErr) {
+                	Log.e(Constants.LOG_TAG, "Error: " + memErr.getMessage());
+                	if (userTask != null)
+                        userTask.cancel(true);
+                    if (getScoreTask != null)
+                        getScoreTask.cancel(true);
+                    getScore(show, restore, userId, newUser);
                 } catch (ParseException e) {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     if (userTask != null)
@@ -747,6 +790,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                             tempAnswers.add(score.getObjectId());
                         }
                     }
+                } catch (OutOfMemoryError memErr) {
+                	Log.e(Constants.LOG_TAG, "Error: " + memErr.getMessage());
+                	if (userTask != null)
+                        userTask.cancel(true);
+                    if (getScoreTask != null)
+                        getScoreTask.cancel(true);
+                    getScore(show, restore, userId, newUser);
                 } catch (ParseException e) {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     if (userTask != null)
@@ -1686,6 +1736,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 thirdQuestionScore, thirdQuestionHint,
                                 thirdQuestionSkip);
                     }
+                } catch (OutOfMemoryError memErr) {
+                	Log.e(Constants.LOG_TAG, "Error: " + memErr.getMessage());
+                	if (getNextQuestionsTask != null)
+                        getNextQuestionsTask.cancel(true);
+                    getNextQuestions(force);
                 } catch (ParseException e) {
                     error = e;
                 }

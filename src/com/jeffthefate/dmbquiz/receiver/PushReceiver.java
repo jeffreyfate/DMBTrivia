@@ -53,7 +53,7 @@ public class PushReceiver extends BroadcastReceiver {
                     setSmallIcon(R.drawable.notification_large).
                     setWhen(System.currentTimeMillis()).
                     setContentTitle("New questions added").
-                    setContentText("Tap to play DMB Trivia").
+                    setContentText("Touch to play DMB Trivia").
                     setContentIntent(pendingIntent);
                 nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
                 notification = nBuilder.build();
