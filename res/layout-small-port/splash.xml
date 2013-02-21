@@ -91,6 +91,22 @@
             android:text="@string/signup"
             android:background="@drawable/button"
             android:visibility="gone" />
+	    <TextView
+            android:id="@+id/ResetButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingTop="10dip"
+            android:paddingBottom="10dip"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:gravity="center"
+            android:text="@string/reset"
+            android:background="@drawable/button"
+            android:visibility="gone" />
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/LoginButtonLayout"

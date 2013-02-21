@@ -330,15 +330,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         super.onResume();
         if (getScoreTask != null)
             getScoreTask.cancel(true);
-        /*
-        if (correctAnswers == null) {
-            if (tempAnswers != null)
-                tempAnswers.clear();
-            else
-                tempAnswers = new ArrayList<String>();
-            getScore(userId, false, false);
-        }
-        */
         if (user == null)
             user = ParseUser.getCurrentUser();
         if (userId == null && user != null) {
@@ -1175,7 +1166,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             public void done(ParseException e) {
                 if (e == null) {
                     ApplicationEx.mToast.setText("Password reset email has " +
-                            "been sent to this address");
+                            "been sent");
                     ApplicationEx.mToast.show();
                 } else {
                     ApplicationEx.mToast.setText("An error occurred, " +

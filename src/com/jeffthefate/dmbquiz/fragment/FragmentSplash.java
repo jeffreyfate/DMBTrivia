@@ -37,7 +37,7 @@ public class FragmentSplash extends FragmentBase {
     
     private EditText loginUsername;
     private EditText loginPassword;
-    private RelativeLayout emailButtonLayout;
+    private LinearLayout emailButtonLayout;
     private LinearLayout buttonLayout;
     private TextView loginButton;
     private TextView signupButton;
@@ -99,7 +99,7 @@ public class FragmentSplash extends FragmentBase {
             } 
         });
         emailButtonLayout = 
-                (RelativeLayout) view.findViewById(R.id.EmailButtonLayout);
+                (LinearLayout) view.findViewById(R.id.EmailButtonLayout);
         buttonLayout = (LinearLayout) view.findViewById(R.id.ButtonLayout);
         loginButton = (TextView) view.findViewById(R.id.LoginButton);
         loginButton.setOnClickListener(new OnClickListener() {
@@ -244,7 +244,7 @@ public class FragmentSplash extends FragmentBase {
     */
     private void checkSignedUp(String username) {
         ParseQuery query = ParseUser.getQuery();
-        query.whereContains("username", username);
+        query.whereEqualTo("username", username);
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> userList,

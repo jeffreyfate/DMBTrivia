@@ -37,7 +37,7 @@
 	        android:id="@+id/EmailLayout"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:orientation="horizontal"
+	        android:orientation="vertical"
 	        android:visibility="gone"
 	        android:layout_marginBottom="16dip"
             android:layout_gravity="center"
@@ -61,7 +61,7 @@
 			        android:textColorHint="@android:color/white"
 			        android:textSize="44sp"
 			        android:background="@drawable/edit_text"
-			        android:layout_weight="0.45"
+			        android:layout_weight="0.5"
 	                android:layout_marginRight="4dip" />
 			    <EditText
 			        android:id="@+id/LoginPassword"
@@ -75,21 +75,22 @@
 			        android:textColorHint="@android:color/white"
 			        android:textSize="44sp"
 			        android:background="@drawable/edit_text"
-			        android:layout_weight="0.45"
+			        android:layout_weight="0.5"
 			        android:layout_marginLeft="4dip" />
 		    </LinearLayout>
-		    <RelativeLayout
+		    <LinearLayout
 		        android:id="@+id/EmailButtonLayout"
-		        android:layout_width="0dip"
-                android:layout_height="match_parent"
+		        android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:visibility="gone"
-                android:layout_weight="0.55" >
+                android:visibility="gone" >
 			    <TextView
 			        android:id="@+id/LoginButton"
 			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
+			        android:layout_height="match_parent"
+			        android:layout_weight="0.5"
 			        android:textColor="@android:color/black"
 			        android:textSize="44sp"
 			        android:textStyle="bold"
@@ -105,7 +106,8 @@
 			    <TextView
 		            android:id="@+id/SignupButton"
 		            android:layout_width="match_parent"
-		            android:layout_height="wrap_content"
+		            android:layout_height="match_parent"
+		            android:layout_weight="0.5"
 		            android:textColor="@android:color/black"
 		            android:textSize="44sp"
 		            android:textStyle="bold"
@@ -118,7 +120,24 @@
 		            android:text="@string/signup"
 		            android:background="@drawable/button"
 		            android:visibility="gone" />
-		    </RelativeLayout>
+			    <TextView
+                    android:id="@+id/ResetButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:textColor="@android:color/black"
+                    android:textSize="44sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:paddingTop="0dip"
+                    android:paddingBottom="0dip"
+                    android:paddingLeft="20dip"
+                    android:paddingRight="20dip"
+                    android:gravity="center"
+                    android:text="@string/reset"
+                    android:background="@drawable/button"
+                    android:visibility="gone" />
+		    </LinearLayout>
 	    </LinearLayout>
 	    <LinearLayout
 	        android:id="@+id/ButtonLayout"
