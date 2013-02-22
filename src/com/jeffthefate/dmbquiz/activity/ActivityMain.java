@@ -439,18 +439,22 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void onDestroy() {
-    	if (backgroundDrawable instanceof BitmapDrawable)
+    	if (backgroundDrawable != null &&
+    			backgroundDrawable instanceof BitmapDrawable)
     	    ((BitmapDrawable) backgroundDrawable).getBitmap().recycle();
-    	oldBitmapDrawable.getBitmap().recycle();
-    	Drawable drawable = background.getDrawable();
-    	if (drawable instanceof TransitionDrawable) {
-            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(0)))
-            		.getBitmap().recycle();
-            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(1)))
-    				.getBitmap().recycle();
-        }
-        else if (drawable instanceof BitmapDrawable)
-            ((BitmapDrawable) drawable).getBitmap().recycle();
+    	if (oldBitmapDrawable != null)
+    		oldBitmapDrawable.getBitmap().recycle();
+    	if (background != null) {
+	    	Drawable drawable = background.getDrawable();
+	    	if (drawable != null && drawable instanceof TransitionDrawable) {
+	            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(0)))
+	            		.getBitmap().recycle();
+	            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(1)))
+	    				.getBitmap().recycle();
+	        }
+	        else if (drawable != null && drawable instanceof BitmapDrawable)
+	            ((BitmapDrawable) drawable).getBitmap().recycle();
+    	}
     	super.onDestroy();
     }
 
