@@ -1,0 +1,47 @@
+html > body > table > tbody > tr
+                              tr > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr
+                                                                                                            tr > td > div
+                                                                                                                      div
+                                                                                                                      div
+                                                                                                                      div
+                                                                                                                      div > a > span (content is date of next show)
+                                                                                                                      div (content is setlist content does not equal "Next Five Shows")
+                                                                                                                      
+Write cloud code function that returns the setlist for today (JSON array?)
+    If no show today, show the next date and setlist
+
+var date;
+var city;
+var songs = [];
+var nodes = ["table","tbody","tr","tr","td","table","tbody","tr","td","table","tbody","tr","td","table","tbody","tr","tr","td","div","div","div","div","div","div"];
+var node;
+
+function httpGet(theUrl) {
+    var xmlHttp = null;
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false);
+    xmlHttp.send(null);
+    return xmlHttp.responseXML;
+}
+    
+nodewalk = function(node) {
+    for (var i = 0; i < node.length; i++) {
+        if (node[i].nodeValue.toLowerCase() != "Next Five Shows".toLowerCase())
+            break;
+        if (nodes.length == 1)
+            songs[songs.length] = node[i].nodeValue;
+        if (nodes.length > 1 && node[i].nodeName.toLowerCase() == nodes[0].toLowerCase()) {
+            if (nodes.length == 2) {
+                var elements = node[i].getElementsByTagName('span');
+                date = elements[0].nodeValue;
+                city = elements[1].nodeValue;
+            }
+            nodes.shift();
+            nodewalk(node[i].childNodes);
+        }
+    }
+}
+nodewalk(httpGet("http://www.dmbalmanac.com").getElementsByTagName('body')[0]);
+for (var j = 0; j < songs.length; j++) {
+    document.write(songs[j]);
+}

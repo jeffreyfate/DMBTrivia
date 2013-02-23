@@ -3,6 +3,7 @@ package com.jeffthefate.dmbquiz.fragment;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,12 +25,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.CheatSheetMenu;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.R;
@@ -54,6 +57,9 @@ public class FragmentQuiz extends FragmentBase {
     private ImageView answerImage;
     private TextView retryText;
     private Button retryButton;
+    private ViewGroup toolTipView;
+    private ImageView cameraButton;
+    
     private long skipTick = 17000;
     private long hintTick = 15000;
     
@@ -88,6 +94,9 @@ public class FragmentQuiz extends FragmentBase {
         if (!sharedPrefs.contains(getString(R.string.notification_key)))
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
                     true).commit();
+        if (!sharedPrefs.contains(getString(R.string.quicktip_key)))
+            sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
+                    false).commit();
         imm = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
         setHasOptionsMenu(true);
@@ -276,6 +285,7 @@ public class FragmentQuiz extends FragmentBase {
         
         protected void onProgressUpdate(Void... nothing) {
             answerText.setText("");
+            Log.i(Constants.LOG_TAG, "blanking answer");
             answerButton.setText("LOADING");
             //imm.restartInput(answerText);
         }
@@ -378,7 +388,9 @@ public class FragmentQuiz extends FragmentBase {
         protected void onProgressUpdate(Void... nothing) {
             answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
             answerPlace.setVisibility(View.VISIBLE);
+            Log.w(Constants.LOG_TAG, "HintTask setHint: " + answerTextHint);
             answerText.setHint(answerTextHint);
+            Log.i(Constants.LOG_TAG, "restart input HintTask");
             imm.restartInput(answerText);
         }
         
@@ -390,6 +402,8 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
+                (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
         View v = inflater.inflate(R.layout.question, container, false);
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
         scoreText.setOnClickListener(new OnClickListener() {
@@ -399,8 +413,12 @@ public class FragmentQuiz extends FragmentBase {
                     mCallback.onStatsPressed();
             }
         });
+        scoreText.setText(sharedPrefs.getString(
+        		getString(R.string.scoretext_key), ""));
         questionText = (TextView) v.findViewById(R.id.QuestionText);
         questionText.setMovementMethod(new ScrollingMovementMethod());
+        questionText.setText(sharedPrefs.getString(
+        		getString(R.string.questiontext_key), ""));
         answerText = (EditText) v.findViewById(R.id.QuestionAnswer);
         answerText.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
@@ -439,14 +457,21 @@ public class FragmentQuiz extends FragmentBase {
                     int after){}
             public void onTextChanged(CharSequence s, int start, int before,
                     int count){
+            	Log.i(Constants.LOG_TAG, "new text: " + s);
                 /*
                 savedAnswer = s == null ? "" : s.toString();
                 ApplicationEx.dbHelper.setUserValue(savedAnswer,
                         DatabaseHelper.COL_ANSWER, mCallback.getUserId());
                 */
             }
-        }); 
+        });
+        answerText.setText(sharedPrefs.getString(
+        		getString(R.string.answertext_key), ""));
+        answerText.setHint(sharedPrefs.getString(
+        		getString(R.string.hinttext_key), ""));
         answerPlace = (TextView) v.findViewById(R.id.AnswerText);
+        answerPlace.setText(sharedPrefs.getString(
+        		getString(R.string.placetext_key), ""));
         answerButton = (Button) v.findViewById(R.id.QuestionButton);
         answerButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -570,6 +595,14 @@ public class FragmentQuiz extends FragmentBase {
                 }
             }
         });
+        cameraButton = (ImageView) v.findViewById(R.id.CameraButton);
+        cameraButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null)
+	                mCallback.shareScreenshot();
+			}
+        });
         return v;
     }
     
@@ -633,7 +666,9 @@ public class FragmentQuiz extends FragmentBase {
                 DatabaseHelper.COL_HINT, mCallback.getUserId());
         answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
         answerPlace.setVisibility(View.VISIBLE);
+        Log.w(Constants.LOG_TAG, "resumeQuestion setHint: " + answerTextHint);
         answerText.setHint(answerTextHint);
+        Log.i(Constants.LOG_TAG, "restart input resumeQuestion");
         imm.restartInput(answerText);
         answerButton.setVisibility(View.VISIBLE);
         answerButton.setBackgroundResource(R.drawable.button);
@@ -726,6 +761,7 @@ public class FragmentQuiz extends FragmentBase {
                 skipButton.setEnabled(true);
             }
         }
+        cameraButton.setVisibility(View.VISIBLE);
         updateScoreText();
     }
     
@@ -737,8 +773,9 @@ public class FragmentQuiz extends FragmentBase {
             if (ApplicationEx.getConnection()) {
                 mCallback.saveUserScore(mCallback.getCurrentScore());
                 if (mCallback.getQuestionId() != null) {
+                	Log.i(Constants.LOG_TAG, "getNextQuestions onResume");
                     mCallback.getNextQuestions(true);
-                    resumeQuestion();
+                    //resumeQuestion();
                 }
                 else {
                     showNoMoreQuestions();
@@ -768,6 +805,18 @@ public class FragmentQuiz extends FragmentBase {
             hintTimer.cancel();
         if (hintTask != null)
             hintTask.cancel(true);
+        Editor editor = sharedPrefs.edit();
+        editor.putString(getString(R.string.scoretext_key),
+        		scoreText.getText().toString());
+        editor.putString(getString(R.string.questiontext_key),
+        		questionText.getText().toString());
+        editor.putString(getString(R.string.hinttext_key),
+        		answerText.getHint().toString());
+        editor.putString(getString(R.string.answertext_key),
+        		answerText.getText().toString());
+        editor.putString(getString(R.string.placetext_key),
+        		answerPlace.getText().toString());
+        editor.commit();
         super.onPause();
     }
     
@@ -849,6 +898,7 @@ public class FragmentQuiz extends FragmentBase {
                 answerImage.setVisibility(View.VISIBLE);
                 questionText.setTextColor(Color.GREEN);
                 answerText.setText("");
+                Log.i(Constants.LOG_TAG, "blanking answer");
                 //imm.restartInput(answerText);
                 answerButton.setText("NEXT");
                 answerButton.setEnabled(true);
@@ -1047,6 +1097,10 @@ public class FragmentQuiz extends FragmentBase {
                 .setCheckable(true)
                 .setChecked(sharedPrefs.getBoolean(
                         getString(R.string.notification_key), true));
+        menu.findItem(R.id.QuickTips)
+		        .setCheckable(true)
+		        .setChecked(sharedPrefs.getBoolean(
+		                getString(R.string.quicktip_key), true));
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             if (sharedPrefs.getBoolean(getString(R.string.sound_key), true))
                 menu.findItem(R.id.SoundMenu).setTitle("\u2714  Sound");
@@ -1058,6 +1112,10 @@ public class FragmentQuiz extends FragmentBase {
                         "\u2714  Notifications");
             else
                 menu.findItem(R.id.Notifications).setTitle("Notifications");
+            if (sharedPrefs.getBoolean(getString(R.string.quicktip_key), true))
+                menu.findItem(R.id.QuickTips).setTitle("\u2714  Quick Tips");
+            else
+                menu.findItem(R.id.QuickTips).setTitle("Quick Tips");
         }
         super.onPrepareOptionsMenu(menu);
     }
@@ -1070,8 +1128,18 @@ public class FragmentQuiz extends FragmentBase {
                 mCallback.setBackground(mCallback.getBackground(), true);
             break;
         case R.id.LeadersMenu:
-            if (mCallback != null)
+            if (mCallback != null) {
+            	if (!sharedPrefs.contains(getString(R.string.stats_key)) ||
+            			sharedPrefs.getBoolean(getString(R.string.quicktip_key),
+            					false)) {
+                    sharedPrefs.edit().putBoolean(getString(R.string.stats_key),
+                    		true).commit();
+                    CheatSheetMenu.setup(toolTipView, "Touch your score to " +
+                    		"enter Stats & Standings", mCallback.getWidth(),
+                    		mCallback.getHeight());
+                }
                 mCallback.onStatsPressed();
+            }
             break;
         case R.id.SoundMenu:
             item.setChecked(!item.isChecked());
@@ -1085,6 +1153,13 @@ public class FragmentQuiz extends FragmentBase {
             sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
                     !sharedPrefs.getBoolean(
                             getString(R.string.notification_key), true))
+                .commit();
+            break;
+        case R.id.QuickTips:
+            item.setChecked(!item.isChecked());
+            sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
+                    !sharedPrefs.getBoolean(
+                            getString(R.string.quicktip_key), true))
                 .commit();
             break;
         case R.id.ReportMenu:

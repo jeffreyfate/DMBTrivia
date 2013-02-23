@@ -1241,6 +1241,7 @@ com.jeffthefate.dmbquiz.R$color: int com_facebook_usersettingsfragment_not_conne
 com.jeffthefate.dmbquiz.R$color: int dark_gray
 com.jeffthefate.dmbquiz.R$color: int green
 com.jeffthefate.dmbquiz.R$color: int light_gray
+com.jeffthefate.dmbquiz.R$color: int orange
 com.jeffthefate.dmbquiz.R$dimen: int com_facebook_loginview_height
 com.jeffthefate.dmbquiz.R$dimen: int com_facebook_loginview_padding_bottom
 com.jeffthefate.dmbquiz.R$dimen: int com_facebook_loginview_padding_left
@@ -1393,6 +1394,9 @@ com.jeffthefate.dmbquiz.R$id: int Stat2
 com.jeffthefate.dmbquiz.R$id: int Stat2Name
 com.jeffthefate.dmbquiz.R$id: int Stat2Score
 com.jeffthefate.dmbquiz.R$id: int SwitchBackground
+com.jeffthefate.dmbquiz.R$id: int ToolTipLayout
+com.jeffthefate.dmbquiz.R$id: int ToolTipText
+com.jeffthefate.dmbquiz.R$id: int ToolTipTitle
 com.jeffthefate.dmbquiz.R$id: int TwitterLoginButton
 com.jeffthefate.dmbquiz.R$id: int UserLayout
 com.jeffthefate.dmbquiz.R$id: int UserList
@@ -1451,6 +1455,7 @@ com.jeffthefate.dmbquiz.R$layout: int row_category
 com.jeffthefate.dmbquiz.R$layout: int row_standings
 com.jeffthefate.dmbquiz.R$layout: int scores
 com.jeffthefate.dmbquiz.R$layout: int splash
+com.jeffthefate.dmbquiz.R$layout: int tooltip
 com.jeffthefate.dmbquiz.R$menu: int menu_quiz
 com.jeffthefate.dmbquiz.R$menu: int menu_splash
 com.jeffthefate.dmbquiz.R$menu: int menu_stats
@@ -1639,6 +1644,7 @@ com.jeffthefate.dmbquiz.R$string: int NameTitle
 com.jeffthefate.dmbquiz.R$string: int NoConnection
 com.jeffthefate.dmbquiz.R$string: int NoService
 com.jeffthefate.dmbquiz.R$string: int NotificationTitle
+com.jeffthefate.dmbquiz.R$string: int QuickTipsTitle
 com.jeffthefate.dmbquiz.R$string: int ReportTitle
 com.jeffthefate.dmbquiz.R$string: int ScoreDialogText
 com.jeffthefate.dmbquiz.R$string: int ScoreDialogTitle
@@ -1647,10 +1653,12 @@ com.jeffthefate.dmbquiz.R$string: int ShareScreen
 com.jeffthefate.dmbquiz.R$string: int SoundTitle
 com.jeffthefate.dmbquiz.R$string: int StatsLoading
 com.jeffthefate.dmbquiz.R$string: int SwitchBackground
+com.jeffthefate.dmbquiz.R$string: int ToolTipTitle
 com.jeffthefate.dmbquiz.R$string: int answerImage
 com.jeffthefate.dmbquiz.R$string: int app_id
 com.jeffthefate.dmbquiz.R$string: int app_name
 com.jeffthefate.dmbquiz.R$string: int backgroundImage
+com.jeffthefate.dmbquiz.R$string: int background_key
 com.jeffthefate.dmbquiz.R$string: int cancel
 com.jeffthefate.dmbquiz.R$string: int com_facebook_choose_friends
 com.jeffthefate.dmbquiz.R$string: int com_facebook_dialogloginactivity_ok_button
@@ -1692,12 +1700,14 @@ com.jeffthefate.dmbquiz.R$string: int loginEmail
 com.jeffthefate.dmbquiz.R$string: int notification_key
 com.jeffthefate.dmbquiz.R$string: int ok
 com.jeffthefate.dmbquiz.R$string: int passwordHint
+com.jeffthefate.dmbquiz.R$string: int quicktip_key
 com.jeffthefate.dmbquiz.R$string: int reset
 com.jeffthefate.dmbquiz.R$string: int retry
 com.jeffthefate.dmbquiz.R$string: int signup
 com.jeffthefate.dmbquiz.R$string: int skip
 com.jeffthefate.dmbquiz.R$string: int sound_key
 com.jeffthefate.dmbquiz.R$string: int splashTitle
+com.jeffthefate.dmbquiz.R$string: int stats_key
 com.jeffthefate.dmbquiz.R$string: int twitterLogin
 com.jeffthefate.dmbquiz.R$string: int usernameHint
 com.jeffthefate.dmbquiz.R$style: int ActivityTheme

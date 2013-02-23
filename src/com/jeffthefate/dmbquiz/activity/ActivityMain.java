@@ -19,10 +19,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -30,11 +32,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -169,6 +173,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private TransitionDrawable transitionDrawable;
     private BitmapDrawable oldBitmapDrawable = null;
     
+    private int width = 0;
+    private int height = 0;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         /*
@@ -186,6 +193,17 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         */
         super.onCreate(savedInstanceState);
         res = getResources();
+        Display display = getWindowManager().getDefaultDisplay();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
+        	width = display.getWidth();
+        	height = display.getHeight();
+        }
+        else {
+        	Point size = new Point();
+        	display.getSize(size);
+        	width = size.x;
+        	height = size.y;
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         else
@@ -1272,6 +1290,14 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         @Override
         protected Void doInBackground(Void... nothing) {
             loggedIn = false;
+            Editor editor = PreferenceManager.getDefaultSharedPreferences(
+            		ApplicationEx.getApp()).edit();
+            editor.putString(getString(R.string.scoretext_key), "");
+            editor.putString(getString(R.string.questiontext_key), "");
+            editor.putString(getString(R.string.hinttext_key), "");
+            editor.putString(getString(R.string.answertext_key), "");
+            editor.putString(getString(R.string.placetext_key), "");
+            editor.commit();
             if (userTask != null)
                 userTask.cancel(true);
             if (facebookTask != null)
@@ -1353,11 +1379,15 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private void showQuiz() {
         newUser = false;
         try {
-            FragmentQuiz fQuiz = new FragmentQuiz();
-            fMan.beginTransaction().replace(android.R.id.content, fQuiz,
-                    "fQuiz").commitAllowingStateLoss();
-            fMan.executePendingTransactions();
-            currFrag = fQuiz;
+        	if (fMan.findFragmentByTag("fQuiz") == null) {
+	            FragmentQuiz fQuiz = new FragmentQuiz();
+	            fMan.beginTransaction().replace(android.R.id.content, fQuiz,
+	                    "fQuiz").commitAllowingStateLoss();
+	            fMan.executePendingTransactions();
+	            currFrag = fQuiz;
+        	}
+        	else
+        		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
         } catch (IllegalStateException e) {}
     }
     
@@ -1538,6 +1568,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     @Override
     public void getNextQuestions(boolean force) {
+    	Log.e(Constants.LOG_TAG, "getNextQuestions");
         if (getNextQuestionsTask != null)
             getNextQuestionsTask.cancel(true);
         getNextQuestionsTask = new GetNextQuestionsTask(force);
@@ -1556,6 +1587,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         boolean questionNull = false;
         ArrayList<String> stageList;
         boolean force;
+        boolean resumed = false;
         
         private GetNextQuestionsTask(boolean force) {
             this.force = force;
@@ -1712,7 +1744,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                                 thirdQuestionScore = score == null ? "1011" :
                                         Integer.toString(score.intValue());
                             }
-                            getStage(userId, stageList);
+                            getStage(userId, stageList, resumed);
                             if (!isCancelled())
                                 ApplicationEx.dbHelper.setQuestions(userId,
                                         questionId, question, correctAnswer,
@@ -1757,14 +1789,17 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            if (questionId != null && !isCancelled() && !force) {
+            if (questionId != null && !isCancelled()) {
                 if (!loggedIn) {
                     try {
                         goToQuiz();
                     } catch (IllegalStateException exception) {}
                 }
-                else
+                else {
+                	Log.i(Constants.LOG_TAG, "resumeQuestion GetNextQuestionsTask onProgressUpdate");
                     currFrag.resumeQuestion();
+                    resumed = true;
+                }
             }
             else if (questionId == null)
                 questionNull = true;
@@ -1787,8 +1822,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 else {
                     if (questionId == null)
                         currFrag.showNoMoreQuestions();
-                    else
+                    else if (!resumed) {
+                    	Log.i(Constants.LOG_TAG, "resumeQuestion GetNextQuestionsTask onPostExecute");
                         currFrag.resumeQuestion();
+                    }
                 }
             }
         }
@@ -1823,10 +1860,11 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
     }
     
-    private void getStage(String userId, ArrayList<String> questionIds) {
+    private void getStage(String userId, ArrayList<String> questionIds,
+    		boolean resumed) {
         if (getStageTask != null)
             getStageTask.cancel(true);
-        getStageTask = new GetStageTask(userId, questionIds);
+        getStageTask = new GetStageTask(userId, questionIds, resumed);
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
             getStageTask.execute();
@@ -1838,10 +1876,13 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private class GetStageTask extends AsyncTask<Void, Void, Void> {
         private String userId;
         ArrayList<String> questionIds;
+        private boolean resumed = false;
         
-        private GetStageTask(String userId, ArrayList<String> questionIds) {
+        private GetStageTask(String userId, ArrayList<String> questionIds,
+        		boolean resumed) {
             this.userId = userId;
             this.questionIds = questionIds;
+            this.resumed = resumed;
         }
         @Override
         protected Void doInBackground(Void... nothing) {
@@ -1916,8 +1957,10 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     goToQuiz();
                 } catch (IllegalStateException exception) {}
             }
-            else
+            else if (!resumed) {
+            	Log.i(Constants.LOG_TAG, "resumeQuestion GetStageTask");
                 currFrag.resumeQuestion();
+            }
         }
         
         @Override
@@ -2274,6 +2317,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        bitmap.recycle();
         return path;
     }
     
@@ -2389,6 +2433,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public boolean isNewUser() {
         return newUser;
+    }
+    
+    @Override
+    public int getWidth() {
+    	return width;
+    }
+    
+    @Override
+    public int getHeight() {
+    	return height;
     }
     
 }

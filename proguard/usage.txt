@@ -1273,6 +1273,11 @@ com.jeffthefate.dmbquiz.ApplicationEx:
     146:155:public void clearApplicationData()
     158:166:public static boolean deleteDir(java.io.File)
 com.jeffthefate.dmbquiz.BuildConfig
+com.jeffthefate.dmbquiz.CheatSheet
+com.jeffthefate.dmbquiz.CheatSheet$1
+com.jeffthefate.dmbquiz.CheatSheet$2
+com.jeffthefate.dmbquiz.CheatSheet$3
+com.jeffthefate.dmbquiz.CheatSheetMenu
 com.jeffthefate.dmbquiz.Constants:
     public static final java.lang.String LOG_TAG
     public static final java.lang.String ACTION_CONNECTION
@@ -1363,24 +1368,26 @@ com.jeffthefate.dmbquiz.VersionedNotificationBuilder$GingerbreadBuilder
 com.jeffthefate.dmbquiz.VersionedNotificationBuilder$HoneycombBuilder
 com.jeffthefate.dmbquiz.VersionedNotificationBuilder$JellyBeanBuilder
 com.jeffthefate.dmbquiz.activity.ActivityMain:
-    1999:1999:public java.lang.String getQuestionCategory()
-    2009:2009:public boolean getQuestionSkip()
-    2014:2014:public java.lang.String getNextQuestionId()
-    2019:2019:public java.lang.String getNextQuestion()
-    2024:2024:public java.lang.String getNextCorrectAnswer()
-    2029:2029:public java.lang.String getNextQuestionScore()
-    2034:2034:public java.lang.String getNextQuestionCategory()
-    2039:2039:public boolean getNextQuestionHint()
-    2044:2044:public boolean getNextQuestionSkip()
-    2049:2049:public java.lang.String getThirdQuestionId()
-    2054:2054:public java.lang.String getThirdQuestion()
-    2059:2059:public java.lang.String getThirdCorrectAnswer()
-    2064:2064:public java.lang.String getThirdQuestionScore()
-    2069:2069:public java.lang.String getThirdQuestionCategory()
-    2074:2074:public boolean getThirdQuestionHint()
-    2079:2079:public boolean getThirdQuestionSkip()
-    2139:2140:public void setNextQuestionHint(boolean)
-    2169:2170:public void setThirdQuestionHint(boolean)
+    2018:2018:public java.lang.String getQuestionCategory()
+    2028:2028:public boolean getQuestionSkip()
+    2033:2033:public java.lang.String getNextQuestionId()
+    2038:2038:public java.lang.String getNextQuestion()
+    2043:2043:public java.lang.String getNextCorrectAnswer()
+    2048:2048:public java.lang.String getNextQuestionScore()
+    2053:2053:public java.lang.String getNextQuestionCategory()
+    2058:2058:public boolean getNextQuestionHint()
+    2063:2063:public boolean getNextQuestionSkip()
+    2068:2068:public java.lang.String getThirdQuestionId()
+    2073:2073:public java.lang.String getThirdQuestion()
+    2078:2078:public java.lang.String getThirdCorrectAnswer()
+    2083:2083:public java.lang.String getThirdQuestionScore()
+    2088:2088:public java.lang.String getThirdQuestionCategory()
+    2093:2093:public boolean getThirdQuestionHint()
+    2098:2098:public boolean getThirdQuestionSkip()
+    2158:2159:public void setNextQuestionHint(boolean)
+    2188:2189:public void setThirdQuestionHint(boolean)
+    2413:2413:public int getWidth()
+    2418:2418:public int getHeight()
 com.jeffthefate.dmbquiz.activity.ActivityMain$UiCallback
 com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_FACEBOOK
@@ -1388,7 +1395,7 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_ANON
     public static final int SIGNUP_EMAIL
     public static final int LOGIN_EMAIL
-    275:275:public void resetHint()
+    277:277:public void resetHint()
 com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener:
     public abstract java.lang.String getQuestionCategory()
     public abstract boolean getQuestionSkip()
@@ -1409,8 +1416,10 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase$OnButtonListener:
     public abstract void setThirdQuestionHint(boolean)
     public abstract boolean getThirdQuestionSkip()
     public abstract void setDisplayName(java.lang.String)
+    public abstract int getWidth()
+    public abstract int getHeight()
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz:
-    578:581:public void resetHint()
+    586:589:public void resetHint()
 com.jeffthefate.stacktrace.DefaultExceptionHandler:
     private static final java.lang.String TAG
 com.jeffthefate.stacktrace.ExceptionHandler:
