@@ -178,7 +178,7 @@ public class FragmentQuiz extends FragmentBase {
     private class SkipTimer extends CountDownTimer {
         public SkipTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
-            skipTime.setText("");
+            //skipTime.setText("");
             skipText.setTextColor(Color.BLACK);
             skipText.setBackgroundResource(R.drawable.button);
             skipText.setVisibility(View.INVISIBLE);
@@ -614,6 +614,18 @@ public class FragmentQuiz extends FragmentBase {
         	skipButton.setVisibility(View.VISIBLE);
         	cameraButton.setVisibility(View.VISIBLE);
         	// TODO save and restore the state of the hint and skip buttons
+        	hintTime.setVisibility(sharedPrefs.getInt(
+        			getString(R.string.hinttimevis_key), View.VISIBLE));
+        	hintText.setVisibility(sharedPrefs.getInt(
+        			getString(R.string.hinttextvis_key), View.INVISIBLE));
+        	skipTime.setVisibility(sharedPrefs.getInt(
+        			getString(R.string.skiptimevis_key), View.VISIBLE));
+        	skipText.setVisibility(sharedPrefs.getInt(
+        			getString(R.string.skiptextvis_key), View.INVISIBLE));
+        	hintTime.setText(sharedPrefs.getString(
+        			getString(R.string.hintnum_key), ""));
+        	skipTime.setText(sharedPrefs.getString(
+        			getString(R.string.skipnum_key), ""));
         }
         return v;
     }
@@ -828,6 +840,18 @@ public class FragmentQuiz extends FragmentBase {
         		answerText.getText().toString());
         editor.putString(getString(R.string.placetext_key),
         		answerPlace.getText().toString());
+        editor.putInt(getString(R.string.hinttimevis_key),
+        		hintTime.getVisibility());
+        editor.putInt(getString(R.string.hinttextvis_key),
+        		hintText.getVisibility());
+        editor.putInt(getString(R.string.skiptimevis_key),
+        		skipTime.getVisibility());
+        editor.putInt(getString(R.string.skiptextvis_key),
+        		skipText.getVisibility());
+        editor.putString(getString(R.string.hintnum_key),
+        		hintTime.getText().toString());
+        editor.putString(getString(R.string.skipnum_key),
+        		skipTime.getText().toString());
         editor.commit();
         super.onPause();
     }

@@ -1297,6 +1297,12 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             editor.putString(getString(R.string.hinttext_key), "");
             editor.putString(getString(R.string.answertext_key), "");
             editor.putString(getString(R.string.placetext_key), "");
+            editor.putInt(getString(R.string.hinttimevis_key), View.VISIBLE);
+            editor.putInt(getString(R.string.hinttextvis_key), View.INVISIBLE);
+            editor.putInt(getString(R.string.skiptimevis_key), View.VISIBLE);
+            editor.putInt(getString(R.string.skiptextvis_key), View.INVISIBLE);
+            editor.putString(getString(R.string.hintnum_key), "");
+            editor.putString(getString(R.string.skipnum_key), "");
             editor.commit();
             if (userTask != null)
                 userTask.cancel(true);

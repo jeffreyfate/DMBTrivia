@@ -74,7 +74,12 @@
     <string name="hinttext_key">hinttext</string>
     <string name="answertext_key">answertext</string>
     <string name="placetext_key">placetext</string>
-    
+    <string name="hinttimevis_key">hinttimevis</string>    
+    <string name="hinttextvis_key">hinttextvis</string>
+    <string name="skiptimevis_key">skiptimevis</string>
+    <string name="skiptextvis_key">skiptextvis</string>
+    <string name="hintnum_key">hintnum</string>
+    <string name="skipnum_key">skipnum</string>
     
     <string name="leaders">Top Scores</string>
     
