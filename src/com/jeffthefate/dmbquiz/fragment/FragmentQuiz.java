@@ -603,6 +603,18 @@ public class FragmentQuiz extends FragmentBase {
 	                mCallback.shareScreenshot();
 			}
         });
+        if (!sharedPrefs.getString(getString(R.string.scoretext_key), "")
+        		.equals("")) {
+        	scoreText.setVisibility(View.VISIBLE);
+        	questionText.setVisibility(View.VISIBLE);
+        	answerText.setVisibility(View.VISIBLE);
+        	answerPlace.setVisibility(View.VISIBLE);
+        	answerButton.setVisibility(View.VISIBLE);
+        	hintButton.setVisibility(View.VISIBLE);
+        	skipButton.setVisibility(View.VISIBLE);
+        	cameraButton.setVisibility(View.VISIBLE);
+        	// TODO save and restore the state of the hint and skip buttons
+        }
         return v;
     }
     
