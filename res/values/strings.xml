@@ -8,8 +8,6 @@
     <string name="Error">Error</string>
     <string name="HintsUsed">My Hints Used</string>
     <string name="LatestQuestion">Latest Question</string>
-    <string name="Leaders">Leaders</string>
-    <string name="NoConnection">Unable to connect to service</string>
     <string name="StatsLoading">Calculating stats&#8230;</string>
     <string name="LoginLoading">Fetching user info&#8230;</string>
     <string name="Settings">Settings</string>
@@ -67,7 +65,6 @@
     <string name="quicktip_key">quicktip</string>
     
     <string name="stats_key">stats</string>
-    <string name="background_key">background</string>
     
     <string name="scoretext_key">scoretext</string>
     <string name="questiontext_key">questiontext</string>
@@ -84,7 +81,7 @@
     <string name="leaders">Top Scores</string>
     
     <string name="NoService">Service not responding</string>
-    <string name="NoConnection">Can\'t detect connection</string>
+    <string name="NoConnectionToast">Can\'t detect connection</string>
     
     <string name="app_id">463296083721286</string>
     <string name="facebook_name">Logging in with Facebook</string>

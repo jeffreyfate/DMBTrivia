@@ -41,7 +41,8 @@ public class FragmentLoad extends FragmentBase {
                         mCallback.onStatsPressed();
                     }
                     else {
-                        ApplicationEx.mToast.setText(R.string.NoConnection);
+                        ApplicationEx.mToast.setText(
+                        		R.string.NoConnectionToast);
                         ApplicationEx.mToast.show();
                         showNetworkProblem();
                     }
@@ -63,7 +64,7 @@ public class FragmentLoad extends FragmentBase {
                 retryButton.setVisibility(View.INVISIBLE);
             }
             else {
-                ApplicationEx.mToast.setText(R.string.NoConnection);
+                ApplicationEx.mToast.setText(R.string.NoConnectionToast);
                 ApplicationEx.mToast.show();
                 showNetworkProblem();
             }

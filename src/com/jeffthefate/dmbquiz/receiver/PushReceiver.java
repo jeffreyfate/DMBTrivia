@@ -48,7 +48,7 @@ public class PushReceiver extends BroadcastReceiver {
                             Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 nBuilder = new NotificationCompat.Builder(
                         ApplicationEx.getApp());
-                nBuilder. setLargeIcon(BitmapFactory.decodeResource(res,
+                nBuilder.setLargeIcon(BitmapFactory.decodeResource(res,
                             R.drawable.notification_large)).
                     setSmallIcon(R.drawable.notification_large).
                     setWhen(System.currentTimeMillis()).

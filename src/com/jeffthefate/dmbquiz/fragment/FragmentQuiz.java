@@ -588,7 +588,8 @@ public class FragmentQuiz extends FragmentBase {
                             mCallback.getNextQuestions(false);
                     }
                     else {
-                        ApplicationEx.mToast.setText(R.string.NoConnection);
+                        ApplicationEx.mToast.setText(
+                        		R.string.NoConnectionToast);
                         ApplicationEx.mToast.show();
                         showNetworkProblem();
                     }
@@ -814,7 +815,7 @@ public class FragmentQuiz extends FragmentBase {
                 }
             }
             else {
-                ApplicationEx.mToast.setText(R.string.NoConnection);
+                ApplicationEx.mToast.setText(R.string.NoConnectionToast);
                 ApplicationEx.mToast.show();
                 showNetworkProblem();
             }

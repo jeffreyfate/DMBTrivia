@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="IconDensities" severity="ignore" />
+    <issue id="IconDuplicates" severity="ignore" />
+    <issue id="IconDuplicatesConfig">
+        <ignore path="res\drawable-xlarge\edit_text_default.9.png" />
+    </issue>
+    <issue id="IconLocation">
+        <ignore path="res\drawable\notification_large.png" />
+    </issue>
+    <issue id="InlinedApi">
+        <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
+    </issue>
+    <issue id="MissingRegistered">
+        <ignore path="AndroidManifest.xml" />
+    </issue>
     <issue id="MissingTranslation">
         <ignore path="res\values\strings.xml" />
     </issue>
@@ -13,17 +27,23 @@
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentLeaders.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\receiver\ExternalStorageReceiver.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\VersionedNotificationBuilder.java" />
@@ -33,10 +53,17 @@
         <ignore path="src\com\jeffthefate\dmbquiz_dev\fragment\FragmentSplash.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\receiver\ExternalStorageReceiver.java" />
     </issue>
-    <issue id="Overdraw">
+    <issue id="Overdraw" severity="ignore">
+        <ignore path="res\layout-land\info.xml" />
         <ignore path="res\layout\info.xml" />
     </issue>
-    <issue id="UnusedResources">
+    <issue id="SelectableText" severity="ignore">
+        <ignore path="res\layout-large-port\leaders.xml" />
+        <ignore path="res\layout-normal-port\leaders.xml" />
+        <ignore path="res\layout-small-port\leaders.xml" />
+    </issue>
+    <issue id="SmallSp" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore">
         <ignore path="res\drawable-land\splash1.jpeg" />
         <ignore path="res\drawable-land\splash10.jpeg" />
         <ignore path="res\drawable-land\splash11.jpeg" />

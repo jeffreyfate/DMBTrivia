@@ -44,7 +44,8 @@ public class FragmentLogin extends FragmentBase {
                         progress.setVisibility(View.VISIBLE);
                     }
                     else {
-                        ApplicationEx.mToast.setText(R.string.NoConnection);
+                        ApplicationEx.mToast.setText(
+                        		R.string.NoConnectionToast);
                         ApplicationEx.mToast.show();
                         showNetworkProblem();
                     }
@@ -66,7 +67,7 @@ public class FragmentLogin extends FragmentBase {
                 progress.setVisibility(View.VISIBLE);
             }
             else {
-                ApplicationEx.mToast.setText(R.string.NoConnection);
+                ApplicationEx.mToast.setText(R.string.NoConnectionToast);
                 ApplicationEx.mToast.show();
                 showNetworkProblem();
             }
