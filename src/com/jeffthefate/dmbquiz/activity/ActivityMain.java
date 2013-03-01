@@ -84,7 +84,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private ParseUser user;
     private String userId;
     
-    private ImageView background;
     private TextView noConnection;
     
     FragmentManager fMan;
@@ -159,6 +158,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         public void disableButton(boolean isRetry);
         public void enableButton(boolean isRetry);
         public void setDisplayName(String displayName);
+        public Drawable getBackground();
+        public void setBackground(Drawable background);
     }
     
     private NotificationManager nManager;
@@ -176,7 +177,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     private int width = 0;
     private int height = 0;
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         /*
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -219,7 +221,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 } catch (IllegalAccessException e1) {e1.printStackTrace();}
             }
         }
-        background = (ImageView) findViewById(R.id.Background);
         noConnection = (TextView) findViewById(R.id.NoConnection);
         /*
         TEST
@@ -294,11 +295,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         if (currentBackground == null && userId != null)
             currentBackground =
                     ApplicationEx.dbHelper.getCurrBackground(userId);
-        if (currentBackground != null) {
-            int resourceId = res.getIdentifier(currentBackground, "drawable",
-                    getPackageName());
-            background.setImageResource(resourceId);
-        }
         nManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         connReceiver = new ConnectionReceiver();
@@ -462,8 +458,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     	    ((BitmapDrawable) backgroundDrawable).getBitmap().recycle();
     	if (oldBitmapDrawable != null)
     		oldBitmapDrawable.getBitmap().recycle();
-    	if (background != null) {
-	    	Drawable drawable = background.getDrawable();
+    	if (currFrag != null) {
+	    	Drawable drawable = currFrag.getBackground();
 	    	if (drawable != null && drawable instanceof TransitionDrawable) {
 	            ((BitmapDrawable)(((TransitionDrawable) drawable).getDrawable(0)))
 	            		.getBitmap().recycle();
@@ -510,7 +506,8 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     rawIndex = 0;
                 int currentId = fieldsList.get(rawIndex);
                 currentBackground = res.getResourceEntryName(currentId);
-                ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
+                ApplicationEx.dbHelper.setCurrBackground(userId,
+                		currentBackground);
                 if (currentId != resourceId) {
                     try {
                         tempDrawable = res.getDrawable(currentId);
@@ -525,7 +522,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                         	((BitmapDrawable)(transitionDrawable.getDrawable(0)))
 		            				.getBitmap().recycle();
                         }
-                        backgroundDrawable = background.getDrawable();
+                        backgroundDrawable = currFrag.getBackground();
                         if (oldBitmapDrawable != null)
                         	oldBitmapDrawable.getBitmap().recycle();
                         if (backgroundDrawable != null &&
@@ -563,22 +560,30 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         
         @Override
         protected void onPostExecute(Void nothing) {
-            if (showNew) {
-                if (backgroundDrawable != null) {
-                    transitionDrawable = new TransitionDrawable(arrayDrawable);
-                    transitionDrawable.setCrossFadeEnabled(true);
-                    background.setImageDrawable(transitionDrawable);
-                    transitionDrawable.startTransition(500);
-                }
-                else
-                    background.setImageDrawable(tempDrawable);
-            }
-            else {
-                if (fieldsList.indexOf(resourceId) >= 0)
-                    background.setImageResource(resourceId);
-                else
-                    background.setImageResource(R.drawable.splash8);
-            }
+        	if (currFrag != null) {
+	            if (showNew) {
+	                if (backgroundDrawable != null) {
+	                    transitionDrawable =
+	                    		new TransitionDrawable(arrayDrawable);
+	                    transitionDrawable.setCrossFadeEnabled(true);
+	                    currFrag.setBackground(transitionDrawable);
+	                    //background.setImageDrawable(transitionDrawable);
+	                    transitionDrawable.startTransition(500);
+	                }
+	                else
+	                	currFrag.setBackground(tempDrawable);
+	                    //background.setImageDrawable(tempDrawable);
+	            }
+	            else {
+	                if (fieldsList.indexOf(resourceId) >= 0)
+	                	currFrag.setBackground(res.getDrawable(resourceId));
+	                    //background.setImageResource(resourceId);
+	                else
+	                	currFrag.setBackground(
+	                			res.getDrawable(R.drawable.splash8));
+	                    //background.setImageResource(R.drawable.splash8);
+	            }
+        	}
         }
     }
 
@@ -909,20 +914,6 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
             Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-    }
-    
-    @Override
-    public void onInfoPressed() {
-        try {
-            FragmentInfo fInfo = new FragmentInfo();
-            fMan.beginTransaction().replace(android.R.id.content, fInfo,
-                    "fInfo").commitAllowingStateLoss();
-            fMan.executePendingTransactions();
-            currFrag = fInfo;
-            inInfo = true;
-            ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
-                    DatabaseHelper.COL_IN_INFO, userId);
-        } catch (IllegalStateException e) {}
     }
     
     @Override
@@ -1352,6 +1343,21 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         }
     }
     
+    @Override
+    public void onInfoPressed() {
+        try {
+            FragmentInfo fInfo = new FragmentInfo();
+            fMan.beginTransaction().replace(android.R.id.content, fInfo,
+                    "fInfo").commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            currFrag = fInfo;
+            setBackground(currentBackground, false);
+            inInfo = true;
+            ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
+                    DatabaseHelper.COL_IN_INFO, userId);
+        } catch (IllegalStateException e) {}
+    }
+    
     private void showLeaders() {
         try {
             FragmentLeaders fLeaders = new FragmentLeaders();
@@ -1359,6 +1365,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "fLeaders").commitAllowingStateLoss();
             fMan.executePendingTransactions();
             currFrag = fLeaders;
+            setBackground(currentBackground, false);
         } catch (IllegalStateException e) {}
     }
     
@@ -1369,6 +1376,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "fLogin").commitAllowingStateLoss();
             fMan.executePendingTransactions();
             currFrag = fLogin;
+            setBackground(currentBackground, false);
         } catch (IllegalStateException e) {}
     }
     
@@ -1379,6 +1387,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "fSplash").commitAllowingStateLoss();
             fMan.executePendingTransactions();
             currFrag = fSplash;
+            setBackground(currentBackground, false);
         } catch (IllegalStateException e) {}
     }
     
@@ -1394,6 +1403,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         	}
         	else
         		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
+        	setBackground(currentBackground, false);
         } catch (IllegalStateException e) {}
     }
     
@@ -1404,6 +1414,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                     "fLoad").commitAllowingStateLoss();
             fMan.executePendingTransactions();
             currFrag = fLoad;
+            setBackground(currentBackground, false);
         } catch (IllegalStateException e) {}
     }
     
@@ -2305,7 +2316,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
                 fileName;
         
         Bitmap bitmap;
-        View v1 = background.getRootView();
+        View v1 = noConnection.getRootView();
         v1.setDrawingCacheEnabled(true);
         bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);

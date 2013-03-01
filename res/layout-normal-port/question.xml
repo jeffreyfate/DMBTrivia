@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/QuestionLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@android:color/black" >
+    <ImageView
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/backgroundImage" />
     <TextView
         android:id="@+id/ScoreText"
         android:layout_width="wrap_content"
@@ -213,6 +220,7 @@
                 android:visibility="invisible" />
         </RelativeLayout>
     </RelativeLayout>
+    <!--
     <ImageView
         android:id="@+id/CameraButton"
         android:layout_width="wrap_content"
@@ -223,7 +231,6 @@
         android:contentDescription="@string/ShareScreenshot"
         android:src="@drawable/camera"
         android:visibility="invisible" />
-    <!--
     <TextView
         android:id="@+id/CategoryButton"
         android:layout_width="120dip"

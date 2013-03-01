@@ -203,6 +203,7 @@
         android:textStyle="bold"
         android:textSize="24sp"
         android:visibility="gone" />
+    <!--
     <ImageView
         android:id="@+id/CameraButton"
         android:layout_width="wrap_content"
@@ -213,7 +214,6 @@
         android:layout_marginBottom="4dip"
         android:contentDescription="@string/ShareScreenshot"
         android:src="@drawable/camera" />
-    <!--
     <TextView
         android:id="@+id/CategoryButton"
         android:layout_width="120dip"

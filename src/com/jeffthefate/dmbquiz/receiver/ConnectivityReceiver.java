@@ -18,7 +18,8 @@ public class ConnectivityReceiver extends BroadcastReceiver {
     boolean wifiEnabled = false;
     ConnectivityManager connMan;
  
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onReceive(Context context, Intent intent) {
         connMan = (ConnectivityManager) ApplicationEx.getApp()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,9 +40,11 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.slidingmenu.lib.SlidingMenu;
 
 public class FragmentQuiz extends FragmentBase {
     
+	private ImageView backgroundImage;
     private TextView scoreText;
     private TextView questionText;
     private EditText answerText;
@@ -58,7 +60,8 @@ public class FragmentQuiz extends FragmentBase {
     private TextView retryText;
     private Button retryButton;
     private ViewGroup toolTipView;
-    private ImageView cameraButton;
+    private SlidingMenu slidingMenu;
+    //private ImageView cameraButton;
     
     private long skipTick = 17000;
     private long hintTick = 15000;
@@ -404,7 +407,12 @@ public class FragmentQuiz extends FragmentBase {
             Bundle savedInstanceState) {
     	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
                 (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
-        View v = inflater.inflate(R.layout.question, container, false);
+        View v = inflater.inflate(R.layout.slidingquiz, container, false);
+        slidingMenu = (SlidingMenu) v.findViewById(R.id.SlidingMenu);
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		slidingMenu.setTouchModeBehind(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		backgroundImage = (ImageView) v.findViewById(R.id.Background);
+		setBackground(getBackgroundDrawable(mCallback.getBackground()));
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
         scoreText.setOnClickListener(new OnClickListener() {
             @Override
@@ -596,6 +604,7 @@ public class FragmentQuiz extends FragmentBase {
                 }
             }
         });
+        /*
         cameraButton = (ImageView) v.findViewById(R.id.CameraButton);
         cameraButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -604,6 +613,7 @@ public class FragmentQuiz extends FragmentBase {
 	                mCallback.shareScreenshot();
 			}
         });
+        */
         if (!sharedPrefs.getString(getString(R.string.scoretext_key), "")
         		.equals("")) {
         	scoreText.setVisibility(View.VISIBLE);
@@ -613,8 +623,7 @@ public class FragmentQuiz extends FragmentBase {
         	answerButton.setVisibility(View.VISIBLE);
         	hintButton.setVisibility(View.VISIBLE);
         	skipButton.setVisibility(View.VISIBLE);
-        	cameraButton.setVisibility(View.VISIBLE);
-        	// TODO save and restore the state of the hint and skip buttons
+        	//cameraButton.setVisibility(View.VISIBLE);
         	hintTime.setVisibility(sharedPrefs.getInt(
         			getString(R.string.hinttimevis_key), View.VISIBLE));
         	hintText.setVisibility(sharedPrefs.getInt(
@@ -786,7 +795,7 @@ public class FragmentQuiz extends FragmentBase {
                 skipButton.setEnabled(true);
             }
         }
-        cameraButton.setVisibility(View.VISIBLE);
+        //cameraButton.setVisibility(View.VISIBLE);
         updateScoreText();
     }
     
@@ -1303,5 +1312,23 @@ public class FragmentQuiz extends FragmentBase {
             }
         });
     }
+    
+    @Override
+	public void setBackground(Drawable background) {
+    	if (backgroundImage != null) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+    			backgroundImage.setBackgroundDrawable(background);
+    		else
+    			backgroundImage.setBackground(background);
+    	}
+    }
+    
+    @Override
+	public Drawable getBackground() {
+    	if (backgroundImage == null)
+    		return null;
+    	else
+    		return backgroundImage.getBackground();
+	}
     
 }

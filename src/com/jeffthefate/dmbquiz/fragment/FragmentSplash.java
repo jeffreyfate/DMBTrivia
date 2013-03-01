@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -34,6 +36,7 @@ import com.parse.ParseUser;
 
 public class FragmentSplash extends FragmentBase {
     
+	private RelativeLayout splashLayout;
     private EditText loginUsername;
     private EditText loginPassword;
     private LinearLayout emailButtonLayout;
@@ -59,6 +62,8 @@ public class FragmentSplash extends FragmentBase {
             Bundle savedInstanceState) {
         setRetainInstance(true);
         View view = inflater.inflate(R.layout.splash, container, false);
+        splashLayout = (RelativeLayout) view.findViewById(R.id.SplashLayout);
+        setBackground(getBackgroundDrawable(mCallback.getBackground()));
         loginUsername = (EditText) view.findViewById(R.id.LoginUsername);
         loginUsername.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
@@ -337,5 +342,23 @@ public class FragmentSplash extends FragmentBase {
                     Uri.parse("https://www.facebook.com/DMBTrivia"));
         }
     }
+    
+    @Override
+	public void setBackground(Drawable background) {
+    	if (splashLayout != null) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+    			splashLayout.setBackgroundDrawable(background);
+    		else
+    			splashLayout.setBackground(background);
+    	}
+    }
+	
+	@Override
+	public Drawable getBackground() {
+		if (splashLayout == null)
+    		return null;
+    	else
+    		return splashLayout.getBackground();
+	}
     
 }

@@ -1,6 +1,8 @@
 package com.jeffthefate.dmbquiz.fragment;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
@@ -15,6 +18,7 @@ import com.jeffthefate.dmbquiz.R;
 
 public class FragmentLoad extends FragmentBase {
     
+	private RelativeLayout loadLayout;
     private ProgressBar progress;
     private TextView networkText;
     private TextView loadingText;
@@ -26,6 +30,8 @@ public class FragmentLoad extends FragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.load, container, false);
+        loadLayout = (RelativeLayout) view.findViewById(R.id.LoadLayout);
+        setBackground(getBackgroundDrawable(mCallback.getBackground()));
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);
@@ -108,5 +114,23 @@ public class FragmentLoad extends FragmentBase {
             retryButton.setEnabled(true);
         }
     }
+    
+    @Override
+	public void setBackground(Drawable background) {
+    	if (loadLayout != null) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+    			loadLayout.setBackgroundDrawable(background);
+    		else
+    			loadLayout.setBackground(background);
+    	}
+    }
+	
+	@Override
+	public Drawable getBackground() {
+		if (loadLayout == null)
+    		return null;
+    	else
+    		return loadLayout.getBackground();
+	}
     
 }

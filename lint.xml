@@ -13,6 +13,7 @@
     </issue>
     <issue id="MissingRegistered">
         <ignore path="AndroidManifest.xml" />
+        <ignore path="AndroidManifest.xml" />
     </issue>
     <issue id="MissingTranslation">
         <ignore path="res\values\strings.xml" />
@@ -28,6 +29,8 @@
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
@@ -43,6 +46,7 @@
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentSplash.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\receiver\ExternalStorageReceiver.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\receiver\ExternalStorageReceiver.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz_dev\VersionedActionBar.java" />

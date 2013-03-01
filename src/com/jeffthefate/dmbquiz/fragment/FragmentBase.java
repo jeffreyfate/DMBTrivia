@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -263,6 +264,15 @@ public class FragmentBase extends Fragment implements UiCallback {
         audioManager.abandonAudioFocus(afChangeListener);
         super.onPause();
     }
+    
+    protected Drawable getBackgroundDrawable(String name) {
+    	if (name == null)
+    		return res.getDrawable(res.getIdentifier("splash8", "drawable",
+    				getActivity().getPackageName()));
+    	else
+    		return res.getDrawable(res.getIdentifier(name,	"drawable",
+    				getActivity().getPackageName()));
+    }
 
     @Override
     public void updateScoreText() {}
@@ -284,5 +294,11 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     @Override
     public void setDisplayName(String displayName) {}
+
+	@Override
+	public void setBackground(Drawable background) {}
+	
+	@Override
+	public Drawable getBackground() {return null;}
     
 }

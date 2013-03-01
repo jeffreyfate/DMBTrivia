@@ -3,6 +3,7 @@ package com.jeffthefate.dmbquiz.fragment;
 import java.util.ArrayList;
 
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,14 +44,11 @@ public class FragmentLeaders extends FragmentBase {
     private ArrayList<String> scoreList;
     private ArrayList<String> userIdList;
     
-    private Resources res;
-    
     public FragmentLeaders() {}
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        res = getResources();
         setHasOptionsMenu(true);
     }
     
@@ -61,6 +59,7 @@ public class FragmentLeaders extends FragmentBase {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.leaders, container, false);
         leadersLayout = (ViewGroup) view.findViewById(R.id.ListLayout);
+        setBackground(getBackgroundDrawable(mCallback.getBackground()));
         userText = (TextView) view.findViewById(R.id.UserText);
         userAnswerText = (TextView) view.findViewById(R.id.Stat1Name);
         userAnswers = (TextView) view.findViewById(R.id.Stat1Score);
@@ -95,8 +94,6 @@ public class FragmentLeaders extends FragmentBase {
                         mCallback.getUserId(), rankList, userList, scoreList, userIdList,
                         R.layout.row_standings, new String[] {"name", "score"},
                         new int[] {R.id.text1, R.id.text2}));
-                leadersLayout.setBackgroundColor(
-                        res.getColor(R.color.background_dark));
                 isRestored = true;
             }
         }
@@ -144,8 +141,6 @@ public class FragmentLeaders extends FragmentBase {
                             R.layout.row_standings,
                             new String[] {"name", "score"},
                             new int[] {R.id.text1, R.id.text2}));
-                    leadersLayout.setBackgroundColor(
-                            res.getColor(R.color.background_dark));
                     isRestored = true;
                 }
             }
@@ -228,8 +223,6 @@ public class FragmentLeaders extends FragmentBase {
                         userIdList, R.layout.row_standings,
                         new String[] {"name", "score"},
                         new int[] {R.id.text1, R.id.text2}));
-                leadersLayout.setBackgroundColor(
-                        res.getColor(R.color.background_dark));
             }
         }
     }
@@ -291,5 +284,23 @@ public class FragmentLeaders extends FragmentBase {
                 mCallback.setUserName(displayName);
         }
     }
+    
+    @Override
+	public void setBackground(Drawable background) {
+    	if (leadersLayout != null) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+    			leadersLayout.setBackgroundDrawable(background);
+    		else
+    			leadersLayout.setBackground(background);
+    	}
+    }
+	
+	@Override
+	public Drawable getBackground() {
+		if (leadersLayout == null)
+    		return null;
+    	else
+    		return leadersLayout.getBackground();
+	}
     
 }

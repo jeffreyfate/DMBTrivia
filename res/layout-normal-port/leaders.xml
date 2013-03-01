@@ -3,6 +3,13 @@
     android:id="@+id/ListLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    <ImageView
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
     <LinearLayout
 	    android:id="@+id/UserList"
 	    android:layout_width="match_parent"

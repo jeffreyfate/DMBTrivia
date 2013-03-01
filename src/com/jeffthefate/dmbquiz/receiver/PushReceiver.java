@@ -56,7 +56,7 @@ public class PushReceiver extends BroadcastReceiver {
                     setContentText("Touch to play DMB Trivia").
                     setContentIntent(pendingIntent);
                 nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
-                notification = nBuilder.build();
+                notification = nBuilder.getNotification();
                 nManager.notify(null, Constants.NOTIFICATION_NEW_QUESTIONS,
                         notification);
             }
