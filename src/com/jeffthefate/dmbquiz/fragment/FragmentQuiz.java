@@ -409,8 +409,6 @@ public class FragmentQuiz extends FragmentBase {
                 (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
         View v = inflater.inflate(R.layout.slidingquiz, container, false);
         slidingMenu = (SlidingMenu) v.findViewById(R.id.SlidingMenu);
-        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		slidingMenu.setTouchModeBehind(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		backgroundImage = (ImageView) v.findViewById(R.id.Background);
 		setBackground(getBackgroundDrawable(mCallback.getBackground()));
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
