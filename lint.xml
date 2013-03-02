@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="CutPasteId">
+        <ignore path="src\com\jeffthefate\dmbquiz\MenuAdapter.java" />
+    </issue>
     <issue id="IconDensities" severity="ignore" />
     <issue id="IconDuplicates" severity="ignore" />
     <issue id="IconDuplicatesConfig">

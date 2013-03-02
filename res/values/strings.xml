@@ -87,5 +87,6 @@
     <string name="facebook_name">Logging in with Facebook</string>
     
     <string name="ShareScreenshot">Share screenshot</string>
+    <string name="MenuImage">Menu Image</string>
     
 </resources>

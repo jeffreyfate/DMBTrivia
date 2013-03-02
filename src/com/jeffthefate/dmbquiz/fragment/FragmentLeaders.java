@@ -2,7 +2,6 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.ArrayList;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;

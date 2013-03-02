@@ -27,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -35,6 +36,8 @@ import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.CheatSheetMenu;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.MenuAdapter;
+import com.jeffthefate.dmbquiz.MenuRow;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -84,6 +87,10 @@ public class FragmentQuiz extends FragmentBase {
     private String answerTextHint = null;
     
     private InputMethodManager imm;
+    
+    private MenuAdapter textAdapter;
+	
+	private ListView textList;
     
     public FragmentQuiz() {
     }
@@ -405,10 +412,39 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	ArrayList<MenuRow> menuItems = new ArrayList<MenuRow>();
+		menuItems.add(new MenuRow(getString(R.string.LeadersTitle),
+				Constants.MENU_STATS, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.SwitchBackground),
+				Constants.MENU_BACKGROUND, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.SoundTitle),
+				Constants.MENU_SOUND, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.NotificationTitle),
+				Constants.MENU_NOTIFICATIONS, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.QuickTipsTitle),
+				Constants.MENU_QUICKTIPS, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.FollowTitle),
+				Constants.MENU_FOLLOW, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.LikeTitle),
+				Constants.MENU_LIKE, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.ReportTitle),
+				Constants.MENU_REPORT, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.ShareScreen),
+				Constants.MENU_SCREEN, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.NameTitle),
+				Constants.MENU_NAME, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.LogoutTitle),
+				Constants.MENU_LOGOUT, R.drawable.ic_launcher));
+		menuItems.add(new MenuRow(getString(R.string.ExitTitle),
+				Constants.MENU_EXIT, R.drawable.ic_launcher));
+		textAdapter = new MenuAdapter(getActivity(), menuItems, this,
+				sharedPrefs);
     	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
                 (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
         View v = inflater.inflate(R.layout.slidingquiz, container, false);
         slidingMenu = (SlidingMenu) v.findViewById(R.id.SlidingMenu);
+        textList = (ListView) v.findViewById(android.R.id.list);
+		textList.setAdapter(textAdapter);
 		backgroundImage = (ImageView) v.findViewById(R.id.Background);
 		setBackground(getBackgroundDrawable(mCallback.getBackground()));
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
@@ -800,8 +836,8 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        loggingOut = false;
         if (mCallback != null) {
+        	mCallback.setLoggingOut(false);
             if (ApplicationEx.getConnection()) {
                 mCallback.saveUserScore(mCallback.getCurrentScore());
                 if (mCallback.getQuestionId() != null) {
@@ -1041,8 +1077,6 @@ public class FragmentQuiz extends FragmentBase {
         });
     }
     
-    private boolean loggingOut = false;
-    
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("hint", savedHint);
@@ -1051,10 +1085,12 @@ public class FragmentQuiz extends FragmentBase {
         outState.putBoolean("hintPressed", hintPressed);
         outState.putBoolean("skipPressed", skipPressed);
         outState.putBoolean("isCorrect", isCorrect);
-        if (!loggingOut)
-            super.onSaveInstanceState(outState);
-        else
-            super.onSaveInstanceState(null);
+        if (mCallback != null) {
+	        if (!mCallback.isLoggingOut())
+	            super.onSaveInstanceState(outState);
+	        else
+	            super.onSaveInstanceState(null);
+        }
     }
     
     @Override
@@ -1218,7 +1254,7 @@ public class FragmentQuiz extends FragmentBase {
         case R.id.LogoutMenu:
             if (mCallback != null) {
                 ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
-                loggingOut = true;
+                mCallback.setLoggingOut(true);
                 mCallback.setQuestionId(null);
                 mCallback.setQuestion(null);
                 mCallback.setCorrectAnswer(null);
@@ -1328,5 +1364,13 @@ public class FragmentQuiz extends FragmentBase {
     	else
     		return backgroundImage.getBackground();
 	}
+    
+    @Override
+	public void toggleMenu() {
+    	if (!slidingMenu.isBehindShowing())
+    		slidingMenu.showBehind();
+    	else
+    		slidingMenu.showAbove();
+    }
     
 }

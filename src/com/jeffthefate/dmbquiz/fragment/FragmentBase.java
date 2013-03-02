@@ -17,8 +17,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.CheatSheetMenu;
+import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
 import com.parse.Parse;
@@ -26,78 +31,7 @@ import com.parse.Parse;
 public class FragmentBase extends Fragment implements UiCallback {
     
     OnButtonListener mCallback;
-    
-    public interface OnButtonListener {
-        public void setBackground(String name, boolean showNew);
-        public String getBackground();
-        public void onInfoPressed();
-        public void onStatsPressed();
-        public void onLoginPressed(int loginType, String user, String pass);
-        public void setupUser(boolean newUser);
-        public void showScoreDialog();
-        public void showNameDialog();
-        public void logOut(boolean force);
-        public Bundle getLeadersState();
-        public void next();
-        public String getQuestionId();
-        public void setQuestionId(String questionId);
-        public String getQuestion();
-        public void setQuestion(String question);
-        public String getCorrectAnswer();
-        public void setCorrectAnswer(String correctAnswer);
-        public String getQuestionScore();
-        public void setQuestionScore(String questionScore);
-        public String getQuestionCategory();
-        public void setQuestionCategory(String questionCategory);
-        public boolean getQuestionHint();
-        public void setQuestionHint(boolean questionHint);
-        public boolean getQuestionSkip();
-        public String getNextQuestionId();
-        public void setNextQuestionId(String nextQuestionId);
-        public String getNextQuestion();
-        public void setNextQuestion(String nextQuestion);
-        public String getNextCorrectAnswer();
-        public void setNextCorrectAnswer(String nextCorrectAnswer);
-        public String getNextQuestionScore();
-        public void setNextQuestionScore(String nextQuestionScore);
-        public String getNextQuestionCategory();
-        public boolean getNextQuestionHint();
-        public void setNextQuestionHint(boolean nextQuestionHint);
-        public boolean getNextQuestionSkip();
-        public void setNextQuestionCategory(String nextQuestionCategory);
-        public String getThirdQuestionId();
-        public void setThirdQuestionId(String thirdQuestionId);
-        public String getThirdQuestion();
-        public void setThirdQuestion(String thirdQuestion);
-        public String getThirdCorrectAnswer();
-        public void setThirdCorrectAnswer(String thirdCorrectAnswer);
-        public String getThirdQuestionScore();
-        public void setThirdQuestionScore(String thirdQuestionScore);
-        public String getThirdQuestionCategory();
-        public void setThirdQuestionCategory(String thirdQuestionCategory);
-        public boolean getThirdQuestionHint();
-        public void setThirdQuestionHint(boolean thirdQuestionHint);
-        public boolean getThirdQuestionSkip();
-        public void getNextQuestions(boolean force);
-        public String getUserId();
-        public String getDisplayName();
-        public boolean isNewQuestion();
-        public void setIsNewQuestion(boolean isNewQuestion);
-        public int getCurrentScore();
-        public void addCurrentScore(int addValue);
-        public void shareScreenshot();
-        public void setDisplayName(String displayName);
-        public boolean getNetworkProblem();
-        public void setNetworkProblem(boolean networkProblem);
-        public void saveUserScore(final int currTemp);
-        public void addCorrectAnswer(String correctId);
-        public boolean isCorrectAnswer(String correctId);
-        public void setUserName(String userName);
-        public boolean isNewUser();
-        public void resetPassword(String username);
-        public int getWidth();
-        public int getHeight();
-    }
+    private ViewGroup toolTipView;
     
     public static final int LOGIN_FACEBOOK = 0;
     public static final int LOGIN_TWITTER = 1;
@@ -136,6 +70,14 @@ public class FragmentBase extends Fragment implements UiCallback {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
                 ApplicationEx.getApp());
     }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    		Bundle savedInstanceState) {
+    	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
+                (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
+		return null;
+	}
     
     protected Resources res;
     protected SharedPreferences sharedPrefs;
@@ -273,6 +215,98 @@ public class FragmentBase extends Fragment implements UiCallback {
     		return res.getDrawable(res.getIdentifier(name,	"drawable",
     				getActivity().getPackageName()));
     }
+    
+    public void openStats() {
+    	if (mCallback != null) {
+        	if (!sharedPrefs.contains(getString(R.string.stats_key)) ||
+        			sharedPrefs.getBoolean(getString(R.string.quicktip_key),
+        					false)) {
+                sharedPrefs.edit().putBoolean(getString(R.string.stats_key),
+                		true).commit();
+                CheatSheetMenu.setup(toolTipView, "Touch your score to " +
+                		"enter Stats & Standings", mCallback.getWidth(),
+                		mCallback.getHeight());
+            }
+            mCallback.onStatsPressed();
+        }
+    }
+    
+    public void switchBackground() {
+    	if (mCallback != null)
+            mCallback.setBackground(mCallback.getBackground(), true);
+    }
+    
+    public void toggleSounds() {
+        sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
+                !sharedPrefs.getBoolean(getString(R.string.sound_key),
+                        true))
+            .commit();
+    }
+    
+    public void toggleNotifications() {
+        sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
+                !sharedPrefs.getBoolean(
+                        getString(R.string.notification_key), true))
+            .commit();
+    }
+    
+    public void toggleTips() {
+        sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
+                !sharedPrefs.getBoolean(
+                        getString(R.string.quicktip_key), true))
+            .commit();
+    }
+    
+    public void report() {
+    	ApplicationEx.reportQuestion(mCallback.getQuestionId(),
+                mCallback.getQuestion(), mCallback.getCorrectAnswer(),
+                mCallback.getQuestionScore());
+    }
+    
+    public void changeName() {
+    	if (mCallback != null)
+            mCallback.showNameDialog();
+    }
+    
+    public void logOut() {
+    	if (mCallback != null) {
+            ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
+            mCallback.setLoggingOut(true);
+            mCallback.setQuestionId(null);
+            mCallback.setQuestion(null);
+            mCallback.setCorrectAnswer(null);
+            mCallback.setQuestionCategory(null);
+            mCallback.setQuestionScore(null);
+            mCallback.setNextQuestionId(null);
+            mCallback.setNextQuestion(null);
+            mCallback.setNextCorrectAnswer(null);
+            mCallback.setNextQuestionCategory(null);
+            mCallback.setNextQuestionScore(null);
+            mCallback.setThirdQuestionId(null);
+            mCallback.setThirdQuestion(null);
+            mCallback.setThirdCorrectAnswer(null);
+            mCallback.setThirdQuestionCategory(null);
+            mCallback.setThirdQuestionScore(null);
+            mCallback.logOut(true);
+        }
+    }
+    
+    public void shareScreen() {
+    	if (mCallback != null)
+            mCallback.shareScreenshot();
+    }
+    
+    public void exit() {
+    	getActivity().moveTaskToBack(true);
+    }
+    
+    public void follow() {
+    	startActivity(getOpenTwitterIntent());
+    }
+    
+    public void like() {
+    	startActivity(getOpenFacebookIntent());
+    }
 
     @Override
     public void updateScoreText() {}
@@ -300,5 +334,8 @@ public class FragmentBase extends Fragment implements UiCallback {
 	
 	@Override
 	public Drawable getBackground() {return null;}
+
+	@Override
+	public void toggleMenu() {}
     
 }

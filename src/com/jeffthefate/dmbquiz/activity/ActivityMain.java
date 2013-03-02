@@ -34,16 +34,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
@@ -52,10 +53,9 @@ import com.facebook.model.GraphUser;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
-import com.jeffthefate.dmbquiz.VersionedActionBar;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
-import com.jeffthefate.dmbquiz.fragment.FragmentBase.OnButtonListener;
 import com.jeffthefate.dmbquiz.fragment.FragmentInfo;
 import com.jeffthefate.dmbquiz.fragment.FragmentLeaders;
 import com.jeffthefate.dmbquiz.fragment.FragmentLoad;
@@ -79,7 +79,7 @@ import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-public class ActivityMain extends FragmentActivity implements OnButtonListener {
+public class ActivityMain extends SherlockFragmentActivity implements OnButtonListener {
     
     private ParseUser user;
     private String userId;
@@ -96,6 +96,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     
     private boolean loggedIn = false;
     private boolean isLogging = false;
+    private boolean loggingOut = false;
     private boolean inLoad = false;
     private boolean inStats = false;
     private boolean inInfo = false;
@@ -160,6 +161,7 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         public void setDisplayName(String displayName);
         public Drawable getBackground();
         public void setBackground(Drawable background);
+        public void toggleMenu();
     }
     
     private NotificationManager nManager;
@@ -206,10 +208,9 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
         	width = size.x;
         	height = size.y;
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-        else
-            VersionedActionBar.newInstance().create(this).setDisplayHome();
+        ActionBarSherlock sherlock = getSherlock();
+        ActionBar actionBar = sherlock.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.main);
         fields = R.drawable.class.getFields();
         fieldsList = new ArrayList<Integer>();
@@ -470,6 +471,18 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
 	            ((BitmapDrawable) drawable).getBitmap().recycle();
     	}
     	super.onDestroy();
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {    
+        switch (item.getItemId()) {        
+        case android.R.id.home:            
+            currFrag.toggleMenu();
+            return true;        
+        default:            
+            return super.onOptionsItemSelected(item);    
+        }
     }
 
     @Override
@@ -2460,6 +2473,16 @@ public class ActivityMain extends FragmentActivity implements OnButtonListener {
     @Override
     public int getHeight() {
     	return height;
+    }
+    
+    @Override
+    public boolean isLoggingOut() {
+    	return loggingOut;
+    }
+    
+    @Override
+    public void setLoggingOut(boolean loggingOut) {
+    	this.loggingOut = loggingOut;
     }
     
 }

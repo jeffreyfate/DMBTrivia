@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     sliding:viewAbove="@layout/question"
-    sliding:viewBehind="@layout/main2"
+    sliding:viewBehind="@layout/menu"
     sliding:behindScrollScale="0.5"
     sliding:behindOffset="@dimen/actionbar_home_width" />
