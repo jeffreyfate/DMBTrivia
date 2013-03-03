@@ -1,10 +1,359 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
-</RelativeLayout>
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none" >
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	    <LinearLayout
+	        android:id="@+id/ActionsLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_alignParentTop="true" >
+	        <TextView
+	            android:id="@+id/ActionsTitle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/ActionsTitle"
+	            android:textColor="@android:color/white"
+	            android:textStyle="bold"
+	            android:textSize="16sp"
+	            android:layout_marginTop="8dip"
+	            android:layout_marginBottom="8dip"
+	            android:layout_marginLeft="16dip" />
+	        <RelativeLayout
+	            android:id="@+id/StatsButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/StatsImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/LeadersTitle" />
+	            <TextView
+		            android:id="@+id/StatsText"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_toRightOf="@id/StatsImage"
+		            android:layout_centerVertical="true"
+		            android:text="@string/LeadersTitle"
+		            android:textColor="@android:color/black"
+		            android:textStyle="bold"
+		            android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/SwitchButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/SwitchImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/SwitchBackground" />
+	            <TextView
+	                android:id="@+id/SwitchText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/SwitchImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/SwitchBackground"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/ReportButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/ReportImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/ReportTitle" />
+	            <TextView
+	                android:id="@+id/ReportText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/ReportImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/ReportTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/ShareButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/ShareImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/ShareScreen" />
+	            <TextView
+	                android:id="@+id/ShareText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/ShareImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/ShareScreen"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/NameButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/NameImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/NameTitle" />
+	            <TextView
+	                android:id="@+id/NameText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/NameImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/NameTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/ExitButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/ExitImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/ExitTitle" />
+	            <TextView
+	                android:id="@+id/ExitText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/ExitImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/ExitTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/LogoutButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/LogoutImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/LogoutTitle" />
+	            <TextView
+	                android:id="@+id/LogoutText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/LogoutImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/LogoutTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	    </LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/SettingsLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_below="@id/ActionsLayout" >
+	        <TextView
+	            android:id="@+id/SettingsTitle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/SettingsTitle"
+	            android:textColor="@android:color/white"
+	            android:textStyle="bold"
+	            android:textSize="16sp"
+	            android:layout_marginTop="8dip"
+	            android:layout_marginBottom="8dip"
+	            android:layout_marginLeft="16dip" />
+	        <RelativeLayout
+	            android:id="@+id/SoundsButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/SoundsImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/SoundsTitle" />
+	            <CheckedTextView
+	                android:id="@+id/SoundsText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/SoundsImage"
+	                android:layout_centerVertical="true"
+	                android:gravity="center"
+	                android:text="@string/SoundsTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp"
+                    android:checkMark="@drawable/btn_check_holo_dark" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/NotificationsButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/NotificationsImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/NotificationsTitle" />
+	            <CheckedTextView
+	                android:id="@+id/NotificationsText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/NotificationsImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/NotificationsTitle"
+	                android:gravity="center"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp"
+                    android:checkMark="@drawable/btn_check_holo_dark" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/QuickTipsButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/QuickTipsImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/QuickTipsTitle" />
+	            <CheckedTextView
+	                android:id="@+id/QuickTipsText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/QuickTipsImage"
+	                android:layout_centerVertical="true"
+	                android:gravity="center"
+	                android:text="@string/QuickTipsTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp"
+	                android:checkMark="@drawable/btn_check_holo_dark" />
+	        </RelativeLayout>
+	    </LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/SocialLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_below="@id/SettingsLayout" >
+	        <TextView
+	            android:id="@+id/SocialTitle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/SocialTitle"
+	            android:textColor="@android:color/white"
+	            android:textStyle="bold"
+	            android:textSize="16sp"
+	            android:layout_marginTop="8dip"
+	            android:layout_marginBottom="8dip"
+	            android:layout_marginLeft="16dip" />
+	        <RelativeLayout
+	            android:id="@+id/FollowButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/FollowImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/FollowTitle" />
+	            <TextView
+	                android:id="@+id/FollowText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/FollowImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/FollowTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	        <RelativeLayout
+	            android:id="@+id/LikeButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="48dip"
+	            android:background="@drawable/button" >
+	            <ImageView
+	                android:id="@+id/LikeImage"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:src="@drawable/ic_launcher"
+	                android:contentDescription="@string/LikeTitle" />
+	            <TextView
+	                android:id="@+id/LikeText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/LikeImage"
+	                android:layout_centerVertical="true"
+	                android:text="@string/LikeTitle"
+	                android:textColor="@android:color/black"
+	                android:textStyle="bold"
+	                android:textSize="20sp" />
+	        </RelativeLayout>
+	    </LinearLayout>
+	</RelativeLayout>
+</ScrollView>

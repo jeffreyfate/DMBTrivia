@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -36,8 +36,6 @@ import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.CheatSheetMenu;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
-import com.jeffthefate.dmbquiz.MenuAdapter;
-import com.jeffthefate.dmbquiz.MenuRow;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -87,10 +85,6 @@ public class FragmentQuiz extends FragmentBase {
     private String answerTextHint = null;
     
     private InputMethodManager imm;
-    
-    private MenuAdapter textAdapter;
-	
-	private ListView textList;
     
     public FragmentQuiz() {
     }
@@ -412,39 +406,161 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-    	ArrayList<MenuRow> menuItems = new ArrayList<MenuRow>();
-		menuItems.add(new MenuRow(getString(R.string.LeadersTitle),
-				Constants.MENU_STATS, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.SwitchBackground),
-				Constants.MENU_BACKGROUND, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.SoundTitle),
-				Constants.MENU_SOUND, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.NotificationTitle),
-				Constants.MENU_NOTIFICATIONS, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.QuickTipsTitle),
-				Constants.MENU_QUICKTIPS, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.FollowTitle),
-				Constants.MENU_FOLLOW, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.LikeTitle),
-				Constants.MENU_LIKE, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.ReportTitle),
-				Constants.MENU_REPORT, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.ShareScreen),
-				Constants.MENU_SCREEN, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.NameTitle),
-				Constants.MENU_NAME, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.LogoutTitle),
-				Constants.MENU_LOGOUT, R.drawable.ic_launcher));
-		menuItems.add(new MenuRow(getString(R.string.ExitTitle),
-				Constants.MENU_EXIT, R.drawable.ic_launcher));
-		textAdapter = new MenuAdapter(getActivity(), menuItems, this,
-				sharedPrefs);
     	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
                 (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
         View v = inflater.inflate(R.layout.slidingquiz, container, false);
         slidingMenu = (SlidingMenu) v.findViewById(R.id.SlidingMenu);
-        textList = (ListView) v.findViewById(android.R.id.list);
-		textList.setAdapter(textAdapter);
+        statsButton = (RelativeLayout) v.findViewById(R.id.StatsButton);
+        statsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null)
+					mCallback.onStatsPressed();
+			}
+        });
+        switchButton = (RelativeLayout) v.findViewById(R.id.SwitchButton);
+        switchButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null)
+	                mCallback.setBackground(mCallback.getBackground(), true);
+			}
+        });
+        reportButton = (RelativeLayout) v.findViewById(R.id.ReportButton);
+        reportButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				ApplicationEx.reportQuestion(mCallback.getQuestionId(),
+	                    mCallback.getQuestion(), mCallback.getCorrectAnswer(),
+	                    mCallback.getQuestionScore());
+			}
+        });
+        shareButton = (RelativeLayout) v.findViewById(R.id.ShareButton);
+        shareButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null)
+	                mCallback.shareScreenshot();
+			}
+        });
+        nameButton = (RelativeLayout) v.findViewById(R.id.NameButton);
+        nameButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null)
+	                mCallback.showNameDialog();
+			}
+        });
+        exitButton = (RelativeLayout) v.findViewById(R.id.ExitButton);
+        exitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				getActivity().moveTaskToBack(true);
+			}
+        });
+        logoutButton = (RelativeLayout) v.findViewById(R.id.LogoutButton);
+        logoutText = (TextView) v.findViewById(R.id.LogoutText);
+        if (mCallback.getUserId() != null) {
+            if (ApplicationEx.dbHelper.hasUser(mCallback.getUserId()) &&
+                    !ApplicationEx.dbHelper.isAnonUser(mCallback.getUserId())) {
+                if (mCallback.getDisplayName() != null)
+                	logoutText.setText("Logout (" + mCallback.getDisplayName() +
+                			")");
+                statsButton.setVisibility(View.VISIBLE);
+                nameButton.setVisibility(View.VISIBLE);
+            }
+            else {
+            	statsButton.setVisibility(View.GONE);
+            	nameButton.setVisibility(View.GONE);
+            }
+        }
+        else {
+        	statsButton.setVisibility(View.GONE);
+        	nameButton.setVisibility(View.GONE);
+        }
+        logoutButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (mCallback != null) {
+	                ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
+	                mCallback.setLoggingOut(true);
+	                mCallback.setQuestionId(null);
+	                mCallback.setQuestion(null);
+	                mCallback.setCorrectAnswer(null);
+	                mCallback.setQuestionCategory(null);
+	                mCallback.setQuestionScore(null);
+	                mCallback.setNextQuestionId(null);
+	                mCallback.setNextQuestion(null);
+	                mCallback.setNextCorrectAnswer(null);
+	                mCallback.setNextQuestionCategory(null);
+	                mCallback.setNextQuestionScore(null);
+	                mCallback.setThirdQuestionId(null);
+	                mCallback.setThirdQuestion(null);
+	                mCallback.setThirdCorrectAnswer(null);
+	                mCallback.setThirdQuestionCategory(null);
+	                mCallback.setThirdQuestionScore(null);
+	                mCallback.logOut(true);
+	            }
+			}
+        });
+        soundsButton = (RelativeLayout) v.findViewById(R.id.SoundsButton);
+        soundsText = (CheckedTextView) v.findViewById(R.id.SoundsText);
+        soundsText.setChecked(sharedPrefs.getBoolean(
+        		getString(R.string.sound_key), true));
+        soundsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				soundsText.toggle();
+				sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
+	                    !sharedPrefs.getBoolean(getString(R.string.sound_key),
+	                            true))
+	                .commit();
+			}
+        });
+        notificationsButton = (RelativeLayout) v.findViewById(
+        		R.id.NotificationsButton);
+        notificationsText = (CheckedTextView) v.findViewById(
+        		R.id.NotificationsText);
+        notificationsText.setChecked(sharedPrefs.getBoolean(
+        		getString(R.string.notification_key), true));
+        notificationsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				notificationsText.toggle();
+				sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
+	                    !sharedPrefs.getBoolean(
+	                            getString(R.string.notification_key), true))
+	                .commit();
+			}
+        });
+        tipsButton = (RelativeLayout) v.findViewById(R.id.QuickTipsButton);
+        tipsText = (CheckedTextView) v.findViewById(R.id.QuickTipsText);
+        tipsText.setChecked(sharedPrefs.getBoolean(
+        		getString(R.string.quicktip_key), false));
+        tipsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				tipsText.toggle();
+				sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
+	                    !sharedPrefs.getBoolean(
+	                            getString(R.string.quicktip_key), true))
+	                .commit();
+			}
+        });
+        followButton = (RelativeLayout) v.findViewById(R.id.FollowButton);
+        followButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				startActivity(getOpenTwitterIntent());
+			}
+        });
+        likeButton = (RelativeLayout) v.findViewById(R.id.LikeButton);
+        likeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				startActivity(getOpenFacebookIntent());
+			}
+        });
 		backgroundImage = (ImageView) v.findViewById(R.id.Background);
 		setBackground(getBackgroundDrawable(mCallback.getBackground()));
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
@@ -1143,32 +1259,6 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (mCallback.getUserId() != null) {
-            if (ApplicationEx.dbHelper.hasUser(mCallback.getUserId()) &&
-                    !ApplicationEx.dbHelper.isAnonUser(mCallback.getUserId())) {
-                if (mCallback.getDisplayName() != null)
-                    menu.findItem(R.id.LogoutMenu).setTitle("Logout (" +
-                            mCallback.getDisplayName() + ")");
-                else
-                    menu.findItem(R.id.LogoutMenu).setTitle("Logout");
-                menu.findItem(R.id.LeadersMenu).setVisible(true)
-                        .setEnabled(true);
-                menu.findItem(R.id.NameMenu).setVisible(true)
-                        .setEnabled(true);
-            }
-            else {
-                menu.findItem(R.id.LogoutMenu).setTitle("Logout");
-                menu.findItem(R.id.LeadersMenu).setVisible(false)
-                        .setEnabled(false);
-                menu.findItem(R.id.NameMenu).setVisible(false)
-                        .setEnabled(false);
-            }
-        }
-        else {
-            menu.findItem(R.id.LogoutMenu).setTitle("Logout");
-            menu.findItem(R.id.LeadersMenu).setVisible(true).setEnabled(true);
-            menu.findItem(R.id.NameMenu).setVisible(true).setEnabled(true);
-        }
         menu.findItem(R.id.SoundMenu)
                 .setCheckable(true)
                 .setChecked(sharedPrefs.getBoolean(

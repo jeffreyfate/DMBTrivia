@@ -6,7 +6,7 @@
         android:title="@string/SwitchBackground" />
     <item
         android:id="@+id/Notifications"
-        android:title="@string/NotificationTitle" />
+        android:title="@string/NotificationsTitle" />
     <item
         android:id="@+id/FollowMenu"
         android:title="@string/FollowTitle" />

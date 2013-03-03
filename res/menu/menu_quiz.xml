@@ -13,11 +13,11 @@
         android:checkableBehavior="all" >
         <item
 	        android:id="@+id/SoundMenu"
-	        android:title="@string/SoundTitle"
+	        android:title="@string/SoundsTitle"
 	        android:checkable="true" />
         <item
 	        android:id="@+id/Notifications"
-	        android:title="@string/NotificationTitle"
+	        android:title="@string/NotificationsTitle"
 	        android:checkable="true" />
         <item
             android:id="@+id/QuickTips"

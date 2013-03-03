@@ -36,7 +36,7 @@
     <string name="passwordHint">password</string>
     
     <string name="SwitchBackground">Switch Background</string>
-    <string name="SoundTitle">Sounds</string>
+    <string name="SoundsTitle">Sounds</string>
     <string name="LeadersTitle">Stats &amp; Standings</string>
     <string name="LogoutTitle">Logout</string>
     <string name="ExitTitle">Exit</string>
@@ -46,7 +46,7 @@
     <string name="LikeTitle">DMB Trivia on Facebook</string>
     <string name="ReportTitle">Report Question</string>
     <string name="ShareScreen">Share Screenshot</string>
-    <string name="NotificationTitle">Notifications</string>
+    <string name="NotificationsTitle">Notifications</string>
     <string name="NameTitle">Edit Display Name</string>
     <string name="QuickTipsTitle">Quick Tips</string>
     
@@ -88,5 +88,9 @@
     
     <string name="ShareScreenshot">Share screenshot</string>
     <string name="MenuImage">Menu Image</string>
+    
+    <string name="ActionsTitle">ACTIONS</string>
+    <string name="SettingsTitle">SETTINGS</string>
+    <string name="SocialTitle">SOCIAL</string>
     
 </resources>

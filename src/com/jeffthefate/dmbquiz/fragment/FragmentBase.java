@@ -20,6 +20,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.CheatSheetMenu;
@@ -30,8 +33,27 @@ import com.parse.Parse;
 
 public class FragmentBase extends Fragment implements UiCallback {
     
-    OnButtonListener mCallback;
+    protected OnButtonListener mCallback;
     private ViewGroup toolTipView;
+    
+    protected RelativeLayout statsButton;
+    protected RelativeLayout switchButton;
+    protected RelativeLayout reportButton;
+    protected RelativeLayout shareButton;
+    protected RelativeLayout nameButton;
+    protected RelativeLayout exitButton;
+    protected RelativeLayout logoutButton;
+    protected TextView logoutText;
+    
+    protected RelativeLayout soundsButton;
+    protected CheckedTextView soundsText;
+    protected RelativeLayout notificationsButton;
+    protected CheckedTextView notificationsText;
+    protected RelativeLayout tipsButton;
+    protected CheckedTextView tipsText;
+    
+    protected RelativeLayout followButton;
+    protected RelativeLayout likeButton;
     
     public static final int LOGIN_FACEBOOK = 0;
     public static final int LOGIN_TWITTER = 1;
