@@ -36,6 +36,7 @@ public class FragmentNameDialog extends DialogFragment {
         View v = inflater.inflate(R.layout.name, null);
         final EditText newName = (EditText) v.findViewById(R.id.NameDialogText);
         newName.setText(mActivity.getDisplayName());
+        newName.setSelection(newName.getText().length());
         newName.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
