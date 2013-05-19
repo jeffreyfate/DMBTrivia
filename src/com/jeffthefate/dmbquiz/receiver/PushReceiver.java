@@ -83,7 +83,10 @@ public class PushReceiver extends BroadcastReceiver {
                 sb.append(getUpdatedDateString(System.currentTimeMillis()));
                 ApplicationEx.setlistStamp = sb.toString();
                 */
-                ApplicationEx.setlistStamp = getUpdatedDateString(Long.parseLong(json.getString("timestamp")));
+                StringBuilder sb = new StringBuilder();
+                sb.append("Updated:\n");
+                sb.append(getUpdatedDateString(Long.parseLong(json.getString("timestamp"))));
+                ApplicationEx.setlistStamp = sb.toString();
                 ApplicationEx.parseSetlist();
                 Intent setIntent = new Intent(Constants.ACTION_UPDATE_SETLIST);
                 setIntent.putExtra("success", true);
