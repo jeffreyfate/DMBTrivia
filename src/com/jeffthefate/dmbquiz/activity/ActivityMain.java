@@ -73,6 +73,9 @@ import com.jeffthefate.dmbquiz.fragment.FragmentLogin;
 import com.jeffthefate.dmbquiz.fragment.FragmentNameDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentPager;
 import com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -87,9 +90,6 @@ import com.parse.PushService;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class ActivityMain extends SlidingFragmentActivity implements
 		OnButtonListener {

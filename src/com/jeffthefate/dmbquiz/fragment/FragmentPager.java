@@ -25,7 +25,7 @@ import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
-import com.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class FragmentPager extends FragmentBase {
     
