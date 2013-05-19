@@ -36,7 +36,7 @@ public class CheatSheet {
      * The estimated height of a toast, in dips (density-independent pixels). This is used to
      * determine whether or not the toast should appear above or below the UI element.
      */
-    private static final int ESTIMATED_TOAST_HEIGHT_DIPS = 48;
+    private static final int ESTIMATED_TOAST_HEIGHT_DIPS = 96;
 
     /**
      * Sets up a cheat sheet (tooltip) for the given view by setting its {@link

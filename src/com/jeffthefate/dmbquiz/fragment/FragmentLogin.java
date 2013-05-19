@@ -1,24 +1,25 @@
 package com.jeffthefate.dmbquiz.fragment;
 
+import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
 public class FragmentLogin extends FragmentBase {
     
-	private RelativeLayout loginLayout;
     private ProgressBar progress;
     private TextView networkText;
     private TextView loadingText;
@@ -27,11 +28,21 @@ public class FragmentLogin extends FragmentBase {
     public FragmentLogin() {}
     
     @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	if (mCallback != null) {
+    		mCallback.setHomeAsUp(false);
+    		mCallback.setInSetlist(false);
+    	}
+    }
+    
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.load, container, false);
-        loginLayout = (RelativeLayout) view.findViewById(R.id.LoadLayout);
-        setBackground(getBackgroundDrawable(mCallback.getBackground()));
+        background = (ImageViewEx) view.findViewById(R.id.Background);
+        setBackgroundBitmap(mCallback.getBackground(), "splash");
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);
@@ -50,9 +61,7 @@ public class FragmentLogin extends FragmentBase {
                         progress.setVisibility(View.VISIBLE);
                     }
                     else {
-                        ApplicationEx.mToast.setText(
-                        		R.string.NoConnectionToast);
-                        ApplicationEx.mToast.show();
+                        ApplicationEx.showLongToast(R.string.NoConnectionToast);
                         showNetworkProblem();
                     }
                 }
@@ -71,13 +80,35 @@ public class FragmentLogin extends FragmentBase {
                 networkText.setVisibility(View.INVISIBLE);
                 retryButton.setVisibility(View.INVISIBLE);
                 progress.setVisibility(View.VISIBLE);
+                if (mCallback.isLoggingOut())
+                    mCallback.logOut(true);
             }
             else {
-                ApplicationEx.mToast.setText(R.string.NoConnectionToast);
-                ApplicationEx.mToast.show();
+                ApplicationEx.showLongToast(R.string.NoConnectionToast);
                 showNetworkProblem();
             }
         }
+    }
+    
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == 0)
+            return null;
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+
+        anim.setAnimationListener(new AnimationListener() {
+
+            public void onAnimationStart(Animation animation) {}
+
+            public void onAnimationRepeat(Animation animation) {}
+
+            public void onAnimationEnd(Animation animation) {
+                if (mCallback != null && mCallback.isLoggingOut())
+                    mCallback.logOut(true);
+            }
+        });
+
+        return anim;
     }
     
     @Override
@@ -85,19 +116,23 @@ public class FragmentLogin extends FragmentBase {
         enableButton(true);
         if (mCallback != null)
             mCallback.setNetworkProblem(true);
-        progress.setVisibility(View.INVISIBLE);
-        networkText.setVisibility(View.VISIBLE);
-        loadingText.setVisibility(View.GONE);
-        retryButton.setVisibility(View.VISIBLE);
+        try {
+	        progress.setVisibility(View.INVISIBLE);
+	        networkText.setVisibility(View.VISIBLE);
+	        loadingText.setVisibility(View.GONE);
+	        retryButton.setVisibility(View.VISIBLE);
+        } catch (NullPointerException e) {}
     }
     
     @Override
     public void showLoading(String message) {
-        progress.setVisibility(View.VISIBLE);
-        networkText.setVisibility(View.INVISIBLE);
-        retryButton.setVisibility(View.INVISIBLE);
-        loadingText.setText(message);
-        loadingText.setVisibility(View.VISIBLE);
+        try {
+            progress.setVisibility(View.VISIBLE);
+            networkText.setVisibility(View.INVISIBLE);
+            retryButton.setVisibility(View.INVISIBLE);
+            loadingText.setText(message);
+            loadingText.setVisibility(View.VISIBLE);
+        } catch (NullPointerException e) {}
     }
     
     @Override
@@ -117,23 +152,5 @@ public class FragmentLogin extends FragmentBase {
             retryButton.setEnabled(true);
         }
     }
-    
-    @Override
-	public void setBackground(Drawable background) {
-    	if (loginLayout != null) {
-    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-    			loginLayout.setBackgroundDrawable(background);
-    		else
-    			loginLayout.setBackground(background);
-    	}
-    }
-	
-	@Override
-	public Drawable getBackground() {
-		if (loginLayout == null)
-    		return null;
-    	else
-    		return loginLayout.getBackground();
-	}
     
 }

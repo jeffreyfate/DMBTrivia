@@ -61,7 +61,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_THIRD_QUESTION_SCORE = "ThirdQuestionScore";
     public static final String COL_THIRD_QUESTION_HINT = "ThirdQuestionHint";
     public static final String COL_THIRD_QUESTION_SKIP = "ThirdQuestionSkip";
-    public static final String COL_CURR_BACKGROUND = "CurrentBackground";
+    public static final String COL_PORT_BACKGROUND = "CurrentBackground";
+    public static final String COL_LAND_BACKGROUND = "CurrentPortBackground";
+    public static final String COL_SPLASH_BACKGROUND = "SplashBackground";
+    public static final String COL_QUIZ_BACKGROUND = "QuizBackground";
+    public static final String COL_LEADERS_BACKGROUND = "LeadersBackground";
     public static final String COL_HINT = "Hint";
     public static final String COL_SKIP_TICK = "SkipTick";
     public static final String COL_HINT_TICK = "HintTick";
@@ -73,16 +77,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_IN_LOAD = "InLoad";
     public static final String COL_IN_STATS = "InStats";
     public static final String COL_IN_INFO = "InInfo";
+    public static final String COL_IN_SETLIST = "InSetlist";
+    public static final String COL_NEW_SETLIST = "NewSetlist";
     public static final String COL_NEW_QUESTION = "NewQuestion";
     public static final String COL_DISPLAY_NAME = "DisplayName";
     public static final String COL_NETWORK_PROBLEM = "NetworkProblem";
     public static final String COL_SKIP_VIS = "SkipVis";
+    public static final String COL_EASY = "Easy";
+    public static final String COL_MEDIUM = "Medium";
+    public static final String COL_SETLIST = "Setlist";
     
     public static final String COL_USER_TEXT = "UserText";
     public static final String COL_USER_ANSWER_TEXT = "UserAnswerText";
     public static final String COL_USER_ANSWERS = "UserAnswers";
     public static final String COL_USER_HINT_TEXT = "UserHintText";
     public static final String COL_USER_HINTS = "UserHints";
+    public static final String COL_USER_RANK_TEXT = "UserRankText";
     public static final String COL_USER_NAME_TEXT = "UserNameText";
     public static final String COL_USER_SCORE_TEXT = "UserScoreText";
     public static final String COL_LEADER_TEXT = "LeaderText";
@@ -114,8 +124,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT, " + COL_THIRD_QUESTION_CATEGORY + " TEXT, " +
             COL_THIRD_QUESTION_SCORE + " TEXT, " + COL_THIRD_QUESTION_HINT +
             " INTEGER DEFAULT 0, " + COL_THIRD_QUESTION_SKIP +
-            " INTEGER DEFAULT 0, " + COL_CURR_BACKGROUND + " TEXT, " +
-            COL_HINT + " TEXT, " + COL_SKIP_TICK +
+            " INTEGER DEFAULT 0, " + COL_PORT_BACKGROUND + " TEXT," +
+            COL_LAND_BACKGROUND + " TEXT," +
+            COL_SPLASH_BACKGROUND + " TEXT, " +
+            COL_QUIZ_BACKGROUND + " TEXT, " + COL_LEADERS_BACKGROUND + " TEXT, "
+            + COL_HINT + " TEXT, " + COL_SKIP_TICK +
             " INTEGER DEFAULT -1, " + COL_HINT_TICK + " INTEGER DEFAULT -1, " +
             COL_SKIP_PRESSED + " INTEGER DEFAULT 0, " + COL_HINT_PRESSED +
             " INTEGER DEFAULT 0, " + COL_IS_CORRECT + " INTEGER DEFAULT 0, " +
@@ -123,13 +136,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " INTEGER DEFAULT 0, " + COL_LOGGING + " INTEGER DEFAULT 0, " +
             COL_IN_LOAD + " INTEGER DEFAULT 0, " + COL_IN_STATS +
             " INTEGER DEFAULT 0, " + COL_IN_INFO + " INTEGER DEFAULT 0, " +
-            COL_NEW_QUESTION + " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME +
+            COL_IN_SETLIST + " INTEGER DEFAULT 0, " + COL_NEW_SETLIST +
+            " INTEGER DEFAULT 0, " + COL_NEW_QUESTION +
+            " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME +
             " TEXT, " + COL_USER_TEXT + " TEXT, " + COL_USER_ANSWER_TEXT +
             " TEXT, " + COL_USER_ANSWERS + " TEXT, " + COL_USER_HINT_TEXT +
-            " TEXT, " + COL_USER_HINTS + " TEXT, " + COL_USER_NAME_TEXT +
-            " TEXT, " + COL_USER_SCORE_TEXT + " TEXT, " + COL_LEADER_TEXT +
-            " TEXT, " + COL_CREATED_TEXT + " TEXT, " + COL_CREATED_DATE +
-            " TEXT, " + COL_SKIP_VIS + " INTEGER DEFAULT 0)";
+            " TEXT, " + COL_USER_HINTS + " TEXT, " + COL_USER_RANK_TEXT +
+            " TEXT, " + COL_USER_NAME_TEXT + " TEXT, " + COL_USER_SCORE_TEXT +
+            " TEXT, " + COL_LEADER_TEXT + " TEXT, " + COL_CREATED_TEXT +
+            " TEXT, " + COL_CREATED_DATE + " TEXT, " + COL_SKIP_VIS +
+            " INTEGER DEFAULT 0, " + COL_EASY + " INTEGER DEFAULT 0, " +
+            COL_MEDIUM + " INTEGER DEFAULT 0, " + COL_SETLIST + " TEXT)";
     /**
      * Create Question table string
      */
@@ -750,25 +767,122 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currSkip;
     }
     
-    public long setCurrBackground(String userId, String currBackground) {
-    	if (userId == null)
-    		return -1;
+    public long setPortBackground(String userId, String currBackground) {
+        if (userId == null)
+            return -1;
         long returnValue = -1;
         ContentValues cv = new ContentValues();
-        cv.put(COL_CURR_BACKGROUND, currBackground);
+        cv.put(COL_PORT_BACKGROUND, currBackground);
         returnValue = updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
                 new String[] {userId});
         return returnValue;
     }
     
-    public String getCurrBackground(String userId) {
-    	if (userId == null)
-    		return null;
-        Cursor cur = db.query(USER_TABLE, new String[] {COL_CURR_BACKGROUND},
+    public String getPortBackground(String userId) {
+        if (userId == null)
+            return null;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_PORT_BACKGROUND},
                 COL_USER_ID + "=?", new String[] {userId}, null, null, null);
         String background = null;
         if (cur.moveToFirst())
-            background = cur.getString(cur.getColumnIndex(COL_CURR_BACKGROUND));
+            background = cur.getString(
+                    cur.getColumnIndex(COL_PORT_BACKGROUND));
+        cur.close();
+        return background;
+    }
+    
+    public long setLandBackground(String userId, String currBackground) {
+        if (userId == null)
+            return -1;
+        long returnValue = -1;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_LAND_BACKGROUND, currBackground);
+        returnValue = updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                new String[] {userId});
+        return returnValue;
+    }
+    
+    public String getLandBackground(String userId) {
+        if (userId == null)
+            return null;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_LAND_BACKGROUND},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        String background = null;
+        if (cur.moveToFirst())
+            background = cur.getString(
+                    cur.getColumnIndex(COL_LAND_BACKGROUND));
+        cur.close();
+        return background;
+    }
+    
+    public long setSplashBackground(String userId, String currBackground) {
+    	if (userId == null)
+    		return -1;
+        long returnValue = -1;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SPLASH_BACKGROUND, currBackground);
+        returnValue = updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                new String[] {userId});
+        return returnValue;
+    }
+    
+    public String getSplashBackground(String userId) {
+    	if (userId == null)
+    		return null;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_SPLASH_BACKGROUND},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        String background = null;
+        if (cur.moveToFirst())
+            background = cur.getString(
+                    cur.getColumnIndex(COL_SPLASH_BACKGROUND));
+        cur.close();
+        return background;
+    }
+    
+    public long setQuizBackground(String userId, String currBackground) {
+        if (userId == null)
+            return -1;
+        long returnValue = -1;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_QUIZ_BACKGROUND, currBackground);
+        returnValue = updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                new String[] {userId});
+        return returnValue;
+    }
+    
+    public String getQuizBackground(String userId) {
+        if (userId == null)
+            return null;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_QUIZ_BACKGROUND},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        String background = null;
+        if (cur.moveToFirst())
+            background = cur.getString(
+                    cur.getColumnIndex(COL_QUIZ_BACKGROUND));
+        cur.close();
+        return background;
+    }
+    
+    public long setLeadersBackground(String userId, String currBackground) {
+        if (userId == null)
+            return -1;
+        long returnValue = -1;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_LEADERS_BACKGROUND, currBackground);
+        returnValue = updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                new String[] {userId});
+        return returnValue;
+    }
+    
+    public String getLeadersBackground(String userId) {
+        if (userId == null)
+            return null;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_LEADERS_BACKGROUND},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        String background = null;
+        if (cur.moveToFirst())
+            background = cur.getString(
+                    cur.getColumnIndex(COL_LEADERS_BACKGROUND));
         cur.close();
         return background;
     }
@@ -986,6 +1100,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_IN_SETLIST)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_SETLIST +
+                    " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_NEW_SETLIST)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_NEW_SETLIST +
+                    " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_NEW_QUESTION)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_NEW_QUESTION
                     + " INTEGER DEFAULT 0";
@@ -1049,6 +1181,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_USER_RANK_TEXT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+            		COL_USER_RANK_TEXT + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_USER_NAME_TEXT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_USER_NAME_TEXT + " TEXT";
@@ -1103,6 +1244,78 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_EASY)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_EASY
+                    + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_MEDIUM)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_MEDIUM
+                    + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_SETLIST)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_SETLIST
+                    + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_PORT_BACKGROUND)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_PORT_BACKGROUND + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_LAND_BACKGROUND)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_LAND_BACKGROUND + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_SPLASH_BACKGROUND)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_SPLASH_BACKGROUND + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_QUIZ_BACKGROUND)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_QUIZ_BACKGROUND + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_LEADERS_BACKGROUND)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_LEADERS_BACKGROUND + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         boolean upgrade = true;
         cur = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'",
                 null);
@@ -1113,6 +1326,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     upgrade = false;
             } while (cur.moveToNext());
         }
+        cur.close();
         if (upgrade) {
             try {
                 db.execSQL(CREATE_LEADER_TABLE);

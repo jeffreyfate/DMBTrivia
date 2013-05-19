@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jeffthefate.dmbquiz.RelativeLayoutEx xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ListLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Darkness"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -126,11 +133,10 @@
 	        android:textSize="24sp"
 	        android:layout_gravity="center" />
 	</LinearLayout>
-    <LinearLayout
+    <RelativeLayout
 	    android:id="@+id/UserScoreLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
 	    android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="12dp"
@@ -138,28 +144,41 @@
 	    android:layout_gravity="center_vertical"
 	    android:layout_alignParentBottom="true" >
 	    <TextView
-	        android:id="@+id/UserName"
-	        android:layout_width="match_parent"
+	        android:id="@+id/UserRank"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:textStyle="bold"
 	        android:textColor="@color/green"
-	        android:layout_weight="0.3"
 	        android:gravity="left"
+	        android:layout_marginRight="8dip"
+	        android:layout_alignParentLeft="true"
+	        android:textSize="20sp"
+	        android:singleLine="true" />
+	    <TextView
+            android:id="@+id/UserScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Error"
+            android:textStyle="bold"
+            android:textColor="@color/green"
+            android:gravity="right"
+            android:layout_marginLeft="8dip"
+            android:layout_alignParentRight="true"
+            android:textSize="20sp" />
+	    <TextView
+	        android:id="@+id/UserName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textStyle="bold"
+	        android:textColor="@color/green"
+	        android:gravity="left"
+	        android:layout_toRightOf="@id/UserRank"
+	        android:layout_toLeftOf="@id/UserScore"
 	        android:textSize="20sp"
 	        android:ellipsize="end"
 	        android:singleLine="true"
 	        android:text="@string/Error" />
-	    <TextView
-	        android:id="@+id/UserScore"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/Error"
-	        android:textStyle="bold"
-	        android:textColor="@color/green"
-	        android:layout_weight="0.7"
-	        android:gravity="right"
-	        android:textSize="20sp" />
-	</LinearLayout>
+	</RelativeLayout>
 	<ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -194,4 +213,4 @@
             android:visibility="invisible"
             android:layout_centerInParent="true" />
     </RelativeLayout>
-</RelativeLayout>
+</com.jeffthefate.dmbquiz.RelativeLayoutEx>

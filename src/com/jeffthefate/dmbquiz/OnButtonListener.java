@@ -1,17 +1,29 @@
 package com.jeffthefate.dmbquiz;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.slidingmenu.lib.SlidingMenu;
 
 public interface OnButtonListener {
-    public void setBackground(String name, boolean showNew);
+    public void setBackground(String name, boolean showNew, String screen);
+    public void setlistBackground(String name, ImageViewEx background);
+    /*
+    public String getSplashBackground();
+    public String getQuizBackground();
+    public String getLeadersBackground();
+    */
     public String getBackground();
-    public void onInfoPressed();
+    public void onInfoPressed(boolean fresh);
     public void onStatsPressed();
     public void onLoginPressed(int loginType, String user, String pass);
     public void setupUser(boolean newUser);
     public void showScoreDialog();
     public void showNameDialog();
     public void logOut(boolean force);
+    public void startLogout();
+    //public void loadSetlist();
     public Bundle getLeadersState();
     public void next();
     public String getQuestionId();
@@ -53,7 +65,7 @@ public interface OnButtonListener {
     public boolean getThirdQuestionHint();
     public void setThirdQuestionHint(boolean thirdQuestionHint);
     public boolean getThirdQuestionSkip();
-    public void getNextQuestions(boolean force);
+    public void getNextQuestions(boolean force, int level);
     public String getUserId();
     public String getDisplayName();
     public boolean isNewQuestion();
@@ -74,4 +86,14 @@ public interface OnButtonListener {
     public int getHeight();
     public boolean isLoggingOut();
     public void setLoggingOut(boolean loggingOut);
+    public void setHomeAsUp(boolean homeAsUp);
+    public void showQuickTip(View view, String message);
+    public void showQuickTipMenu(ViewGroup view, String message, int location);
+    public SlidingMenu slidingMenu();
+    public boolean getGoToSetlist();
+    public void setInSetlist(boolean inSetlist);
+    public void setNewSetlist(boolean newSetlist);
+    public boolean getInSetlist();
+    public void refreshMenu();
+    public BitmapDrawableEx getDrawable(int resId);
 }

@@ -3,11 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black" >
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="@color/background_dark"
         android:contentDescription="@string/backgroundImage" />
     <TextView
         android:id="@+id/ScoreText"
@@ -38,7 +39,7 @@
         android:textColor="@android:color/white"
         android:textColorHint="@color/dark_gray"
         android:background="@drawable/edit_text" />
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/AnswerImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

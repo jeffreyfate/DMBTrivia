@@ -2,6 +2,7 @@ package com.jeffthefate.dmbquiz.receiver;
 
 import java.io.File;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +18,8 @@ import com.jeffthefate.dmbquiz.Constants;
  */
 public class ExternalStorageReceiver extends BroadcastReceiver {
  
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void onReceive(Context context, Intent intent) {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {

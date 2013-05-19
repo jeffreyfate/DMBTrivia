@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:drawable="@drawable/ic_notification_music_vibrate"
+        android:maxLevel="0"/>
+    <item
+        android:drawable="@drawable/ic_notification_music"
+        android:maxLevel="1"/>
+    <item
+        android:drawable="@drawable/ic_notification_vibrate"
+        android:maxLevel="2"/>
+
+</level-list>

@@ -9,7 +9,18 @@
         <ignore path="res\drawable-xlarge\edit_text_default.9.png" />
     </issue>
     <issue id="IconLocation">
+        <ignore path="res\drawable\away_from_the_world.jpg" />
+        <ignore path="res\drawable\before_these_crowded_streets.jpg" />
+        <ignore path="res\drawable\big_whiskey.jpg" />
+        <ignore path="res\drawable\busted_stuff.jpeg" />
+        <ignore path="res\drawable\crash.jpg" />
+        <ignore path="res\drawable\everyday.jpg" />
         <ignore path="res\drawable\notification_large.png" />
+        <ignore path="res\drawable\recently.jpeg" />
+        <ignore path="res\drawable\remember_two_things.jpg" />
+        <ignore path="res\drawable\some_devil.jpg" />
+        <ignore path="res\drawable\stand_up.jpg" />
+        <ignore path="res\drawable\under_the_table_and_dreaming.jpg" />
     </issue>
     <issue id="InlinedApi">
         <ignore path="src\com\jeffthefate\dmbquiz\VersionedActionBar.java" />
@@ -27,7 +38,7 @@
         <ignore path="res\layout-small-land\question.xml" />
         <ignore path="res\layout-xlarge-land\question.xml" />
     </issue>
-    <issue id="NewApi">
+    <issue id="NewApi" severity="ignore">
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\ApplicationEx.java" />
@@ -42,6 +53,7 @@
         <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\activity\ActivityMain.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentLeaders.java" />
+        <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentLoad.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
         <ignore path="src\com\jeffthefate\dmbquiz\fragment\FragmentQuiz.java" />
@@ -213,6 +225,9 @@
         <ignore path="res\raw\wrong7.mp3" />
         <ignore path="res\raw\wrong8.mp3" />
         <ignore path="res\raw\wrong9.mp3" />
+    </issue>
+    <issue id="UseCompoundDrawables">
+        <ignore path="res\layout\quicktip_left.xml" />
     </issue>
     <issue id="UselessParent">
         <ignore path="res\layout-large-port\question.xml" />

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,28 +23,33 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.ActionBarSherlock;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
@@ -51,8 +57,12 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.BitmapDrawableEx;
+import com.jeffthefate.dmbquiz.CheatSheet;
+import com.jeffthefate.dmbquiz.CheatSheetMenu;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
@@ -61,9 +71,8 @@ import com.jeffthefate.dmbquiz.fragment.FragmentLeaders;
 import com.jeffthefate.dmbquiz.fragment.FragmentLoad;
 import com.jeffthefate.dmbquiz.fragment.FragmentLogin;
 import com.jeffthefate.dmbquiz.fragment.FragmentNameDialog;
-import com.jeffthefate.dmbquiz.fragment.FragmentQuiz;
+import com.jeffthefate.dmbquiz.fragment.FragmentPager;
 import com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog;
-import com.jeffthefate.dmbquiz.fragment.FragmentSplash;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -78,8 +87,12 @@ import com.parse.PushService;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
-public class ActivityMain extends SherlockFragmentActivity implements OnButtonListener {
+public class ActivityMain extends SlidingFragmentActivity implements
+		OnButtonListener {
     
     private ParseUser user;
     private String userId;
@@ -92,7 +105,11 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     private int rawIndex = -1;
     private Field[] fields;
     private ArrayList<Integer> fieldsList;
-    private String currentBackground = null;
+    private String portBackground = null;
+    private String landBackground = null;
+    //private String splashBackground = null;
+    //private String quizBackground = null;
+    //private String leadersBackground = null;
     
     private boolean loggedIn = false;
     private boolean isLogging = false;
@@ -100,6 +117,9 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     private boolean inLoad = false;
     private boolean inStats = false;
     private boolean inInfo = false;
+    private boolean inSetlist = false;
+    
+    private boolean newSetlist = false;
     
     private String questionId;
     private String question;
@@ -143,7 +163,6 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     private UserTask userTask;
     
     private ArrayList<String> correctAnswers;
-    private ArrayList<String> tempAnswers;
     
     private boolean networkProblem = false;
     private boolean facebookLogin = false;
@@ -152,16 +171,20 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     public interface UiCallback {
         public void showNetworkProblem();
         public void showLoading(String message);
-        public void showNoMoreQuestions();
+        public void showNoMoreQuestions(int level);
         public void resumeQuestion();
         public void updateScoreText();
+        public void updateSetText();
         public void resetHint();
         public void disableButton(boolean isRetry);
         public void enableButton(boolean isRetry);
         public void setDisplayName(String displayName);
         public Drawable getBackground();
-        public void setBackground(Drawable background);
-        public void toggleMenu();
+        public void setBackground(Bitmap background);
+        public void showRetry();
+        public int getPage();
+        public void setPage(int page);
+        public void setBackground(Drawable newBackground);
     }
     
     private NotificationManager nManager;
@@ -170,16 +193,62 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     
     private Resources res;
     
-    private Drawable backgroundDrawable;
-    private Drawable tempDrawable;
-    private Drawable[] arrayDrawable = new Drawable[2];
-    private TransitionDrawable transitionDrawable;
-    private BitmapDrawable oldBitmapDrawable = null;
+    private BitmapDrawableEx tempDrawable;
+    //private BitmapDrawableEx[] arrayDrawable = new BitmapDrawableEx[2];
+    //private BitmapDrawableEx oldBitmapDrawable = null;
     
     private int width = 0;
     private int height = 0;
     
-    @SuppressWarnings("deprecation")
+    private int lowest = 0;
+    private int highest = 0;
+    
+    private SlidingMenu slidingMenu;
+    
+    protected RelativeLayout statsButton;
+    protected RelativeLayout switchButton;
+    protected RelativeLayout infoButton;
+    protected RelativeLayout reportButton;
+    protected RelativeLayout shareButton;
+    protected RelativeLayout nameButton;
+    protected RelativeLayout exitButton;
+    protected RelativeLayout logoutButton;
+    protected TextView logoutText;
+    
+    //protected RelativeLayout levelButton;
+    //protected ImageViewEx levelImage;
+    //protected TextView levelText;
+    protected RelativeLayout soundsButton;
+    protected CheckedTextView soundsText;
+    protected RelativeLayout notificationsButton;
+    protected CheckedTextView notificationsText;
+    protected RelativeLayout notificationSoundButton;
+    protected TextView notificationSoundText;
+    protected ImageViewEx notificationSoundImage;
+    protected RelativeLayout notificationAlbumButton;
+    protected CheckedTextView notificationAlbumText;
+    protected ImageViewEx notificationAlbumImage;
+    //protected RelativeLayout tipsButton;
+    //protected CheckedTextView tipsText;
+    
+    protected RelativeLayout followButton;
+    protected RelativeLayout likeButton;
+    
+    protected ViewGroup quickTipView;
+    protected ViewGroup quickTipMenuView;
+    protected ViewGroup quickTipLeftView;
+    protected ViewGroup quickTipRightView;
+    protected ViewGroup quickTipTopView;
+    protected ViewGroup quickTipBottomView;
+    
+    private boolean goToSetlist = false;
+    
+    private Menu mMenu;
+    
+    private SetlistReceiver setlistReceiver;
+    
+    @SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         /*
@@ -195,7 +264,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 .penaltyLog()
                 .build());
         */
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         res = getResources();
         Display display = getWindowManager().getDefaultDisplay();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -208,9 +277,6 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         	width = size.x;
         	height = size.y;
         }
-        ActionBarSherlock sherlock = getSherlock();
-        ActionBar actionBar = sherlock.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.main);
         fields = R.drawable.class.getFields();
         fieldsList = new ArrayList<Integer>();
@@ -239,8 +305,19 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             inLoad = savedInstanceState.getBoolean("inLoad");
             inStats = savedInstanceState.getBoolean("inStats");
             inInfo = savedInstanceState.getBoolean("inInfo");
-            currentBackground = savedInstanceState.getString(
-                    "currentBackground");
+            inSetlist = savedInstanceState.getBoolean("inSetlist");
+            newSetlist = savedInstanceState.getBoolean("newSetlist");
+            /*
+            splashBackground = savedInstanceState.getString(
+                    "splashBackground");
+            quizBackground = savedInstanceState.getString(
+                    "quizBackground");
+            Log.i(Constants.LOG_TAG, "ActivityMain savedInstanceState background: " + quizBackground);
+            leadersBackground = savedInstanceState.getString(
+                    "leadersBackground");
+            */
+            portBackground = savedInstanceState.getString("portBackground");
+            landBackground = savedInstanceState.getString("landBackground");
             userId = savedInstanceState.getString("userId");
             questionId = savedInstanceState.getString("questionId");
             question = savedInstanceState.getString("question");
@@ -279,6 +356,8 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             correctAnswers = savedInstanceState.getStringArrayList(
                     "correctAnswers");
             newUser = savedInstanceState.getBoolean("newUser");
+            lowest = savedInstanceState.getInt("lowest");
+            highest = savedInstanceState.getInt("highest");
             networkProblem = savedInstanceState.getBoolean("networkProblem");
             ApplicationEx.dbHelper.setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
@@ -293,12 +372,82 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             if (userId != null)
                 getUserData(userId);
         }
-        if (currentBackground == null && userId != null)
-            currentBackground =
-                    ApplicationEx.dbHelper.getCurrBackground(userId);
+        /*
+        if (userId != null) {
+            if (splashBackground == null)
+                splashBackground =
+                        ApplicationEx.dbHelper.getSplashBackground(userId);
+            if (quizBackground == null)
+                quizBackground =
+                        ApplicationEx.dbHelper.getQuizBackground(userId);
+            if (leadersBackground == null)
+                leadersBackground =
+                        ApplicationEx.dbHelper.getLeadersBackground(userId);
+        }
+        */
+        if (userId != null) {
+            if (portBackground == null)
+                portBackground = ApplicationEx.dbHelper.getPortBackground(userId);
+            if (landBackground == null)
+                landBackground = ApplicationEx.dbHelper.getLandBackground(userId);
+        }
         nManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         connReceiver = new ConnectionReceiver();
+        slidingMenu = getSlidingMenu();
+        slidingMenu.setShadowWidthRes(R.dimen.shadow_width);
+        slidingMenu.setBehindOffsetRes(R.dimen.actionbar_home_width);
+        slidingMenu.setFadeDegree(0.35f);
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        if (!ApplicationEx.sharedPrefs.contains(
+                res.getString(R.string.notification_key))) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                ApplicationEx.sharedPrefs.edit().putBoolean(
+                        res.getString(R.string.notification_key), true).commit();
+            else
+                ApplicationEx.sharedPrefs.edit().putBoolean(
+                        res.getString(R.string.notification_key), true).apply();
+        }
+        if (!ApplicationEx.sharedPrefs.contains(
+                res.getString(R.string.level_key))) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+                ApplicationEx.sharedPrefs.edit().putInt(
+                        res.getString(R.string.level_key),
+                        Constants.HARD).commit();
+            else
+                ApplicationEx.sharedPrefs.edit().putInt(
+                        res.getString(R.string.level_key),
+                        Constants.HARD).apply();
+        }
+        if (!ApplicationEx.sharedPrefs.contains(
+                res.getString(R.string.notificationsound_key))) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                ApplicationEx.sharedPrefs.edit().putInt(
+                        res.getString(R.string.notificationsound_key), 0).commit();
+            else
+                ApplicationEx.sharedPrefs.edit().putInt(
+                        res.getString(R.string.notificationsound_key), 0).apply();
+        }
+        if (!ApplicationEx.sharedPrefs.contains(
+                res.getString(R.string.notificationtype_key))) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                ApplicationEx.sharedPrefs.edit().putBoolean(
+                        res.getString(R.string.notificationtype_key), true).commit();
+            else
+                ApplicationEx.sharedPrefs.edit().putBoolean(
+                        res.getString(R.string.notificationtype_key), true).apply();
+        }
+        refreshSlidingMenu();
+        setlistReceiver = new SetlistReceiver();
+    }
+    
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra("setlist", false))
+            goToSetlist = true;
+        else
+            goToSetlist = false;
     }
     
     @Override
@@ -308,7 +457,15 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         outState.putBoolean("inLoad", inLoad);
         outState.putBoolean("inStats", inStats);
         outState.putBoolean("inInfo", inInfo);
-        outState.putString("currentBackgrond", currentBackground);
+        outState.putBoolean("inSetlist", inSetlist);
+        outState.putBoolean("newSetlist", newSetlist);
+        /*
+        outState.putString("splashBackground", splashBackground);
+        outState.putString("quizBackground", quizBackground);
+        outState.putString("leadersBackground", leadersBackground);
+        */
+        outState.putString("portBackground", portBackground);
+        outState.putString("landBackground", landBackground);
         outState.putString("userId", userId);
         outState.putString("questionId", questionId);
         outState.putString("question", question);
@@ -336,6 +493,8 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         outState.putInt("currScore", currScore);
         outState.putStringArrayList("correctAnswers", correctAnswers);
         outState.putBoolean("newUser", newUser);
+        outState.putInt("lowest", lowest);
+        outState.putInt("highest", highest);
         outState.putBoolean("networkProblem", networkProblem);
         super.onSaveInstanceState(outState);
     }
@@ -352,6 +511,8 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             if (userId != null)
                 getUserData(userId);
         }
+        if (user != null)
+        	getFacebookDisplayName(user);
         if (!isLogging) {
             if (userId == null) {
                 if (!loggedIn)
@@ -362,11 +523,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             else {
                 if (correctAnswers == null) {
                     isLogging = true;
-                    showLogin();
-                    if (tempAnswers != null)
-                        tempAnswers.clear();
-                    else
-                        tempAnswers = new ArrayList<String>();
+                    showLogin(true);
                     getScore(false, true, userId, false);
                 }
                 else
@@ -380,11 +537,30 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 checkUser();
         }
         if (inInfo)
-            onInfoPressed();
+            onInfoPressed(true);
+        /*
+        if (inSetlist)
+            showSetlist(false);
+        */
         ApplicationEx.setActive();
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
         registerReceiver(connReceiver,
                 new IntentFilter(Constants.ACTION_CONNECTION));
+        registerReceiver(setlistReceiver,
+                new IntentFilter(Constants.ACTION_UPDATE_SETLIST));
+        /*
+        if (!inSetlist) {
+            if (invalidateWaitTask != null)
+                invalidateWaitTask.cancel(true);
+            invalidateWaitTask = new InvalidateWaitTask(this);
+            if (Build.VERSION.SDK_INT <
+                    Build.VERSION_CODES.HONEYCOMB)
+                invalidateWaitTask.execute();
+            else
+                invalidateWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+        */
+            
     }
     
     @Override
@@ -395,19 +571,19 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             if (inLoad) {
                 if (getStatsTask != null)
                     getStatsTask.cancel(true);
-                showQuiz();
+                showQuiz(true, false);
                 inLoad = false;
                 ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
                         DatabaseHelper.COL_IN_LOAD, userId);
             }
             else if (inStats) {
-                showQuiz();
                 inStats = false;
                 ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
                         DatabaseHelper.COL_IN_STATS, userId);
+                showQuiz(true, false);
             }
             else if (inInfo) {
-                showSplash();
+                showSplash(true, false);
                 inInfo = false;
                 ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
                         DatabaseHelper.COL_IN_INFO, userId);
@@ -415,8 +591,6 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             else if (isLogging) {
                 if (userTask != null)
                     userTask.cancel(true);
-                if (facebookTask != null)
-                    facebookTask.cancel(true);
                 if (getScoreTask != null)
                     getScoreTask.cancel(true);
                 logOut(true);
@@ -428,6 +602,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     public void onPause() {
         try {
             unregisterReceiver(connReceiver);
+            unregisterReceiver(setlistReceiver);
         } catch (IllegalArgumentException e) {}
         if (getStageTask != null)
             getStageTask.cancel(true);
@@ -435,25 +610,17 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             getNextQuestionsTask.cancel(true);
         if (userTask != null)
             userTask.cancel(true);
-        if (facebookTask != null)
-            facebookTask.cancel(true);
         if (getStatsTask != null)
             getStatsTask.cancel(true);
-        if (!isLogging && userId != null) {
-            if (getScoreTask != null)
-                getScoreTask.cancel(true);
-            if (tempAnswers != null)
-                tempAnswers.clear();
-            else
-                tempAnswers = new ArrayList<String>();
+        if (!isLogging && userId != null)
             getScore(false, false, userId, false);
-        }
         ApplicationEx.setInactive();
         super.onPause();
     }
     
     @Override
     public void onDestroy() {
+    	/*
     	if (backgroundDrawable != null &&
     			backgroundDrawable instanceof BitmapDrawable)
     	    ((BitmapDrawable) backgroundDrawable).getBitmap().recycle();
@@ -470,100 +637,412 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
 	        else if (drawable != null && drawable instanceof BitmapDrawable)
 	            ((BitmapDrawable) drawable).getBitmap().recycle();
     	}
+    	*/
+        if (setBackgroundTask != null)
+            setBackgroundTask.cancel(true);
+        if (setBackgroundWaitTask != null)
+            setBackgroundWaitTask.cancel(true);
+        if (setlistBackgroundWaitTask != null)
+            setlistBackgroundWaitTask.cancel(true);
+        if (getScoreTask != null)
+            getScoreTask.cancel(true);
     	super.onDestroy();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.menu_setlist, menu);
+        mMenu = menu;
+        refreshMenu();
+        return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {    
         switch (item.getItemId()) {        
-        case android.R.id.home:            
-            currFrag.toggleMenu();
-            return true;        
+        case android.R.id.home:
+            if (currFrag != null) {
+                if (currFrag instanceof FragmentPager) {
+                    if (currFrag.getPage() == 1)
+                        currFrag.setPage(0);
+                    else
+                        toggle();
+                }
+                else
+                    toggle();
+            }
+            return true;
+        case R.id.ShareMenu:
+            ApplicationEx.showShortToast("Capturing screen");
+            if (screenshotTask != null)
+                screenshotTask.cancel(true);
+            screenshotTask = new ScreenshotTask();
+            if (Build.VERSION.SDK_INT <
+                    Build.VERSION_CODES.HONEYCOMB)
+                screenshotTask.execute();
+            else
+                screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            return true;
+        case R.id.SetlistMenu:
+            if (currFrag instanceof FragmentPager)
+                ((FragmentPager)currFrag).setPage(1);
+            return true;
         default:            
             return super.onOptionsItemSelected(item);    
         }
     }
+    
+    private SetBackgroundTask setBackgroundTask;
+    private SetBackgroundWaitTask setBackgroundWaitTask;
+    private SetlistBackgroundWaitTask setlistBackgroundWaitTask;
 
+    @SuppressLint("NewApi")
+	@Override
+    public void setBackground(final String name, final boolean showNew,
+            final String screen) {
+        if (!showNew) {
+            if (name == null)
+                return;
+            if (setBackgroundTask != null)
+                setBackgroundTask.cancel(true);
+            /*
+            setBackgroundTask = new SetBackgroundTask(name, showNew, screen, null);
+            try {
+                setBackgroundTask.get(1000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (Build.VERSION.SDK_INT <
+                    Build.VERSION_CODES.HONEYCOMB)
+                setBackgroundTask.execute();
+            else
+                setBackgroundTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            */
+            int resourceId = res.getIdentifier(name, "drawable", getPackageName());
+            try {
+                if (name.equals("setlist")) {
+                    ApplicationEx.setSetlistDrawable(getDrawable(resourceId));
+                    if (currFrag != null)
+                        currFrag.setBackground(ApplicationEx.getSetlistDrawable());
+                }
+                else {
+                    if (fieldsList.indexOf(resourceId) >= 0)
+                        ApplicationEx.setBackgroundDrawable(getDrawable(resourceId));
+                    else
+                        ApplicationEx.setBackgroundDrawable(getDrawable(R.drawable.splash4));
+                    if (currFrag != null)
+                        currFrag.setBackground(ApplicationEx.getBackgroundDrawable());
+                }
+            } catch (RuntimeException err) {
+                Log.e(Constants.LOG_TAG, "Failed to set background!", err);
+                if (setBackgroundWaitTask != null)
+                    setBackgroundWaitTask.cancel(true);
+                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew, screen);
+                if (Build.VERSION.SDK_INT <
+                        Build.VERSION_CODES.HONEYCOMB)
+                    setBackgroundWaitTask.execute();
+                else
+                    setBackgroundWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } catch (OutOfMemoryError memErr) {
+                ApplicationEx.showShortToast("Error setting background");
+                /*
+                if (setBackgroundWaitTask != null)
+                    setBackgroundWaitTask.cancel(true);
+                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew, screen);
+                if (Build.VERSION.SDK_INT <
+                        Build.VERSION_CODES.HONEYCOMB)
+                    setBackgroundWaitTask.execute();
+                else
+                    setBackgroundWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                */
+            }
+        }
+        else {
+        	if (setBackgroundTask != null)
+        		setBackgroundTask.cancel(true);
+        	setBackgroundTask = new SetBackgroundTask(name, showNew, screen, null);
+            if (Build.VERSION.SDK_INT <
+                    Build.VERSION_CODES.HONEYCOMB)
+            	setBackgroundTask.execute();
+            else
+            	setBackgroundTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+    
+    private class SetBackgroundWaitTask extends AsyncTask<Void, Void, Void> {
+        private String name;
+        private boolean showNew;
+        private String screen;
+        
+        private SetBackgroundWaitTask(String name, boolean showNew,
+                String screen) {
+            this.name = name;
+            this.showNew = showNew;
+            this.screen = screen;
+        }
+        
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            if (isCancelled())
+                return null;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            if (!isCancelled()) {
+                setBackground(name, showNew, screen);
+            }
+        }
+    }
+    
     @Override
-    public void setBackground(String name, boolean showNew) {
+    public void setlistBackground(final String name,
+            final ImageViewEx background) {
+        if (name == null)
+            return;
+        int resourceId = res.getIdentifier(name, "drawable", getPackageName());
+        if (background != null) {
+            try {
+                ApplicationEx.setSetlistDrawable(getDrawable(resourceId));
+                background.setImageDrawable(ApplicationEx.getSetlistDrawable());
+            } catch (OutOfMemoryError memErr) {
+                ApplicationEx.showShortToast("Error setting setlist");
+                /*
+                if (setlistBackgroundWaitTask != null)
+                    setlistBackgroundWaitTask.cancel(true);
+                setlistBackgroundWaitTask = new SetlistBackgroundWaitTask(name, background);
+                if (Build.VERSION.SDK_INT <
+                        Build.VERSION_CODES.HONEYCOMB)
+                    setlistBackgroundWaitTask.execute();
+                else
+                    setlistBackgroundWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                */
+            }
+        }
+        /*
+        if (setlistBackgroundTask != null)
+            setlistBackgroundTask.cancel(true);
+        setlistBackgroundTask = new SetBackgroundTask(name, false, "setlist",
+                background);
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
-            new SetBackgroundTask(name, showNew).execute();
+            setlistBackgroundTask.execute();
         else
-            new SetBackgroundTask(name, showNew).executeOnExecutor(
-                    AsyncTask.THREAD_POOL_EXECUTOR);
+            setlistBackgroundTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        */
+    }
+    
+    private class SetlistBackgroundWaitTask extends AsyncTask<Void, Void, Void> {
+        private String name;
+        private ImageViewEx background;
+        
+        private SetlistBackgroundWaitTask(String name, ImageViewEx background) {
+            this.name = name;
+            this.background = background;
+        }
+        
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            if (isCancelled())
+                return null;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {}
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            if (!isCancelled())
+                setlistBackground(name, background);
+        }
     }
     
     private class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
         private String name;
         private boolean showNew;
+        private String screen;
+        
+        private int currentId;
         private int resourceId;
         
-        private SetBackgroundTask(String name, boolean showNew) {
+        private SetBackgroundTask(String name, boolean showNew, String screen,
+                ImageViewEx background) {
             this.name = name;
             this.showNew = showNew;
+            this.screen = screen;
         }
         
         @Override
         protected Void doInBackground(Void... nothing) {
+            if (isCancelled())
+                return null;
             if (name == null)
-                name = "splash8";
+                name = "splash4";
             resourceId = res.getIdentifier(name, "drawable", getPackageName());
+            if (isCancelled())
+                return null;
             if (showNew) {
                 rawIndex = fieldsList.indexOf(resourceId);
                 if (rawIndex < 0)
-                    rawIndex = fieldsList.indexOf(R.drawable.splash8);
+                    rawIndex = fieldsList.indexOf(R.drawable.splash4);
                 rawIndex++;
                 if (rawIndex >= fieldsList.size())
                     rawIndex = 0;
-                int currentId = fieldsList.get(rawIndex);
-                currentBackground = res.getResourceEntryName(currentId);
-                ApplicationEx.dbHelper.setCurrBackground(userId,
-                		currentBackground);
+                currentId = fieldsList.get(rawIndex);
+                if (isCancelled())
+                    return null;
+                switch(res.getConfiguration().orientation) {
+                case Configuration.ORIENTATION_PORTRAIT:
+                    portBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    break;
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    landBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                    break;
+                default:
+                    portBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    break;
+                }
+                if (isCancelled())
+                    return null;
+                /*
+                Log.d(Constants.LOG_TAG, "SWITCH: " + currentBackground);
+                if (screen.equals("splash")) {
+                    ApplicationEx.dbHelper.setSplashBackground(userId,
+                            currentBackground);
+                    splashBackground = currentBackground;
+                }
+                else if (screen.equals("quiz")) {
+                    ApplicationEx.dbHelper.setQuizBackground(userId,
+                            currentBackground);
+                    quizBackground = currentBackground;
+                }
+                else if (screen.equals("leaders")) {
+                    ApplicationEx.dbHelper.setLeadersBackground(userId,
+                            currentBackground);
+                    leadersBackground = currentBackground;
+                }
+                */
+                if (isCancelled())
+                    return null;
                 if (currentId != resourceId) {
                     try {
-                        tempDrawable = res.getDrawable(currentId);
-                        if (backgroundDrawable != null &&
-                        		backgroundDrawable instanceof
+                        tempDrawable = getDrawable(currentId);
+                        if (isCancelled())
+                            return null;
+                        /*
+                        if (ApplicationEx.getBackgroundDrawable() != null &&
+                        		ApplicationEx.getBackgroundDrawable() instanceof
                         			TransitionDrawable) {
-                        	((BitmapDrawable)(
-                        			((TransitionDrawable)backgroundDrawable)
-                        			.getDrawable(0))).getBitmap().recycle();
+                            oldBitmapDrawable = (BitmapDrawableEx)(
+                            		((TransitionDrawable)ApplicationEx.getBackgroundDrawable())
+                            				.getDrawable(1));
                         }
-                        if (transitionDrawable != null) {
-                        	((BitmapDrawable)(transitionDrawable.getDrawable(0)))
-		            				.getBitmap().recycle();
-                        }
-                        backgroundDrawable = currFrag.getBackground();
-                        if (oldBitmapDrawable != null)
-                        	oldBitmapDrawable.getBitmap().recycle();
-                        if (backgroundDrawable != null &&
-                        		backgroundDrawable instanceof
-                        			TransitionDrawable) {
-                            transitionDrawable = (TransitionDrawable) backgroundDrawable;
-                            oldBitmapDrawable = (BitmapDrawable)(
-                                    transitionDrawable.getDrawable(1));
-                            ((BitmapDrawable)(transitionDrawable.getDrawable(0)))
-                    				.getBitmap().recycle();
-                        }
-                        else if (backgroundDrawable != null &&
-                        		backgroundDrawable instanceof BitmapDrawable)
-                            oldBitmapDrawable = (BitmapDrawable) backgroundDrawable;
-                        if (backgroundDrawable != null) {
+                        else if (ApplicationEx.getBackgroundDrawable() != null)
+                            oldBitmapDrawable = new BitmapDrawableEx(res, ((BitmapDrawable)ApplicationEx.getBackgroundDrawable()).getBitmap());
+                        if (ApplicationEx.getBackgroundDrawable() != null)
+                            oldBitmapDrawable = new BitmapDrawableEx(res, ((BitmapDrawable)ApplicationEx.getBackgroundDrawable()).getBitmap());
+                        if (ApplicationEx.getBackgroundDrawable() != null) {
                             arrayDrawable[0] = oldBitmapDrawable;
                             arrayDrawable[1] = tempDrawable;
                         }
+                        */
+                        if (isCancelled())
+                            return null;
                     } catch (OutOfMemoryError memErr) {
-                    	setBackground(currentBackground, showNew);
+                        if (isCancelled())
+                            return null;
+                        ApplicationEx.showShortToast("Error switching backgrounds");
+                    	//setBackground(currentBackground, showNew, screen);
                     } catch (Resources.NotFoundException e) {
-                        setBackground(currentBackground, showNew);
+                        if (isCancelled())
+                            return null;
+                        switch(res.getConfiguration().orientation) {
+                        case Configuration.ORIENTATION_PORTRAIT:
+                            setBackground(portBackground, showNew, screen);
+                            break;
+                        case Configuration.ORIENTATION_LANDSCAPE:
+                            setBackground(landBackground, showNew, screen);
+                            break;
+                        default:
+                            setBackground(portBackground, showNew, screen);
+                            break;
+                        }
                     }
                 }
-                else
-                    setBackground(currentBackground, showNew);
+                else {
+                    if (isCancelled())
+                        return null;
+                    switch(res.getConfiguration().orientation) {
+                    case Configuration.ORIENTATION_PORTRAIT:
+                        setBackground(portBackground, showNew, screen);
+                        break;
+                    case Configuration.ORIENTATION_LANDSCAPE:
+                        setBackground(landBackground, showNew, screen);
+                        break;
+                    default:
+                        setBackground(portBackground, showNew, screen);
+                        break;
+                    }
+                }
             }
-            ApplicationEx.dbHelper.setCurrBackground(userId, currentBackground);
+            else {
+                if (isCancelled())
+                    return null;
+                switch(res.getConfiguration().orientation) {
+                case Configuration.ORIENTATION_PORTRAIT:
+                    portBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    break;
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    landBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                    break;
+                default:
+                    portBackground = res.getResourceEntryName(currentId);
+                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    break;
+                }
+                if (isCancelled())
+                    return null;
+                if (screen.equals("setlist")) {
+                    if (isCancelled())
+                        return null;
+                    ApplicationEx.setSetlistDrawable(getDrawable(resourceId));
+                }
+                else {
+                    if (isCancelled())
+                        return null;
+                    if (fieldsList.indexOf(resourceId) >= 0)
+                        ApplicationEx.setBackgroundDrawable(getDrawable(resourceId));
+                    else
+                        ApplicationEx.setBackgroundDrawable(getDrawable(R.drawable.splash4));
+                }
+            }
             return null;
         }
         
@@ -575,31 +1054,61 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         protected void onPostExecute(Void nothing) {
         	if (currFrag != null) {
 	            if (showNew) {
-	                if (backgroundDrawable != null) {
-	                    transitionDrawable =
-	                    		new TransitionDrawable(arrayDrawable);
-	                    transitionDrawable.setCrossFadeEnabled(true);
-	                    currFrag.setBackground(transitionDrawable);
+	                /*
+	                if (currentId != resourceId && arrayDrawable[0] != null &&
+	                        arrayDrawable[1] != null) {
+	                    ApplicationEx.setBackgroundDrawable(
+	                            new TransitionDrawable(arrayDrawable));
+	                	((TransitionDrawable)ApplicationEx.getBackgroundDrawable())
+	                			.setCrossFadeEnabled(true);
+	                	try {
+	                	    currFrag.setBackground(ApplicationEx.getBackgroundDrawable());
+	                	} catch (IllegalArgumentException e) {
+	                	    Log.e(Constants.LOG_TAG, "Failed to set background!", e);
+	                	} catch (NullPointerException e) {}
 	                    //background.setImageDrawable(transitionDrawable);
-	                    transitionDrawable.startTransition(500);
+	                    ((TransitionDrawable)ApplicationEx.getBackgroundDrawable())
+	                    		.startTransition(500);
 	                }
-	                else
-	                	currFrag.setBackground(tempDrawable);
+	                else {
+	                    try {
+	                        currFrag.setBackground(((BitmapDrawable)tempDrawable).getBitmap());
+	                    } catch (NullPointerException e) {}
+	                }
+	                */
+	                try {
+                        currFrag.setBackground(((BitmapDrawable)tempDrawable).getBitmap());
+                    } catch (NullPointerException e) {}
 	                    //background.setImageDrawable(tempDrawable);
 	            }
 	            else {
-	                if (fieldsList.indexOf(resourceId) >= 0)
-	                	currFrag.setBackground(res.getDrawable(resourceId));
-	                    //background.setImageResource(resourceId);
-	                else
-	                	currFrag.setBackground(
-	                			res.getDrawable(R.drawable.splash8));
-	                    //background.setImageResource(R.drawable.splash8);
-	            }
-        	}
+                    try {
+	                	currFrag.setBackground(ApplicationEx.getBackgroundDrawable());
+                    } catch (IllegalArgumentException e) {
+                        Log.e(Constants.LOG_TAG, "Failed to set background!", e);
+                    } catch (NullPointerException err) {
+	                } catch (OutOfMemoryError memErr) {
+	                    ApplicationEx.showShortToast("Error setting background");
+	                    /*
+	                    Thread backgroundThread = new Thread() {
+                            public void run() {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {}
+                                Log.i(Constants.LOG_TAG, "SetBackgroundTask OOM");
+                                setBackground(name, showNew, screen);
+                            }
+                        };
+                        backgroundThread.start();
+                        */
+                    }
+                }
+            }
+            ApplicationEx.setBackgroundDrawable(currFrag.getBackground());
+        	switchButton.setEnabled(true);
         }
     }
-
+    
     private void checkUser() {
         noConnection.setVisibility(View.INVISIBLE);
         user = ParseUser.getCurrentUser();
@@ -616,16 +1125,17 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             setupUser(newUser);
     }
     
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void setupUser(boolean newUser) {
         if (userId == null && !isLogging) {
-            showSplash();
+            showSplash(false, false);
             return;
         }
         if (userId != null)
             getUserData(userId);
         if (fMan.findFragmentByTag("fLogin") == null)
-            showLogin();
+            showLogin(true);
         if (userTask != null)
             userTask.cancel(true);
         userTask = new UserTask(newUser);
@@ -666,15 +1176,12 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                     correctAnswers.clear();
                 else
                     correctAnswers = new ArrayList<String>();
-                getNextQuestions(false);
+                getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+						res.getString(R.string.level_key),
+						Constants.HARD));
             }
-            else {
-                if (tempAnswers != null)
-                    tempAnswers.clear();
-                else
-                    tempAnswers = new ArrayList<String>();
+            else
                 publishProgress();
-            }
             if (displayName == null && !isCancelled()) {
                 displayName = user.getString("displayName");
                 ApplicationEx.dbHelper.setUserValue(displayName, 
@@ -686,8 +1193,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         protected void onProgressUpdate(Void... nothing) {
             if (userId == null || user == null) {
                 logOut(true);
-                ApplicationEx.mToast.setText("Login failed, try again");
-                ApplicationEx.mToast.show();
+                ApplicationEx.showLongToast("Login failed, try again");
             }
             else
                 getScore(true, false, userId, newUser);
@@ -699,9 +1205,22 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         
         @Override
         protected void onPostExecute(Void nothing) {
-            if (userId != null)
-                setBackground(ApplicationEx.dbHelper.getCurrBackground(userId),
-                        false);
+            if (userId != null) {
+                switch(res.getConfiguration().orientation) {
+                case Configuration.ORIENTATION_PORTRAIT:
+                    setBackground(ApplicationEx.dbHelper.getPortBackground(userId),
+                            false, "quiz");
+                    break;
+                case Configuration.ORIENTATION_LANDSCAPE:
+                    setBackground(ApplicationEx.dbHelper.getLandBackground(userId),
+                            false, "quiz");
+                    break;
+                default:
+                    setBackground(ApplicationEx.dbHelper.getPortBackground(userId),
+                            false, "quiz");
+                    break;
+                }
+            }
         }
     }
     
@@ -726,6 +1245,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         private List<ParseObject> scoreList;
         private List<ParseObject> deleteList;
         private Number number;
+        private ArrayList<String> tempAnswers;
         
         private GetScoreTask(boolean show, boolean restore, String userId,
                 boolean newUser) {
@@ -737,6 +1257,10 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         
         @Override
         protected void onPreExecute() {
+        	if (tempAnswers != null)
+                tempAnswers.clear();
+            else
+                tempAnswers = new ArrayList<String>();
             if (!newUser && currFrag != null)
                 currFrag.showLoading("Calculating score...");
         }
@@ -847,13 +1371,36 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                         currFrag.showNetworkProblem();
                 }
             } while (!isCancelled());
+            ParseQuery scoreQuery = new ParseQuery("Question");
+            try {
+            	scoreQuery.addAscendingOrder("score");
+				lowest = scoreQuery.getFirst().getInt("score");
+				scoreQuery.addDescendingOrder("score");
+				highest = scoreQuery.getFirst().getInt("score");
+				if (highest == 0)
+					highest = 1000;
+				int easy = ((highest-lowest) / 3) + lowest;
+				int med = ((easy-lowest) * 2) + lowest;				
+				ApplicationEx.dbHelper.setUserValue(easy,
+						DatabaseHelper.COL_EASY, userId);
+				ApplicationEx.dbHelper.setUserValue(med,
+						DatabaseHelper.COL_MEDIUM, userId);
+			} catch (ParseException e) {
+				Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                if (userTask != null)
+                    userTask.cancel(true);
+                if (getScoreTask != null)
+                    getScoreTask.cancel(true);
+                if (show && currFrag != null)
+                    currFrag.showNetworkProblem();
+			}
             if (!isCancelled()) {
                 currScore = tempScore;
                 tempScore = 0;
                 saveUserScore(currScore);
                 correctAnswers = new ArrayList<String>(tempAnswers);
                 ApplicationEx.setStringArrayPref(
-                        getString(R.string.correct_key), correctAnswers);
+                        res.getString(R.string.correct_key), correctAnswers);
                 publishProgress();
             }
             tempScore = 0;
@@ -873,7 +1420,9 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                     } catch (IllegalStateException exception) {}
                 }
                 else
-                    getNextQuestions(false);
+                    getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+    						res.getString(R.string.level_key),
+    						Constants.HARD));
             }
             if (restore)
                 showLoggedInFragment();
@@ -888,7 +1437,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         fetchDisplayName();
         if (user == null)
             user = ParseUser.getCurrentUser();
-        if (displayName == null) {
+        if (user != null && displayName == null) {
             displayName = user.getString("displayName");
             ApplicationEx.dbHelper.setUserValue(displayName, 
                     DatabaseHelper.COL_DISPLAY_NAME, userId);
@@ -897,6 +1446,10 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             showLeaders();
         else if (inLoad)
             onStatsPressed();
+        /*
+        else if (inSetlist)
+            showSetlist(false);
+        */
         else {
             isLogging = false;
             ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
@@ -904,7 +1457,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             loggedIn = true;
             ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                     DatabaseHelper.COL_LOGGED_IN, userId);
-            showQuiz();
+            showQuiz(false, false);
         }
     }
     
@@ -931,6 +1484,9 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     
     @Override
     public void onStatsPressed() {
+        inLoad = true;
+        ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
+                DatabaseHelper.COL_IN_LOAD, userId);
         showLoad();
         if (getStatsTask != null)
             getStatsTask.cancel(true);
@@ -942,15 +1498,12 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         else
             getStatsTask.executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR);
-        inLoad = true;
-        ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
-                DatabaseHelper.COL_IN_LOAD, userId);
     }
     
     @Override
     public void onLoginPressed(int loginType, String user, String pass) {
         isLogging = true;
-        showLogin();
+        showLogin(true);
         switch(loginType) {
         case FragmentBase.LOGIN_FACEBOOK:
             facebookLogin();
@@ -976,10 +1529,10 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         isLogging = false;
         ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
                 DatabaseHelper.COL_LOGGING, userId);
-        showQuiz();
         loggedIn = true;
         ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
                 DatabaseHelper.COL_LOGGED_IN, userId);
+        showQuiz(false, false);
     }
     
     private void facebookLogin() {
@@ -989,19 +1542,17 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
                     if (err != null) {
-                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
-                            ApplicationEx.mToast.setText("Network error");
-                            ApplicationEx.mToast.show();
-                        }
-                        else {
-                            ApplicationEx.mToast.setText(
+                        if (err.getCode() == ParseException.CONNECTION_FAILED)
+                        	ApplicationEx.showLongToast("Network error");
+                        else
+                        	ApplicationEx.showLongToast(
                                     "Login failed, try again");
-                            ApplicationEx.mToast.show();
-                        }
                         logOut(false);
                     }
-                    else
+                    else {
+                        ApplicationEx.showLongToast("Login failed, try again");
                         logOut(false);
+                    }
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
@@ -1009,64 +1560,48 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                         ApplicationEx.dbHelper.addUser(user, "Facebook");
                     else
                         ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
-                    facebookTask = new FacebookTask(user); 
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                        facebookTask.execute();
-                    else
-                        facebookTask.executeOnExecutor(
-                                AsyncTask.THREAD_POOL_EXECUTOR);
-                    facebookLogin = false;
+                    getFacebookDisplayName(user);
+                    if (isLogging)
+                        setupUser(newUser);
                 }
             }
         });
     }
     
-    private FacebookTask facebookTask;
-    
-    private class FacebookTask extends AsyncTask<Void, Void, Void> {
-        ParseUser user;
-        
-        private FacebookTask(ParseUser user) {
-            this.user = user;
-        }
-        
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (user.getString("displayName") == null) {
-                Session session = ParseFacebookUtils.getSession();
-            	if (session.getState().isOpened()) {
-            		Request.executeMeRequestAsync(session,
-            				new GraphUserCallback() {
-						@Override
-						public void onCompleted(GraphUser graphUser,
-								Response response) {
-							if (user != null) {
-								displayName = graphUser.getFirstName() + " "
-										+ graphUser.getLastName().substring(
-												0, 1) + ".";
-				                user.put("displayName", displayName);
-				                try {
-				                    user.saveEventually();
-				                }
-				                catch (RuntimeException e) {}
-				                ApplicationEx.dbHelper.setUserValue(displayName, 
-			                        DatabaseHelper.COL_DISPLAY_NAME, userId);
+    private void getFacebookDisplayName(final ParseUser user) {
+    	if (user.getString("displayName") == null) {
+            Session session = ParseFacebookUtils.getSession();
+            boolean error = false;
+        	if (session != null && session.getState().isOpened()) {
+        		do {
+            		try {
+	            		Request.executeMeRequestAsync(session,
+	            				new GraphUserCallback() {
+							@Override
+							public void onCompleted(GraphUser graphUser,
+									Response response) {
+								if (user != null) {
+									displayName = graphUser.getFirstName() +
+											" " + graphUser.getLastName()
+													.substring(0, 1) + ".";
+					                user.put("displayName", displayName);
+					                try {
+					                    user.saveEventually();
+					                }
+					                catch (RuntimeException e) {}
+					                ApplicationEx.dbHelper.setUserValue(
+					                		displayName,
+					                		DatabaseHelper.COL_DISPLAY_NAME,
+					                		userId);
+								}
 							}
-						}
-            		});
-            	}
-            }
-            return null;
-        }
-        
-        @Override
-        protected void onCancelled(Void nothing) {
-        }
-        
-        @Override
-        protected void onPostExecute(Void nothing) {
-            if (isLogging)
-                setupUser(newUser);
+	            		});
+	            		error = false;
+            		} catch (IllegalStateException e) {
+            			error = true;
+            		}
+        		} while (error);
+        	}
         }
     }
     
@@ -1076,19 +1611,17 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
                     if (err != null) {
-                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
-                            ApplicationEx.mToast.setText("Network error");
-                            ApplicationEx.mToast.show();
-                        }
-                        else {
-                            ApplicationEx.mToast.setText(
-                                    "Login failed, try again");
-                            ApplicationEx.mToast.show();
-                        }
+                        if (err.getCode() == ParseException.CONNECTION_FAILED)
+                        	ApplicationEx.showLongToast("Network error");
+                        else
+                        	ApplicationEx.showLongToast(
+                        			"Login failed, try again");
                         logOut(false);
                     }
-                    else
+                    else {
+                        ApplicationEx.showLongToast("Login failed, try again");
                         logOut(false);
+                    }
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
@@ -1116,15 +1649,10 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             @Override
             public void done(final ParseUser user, ParseException e) {
                 if (e != null) {
-                    if (e.getCode() == ParseException.CONNECTION_FAILED) {
-                        ApplicationEx.mToast.setText("Network error");
-                        ApplicationEx.mToast.show();
-                    }
-                    else {
-                        ApplicationEx.mToast.setText(
-                                "Login failed, try again");
-                        ApplicationEx.mToast.show();
-                    }
+                    if (e.getCode() == ParseException.CONNECTION_FAILED)
+                    	ApplicationEx.showLongToast("Network error");
+                    else
+                    	ApplicationEx.showLongToast("Login failed, try again");
                     logOut(false);
                 }
                 else {
@@ -1177,15 +1705,11 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                         setupUser(newUser);
                 }
                 else {
-                    if (err.getCode() == ParseException.CONNECTION_FAILED) {
-                        ApplicationEx.mToast.setText("Network error");
-                        ApplicationEx.mToast.show();
-                    }
-                    else if (err.getCode() != 202) {
-                        ApplicationEx.mToast.setText(
-                                "Sign up failed: " + err.getCode());
-                        ApplicationEx.mToast.show();
-                    }
+                    if (err.getCode() == ParseException.CONNECTION_FAILED)
+                    	ApplicationEx.showLongToast("Network error");
+                    else if (err.getCode() != 202)
+                    	ApplicationEx.showLongToast("Sign up failed: " +
+                    			err.getCode());
                     logOut(false);
                 }
             }
@@ -1200,19 +1724,17 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                     if (err != null) {
                         Log.e(Constants.LOG_TAG, "Login failed: " +
                                 err.getCode());
-                        if (err.getCode() == ParseException.CONNECTION_FAILED) {
-                            ApplicationEx.mToast.setText("Network error");
-                            ApplicationEx.mToast.show();
-                        }
+                        if (err.getCode() == ParseException.CONNECTION_FAILED)
+                        	ApplicationEx.showLongToast("Network error");
                         else if (err.getCode() ==
-                                ParseException.OBJECT_NOT_FOUND) {
-                            ApplicationEx.mToast.setText("Invalid password");
-                            ApplicationEx.mToast.show();
-                        }
+                                ParseException.OBJECT_NOT_FOUND)
+                        	ApplicationEx.showLongToast("Invalid password");
                         logOut(false);
                     }
-                    else
+                    else {
+                        ApplicationEx.showLongToast("Login failed, try again");
                         logOut(false);
+                    }
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
@@ -1240,24 +1762,43 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         ParseUser.requestPasswordResetInBackground(username,
                 new RequestPasswordResetCallback() {
             public void done(ParseException e) {
-                if (e == null) {
-                    ApplicationEx.mToast.setText("Password reset email has " +
-                            "been sent");
-                    ApplicationEx.mToast.show();
-                } else {
-                    ApplicationEx.mToast.setText("An error occurred, " +
+                if (e == null)
+                	ApplicationEx.showLongToast("Password reset email has " +
+                    		"been sent");
+                else
+                	ApplicationEx.showLongToast("An error occurred, " +
                             "try again");
-                    ApplicationEx.mToast.show();
-                }
             }
         });
     }
+    /*
+    @Override
+    public String getSplashBackground() {
+        return splashBackground;
+    }
     
     @Override
-    public String getBackground() {
-        return currentBackground;
+    public String getQuizBackground() {
+        return quizBackground;
     }
-
+    
+    @Override
+    public String getLeadersBackground() {
+        return leadersBackground;
+    }
+    */
+    @Override
+    public String getBackground() {
+        switch(res.getConfiguration().orientation) {
+        case Configuration.ORIENTATION_PORTRAIT:
+            return portBackground;
+        case Configuration.ORIENTATION_LANDSCAPE:
+            return landBackground;
+        default:
+            return portBackground;
+        }
+    }
+    
     @Override
     public void showScoreDialog() {
         DialogFragment newFragment = new FragmentScoreDialog();
@@ -1278,40 +1819,45 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
             new LogOutTask(force).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR);
     }
-    
+    /*
+    @Override
+    public void loadSetlist() {
+        showSetlist(true);
+    }
+    */
     private class LogOutTask extends AsyncTask<Void, Void, Void> {
-        boolean force;
+        //boolean force;
         
         private LogOutTask(boolean force) {
-            this.force = force;
+            //this.force = force;
         }
-        
+        /*
         @Override
         protected void onPreExecute() {
-            showLogin();
+            showLogin(false);
         }
-        
+        */
         @Override
         protected Void doInBackground(Void... nothing) {
             loggedIn = false;
-            Editor editor = PreferenceManager.getDefaultSharedPreferences(
-            		ApplicationEx.getApp()).edit();
-            editor.putString(getString(R.string.scoretext_key), "");
-            editor.putString(getString(R.string.questiontext_key), "");
-            editor.putString(getString(R.string.hinttext_key), "");
-            editor.putString(getString(R.string.answertext_key), "");
-            editor.putString(getString(R.string.placetext_key), "");
-            editor.putInt(getString(R.string.hinttimevis_key), View.VISIBLE);
-            editor.putInt(getString(R.string.hinttextvis_key), View.INVISIBLE);
-            editor.putInt(getString(R.string.skiptimevis_key), View.VISIBLE);
-            editor.putInt(getString(R.string.skiptextvis_key), View.INVISIBLE);
-            editor.putString(getString(R.string.hintnum_key), "");
-            editor.putString(getString(R.string.skipnum_key), "");
-            editor.commit();
+            Editor editor = ApplicationEx.sharedPrefs.edit();
+            editor.putString(res.getString(R.string.scoretext_key), "");
+            editor.putString(res.getString(R.string.questiontext_key), "");
+            editor.putString(res.getString(R.string.hinttext_key), "");
+            editor.putString(res.getString(R.string.answertext_key), "");
+            editor.putString(res.getString(R.string.placetext_key), "");
+            editor.putInt(res.getString(R.string.hinttimevis_key), View.VISIBLE);
+            editor.putInt(res.getString(R.string.hinttextvis_key), View.INVISIBLE);
+            editor.putInt(res.getString(R.string.skiptimevis_key), View.VISIBLE);
+            editor.putInt(res.getString(R.string.skiptextvis_key), View.INVISIBLE);
+            editor.putString(res.getString(R.string.hintnum_key), "");
+            editor.putString(res.getString(R.string.skipnum_key), "");
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                editor.commit();
+            else
+                editor.apply();
             if (userTask != null)
                 userTask.cancel(true);
-            if (facebookTask != null)
-                facebookTask.cancel(true);
             if (getScoreTask != null)
                 getScoreTask.cancel(true);
             if (getNextQuestionsTask != null)
@@ -1335,7 +1881,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 correctAnswers.clear();
                 correctAnswers = null;
                 ApplicationEx.setStringArrayPref(
-                        getString(R.string.correct_key), correctAnswers);
+                		res.getString(R.string.correct_key), correctAnswers);
             }
             return null;
         }
@@ -1349,88 +1895,154 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         
         @Override
         protected void onPostExecute(Void nothing) {
-            if (!getNetworkProblem() || force) {
-                isLogging = false;
-                showSplash();
-            }
+            isLogging = false;
+            setLoggingOut(false);
+            if (!inInfo)
+                showSplash(false, false);
+            else
+                onInfoPressed(true);
         }
     }
     
     @Override
-    public void onInfoPressed() {
+    public void onInfoPressed(boolean fresh) {
         try {
-            FragmentInfo fInfo = new FragmentInfo();
-            fMan.beginTransaction().replace(android.R.id.content, fInfo,
-                    "fInfo").commitAllowingStateLoss();
-            fMan.executePendingTransactions();
-            currFrag = fInfo;
-            setBackground(currentBackground, false);
             inInfo = true;
             ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
                     DatabaseHelper.COL_IN_INFO, userId);
+            FragmentInfo fInfo = new FragmentInfo();
+            currFrag = fInfo;
+            FragmentTransaction ft = fMan.beginTransaction();
+            /*
+            if (!fresh)
+                ft.setCustomAnimations(R.anim.slide_in_top,
+                        R.anim.slide_out_top);
+            */
+            ft.replace(android.R.id.content, fInfo, "fInfo")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
     private void showLeaders() {
         try {
             FragmentLeaders fLeaders = new FragmentLeaders();
+            currFrag = fLeaders;
             fMan.beginTransaction().replace(android.R.id.content, fLeaders,
                     "fLeaders").commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            currFrag = fLeaders;
-            setBackground(currentBackground, false);
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+            refreshSlidingMenu();
         } catch (IllegalStateException e) {}
     }
     
-    private void showLogin() {
+    private void showLogin(boolean loggingIn) {
         try {
             FragmentLogin fLogin = new FragmentLogin();
-            fMan.beginTransaction().replace(android.R.id.content, fLogin,
-                    "fLogin").commitAllowingStateLoss();
-            fMan.executePendingTransactions();
             currFrag = fLogin;
-            setBackground(currentBackground, false);
-        } catch (IllegalStateException e) {}
-    }
-    
-    private void showSplash() {
-        try {
-            FragmentSplash fSplash = new FragmentSplash();
-            fMan.beginTransaction().replace(android.R.id.content, fSplash,
-                    "fSplash").commitAllowingStateLoss();
+            FragmentTransaction ft = fMan.beginTransaction();
+            if (currFrag != null && currFrag instanceof FragmentPager &&
+                    currFrag.isVisible())
+                ((FragmentPager)currFrag).removeChildren(ft);
+            /*
+            if (loggingIn)
+                ft.setCustomAnimations(R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom);
+            else
+                ft.setCustomAnimations(R.anim.slide_in_top,
+                        R.anim.slide_out_top);
+            */
+            ft.replace(android.R.id.content, fLogin, "fLogin")
+                    .commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            currFrag = fSplash;
-            setBackground(currentBackground, false);
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
-    private void showQuiz() {
+    private void showSplash(boolean fromInfo, boolean fromSetlist) {
+        try {
+            FragmentPager fSplash = new FragmentPager();
+            currFrag = fSplash;
+            FragmentTransaction ft = fMan.beginTransaction();
+            /*
+            if (fromInfo)
+                ft.setCustomAnimations(R.anim.slide_in_bottom,
+                        R.anim.slide_out_bottom);
+            else if (fromSetlist)
+                ft.setCustomAnimations(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
+            */
+            ft.replace(android.R.id.content, fSplash, "fSplash")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            refreshSlidingMenu();
+        } catch (IllegalStateException e) {}
+    }
+    
+    private void showQuiz(boolean fromStats, boolean fromSetlist) {
         newUser = false;
         try {
         	if (fMan.findFragmentByTag("fQuiz") == null) {
-	            FragmentQuiz fQuiz = new FragmentQuiz();
-	            fMan.beginTransaction().replace(android.R.id.content, fQuiz,
-	                    "fQuiz").commitAllowingStateLoss();
+        	    FragmentPager fQuiz = new FragmentPager();
+        	    currFrag = fQuiz;
+	            FragmentTransaction ft = fMan.beginTransaction();
+	            /*
+	            if (fromStats)
+	                ft.setCustomAnimations(R.anim.slide_in_top,
+	                        R.anim.slide_out_top);
+	            else if (fromSetlist)
+	                ft.setCustomAnimations(R.anim.slide_in_left,
+	                        R.anim.slide_out_right);
+                */
+	            ft.replace(android.R.id.content, fQuiz, "fQuiz")
+	                    .commitAllowingStateLoss();
 	            fMan.executePendingTransactions();
-	            currFrag = fQuiz;
         	}
         	else
         		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
-        	setBackground(currentBackground, false);
+        	refreshSlidingMenu();
         } catch (IllegalStateException e) {}
     }
     
     private void showLoad() {
         try {
             FragmentLoad fLoad = new FragmentLoad();
-            fMan.beginTransaction().replace(android.R.id.content, fLoad,
-                    "fLoad").commitAllowingStateLoss();
-            fMan.executePendingTransactions();
             currFrag = fLoad;
-            setBackground(currentBackground, false);
+            FragmentTransaction ft = fMan.beginTransaction();
+            if (currFrag != null && currFrag instanceof FragmentPager &&
+                    currFrag.isVisible())
+                ((FragmentPager)currFrag).removeChildren(ft);
+            /*
+            ft.setCustomAnimations(R.anim.slide_in_bottom,
+                    R.anim.slide_out_bottom);
+            */
+            ft.replace(android.R.id.content, fLoad, "fLoad")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
-    
+    /*
+    private void showSetlist(boolean animate) {
+        try {
+            FragmentSetlist fSetlist = new FragmentSetlist();
+            FragmentTransaction ft = fMan.beginTransaction();
+            if (animate)
+                ft.setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left);
+            ft.replace(android.R.id.content, fSetlist, "fSetlist")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            currFrag = fSetlist;
+            setBackground(currentBackground, false);
+            inSetlist = true;
+            ApplicationEx.dbHelper.setUserValue(inSetlist ? 1 : 0,
+                    DatabaseHelper.COL_IN_SETLIST, userId);
+            invalidateOptionsMenu();
+        } catch (IllegalStateException e) {}
+    }
+    */
     private class GetStatsTask extends AsyncTask<Void, Void, Void> {
         int currScore;
         ParseException error;
@@ -1512,6 +2124,36 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 error = e;
                 publishProgress();
             }
+            ArrayList<String> ranks = new ArrayList<String>(devList);
+            ParseQuery rankQuery = ParseUser.getQuery();
+            rankQuery.whereExists("displayName");
+            rankQuery.setLimit(1000);
+            rankQuery.addDescendingOrder("score");
+            int rank = -1;
+            do {
+            	rankQuery.whereNotContainedIn("objectId", ranks);
+	            try {
+	            	List<ParseObject> rankList = rankQuery.find();
+	            	if (rankList.size() == 0)
+	            		break;
+	            	for (int i = 0; i < rankList.size(); i++) {
+	            		ranks.add(rankList.get(i).getObjectId());
+	            		if (rankList.get(i).getObjectId().equals(userId)) {
+	            			rank = ++i;
+	            			break;
+	            		}
+	            	}
+	            	if (rank > -1)
+	            		leadersBundle.putString("userRank",
+	            				(rank < 10 ? "0" : "") +
+	            						Integer.toString(rank));
+	            } catch (ParseException e) {
+	            	error = e;
+	            	publishProgress();
+	            }
+            } while (!isCancelled());
+            if (!leadersBundle.containsKey("userRank"))
+            	leadersBundle.putString("userRank", "");
             if (!isCancelled()) {
                 inStats = true;
                 ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
@@ -1597,11 +2239,11 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     }
     
     @Override
-    public void getNextQuestions(boolean force) {
-    	Log.e(Constants.LOG_TAG, "getNextQuestions");
+    public void getNextQuestions(boolean force, int level) {
         if (getNextQuestionsTask != null)
             getNextQuestionsTask.cancel(true);
-        getNextQuestionsTask = new GetNextQuestionsTask(force);
+        // TODO Use different levels: easy, hard and default
+        getNextQuestionsTask = new GetNextQuestionsTask(force, Constants.HARD);
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
             getNextQuestionsTask.execute();
@@ -1618,9 +2260,12 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         ArrayList<String> stageList;
         boolean force;
         boolean resumed = false;
+        private ArrayList<String> tempQuestions;
+        private int level;
         
-        private GetNextQuestionsTask(boolean force) {
+        private GetNextQuestionsTask(boolean force, int level) {
             this.force = force;
+            this.level = level;
         }
         
         @Override
@@ -1630,32 +2275,62 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                         correctAnswers.contains(nextQuestionId)) &&
                             !isCancelled() && !force) {
                 updateIds();
-                getNextQuestions(force);
+                getNextQuestions(force, level);
             }
             else if (!isCancelled()) {
                 if (!force)
                     updateIds();
                 publishProgress();
-                if (tempAnswers == null)
-                    tempAnswers = new ArrayList<String>();
+                if (tempQuestions == null)
+                	tempQuestions = new ArrayList<String>();
                 else
-                    tempAnswers.clear();
-                tempAnswers.addAll(correctAnswers);
+                	tempQuestions.clear();
+                if (correctAnswers != null)
+                    tempQuestions.addAll(correctAnswers);
                 if (questionId != null)
-                    tempAnswers.add(questionId);
+                	tempQuestions.add(questionId);
                 if (nextQuestionId != null)
-                    tempAnswers.add(nextQuestionId);
+                	tempQuestions.add(nextQuestionId);
                 if (thirdQuestionId != null)
-                    tempAnswers.add(thirdQuestionId);
-                ParseQuery query = new ParseQuery("Question");
-                query.whereNotContainedIn("objectId", tempAnswers);
+                	tempQuestions.add(thirdQuestionId);
+                ParseQuery query = null;
+                ParseQuery queryFirst = null;
+                ParseQuery querySecond = null;
+                if (level == Constants.HARD) {
+                	queryFirst = new ParseQuery("Question");
+                    queryFirst.whereNotContainedIn("objectId", tempQuestions);
+                    queryFirst.whereLessThanOrEqualTo("score", 1000);
+                    querySecond = new ParseQuery("Question");
+                    querySecond.whereNotContainedIn("objectId", tempQuestions);
+                	querySecond.whereDoesNotExist("score");
+                	ArrayList<ParseQuery> queries = new ArrayList<ParseQuery>();
+                	queries.add(queryFirst);
+                	queries.add(querySecond);
+                	query = ParseQuery.or(queries);
+                }
+                else {
+                	query = new ParseQuery("Question");
+                	query.whereNotContainedIn("objectId", tempQuestions);
+                	if (level == Constants.EASY) {
+                		int easy = ApplicationEx.dbHelper.getUserIntValue(
+        						DatabaseHelper.COL_EASY, userId);
+                		if (easy <= 0)
+                			easy = 600;
+                		query.whereLessThanOrEqualTo("score", easy);
+                	}
+                	else if (level == Constants.MEDIUM) {
+                		int med = ApplicationEx.dbHelper.getUserIntValue(
+        						DatabaseHelper.COL_MEDIUM, userId);
+                		if (med <= 0)
+                			med = 800;
+                		query.whereLessThanOrEqualTo("score", med);
+                	}
+                }
                 try {
                     count = query.count();
                     if (count > 0 && !isCancelled()) {
                         stageList = new ArrayList<String>();
                         int skip = (int) (Math.random()*count);
-                        query = new ParseQuery("Question");
-                        query.whereNotContainedIn("objectId", correctAnswers);
                         if (questionId == null)
                             query.setLimit(3);
                         else {
@@ -1671,7 +2346,6 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                         if (query.getLimit() > (count-skip))
                             skip = count-query.getLimit();
                         query.setSkip(skip);
-                        // TODO set and fetch hint/skip values from new class in Parse
                         questionList = query.find();
                         if (!questionList.isEmpty() && !isCancelled()) {
                             Number score;
@@ -1806,7 +2480,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 	Log.e(Constants.LOG_TAG, "Error: " + memErr.getMessage());
                 	if (getNextQuestionsTask != null)
                         getNextQuestionsTask.cancel(true);
-                    getNextQuestions(force);
+                    getNextQuestions(force, level);
                 } catch (ParseException e) {
                     error = e;
                 }
@@ -1826,7 +2500,6 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                     } catch (IllegalStateException exception) {}
                 }
                 else {
-                	Log.i(Constants.LOG_TAG, "resumeQuestion GetNextQuestionsTask onProgressUpdate");
                     currFrag.resumeQuestion();
                     resumed = true;
                 }
@@ -1851,11 +2524,11 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 }
                 else {
                     if (questionId == null)
-                        currFrag.showNoMoreQuestions();
-                    else if (!resumed) {
-                    	Log.i(Constants.LOG_TAG, "resumeQuestion GetNextQuestionsTask onPostExecute");
+                        currFrag.showNoMoreQuestions(ApplicationEx.sharedPrefs
+                        		.getInt(res.getString(R.string.level_key),
+                    						Constants.HARD));
+                    else if (!resumed)
                         currFrag.resumeQuestion();
-                    }
                 }
             }
         }
@@ -1987,10 +2660,8 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                     goToQuiz();
                 } catch (IllegalStateException exception) {}
             }
-            else if (!resumed) {
-            	Log.i(Constants.LOG_TAG, "resumeQuestion GetStageTask");
+            else if (!resumed)
                 currFrag.resumeQuestion();
-            }
         }
         
         @Override
@@ -2007,18 +2678,48 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         }
         @Override
         protected Void doInBackground(Void... nothing) {
+            if (isCancelled())
+                return null;
             if (questionId != null && correctAnswers.contains(questionId)) {
                 if (correctAnswers.size() % 20 == 0) {
-                    if (currentBackground == null) {
+                    if (getBackground() == null) {
                         if (userId != null) {
-                            currentBackground =
-                                ApplicationEx.dbHelper.getCurrBackground(userId);
-                            if (currentBackground == null)
-                                currentBackground = "splash8";
+                            if (isCancelled())
+                                return null;
+                            portBackground =
+                                ApplicationEx.dbHelper.getPortBackground(userId);
+                            landBackground =
+                                ApplicationEx.dbHelper.getLandBackground(userId);
+                            if (getBackground() == null) {
+                                switch(res.getConfiguration().orientation) {
+                                case Configuration.ORIENTATION_PORTRAIT:
+                                    portBackground = "splash4";
+                                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                                    break;
+                                case Configuration.ORIENTATION_LANDSCAPE:
+                                    landBackground = "splash4";
+                                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                                    break;
+                                default:
+                                    portBackground = "splash4";
+                                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                                    break;
+                                }
+                            }
                         }
-                        else
-                            currentBackground = "splash8";
-                        
+                        else {
+                            switch(res.getConfiguration().orientation) {
+                            case Configuration.ORIENTATION_PORTRAIT:
+                                portBackground = "splash4";
+                                break;
+                            case Configuration.ORIENTATION_LANDSCAPE:
+                                landBackground = "splash4";
+                                break;
+                            default:
+                                portBackground = "splash4";
+                                break;
+                            }
+                        }
                     }
                     publishProgress();
                 }
@@ -2027,7 +2728,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            setBackground(currentBackground, true);
+            setBackground(getBackground(), true, "quiz");
         }
         
         @Override
@@ -2047,7 +2748,9 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         newQuestion = false;
         ApplicationEx.dbHelper.setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
-        getNextQuestions(false);
+        getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+				res.getString(R.string.level_key),
+				Constants.HARD));
     }
 
     @Override
@@ -2281,6 +2984,8 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     @Override
     public void shareScreenshot() {
         String path = takeScreenshot();
+        if (path == null)
+            return;
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");
 
@@ -2328,12 +3033,18 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         String path = ApplicationEx.cacheLocation + Constants.SCREENS_LOCATION +
                 fileName;
         
-        Bitmap bitmap;
+        Bitmap bitmap = null;
         View v1 = noConnection.getRootView();
-        v1.setDrawingCacheEnabled(true);
-        bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-        v1.setDrawingCacheEnabled(false);
-
+        try {
+            v1.setDrawingCacheEnabled(true);
+            v1.buildDrawingCache();
+            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+        } catch (NullPointerException e) {
+            ApplicationEx.showLongToast("Oops, try again");
+            e.printStackTrace();
+            return null;
+        }
         OutputStream fout = null;
         File imageFile = new File(path);
 
@@ -2362,14 +3073,27 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
                 DatabaseHelper.COL_IN_STATS, userId) == 1 ? true : false;
         inInfo = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_IN_INFO, userId) == 1 ? true : false;
+        inSetlist = ApplicationEx.dbHelper.getUserIntValue(
+                DatabaseHelper.COL_IN_SETLIST, userId) == 1 ? true : false;
+        newSetlist = ApplicationEx.dbHelper.getUserIntValue(
+                DatabaseHelper.COL_NEW_SETLIST, userId) == 1 ? true : false;
         getUserData(userId);
         networkProblem = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_NETWORK_PROBLEM, userId) == 1 ? true : false;
     }
     
     private void getUserData(String userId) {
-        currentBackground = ApplicationEx.dbHelper.getUserStringValue(
-                DatabaseHelper.COL_CURR_BACKGROUND, userId);
+        /*
+        splashBackground = ApplicationEx.dbHelper.getUserStringValue(
+                DatabaseHelper.COL_SPLASH_BACKGROUND, userId);
+        quizBackground = ApplicationEx.dbHelper.getUserStringValue(
+                DatabaseHelper.COL_QUIZ_BACKGROUND, userId);
+        Log.i(Constants.LOG_TAG, "getUserData background: " + quizBackground);
+        leadersBackground = ApplicationEx.dbHelper.getUserStringValue(
+                DatabaseHelper.COL_LEADERS_BACKGROUND, userId);
+        */
+        portBackground = ApplicationEx.dbHelper.getPortBackground(userId);
+        landBackground = ApplicationEx.dbHelper.getLandBackground(userId);
         questionId = ApplicationEx.dbHelper.getCurrQuestionId(userId);
         question = ApplicationEx.dbHelper.getCurrQuestionQuestion(userId);
         correctAnswer = ApplicationEx.dbHelper.getCurrQuestionAnswer(userId);
@@ -2404,7 +3128,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         currScore = ApplicationEx.dbHelper.getUserIntValue(
                 DatabaseHelper.COL_SCORE, userId);
         correctAnswers = ApplicationEx.getStringArrayPref(
-                getString(R.string.correct_key));
+        		res.getString(R.string.correct_key));
     }
     
     private class ConnectionReceiver extends BroadcastReceiver {
@@ -2439,7 +3163,7 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
         else
             correctAnswers.add(correctId);
         ApplicationEx.setStringArrayPref(
-                getString(R.string.correct_key), correctAnswers);
+        		res.getString(R.string.correct_key), correctAnswers);
     }
     
     @Override
@@ -2483,6 +3207,918 @@ public class ActivityMain extends SherlockFragmentActivity implements OnButtonLi
     @Override
     public void setLoggingOut(boolean loggingOut) {
     	this.loggingOut = loggingOut;
+    }
+
+	@Override
+	public void setHomeAsUp(boolean homeAsUp) {
+		getSherlock().getActionBar().setDisplayHomeAsUpEnabled(homeAsUp);
+		if (!homeAsUp)
+		    getSherlock().getActionBar().setHomeButtonEnabled(false);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_MENU) {
+	        if (currFrag != null) {
+	            if (currFrag instanceof FragmentPager) {
+                    if (currFrag.getPage() == 1)
+                        currFrag.setPage(0);
+                    else
+                        toggle();
+	            }
+	            else
+	                toggle();
+            }
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+
+    @Override
+    public void startLogout() {
+        showLogin(false);
+    }
+    
+    private Intent getOpenFacebookIntent() {
+        try {
+            ApplicationEx.getApp().getPackageManager().getPackageInfo(
+                    "com.facebook.katana", 0);
+            return new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("fb://profile/401123586629428"));
+        } catch (Exception e) {
+            return new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.facebook.com/DMBTrivia"));
+        }
+    }
+
+    private Intent getOpenTwitterIntent() {
+        Uri uri = Uri.parse("http://www.twitter.com/dmbtrivia");
+        return new Intent(Intent.ACTION_VIEW, uri);
+    }
+    
+    @SuppressLint("NewApi")
+    protected void openStats() {
+        if (slidingMenu.isMenuShowing()) {
+            slidingMenu.setOnClosedListener(new OnClosedListener() {
+                @Override
+                public void onClosed() {
+                    slidingMenu.setOnClosedListener(null);
+                    onStatsPressed();
+                }
+            });
+            slidingMenu.showContent();
+            if (!ApplicationEx.sharedPrefs.contains(
+                    res.getString(R.string.stats_key)) ||
+                ApplicationEx.sharedPrefs.getBoolean(
+                            res.getString(R.string.quicktip_key), false)) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                    ApplicationEx.sharedPrefs.edit().putBoolean(
+                            res.getString(R.string.stats_key), true).commit();
+                else
+                    ApplicationEx.sharedPrefs.edit().putBoolean(
+                            res.getString(R.string.stats_key), true).apply();
+                showQuickTipMenu(quickTipMenuView,
+                        "Touch your score to enter Stats & Standings",
+                        Constants.QUICK_TIP_TOP);
+            }
+        }
+    }
+    
+    @Override
+    public void showQuickTip(View view, String message) {
+        if (ApplicationEx.sharedPrefs.getBoolean(
+                res.getString(R.string.quicktip_key), false))
+            CheatSheet.setup(view, message);
+    }
+
+    @Override
+    public void showQuickTipMenu(ViewGroup view, String message, int location) {
+        if (ApplicationEx.sharedPrefs.getBoolean(
+                res.getString(R.string.quicktip_key), false))
+            CheatSheetMenu.setup(view, message, getWidth(), getHeight(),
+                    location);
+    }
+
+    @Override
+    public SlidingMenu slidingMenu() {
+        return slidingMenu;
+    }
+    
+    private void refreshSlidingMenu() {
+        if (!loggedIn) {
+            setBehindContentView(R.layout.menu_splash);
+            infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
+            infoButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                Thread infoThread = new Thread() {
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(500);
+                                        } catch (InterruptedException e) {}
+                                        onInfoPressed(false);
+                                    }
+                                };
+                                infoThread.start();
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            /*
+            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    switchButton.setEnabled(false);
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                setBackground(getSplashBackground(), true, "splash");
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            switchButton.setEnabled(true);
+            */
+            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing())
+                        moveTaskToBack(true);
+                }
+            });
+            notificationSoundButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationSoundsButton);
+            notificationSoundImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationSoundsImage);
+            notificationSoundText = (TextView) slidingMenu.findViewById(
+                    R.id.NotificationSoundsText);
+            int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                    res.getString(R.string.notificationsound_key), 0);
+            notificationSoundImage.setImageLevel(soundSetting);
+            switch (soundSetting) {
+            case 0:
+                notificationSoundText.setText(R.string.NotificationBothTitle);
+                break;
+            case 1:
+                notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                break;
+            case 2:
+                notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                break;
+            }
+            notificationSoundButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                                res.getString(R.string.notificationsound_key), 0);
+                        switch (soundSetting) {
+                        case 0:
+                            notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                            soundSetting = 1;
+                            break;
+                        case 1:
+                            notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                            soundSetting = 2;
+                            break;
+                        case 2:
+                            notificationSoundText.setText(R.string.NotificationBothTitle);
+                            soundSetting = 0;
+                            break;
+                        }
+                        notificationSoundImage.setImageLevel(soundSetting);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            ApplicationEx.sharedPrefs.edit().putInt(
+                                    res.getString(R.string.notificationsound_key),
+                                    soundSetting)
+                            .commit();
+                        else
+                            ApplicationEx.sharedPrefs.edit().putInt(
+                                    res.getString(R.string.notificationsound_key),
+                                    soundSetting)
+                            .apply();
+                    }
+                }
+            });
+            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationTypeButton);
+            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationTypeImage);
+            notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
+                    R.id.NotificationTypeText);
+            notificationAlbumText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+                    res.getString(R.string.notificationtype_key), true));
+            notificationAlbumButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        notificationAlbumText.toggle();
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.notificationtype_key),
+                                    notificationAlbumText.isChecked())
+                            .commit();
+                        else
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.notificationtype_key),
+                                    notificationAlbumText.isChecked())
+                            .apply();
+                    }
+                }
+            });
+        }
+        else if (!inStats) {
+            setBehindContentView(R.layout.menu_quiz);
+            statsButton = (RelativeLayout) slidingMenu.findViewById(R.id.StatsButton);
+            statsButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    openStats();
+                }
+            });
+            /*
+            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    switchButton.setEnabled(false);
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                setBackground(getQuizBackground(), true, "quiz");
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            switchButton.setEnabled(true);
+            */
+            reportButton = (RelativeLayout) slidingMenu.findViewById(R.id.ReportButton);
+            reportButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                Thread shareThread = new Thread() {
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {}
+                                        ApplicationEx.reportQuestion(getQuestionId(), getQuestion(),
+                                                getCorrectAnswer(), getQuestionScore());
+                                    }
+                                };
+                                shareThread.start();
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            shareButton = (RelativeLayout) slidingMenu.findViewById(R.id.ShareButton);
+            shareButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        ApplicationEx.showShortToast("Capturing screen");
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                if (screenshotTask != null)
+                                    screenshotTask.cancel(true);
+                                screenshotTask = new ScreenshotTask();
+                                if (Build.VERSION.SDK_INT <
+                                        Build.VERSION_CODES.HONEYCOMB)
+                                    screenshotTask.execute();
+                                else
+                                    screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            logoutButton = (RelativeLayout) slidingMenu.findViewById(R.id.LogoutButton);
+            logoutText = (TextView) findViewById(R.id.LogoutText);
+            nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
+            nameButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing())
+                        showNameDialog();
+                }
+            });
+            if (getUserId() != null) {
+                if (ApplicationEx.dbHelper.hasUser(getUserId()) &&
+                        !ApplicationEx.dbHelper.isAnonUser(getUserId())) {
+                    if (getDisplayName() != null)
+                        logoutText.setText("Logout (" + getDisplayName() + ")");
+                    statsButton.setVisibility(View.VISIBLE);
+                    nameButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    statsButton.setVisibility(View.GONE);
+                    nameButton.setVisibility(View.GONE);
+                }
+            }
+            else {
+                statsButton.setVisibility(View.GONE);
+                nameButton.setVisibility(View.GONE);
+            }
+            logoutButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    ApplicationEx.dbHelper.setOffset(0, getUserId());
+                    setLoggingOut(true);
+                    setQuestionId(null);
+                    setQuestion(null);
+                    setCorrectAnswer(null);
+                    setQuestionCategory(null);
+                    setQuestionScore(null);
+                    setNextQuestionId(null);
+                    setNextQuestion(null);
+                    setNextCorrectAnswer(null);
+                    setNextQuestionCategory(null);
+                    setNextQuestionScore(null);
+                    setThirdQuestionId(null);
+                    setThirdQuestion(null);
+                    setThirdCorrectAnswer(null);
+                    setThirdQuestionCategory(null);
+                    setThirdQuestionScore(null);
+                    startLogout();
+                    slidingMenu.showContent();
+                }
+            });
+            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing())
+                        moveTaskToBack(true);
+                }
+            });
+            /*
+            levelButton = (RelativeLayout) slidingMenu.findViewById(R.id.LevelButton);
+            levelImage = (ImageViewEx) slidingMenu.findViewById(R.id.LevelImage);
+            levelText = (TextView) slidingMenu.findViewById(R.id.LevelText);
+            switch (ApplicationEx.sharedPrefs.getInt(
+                    res.getString(R.string.level_key),Constants.HARD)) {
+            case Constants.EASY:
+                levelText.setText(res.getString(R.string.LevelTitle) + " (Easy)");
+                levelImage.setImageResource(R.drawable.ic_level_easy_inverse);
+                break;
+            case Constants.MEDIUM:
+                levelText.setText(res.getString(R.string.LevelTitle) + " (Medium)");
+                levelImage.setImageResource(R.drawable.ic_level_med_inverse);
+                break;
+            case Constants.HARD:
+                levelText.setText(res.getString(R.string.LevelTitle) + " (Hard)");
+                levelImage.setImageResource(R.drawable.ic_level_hard_inverse);
+                break;
+            }
+            levelButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        switch (ApplicationEx.sharedPrefs.getInt(
+                            res.getString(R.string.level_key), Constants.HARD)) {
+                        case Constants.EASY:
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.MEDIUM).commit();
+                            else
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.MEDIUM).apply();
+                            levelText.setText(res.getString(R.string.LevelTitle) +
+                                    " (Medium)");
+                            levelImage.setImageResource(R.drawable.ic_level_med_inverse);
+                            break;
+                        case Constants.MEDIUM:
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.HARD).commit();
+                            else
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.HARD).apply();
+                            levelText.setText(res.getString(R.string.LevelTitle) +
+                                    " (Hard)");
+                            levelImage.setImageResource(R.drawable.ic_level_hard_inverse);
+                            break;
+                        case Constants.HARD:
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.EASY).commit();
+                            else
+                                ApplicationEx.sharedPrefs.edit().putInt(
+                                        res.getString(R.string.level_key),
+                                        Constants.EASY).apply();
+                            levelText.setText(res.getString(R.string.LevelTitle) +
+                                    " (Easy)");
+                            levelImage.setImageResource(R.drawable.ic_level_easy_inverse);
+                            break;
+                        }
+                        if (getQuestion() == null) {
+                            getNextQuestions(false,
+                                    ApplicationEx.sharedPrefs.getInt(
+                                    res.getString(R.string.level_key),
+                                    Constants.HARD));
+                            if (currFrag != null)
+                                currFrag.showRetry();
+                        }
+                    }
+                }
+            });
+            */
+            soundsButton = (RelativeLayout) slidingMenu.findViewById(R.id.SoundsButton);
+            soundsText = (CheckedTextView) slidingMenu.findViewById(R.id.SoundsText);
+            soundsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+                    res.getString(R.string.sound_key), true));
+            soundsButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        soundsText.toggle();
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.sound_key),
+                                    !ApplicationEx.sharedPrefs.getBoolean(
+                                            res.getString(R.string.sound_key), true))
+                            .commit();
+                        else
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.sound_key),
+                                    !ApplicationEx.sharedPrefs.getBoolean(
+                                            res.getString(R.string.sound_key), true))
+                            .apply();
+                    }
+                }
+            });
+            notificationSoundButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationSoundsButton);
+            notificationSoundImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationSoundsImage);
+            notificationSoundText = (TextView) slidingMenu.findViewById(
+                    R.id.NotificationSoundsText);
+            int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                    res.getString(R.string.notificationsound_key), 0);
+            notificationSoundImage.setImageLevel(soundSetting);
+            switch (soundSetting) {
+            case 0:
+                notificationSoundText.setText(R.string.NotificationBothTitle);
+                break;
+            case 1:
+                notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                break;
+            case 2:
+                notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                break;
+            }
+            notificationSoundButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                                res.getString(R.string.notificationsound_key), 0);
+                        switch (soundSetting) {
+                        case 0:
+                            notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                            soundSetting = 1;
+                            break;
+                        case 1:
+                            notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                            soundSetting = 2;
+                            break;
+                        case 2:
+                            notificationSoundText.setText(R.string.NotificationBothTitle);
+                            soundSetting = 0;
+                            break;
+                        }
+                        notificationSoundImage.setImageLevel(soundSetting);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            ApplicationEx.sharedPrefs.edit().putInt(
+                                    res.getString(R.string.notificationsound_key),
+                                    soundSetting)
+                            .commit();
+                        else
+                            ApplicationEx.sharedPrefs.edit().putInt(
+                                    res.getString(R.string.notificationsound_key),
+                                    soundSetting)
+                            .apply();
+                    }
+                }
+            });
+            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationTypeButton);
+            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationTypeImage);
+            notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
+                    R.id.NotificationTypeText);
+            notificationAlbumText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+                    res.getString(R.string.notificationtype_key), true));
+            notificationAlbumButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        notificationAlbumText.toggle();
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.notificationtype_key),
+                                    notificationAlbumText.isChecked())
+                            .commit();
+                        else
+                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                                    res.getString(R.string.notificationtype_key),
+                                    notificationAlbumText.isChecked())
+                            .apply();
+                    }
+                }
+            });
+        }
+        else if (inStats) {
+            setBehindContentView(R.layout.menu_leaders);
+            shareButton = (RelativeLayout) slidingMenu.findViewById(R.id.ShareButton);
+            shareButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        ApplicationEx.showShortToast("Capturing screen");
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                if (screenshotTask != null)
+                                    screenshotTask.cancel(true);
+                                screenshotTask = new ScreenshotTask();
+                                if (Build.VERSION.SDK_INT <
+                                        Build.VERSION_CODES.HONEYCOMB)
+                                    screenshotTask.execute();
+                                else
+                                    screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
+            nameButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing())
+                        showNameDialog();
+                }
+            });
+            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                inStats = false;
+                                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
+                                        DatabaseHelper.COL_IN_STATS, userId);
+                                showQuiz(true, false);
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            /*
+            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    switchButton.setEnabled(false);
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                setBackground(getLeadersBackground(), true, "leaders");
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
+                }
+            });
+            switchButton.setEnabled(true);
+            */
+        }
+        notificationsButton = (RelativeLayout) slidingMenu.findViewById(
+                R.id.NotificationsButton);
+        notificationsText = (CheckedTextView) slidingMenu.findViewById(
+                R.id.NotificationsText);
+        notificationsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+                res.getString(R.string.notification_key), true));
+        if (notificationSoundButton != null &&
+                notificationAlbumButton != null) {
+            if (!notificationsText.isChecked()) {
+                notificationSoundButton.setEnabled(false);
+                notificationSoundImage.setEnabled(false);
+                notificationSoundText.setTextColor(res.getColor(R.color.dark_gray));
+                notificationAlbumButton.setEnabled(false);
+                notificationAlbumImage.setEnabled(false);
+                notificationAlbumText.setTextColor(res.getColor(R.color.dark_gray));
+                notificationAlbumText.setEnabled(false);
+            }
+            else {
+                notificationSoundButton.setEnabled(true);
+                notificationSoundImage.setEnabled(true);
+                notificationSoundText.setTextColor(res.getColor(android.R.color.white));
+                notificationAlbumButton.setEnabled(true);
+                notificationAlbumImage.setEnabled(true);
+                notificationAlbumText.setTextColor(res.getColor(android.R.color.white));
+                notificationAlbumText.setEnabled(true);
+            }
+        }
+        notificationsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (slidingMenu.isMenuShowing()) {
+                    notificationsText.toggle();
+                    if (notificationSoundButton != null &&
+                            notificationAlbumButton != null) {
+                        if (!notificationsText.isChecked()) {
+                            notificationSoundButton.setEnabled(false);
+                            notificationSoundImage.setEnabled(false);
+                            notificationSoundText.setTextColor(res.getColor(R.color.dark_gray));
+                            notificationAlbumButton.setEnabled(false);
+                            notificationAlbumImage.setEnabled(false);
+                            notificationAlbumText.setTextColor(res.getColor(R.color.dark_gray));
+                            notificationAlbumText.setEnabled(false);
+                        }
+                        else {
+                            notificationSoundButton.setEnabled(true);
+                            notificationSoundImage.setEnabled(true);
+                            notificationSoundText.setTextColor(res.getColor(android.R.color.white));
+                            notificationAlbumButton.setEnabled(true);
+                            notificationAlbumImage.setEnabled(true);
+                            notificationAlbumText.setTextColor(res.getColor(android.R.color.white));
+                            notificationAlbumText.setEnabled(true);
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                                res.getString(R.string.notification_key),
+                                notificationsText.isChecked())
+                        .commit();
+                    else
+                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                                res.getString(R.string.notification_key),
+                                notificationsText.isChecked())
+                        .apply();
+                }
+            }
+        });
+        /*
+        tipsButton = (RelativeLayout) slidingMenu.findViewById(R.id.QuickTipsButton);
+        tipsText = (CheckedTextView) slidingMenu.findViewById(R.id.QuickTipsText);
+        tipsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+                res.getString(R.string.quicktip_key), false));
+        tipsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (slidingMenu.isMenuShowing()) {
+                    tipsText.toggle();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                                res.getString(R.string.quicktip_key),
+                                !ApplicationEx.sharedPrefs.getBoolean(
+                                        res.getString(R.string.quicktip_key), true))
+                        .commit();
+                    else
+                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                                res.getString(R.string.quicktip_key),
+                                !ApplicationEx.sharedPrefs.getBoolean(
+                                        res.getString(R.string.quicktip_key), true))
+                        .apply();
+                }
+            }
+        });
+        */
+        followButton = (RelativeLayout) slidingMenu.findViewById(R.id.FollowButton);
+        followButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (slidingMenu.isMenuShowing())
+                    startActivity(getOpenTwitterIntent());
+            }
+        });
+        likeButton = (RelativeLayout) slidingMenu.findViewById(R.id.LikeButton);
+        likeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (slidingMenu.isMenuShowing())
+                    startActivity(getOpenFacebookIntent());
+            }
+        });
+        quickTipView = (ViewGroup) getLayoutInflater().inflate(
+                R.layout.quicktip_menu,
+                (ViewGroup) findViewById(R.id.ToolTipLayout));
+        quickTipMenuView = (ViewGroup) getLayoutInflater().inflate(
+                R.layout.quicktip_menu,
+                (ViewGroup) findViewById(R.id.ToolTipLayout));
+        quickTipLeftView = (ViewGroup) getLayoutInflater().inflate(
+                R.layout.quicktip_left,
+                (ViewGroup) findViewById(R.id.ToolTipLayout));
+        switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+        switchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                switchButton.setEnabled(false);
+                if (slidingMenu.isMenuShowing()) {
+                    slidingMenu.setOnClosedListener(new OnClosedListener() {
+                        @Override
+                        public void onClosed() {
+                            slidingMenu.setOnClosedListener(null);
+                            setBackground(getBackground(), true, "leaders");
+                        }
+                    });
+                    slidingMenu.showContent();
+                }
+            }
+        });
+        switchButton.setEnabled(true);
+    }
+
+    @Override
+    public boolean getGoToSetlist() {
+        return goToSetlist;
+    }
+    
+    //private InvalidateWaitTask invalidateWaitTask;
+    private ScreenshotTask screenshotTask;
+    //private SwitchTask switchTask;
+
+    @Override
+    public void setInSetlist(boolean inSetlist) {
+        this.inSetlist = inSetlist;
+        ApplicationEx.dbHelper.setUserValue(inSetlist ? 1 : 0,
+                DatabaseHelper.COL_IN_SETLIST, userId);
+        refreshMenu();
+        /*
+        if (invalidateWaitTask != null)
+            invalidateWaitTask.cancel(true);
+        invalidateWaitTask = new InvalidateWaitTask(this);
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+            invalidateWaitTask.execute();
+        else
+            invalidateWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        */
+    }
+    
+    @Override
+    public void setNewSetlist(boolean newSetlist) {
+        this.newSetlist = newSetlist;
+        ApplicationEx.dbHelper.setUserValue(newSetlist ? 1 : 0,
+                DatabaseHelper.COL_NEW_SETLIST, userId);
+    }
+    /*
+    private class InvalidateWaitTask extends AsyncTask<Void, Void, Void> { 
+        private Activity activity;
+        
+        private InvalidateWaitTask(Activity activity) {
+            this.activity = activity;
+        }
+        
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {}
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            VersionedInvalidateOptions.newInstance().create(activity)
+                    .invalidateOptionsMenu();
+        }
+    }
+    */
+    private class ScreenshotTask extends AsyncTask<Void, Void, Void> { 
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {}
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            shareScreenshot();
+        }
+    }
+    /*
+    private class SwitchTask extends AsyncTask<Void, Void, Void> { 
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {}
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            setBackground(getSplashBackground(), true, "splash");
+        }
+    }
+    */
+    @Override
+    public boolean getInSetlist() {
+        return inSetlist;
+    }
+    
+    private MenuItem shareItem;
+    private MenuItem setlistItem;
+
+    @Override
+    public void refreshMenu() {
+        if (mMenu != null) {
+            shareItem = mMenu.findItem(R.id.ShareMenu);
+            setlistItem = mMenu.findItem(R.id.SetlistMenu);
+            if (inSetlist) {
+                if (shareItem != null)
+                    shareItem.setVisible(true);
+                if (setlistItem != null)
+                    setlistItem.setVisible(false);
+            }
+            else if (!inStats && !inInfo && !inLoad && !isLogging) {
+                if (shareItem != null)
+                    shareItem.setVisible(false);
+                if (setlistItem != null)
+                    setlistItem.setVisible(true);
+            }
+            else {
+                if (shareItem != null)
+                    shareItem.setVisible(false);
+                if (setlistItem != null)
+                    setlistItem.setVisible(false);
+            }
+            onPrepareOptionsMenu(mMenu);
+        }
+    }
+    
+    @Override
+    public BitmapDrawableEx getDrawable(int resId) throws OutOfMemoryError {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inTempStorage = new byte[16*1024];
+        BitmapDrawableEx drawable = new BitmapDrawableEx(res, BitmapFactory.decodeResource(res, resId, options));
+        drawable.setIsDisplayed(true);
+        return drawable;
+    }
+    
+    private class SetlistReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setNewSetlist(true);
+        }
     }
     
 }

@@ -1,29 +1,51 @@
 package com.jeffthefate.dmbquiz;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.TimeZone;
 
+import org.apache.commons.lang3.StringUtils;
+import org.ardverk.collection.PatriciaTrie;
+import org.ardverk.collection.StringKeyAnalyzer;
+import org.ardverk.collection.Trie;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.jeffthefate.stacktrace.ExceptionHandler;
 import com.jeffthefate.stacktrace.ExceptionHandler.OnStacktraceListener;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.SaveCallback;
 
@@ -34,6 +56,7 @@ import com.parse.SaveCallback;
  */
 @SuppressLint("ShowToast")
 public class ApplicationEx extends Application implements OnStacktraceListener {
+    // TODO Get the latest setlist and store it for easy access
     /**
      * The application's context
      */
@@ -44,8 +67,40 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static ConnectivityManager connMan;
     public static String cacheLocation = null;
     public static Toast mToast;
+    public static SharedPreferences sharedPrefs;
+    public static String latestSong;
+    public static String setlist;
+    public static String setlistStamp;
+    public static ArrayList<String> setlistList;
+    public static Uri notificationSound;
+    private static Trie<String, SongInfo> songMap;
+    public static SimpleDateFormat df = new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
     
-    @Override
+    private static Drawable portraitBackgroundDrawable;
+    private static Drawable landBackgroundDrawable;
+    private static Drawable portraitSetlistDrawable;
+    private static Drawable landSetlistDrawable;
+    
+    private static class SongInfo {
+        private int image;
+        private int audio;
+        
+        private SongInfo(int image, int audio) {
+            this.image = image;
+            this.audio = audio;
+        }
+        
+        public int getImage() {
+            return image;
+        }
+        
+        public int getAudio() {
+            return audio;
+        }
+    }
+    
+    @SuppressLint("NewApi")
+	@Override
     public void onCreate() {
         super.onCreate();
         // make sure AsyncTask is loaded in the Main thread
@@ -88,6 +143,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         else
             mHasConnection = nInfo.isConnected();
         dbHelper.checkUpgrade();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(app);
+        getSetlist();
+        generateSongMap();
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.saveEventually();
     }
     /**
      * Used by other classes to get the application's global context.
@@ -123,15 +183,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             object.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException arg0) {
-                    mToast.setText("Report sent, thank you");
-                    mToast.show();
+                	showLongToast("Report sent, thank you");
                 }
             });
         }
-        else {
-            mToast.setText("Report sent, thank you");
-            mToast.show();
-        }
+        else
+        	showLongToast("Report sent, thank you");
     }
     
     public static void setConnection(boolean hasConnection) {
@@ -180,8 +237,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     
     public static void setStringArrayPref(String key,
             ArrayList<String> answers) {
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(app);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         if (answers == null)
             editor.remove(key);
@@ -192,7 +247,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             else
                 editor.putString(key, null);
         }
-        editor.commit();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+        	editor.commit();
+        else
+        	editor.apply();
     }
 
     public static ArrayList<String> getStringArrayPref(String key) {
@@ -214,4 +272,312 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         return answers;
     }
     
+    public static void showShortToast(String message) {
+    	if (mToast != null) {
+    		mToast.setText(message);
+    		mToast.setDuration(Toast.LENGTH_SHORT);
+    		mToast.show();
+    	}
+    }
+    
+    public static void showLongToast(String message) {
+    	if (mToast != null) {
+    		mToast.setText(message);
+    		mToast.setDuration(Toast.LENGTH_LONG);
+    		mToast.show();
+    	}
+    }
+    
+    public static void showLongToast(int messageId) {
+    	showLongToast(app.getString(messageId));
+    }
+    
+    public static void getSetlist() {
+        ParseQuery setlistQuery = new ParseQuery("Setlist");
+        setlistQuery.addDescendingOrder("setDate");
+        setlistQuery.setLimit(1);
+        setlistQuery.findInBackground(new FindCallback() {
+            @Override
+            public void done(List<ParseObject> setlists, ParseException e) {
+                Intent intent = new Intent(Constants.ACTION_UPDATE_SETLIST);
+                if (e != null) {
+                    Log.e(Constants.LOG_TAG, "Error getting setlist!", e);
+                    setlist = "Error downloading setlist";
+                    intent.putExtra("success", false);
+                }
+                else {
+                    setlist = setlists.get(0).getString("set");
+                    df.setTimeZone(TimeZone.getDefault());
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Updated:\n");
+                    sb.append(DateFormat.format(df.toLocalizedPattern(), setlists.get(0).getUpdatedAt()));
+                    setlistStamp = sb.toString();
+                    parseSetlist();
+                    intent.putExtra("success", true);
+                }
+                app.sendBroadcast(intent);
+            }
+        });
+    }
+    
+    public static void parseSetlist() {
+        setlistList = new ArrayList<String>(Arrays.asList(setlist.split("\n")));
+    }
+    
+    public static void createNotificationUri(int soundId) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("android.resource://");
+        sb.append(app.getPackageName());
+        sb.append("/");
+        sb.append(soundId);
+        notificationSound = Uri.parse(sb.toString());
+    }
+    
+    private static void generateSongMap() {
+        songMap = new PatriciaTrie<String, SongInfo>(StringKeyAnalyzer.CHAR);
+        
+        songMap.put("belly belly nice", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("belly full", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("broken things", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("drunken soldier", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("gaucho", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("if only", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("mercy", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("the riff", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("rooftop", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("snow outside", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        songMap.put("sweet", new SongInfo(R.drawable.away_from_the_world, R.raw.aftw));
+        
+        songMap.put("#35", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("alligator pie", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("baby blue", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("dive in", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("funny the way it is", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("grux", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("lying in the hands of god", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("seven", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("shake me like a monkey", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("spaceman", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("squirm", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("time bomb", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("why i am", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        songMap.put("you and me", new SongInfo(R.drawable.big_whiskey, R.raw.bw));
+        
+        songMap.put("american baby", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("american baby intro", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("dreamgirl", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("dream girl", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("everybody wake up", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("hello again", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("hunger for the great light", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("louisiana bayou", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("old dirt hill", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("out of my hands", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("smooth rider", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("stand up", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("steady as we go", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("stolen away on 55th & 3rd", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        songMap.put("you might die trying", new SongInfo(R.drawable.stand_up, R.raw.standup));
+        
+        songMap.put("an' another thing", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("baby", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("dodo", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("gravedigger", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("grey blue eyes", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("oh", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("save me", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("so damn lucky", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("some devil", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("stay or leave", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("too high", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("trouble", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("up and away", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        
+        songMap.put("bartender", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("big eyed fish", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("busted stuff", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("captain", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("digging a ditch", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("grace is gone", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("grey street", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("kit kat jam", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("raven", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("where are you going", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        songMap.put("you never know", new SongInfo(R.drawable.busted_stuff, R.raw.bs));
+        
+        songMap.put("angel", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("dreams of our fathers", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("everyday", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("fool to think", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("i did it", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("if i had it all", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("mother father", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("sleep to dream her", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("so right", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("the space between", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("what you are", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        songMap.put("when the world ends", new SongInfo(R.drawable.everyday, R.raw.everyday));
+        
+        songMap.put("crush", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("don't drink the water",
+                new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("dreaming tree", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("halloween", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("last stop", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("pantala naga pampa",
+                new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("pig", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("rapunzel", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("spoon", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("stay", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("the stone", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        
+        songMap.put("#41", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("crash into me", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("cry freedom", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("drive in drive out", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("let you down", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("lie in our graves", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("proudest monkey", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("say goodbye", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("so much to say", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("too much", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("tripping billies", new SongInfo(R.drawable.crash, R.raw.crash));
+        songMap.put("two step", new SongInfo(R.drawable.crash, R.raw.crash));
+        
+        songMap.put("#34", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("ants marching", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("best of whats around",
+                new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("dancing nancies", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("jimi thing", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("lover lay down", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("pay for what you get",
+                new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("rhyme and reason", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("satellite", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("typical situation",
+                new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("warehouse", new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        songMap.put("what would you say",
+                new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
+        
+        songMap.put("christmas song", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("i'll back you up", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("minarets", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("one sweet world", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("recently", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("seek up", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("the song that jane likes", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        
+        songMap.put("encore", new SongInfo(R.drawable.notification_large, R.raw.endofset));
+    }
+    
+    public static int findMatchingImage(String songTitle) {
+        songTitle = StringUtils.remove(songTitle, "*");
+        songTitle = StringUtils.remove(songTitle, "+");
+        songTitle = StringUtils.remove(songTitle, "~");
+        songTitle = StringUtils.remove(songTitle, "Ä");
+        songTitle = StringUtils.strip(songTitle);
+        songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
+        Entry<String, SongInfo> entry = songMap.select(songTitle);
+        if (songTitle.startsWith(entry.getKey()))
+            return entry.getValue().getImage();
+        else
+            return R.drawable.notification_large;
+    }
+    
+    public static int findMatchingAudio(Resources res, String songTitle) {
+        songTitle = StringUtils.remove(songTitle, "*");
+        songTitle = StringUtils.remove(songTitle, "+");
+        songTitle = StringUtils.remove(songTitle, "~");
+        songTitle = StringUtils.remove(songTitle, "Ä");
+        songTitle = StringUtils.remove(songTitle, "(");
+        songTitle = StringUtils.strip(songTitle);
+        songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
+        Entry<String, SongInfo> entry = songMap.select(songTitle);
+        if (ApplicationEx.sharedPrefs.getBoolean(
+                res.getString(R.string.notificationtype_key), true) &&
+                songTitle.startsWith(entry.getKey()))
+            return entry.getValue().getAudio();
+        else
+            return R.raw.general;
+    }
+    
+    public static Bitmap resizeImage(Resources res, int resId) {
+        Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
+        if (resId == R.drawable.notification_large)
+            return bitmap;
+        double ratio = (double) ((double)bitmap.getHeight() / 
+                (double)bitmap.getWidth());
+        Bitmap smallBitmap;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            smallBitmap = Bitmap.createScaledBitmap(bitmap,
+                    res.getDimensionPixelSize(
+                            android.R.dimen.notification_large_icon_width), 
+                    (int) (ratio < 1 ? res.getDimensionPixelSize(
+                        android.R.dimen.notification_large_icon_height)*ratio :
+                        res.getDimensionPixelSize(
+                            android.R.dimen.notification_large_icon_height)),
+                    true);
+        else
+            smallBitmap = Bitmap.createScaledBitmap(bitmap,
+                    res.getDimensionPixelSize(
+                            R.dimen.notification_large_icon_width), 
+                    (int) (ratio < 1 ? res.getDimensionPixelSize(
+                        R.dimen.notification_large_icon_height)*ratio :
+                        res.getDimensionPixelSize(
+                            R.dimen.notification_large_icon_height)),
+                    true);
+        return smallBitmap;
+    }
+    
+    public static void setBackgroundDrawable(Drawable backgroundDrawable) {
+        switch(app.getResources().getConfiguration().orientation) {
+        case Configuration.ORIENTATION_PORTRAIT:
+            ApplicationEx.portraitBackgroundDrawable = backgroundDrawable;
+            break;
+        case Configuration.ORIENTATION_LANDSCAPE:
+            ApplicationEx.landBackgroundDrawable = backgroundDrawable;
+            break;
+        default:
+            break;
+        }
+    }
+    
+    public static Drawable getBackgroundDrawable() {
+        switch(app.getResources().getConfiguration().orientation) {
+        case Configuration.ORIENTATION_PORTRAIT:
+            return ApplicationEx.portraitBackgroundDrawable;
+        case Configuration.ORIENTATION_LANDSCAPE:
+            return ApplicationEx.landBackgroundDrawable;
+        default:
+            return ApplicationEx.portraitBackgroundDrawable;
+        }
+    }
+    
+    public static void setSetlistDrawable(Drawable setlistDrawable) {
+        switch(app.getResources().getConfiguration().orientation) {
+        case Configuration.ORIENTATION_PORTRAIT:
+            ApplicationEx.portraitSetlistDrawable = setlistDrawable;
+            break;
+        case Configuration.ORIENTATION_LANDSCAPE:
+            ApplicationEx.landSetlistDrawable = setlistDrawable;
+            break;
+        default:
+            break;
+        }
+    }
+    
+    public static Drawable getSetlistDrawable() {
+        switch(app.getResources().getConfiguration().orientation) {
+        case Configuration.ORIENTATION_PORTRAIT:
+            return ApplicationEx.portraitSetlistDrawable;
+        case Configuration.ORIENTATION_LANDSCAPE:
+            return ApplicationEx.landSetlistDrawable;
+        default:
+            return ApplicationEx.portraitSetlistDrawable;
+        }
+    }
+
 }

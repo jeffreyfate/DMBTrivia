@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ToolTipLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_marginLeft="20dip"
+    android:layout_marginRight="20dip" >
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/ToolTipImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_left"
+        android:layout_marginTop="1dip"
+        android:layout_marginBottom="1dip"
+        android:contentDescription="@string/left" />
+    <TextView
+        android:id="@+id/ToolTipText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="-5dip"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:background="@drawable/tip_text" />
+</LinearLayout>

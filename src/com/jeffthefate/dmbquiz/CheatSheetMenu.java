@@ -42,9 +42,9 @@ public class CheatSheetMenu {
      * @param textResId The string resource containing the text to show on long-press.
      */
     public static void setup(View view, final int textResId, int width,
-    		int height) {
+    		int height, int location) {
     	showCheatSheet(view, ApplicationEx.getApp().getString(textResId),
-    			width, height);
+    			width, height, location);
     }
 
     /**
@@ -57,23 +57,54 @@ public class CheatSheetMenu {
      * @param text The text to show on long-press.
      */
     public static void setup(View view, final CharSequence text, int width,
-    		int height) {
-    	showCheatSheet(view, text, width, height);
+    		int height, int location) {
+    	showCheatSheet(view, text, width, height, location);
     }
 
     /**
      * Internal helper method to show the cheat sheet toast.
      */
     private static boolean showCheatSheet(View view, CharSequence text,
-    		int width, int height) {
+    		int width, int height, int location) {
         if (TextUtils.isEmpty(text)) {
             return false;
         }
-        TextView toolTipText = (TextView)view.findViewById(R.id.ToolTipText);
+        TextView toolTipText = (TextView) view.findViewById(R.id.ToolTipText);
         toolTipText.setText(text);
         Toast cheatSheet = new Toast(ApplicationEx.getApp());
         cheatSheet.setDuration(Toast.LENGTH_LONG);
-        cheatSheet.setGravity(Gravity.CENTER, 0, height/3);
+        switch (location) {
+        case Constants.QUICK_TIP_TOP:
+        	cheatSheet.setGravity(Gravity.CENTER, 0, height/-5);
+        	break;
+        case Constants.QUICK_TIP_CENTER:
+        	cheatSheet.setGravity(Gravity.CENTER, 0, 0);
+        	break;
+        case Constants.QUICK_TIP_BOTTOM:
+        	cheatSheet.setGravity(Gravity.CENTER, 0, height/3);
+        	break;
+        case Constants.QUICK_TIP_LEFT:
+        	cheatSheet.setGravity(Gravity.LEFT, 0, 0);
+        	break;
+        case Constants.QUICK_TIP_RIGHT:
+        	cheatSheet.setGravity(Gravity.RIGHT, 0, 0);
+        	break;
+        case Constants.QUICK_TIP_LEFT | Constants.QUICK_TIP_TOP:
+        	cheatSheet.setGravity(Gravity.LEFT, 0, height/-5);
+        	break;
+        case Constants.QUICK_TIP_RIGHT | Constants.QUICK_TIP_TOP:
+        	cheatSheet.setGravity(Gravity.RIGHT, 0, height/-5);
+        	break;
+        case Constants.QUICK_TIP_LEFT | Constants.QUICK_TIP_BOTTOM:
+        	cheatSheet.setGravity(Gravity.LEFT, 0, height/3);
+        	break;
+        case Constants.QUICK_TIP_RIGHT | Constants.QUICK_TIP_BOTTOM:
+        	cheatSheet.setGravity(Gravity.RIGHT, 0, height/3);
+        	break;
+        default:
+        	cheatSheet.setGravity(Gravity.CENTER, 0, 0);
+        	break;
+        }
         cheatSheet.setView(view);
         cheatSheet.show();
         return true;

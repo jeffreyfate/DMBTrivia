@@ -3,13 +3,20 @@
     android:id="@+id/SplashLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
 	<RelativeLayout
 	    style="@style/SplashLayout" >
-	    <ImageView
+	    <com.jeffthefate.dmbquiz.ImageViewEx
 	        android:id="@+id/SplashTitle"
 	        style="@style/SplashTitlePort"
 	        android:contentDescription="@string/splashTitle" />
-	    <ImageView
+	    <com.jeffthefate.dmbquiz.ImageViewEx
 	        android:id="@+id/FacebookLoginButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -19,7 +26,7 @@
 	        android:layout_below="@id/SplashTitle"
 	        android:layout_centerHorizontal="true"
 	        android:contentDescription="@string/facebookLogin" />
-	    <ImageView
+	    <com.jeffthefate.dmbquiz.ImageViewEx
 	        android:id="@+id/TwitterLoginButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"

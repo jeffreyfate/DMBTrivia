@@ -16,6 +16,10 @@
 
 <resources>
     <dimen name="actionbar_home_width">60dp</dimen>
+    <dimen name="setlist_offset">0dp</dimen>
     <dimen name="list_padding">10dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
+    
+    <dimen name="notification_large_icon_height">64dp</dimen>
+    <dimen name="notification_large_icon_width">64dp</dimen>
 </resources>

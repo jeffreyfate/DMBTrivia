@@ -2,30 +2,27 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.lang.reflect.Field;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+//import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckedTextView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
-import com.jeffthefate.dmbquiz.CheatSheetMenu;
+import com.jeffthefate.dmbquiz.Constants;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
@@ -34,26 +31,10 @@ import com.parse.Parse;
 public class FragmentBase extends Fragment implements UiCallback {
     
     protected OnButtonListener mCallback;
-    private ViewGroup toolTipView;
     
-    protected RelativeLayout statsButton;
-    protected RelativeLayout switchButton;
-    protected RelativeLayout reportButton;
-    protected RelativeLayout shareButton;
-    protected RelativeLayout nameButton;
-    protected RelativeLayout exitButton;
-    protected RelativeLayout logoutButton;
-    protected TextView logoutText;
+    protected ImageViewEx background;
     
-    protected RelativeLayout soundsButton;
-    protected CheckedTextView soundsText;
-    protected RelativeLayout notificationsButton;
-    protected CheckedTextView notificationsText;
-    protected RelativeLayout tipsButton;
-    protected CheckedTextView tipsText;
-    
-    protected RelativeLayout followButton;
-    protected RelativeLayout likeButton;
+    protected Resources res;
     
     public static final int LOGIN_FACEBOOK = 0;
     public static final int LOGIN_TWITTER = 1;
@@ -73,7 +54,8 @@ public class FragmentBase extends Fragment implements UiCallback {
         }
     }
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /*
@@ -89,44 +71,55 @@ public class FragmentBase extends Fragment implements UiCallback {
         audioManager = (AudioManager) getActivity().getSystemService(
                 Context.AUDIO_SERVICE);
         fields = R.raw.class.getFields();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
-                ApplicationEx.getApp());
     }
-    
+    /*
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-    		Bundle savedInstanceState) {
-    	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
-                (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
-		return null;
-	}
-    
-    protected Resources res;
-    protected SharedPreferences sharedPrefs;
-
+    public void onDestroyView() {
+        if (background != null) {
+            background.setImageDrawable(null);
+            Drawable drawable = background.getDrawable();
+            if (drawable != null) {
+                if (drawable instanceof BitmapDrawableEx) {
+                    BitmapDrawableEx bitmapDrawable = (BitmapDrawableEx) drawable;
+                    bitmapDrawable.setIsDisplayed(false);
+                }
+            }
+        }
+        super.onDestroyView();
+    }
+    */
+    /*
+    @Override
+    public void onDestroyView() {
+        if (background != null) {
+            Drawable drawable = background.getDrawable();
+            if (drawable != null) {
+                /*
+                if (drawable instanceof BitmapDrawable) {
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    bitmap.recycle();
+                }
+                if (drawable instanceof TransitionDrawable) {
+                    TransitionDrawable transitionDrawable = (TransitionDrawable) drawable;
+                    Bitmap bitmap = ((BitmapDrawable)transitionDrawable.getDrawable(0)).getBitmap();
+                    if (bitmap != null)
+                        bitmap.recycle();
+                    /*
+                    bitmap = ((BitmapDrawable)transitionDrawable.getDrawable(1)).getBitmap();
+                    if (bitmap != null)
+                        bitmap.recycle();
+                }
+            }
+        }
+        super.onDestroyView();
+    }
+    */
     @Override
     public void showNetworkProblem() {}
 
     @Override
-    public void showNoMoreQuestions() {}
-    
-    protected Intent getOpenFacebookIntent() {
-
-        try {
-            ApplicationEx.getApp().getPackageManager().getPackageInfo(
-                    "com.facebook.katana", 0);
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("fb://profile/401123586629428"));
-        } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.facebook.com/DMBTrivia"));
-        }
-    }
-
-    protected Intent getOpenTwitterIntent() {
-        Uri uri = Uri.parse("http://www.twitter.com/dmbtrivia");
-        return new Intent(Intent.ACTION_VIEW, uri);
-    }
+    public void showNoMoreQuestions(int level) {}
 
     OnAudioFocusChangeListener afChangeListener = 
         new OnAudioFocusChangeListener() {
@@ -208,7 +201,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         } catch (IllegalAccessException e1) {e1.printStackTrace();}
         if (PreferenceManager.getDefaultSharedPreferences(
                 ApplicationEx.getApp()).getBoolean(
-                        getString(R.string.sound_key), false))
+                		res.getString(R.string.sound_key), false))
             getAudioFocus(currentAudio);
     }
     
@@ -229,54 +222,85 @@ public class FragmentBase extends Fragment implements UiCallback {
         super.onPause();
     }
     
-    protected Drawable getBackgroundDrawable(String name) {
-    	if (name == null)
-    		return res.getDrawable(res.getIdentifier("splash8", "drawable",
-    				getActivity().getPackageName()));
-    	else
-    		return res.getDrawable(res.getIdentifier(name,	"drawable",
-    				getActivity().getPackageName()));
-    }
-    
-    public void openStats() {
-    	if (mCallback != null) {
-        	if (!sharedPrefs.contains(getString(R.string.stats_key)) ||
-        			sharedPrefs.getBoolean(getString(R.string.quicktip_key),
-        					false)) {
-                sharedPrefs.edit().putBoolean(getString(R.string.stats_key),
-                		true).commit();
-                CheatSheetMenu.setup(toolTipView, "Touch your score to " +
-                		"enter Stats & Standings", mCallback.getWidth(),
-                		mCallback.getHeight());
+    protected void setBackgroundBitmap(String name, String screen) {
+        Drawable backgroundDrawable = ApplicationEx.getBackgroundDrawable();
+        if (backgroundDrawable == null) {
+            Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
+        	if (name == null)
+        	    mCallback.setBackground("splash4", false, screen);
+        	else
+        	    mCallback.setBackground(name, false, screen);
+        }
+        else {
+            if (background != null) {
+                /*
+                if (backgroundDrawable instanceof TransitionDrawable) {
+                    Drawable tempDrawable =
+                        ((TransitionDrawable)backgroundDrawable).getDrawable(1);
+                    if (tempDrawable != null)
+                        background.setImageDrawable(tempDrawable);
+                    else {
+                        Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
+                        if (name == null)
+                            mCallback.setBackground("splash4", false, screen);
+                        else
+                            mCallback.setBackground(name, false, screen);
+                    }
+                }
+                else
+                    background.setImageDrawable(backgroundDrawable);
+                */
+                background.setImageDrawable(backgroundDrawable);
             }
-            mCallback.onStatsPressed();
         }
     }
     
-    public void switchBackground() {
-    	if (mCallback != null)
-            mCallback.setBackground(mCallback.getBackground(), true);
+    @SuppressLint("NewApi")
+	public void toggleSounds() {
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+    		ApplicationEx.sharedPrefs.edit().putBoolean(
+    				res.getString(R.string.sound_key),
+    				!ApplicationEx.sharedPrefs.getBoolean(
+    						res.getString(R.string.sound_key),true))
+				.commit();
+    	else
+    		ApplicationEx.sharedPrefs.edit().putBoolean(
+    				res.getString(R.string.sound_key),
+    				!ApplicationEx.sharedPrefs.getBoolean(
+    						res.getString(R.string.sound_key),true))
+				.apply();
     }
     
-    public void toggleSounds() {
-        sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
-                !sharedPrefs.getBoolean(getString(R.string.sound_key),
-                        true))
-            .commit();
+    @SuppressLint("NewApi")
+	public void toggleNotifications() {
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    			res.getString(R.string.notification_key),
+	                !ApplicationEx.sharedPrefs.getBoolean(
+	                		res.getString(R.string.notification_key), true))
+	            .commit();
+    	else
+	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    			res.getString(R.string.notification_key),
+	                !ApplicationEx.sharedPrefs.getBoolean(
+	                		res.getString(R.string.notification_key), true))
+	            .apply();
     }
     
-    public void toggleNotifications() {
-        sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                !sharedPrefs.getBoolean(
-                        getString(R.string.notification_key), true))
-            .commit();
-    }
-    
-    public void toggleTips() {
-        sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
-                !sharedPrefs.getBoolean(
-                        getString(R.string.quicktip_key), true))
-            .commit();
+    @SuppressLint("NewApi")
+	public void toggleTips() {
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    			res.getString(R.string.quicktip_key),
+	                !ApplicationEx.sharedPrefs.getBoolean(
+	                		res.getString(R.string.quicktip_key), true))
+	            .commit();
+    	else
+	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    			res.getString(R.string.quicktip_key),
+	                !ApplicationEx.sharedPrefs.getBoolean(
+	                		res.getString(R.string.quicktip_key), true))
+	            .apply();
     }
     
     public void report() {
@@ -321,14 +345,6 @@ public class FragmentBase extends Fragment implements UiCallback {
     public void exit() {
     	getActivity().moveTaskToBack(true);
     }
-    
-    public void follow() {
-    	startActivity(getOpenTwitterIntent());
-    }
-    
-    public void like() {
-    	startActivity(getOpenFacebookIntent());
-    }
 
     @Override
     public void updateScoreText() {}
@@ -351,13 +367,39 @@ public class FragmentBase extends Fragment implements UiCallback {
     @Override
     public void setDisplayName(String displayName) {}
 
-	@Override
-	public void setBackground(Drawable background) {}
+    @Override
+	public void setBackground(Bitmap newBackground) {
+    	if (background != null && newBackground != null)
+			background.setImageBitmap(newBackground);
+    }
+    
+    @Override
+    public void setBackground(Drawable newBackground) {
+        if (background != null && newBackground != null) {
+            background.setImageDrawable(newBackground);
+        }
+    }
 	
 	@Override
-	public Drawable getBackground() {return null;}
+	public Drawable getBackground() {
+		if (background == null)
+    		return null;
+    	else
+    		return background.getDrawable();
+	}
+	
+    @Override
+    public void updateSetText() {}
 
-	@Override
-	public void toggleMenu() {}
+    @Override
+    public void showRetry() {}
+
+    @Override
+    public int getPage() {
+        return 0;
+    }
     
+    @Override
+    public void setPage(int page) {}
+
 }

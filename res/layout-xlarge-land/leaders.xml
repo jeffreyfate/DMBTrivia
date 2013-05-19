@@ -1,202 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ListLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:baselineAligned="false" >
-    <RelativeLayout
-        android:id="@+id/UserList"
+    android:layout_height="match_parent" >
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_weight="0.5" >
-        <TextView
-            android:id="@+id/UserText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/MyStats"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_centerHorizontal="true"
-            android:textSize="40sp"
-            android:gravity="center"
-            android:layout_alignParentTop="true" />
-        <LinearLayout
-            android:id="@+id/Stat1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@id/UserText" >
-            <TextView
-                android:id="@+id/Stat1Name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/CorrectAnswers"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.2"
-                android:gravity="left"
-                android:textSize="36sp"
-                android:ellipsize="end"
-                android:singleLine="true" />
-            <TextView
-                android:id="@+id/Stat1Score"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Error"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.8"
-                android:gravity="right"
-                android:textSize="36sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/Stat2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@id/Stat1" >
-            <TextView
-                android:id="@+id/Stat2Name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/HintsUsed"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.2"
-                android:gravity="left"
-                android:textSize="36sp"
-                android:ellipsize="end"
-                android:singleLine="true" />
-            <TextView
-                android:id="@+id/Stat2Score"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Error"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.8"
-                android:gravity="right"
-                android:textSize="36sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/LastQuestionLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="center_vertical"
-            android:layout_below="@id/Stat2" >
-            <TextView
-                android:id="@+id/LastQuestionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.45"
-                android:gravity="left"
-                android:textSize="36sp"
-                android:textScaleX="0.9"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@string/LatestQuestion" />
-            <TextView
-                android:id="@+id/LastQuestionDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Error"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_weight="0.55"
-                android:gravity="right"
-                android:textSize="36sp"
-                android:textScaleX="0.9" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/UserScoreLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentBottom="true" >
-            <TextView
-                android:id="@+id/UserName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/green"
-                android:layout_weight="0.4"
-                android:gravity="left"
-                android:textSize="36sp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@string/Error" />
-            <TextView
-                android:id="@+id/UserScore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Error"
-                android:textStyle="bold"
-                android:textColor="@color/green"
-                android:layout_weight="0.6"
-                android:gravity="right"
-                android:textSize="36sp" />
-        </LinearLayout>
-    </RelativeLayout>
-    <LinearLayout 
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Darkness"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_weight="0.5" >
-        <TextView
-            android:id="@+id/LeadersText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/leaders"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:layout_gravity="center" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-            <ListView
-                android:id="@android:id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawSelectorOnTop="false" />
-            <RelativeLayout
-                android:id="@android:id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                android:gravity="center" >
-                <TextView
-                    android:id="@+id/EmptyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center" />
-                <ProgressBar
-                    android:id="@+id/EmptyProgress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </LinearLayout>
-</LinearLayout>
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false" >
+	    <RelativeLayout
+	        android:id="@+id/UserList"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_marginTop="8dp"
+	        android:layout_marginBottom="8dp"
+	        android:layout_marginLeft="12dp"
+	        android:layout_marginRight="12dp"
+	        android:layout_weight="0.5" >
+	        <TextView
+	            android:id="@+id/UserText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/MyStats"
+	            android:textStyle="bold"
+	            android:textColor="@android:color/white"
+	            android:layout_centerHorizontal="true"
+	            android:textSize="40sp"
+	            android:gravity="center"
+	            android:layout_alignParentTop="true" />
+	        <LinearLayout
+	            android:id="@+id/Stat1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="8dp"
+	            android:layout_marginBottom="8dp"
+	            android:layout_below="@id/UserText" >
+	            <TextView
+	                android:id="@+id/Stat1Name"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/CorrectAnswers"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.2"
+	                android:gravity="left"
+	                android:textSize="36sp"
+	                android:ellipsize="end"
+	                android:singleLine="true" />
+	            <TextView
+	                android:id="@+id/Stat1Score"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/Error"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.8"
+	                android:gravity="right"
+	                android:textSize="36sp" />
+	        </LinearLayout>
+	        <LinearLayout
+	            android:id="@+id/Stat2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="8dp"
+	            android:layout_marginBottom="8dp"
+	            android:layout_below="@id/Stat1" >
+	            <TextView
+	                android:id="@+id/Stat2Name"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/HintsUsed"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.2"
+	                android:gravity="left"
+	                android:textSize="36sp"
+	                android:ellipsize="end"
+	                android:singleLine="true" />
+	            <TextView
+	                android:id="@+id/Stat2Score"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/Error"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.8"
+	                android:gravity="right"
+	                android:textSize="36sp" />
+	        </LinearLayout>
+	        <LinearLayout
+	            android:id="@+id/LastQuestionLayout"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_marginTop="8dp"
+	            android:layout_marginBottom="8dp"
+	            android:layout_gravity="center_vertical"
+	            android:layout_below="@id/Stat2" >
+	            <TextView
+	                android:id="@+id/LastQuestionText"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.45"
+	                android:gravity="left"
+	                android:textSize="36sp"
+	                android:textScaleX="0.9"
+	                android:ellipsize="end"
+	                android:singleLine="true"
+	                android:text="@string/LatestQuestion" />
+	            <TextView
+	                android:id="@+id/LastQuestionDate"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/Error"
+	                android:textStyle="bold"
+	                android:textColor="@android:color/white"
+	                android:layout_weight="0.55"
+	                android:gravity="right"
+	                android:textSize="36sp"
+	                android:textScaleX="0.9" />
+	        </LinearLayout>
+	        <RelativeLayout
+	            android:id="@+id/UserScoreLayout"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical"
+	            android:layout_alignParentBottom="true" >
+	            <TextView
+	                android:id="@+id/UserRank"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textStyle="bold"
+	                android:textColor="@color/green"
+	                android:gravity="left"
+	                android:layout_marginRight="8dip"
+	                android:layout_alignParentLeft="true"
+	                android:textSize="36sp"
+	                android:singleLine="true" />
+	            <TextView
+	                android:id="@+id/UserScore"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="@string/Error"
+	                android:textStyle="bold"
+	                android:textColor="@color/green"
+	                android:gravity="right"
+	                android:layout_marginLeft="8dip"
+	                android:layout_alignParentRight="true"
+	                android:textSize="36sp" />
+	            <TextView
+	                android:id="@+id/UserName"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textStyle="bold"
+	                android:textColor="@color/green"
+	                android:gravity="left"
+	                android:layout_toRightOf="@id/UserRank"
+	                android:layout_toLeftOf="@id/UserScore"
+	                android:textSize="36sp"
+	                android:ellipsize="end"
+	                android:singleLine="true"
+	                android:text="@string/Error" />
+	        </RelativeLayout>
+	    </RelativeLayout>
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical"
+	        android:layout_marginTop="8dp"
+	        android:layout_marginBottom="8dp"
+	        android:layout_marginLeft="12dp"
+	        android:layout_marginRight="12dp"
+	        android:layout_weight="0.5" >
+	        <TextView
+	            android:id="@+id/LeadersText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/leaders"
+	            android:textStyle="bold"
+	            android:textColor="@android:color/white"
+	            android:textSize="40sp"
+	            android:layout_gravity="center" />
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent" >
+	            <ListView
+	                android:id="@android:id/list"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:drawSelectorOnTop="false" />
+	            <RelativeLayout
+	                android:id="@android:id/empty"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:visibility="invisible"
+	                android:gravity="center" >
+	                <TextView
+	                    android:id="@+id/EmptyText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerInParent="true"
+	                    android:gravity="center" />
+	                <ProgressBar
+	                    android:id="@+id/EmptyProgress"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:visibility="invisible"
+	                    android:layout_centerInParent="true" />
+	            </RelativeLayout>
+	        </RelativeLayout>
+	    </LinearLayout>
+	</LinearLayout>
+</RelativeLayout>

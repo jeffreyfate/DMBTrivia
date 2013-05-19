@@ -81,10 +81,12 @@ public class LeaderAdapter extends ArrayAdapter<String>  {
         holder.text1.setText(userList.get(position));
         holder.text2.setText(scoreList.get(position));
         if (userIdList.get(position).equals(userId)) {
+        	holder.rank.setTextColor(Color.GREEN);
             holder.text1.setTextColor(Color.GREEN);
             holder.text2.setTextColor(Color.GREEN);
         }
         else {
+        	holder.rank.setTextColor(Color.WHITE);
             holder.text1.setTextColor(Color.WHITE);
             holder.text2.setTextColor(Color.WHITE);
         }

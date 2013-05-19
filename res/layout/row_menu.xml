@@ -3,7 +3,7 @@
     android:id="@+id/ListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/MenuImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

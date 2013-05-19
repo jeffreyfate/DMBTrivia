@@ -15,25 +15,21 @@ public class Constants {
     
     public static final String ACTION_NEW_QUESTIONS =
             "com.jeffthefate.dmb.ACTION_NEW_QUESTIONS";
+    public static final String ACTION_NEW_SONG =
+            "com.jeffthefate.dmb.ACTION_NEW_SONG";
+    public static final String ACTION_UPDATE_SETLIST =
+            "com.jeffthefate.dmb.ACTION_UPDATE_SETLIST";
     
     public static final int NOTIFICATION_NEW_QUESTIONS = 3641;
     
-    public static final int MENU_STATS = 0;
-    public static final int MENU_BACKGROUND = 1;
-    public static final int MENU_SOUND = 2;
-    public static final int MENU_NOTIFICATIONS = 3;
-    public static final int MENU_QUICKTIPS = 4;
-    public static final int MENU_FOLLOW = 5;
-    public static final int MENU_LIKE = 6;
-    public static final int MENU_REPORT = 7;
-    public static final int MENU_SCREEN = 8;
-    public static final int MENU_NAME = 9;
-    public static final int MENU_LOGOUT = 10;
-    public static final int MENU_EXIT = 11;
+    public static final int QUICK_TIP_TOP = 1;
+    public static final int QUICK_TIP_CENTER = 2;
+    public static final int QUICK_TIP_BOTTOM = 4;
+    public static final int QUICK_TIP_LEFT = 8;
+    public static final int QUICK_TIP_RIGHT = 16;
     
-    public enum TextMenus {
-    	MENU_STATS, MENU_BACKGROUND, MENU_REPORT, MENU_SCREEN, MENU_NAME,
-    	MENU_LOGOUT, MENU_EXIT
-    }
+    public static final int EASY = 0;
+    public static final int MEDIUM = 1;
+    public static final int HARD = 2;
     
 }

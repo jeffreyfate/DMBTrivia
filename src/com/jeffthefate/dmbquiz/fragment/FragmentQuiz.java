@@ -2,10 +2,11 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,36 +17,29 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
-import com.jeffthefate.dmbquiz.CheatSheetMenu;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.slidingmenu.lib.SlidingMenu;
 
 public class FragmentQuiz extends FragmentBase {
     
-	private ImageView backgroundImage;
     private TextView scoreText;
     private TextView questionText;
     private EditText answerText;
@@ -57,12 +51,9 @@ public class FragmentQuiz extends FragmentBase {
     private RelativeLayout hintButton;
     private TextView hintText;
     private TextView hintTime;
-    private ImageView answerImage;
+    private ImageViewEx answerImage;
     private TextView retryText;
     private Button retryButton;
-    private ViewGroup toolTipView;
-    private SlidingMenu slidingMenu;
-    //private ImageView cameraButton;
     
     private long skipTick = 17000;
     private long hintTick = 15000;
@@ -90,20 +81,36 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	if (mCallback != null)
+    		mCallback.setHomeAsUp(true);
+    }
+    
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!sharedPrefs.contains(getString(R.string.sound_key)))
-            sharedPrefs.edit().putBoolean(getString(R.string.sound_key), true)
-                    .commit();
-        if (!sharedPrefs.contains(getString(R.string.notification_key)))
-            sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                    true).commit();
-        if (!sharedPrefs.contains(getString(R.string.quicktip_key)))
-            sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
-                    false).commit();
+        setHasOptionsMenu(true);
+        if (!ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.sound_key))) {
+        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	            		res.getString(R.string.sound_key), true).commit();
+        	else
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	            		res.getString(R.string.sound_key), true).apply();
+        }
+        if (!ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.quicktip_key))) {
+        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.quicktip_key),false).commit();
+        	else
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.quicktip_key),false).apply();
+        }
         imm = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
-        setHasOptionsMenu(true);
         if (savedInstanceState != null) {
             /*
             savedAnswer = savedInstanceState.getString("answer");
@@ -162,6 +169,239 @@ public class FragmentQuiz extends FragmentBase {
                 DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue((int) skipTick,
                 DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
+    }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+    	super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.question, container, false);
+        /*
+        ViewTreeObserver vto = slidingMenu.getViewTreeObserver(); 
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() { 
+            @Override 
+            public void onGlobalLayout() { 
+                slidingMenu.setThreshold(5);
+            } 
+        });
+        */
+		background = (ImageViewEx) v.findViewById(R.id.Background);
+		setBackgroundBitmap(mCallback.getBackground(), "quiz");
+        scoreText = (TextView) v.findViewById(R.id.ScoreText);
+        scoreText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCallback != null)
+                    mCallback.onStatsPressed();
+            }
+        });
+        scoreText.setText(ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.scoretext_key), ""));
+        questionText = (TextView) v.findViewById(R.id.QuestionText);
+        questionText.setMovementMethod(new ScrollingMovementMethod());
+        questionText.setText(ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.questiontext_key), ""));
+        answerText = (EditText) v.findViewById(R.id.QuestionAnswer);
+        answerText.setOnEditorActionListener(new OnEditorActionListener() {
+            @SuppressLint("NewApi")
+			@Override
+            public boolean onEditorAction(TextView v, int actionId,
+                    KeyEvent event) {
+                if (mCallback != null && !mCallback.getNetworkProblem() &&
+                        !mCallback.isNewQuestion() &&
+                        (actionId == EditorInfo.IME_ACTION_DONE ||
+                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    answerButton.setBackgroundResource(
+                            R.drawable.button_disabled);
+                    answerButton.setTextColor(res.getColor(R.color.light_gray));
+                    answerButton.setText("ENTER");
+                    answerButton.setEnabled(false);
+                    String entry = null;
+                    entry = v.getEditableText().toString();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+                        new VerifyTask(mCallback.getUserId(),
+                                mCallback.getQuestionId(),
+                                mCallback.getQuestionHint()).execute(entry);
+                    else
+                        new VerifyTask(mCallback.getUserId(),
+                                mCallback.getQuestionId(),
+                                mCallback.getQuestionHint()).executeOnExecutor(
+                                        AsyncTask.THREAD_POOL_EXECUTOR, entry);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                else
+                    return false;
+            } 
+        });
+        answerText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after){}
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count){
+                /*
+                savedAnswer = s == null ? "" : s.toString();
+                ApplicationEx.dbHelper.setUserValue(savedAnswer,
+                        DatabaseHelper.COL_ANSWER, mCallback.getUserId());
+                */
+            }
+        });
+        answerText.setText(ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.answertext_key), ""));
+        answerText.setHint(ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.hinttext_key), ""));
+        answerPlace = (TextView) v.findViewById(R.id.AnswerText);
+        answerPlace.setText(ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.placetext_key), ""));
+        answerButton = (Button) v.findViewById(R.id.QuestionButton);
+        answerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answerButton.setBackgroundResource(R.drawable.button_disabled);
+                answerButton.setTextColor(res.getColor(R.color.light_gray));
+                answerButton.setEnabled(false);
+                if (mCallback != null) {
+                    if (mCallback.isNewQuestion()) {
+                    	answerButton.setText("NEXT");
+                        if (Build.VERSION.SDK_INT <
+                                Build.VERSION_CODES.HONEYCOMB)
+                            new NextTask().execute();
+                        else
+                            new NextTask().executeOnExecutor(
+                                    AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                    	answerButton.setText("ENTER");
+                        if (Build.VERSION.SDK_INT <
+                                Build.VERSION_CODES.HONEYCOMB)
+                            new VerifyTask(mCallback.getUserId(),
+                                    mCallback.getQuestionId(),
+                                    mCallback.getQuestionHint()).execute(
+                                    answerText.getEditableText().toString());
+                        else
+                            new VerifyTask(mCallback.getUserId(),
+                                    mCallback.getQuestionId(),
+                                    mCallback.getQuestionHint())
+                                .executeOnExecutor(
+                                    AsyncTask.THREAD_POOL_EXECUTOR,
+                                    answerText.getEditableText().toString());
+                    }
+                }
+            }
+        });
+        skipButton = (RelativeLayout) v.findViewById(R.id.Skip);
+        skipButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.setIsNewQuestion(true);
+                stageQuestion(mCallback.getUserId(), mCallback.getQuestionId(),
+                        mCallback.getQuestionHint());
+                skipButton.setEnabled(false);
+                playAudio("skip");
+                savedHint = mCallback.getCorrectAnswer();
+                ApplicationEx.dbHelper.setUserValue(savedHint,
+                        DatabaseHelper.COL_HINT, mCallback.getUserId());
+                answerPlace.setText(savedHint);
+                hintButton.setEnabled(false);
+                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setBackgroundResource(R.drawable.button_disabled);
+                answerButton.setBackgroundResource(R.drawable.button);
+                answerButton.setTextColor(Color.BLACK);
+                answerButton.setText("NEXT");
+                answerButton.setEnabled(true);
+                skipText.setTextColor(res.getColor(R.color.light_gray));
+                skipText.setBackgroundResource(R.drawable.button_disabled);
+                skipPressed = true;
+                ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+                        DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
+                if (hintTimer != null)
+                    hintTimer.cancel();
+                if (skipTimer != null)
+                    skipTimer.cancel();
+                isCorrect = true;
+                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+                        DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
+                hintTick = 0;
+                ApplicationEx.dbHelper.setUserValue((int) hintTick,
+                        DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
+                skipTick = 0;
+                ApplicationEx.dbHelper.setUserValue((int) skipTick,
+                        DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
+                saveQuestionScore(true);
+            } 
+        });
+        skipText = (TextView) v.findViewById(R.id.SkipText);
+        skipTime = (TextView) v.findViewById(R.id.SkipTime);
+        if (skipTick > 0)
+            skipTime.setText(Long.toString((skipTick/1000)+1));
+        hintButton = (RelativeLayout) v.findViewById(R.id.Hint);
+        hintButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hintButton.setEnabled(false);
+                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setBackgroundResource(R.drawable.button_disabled);
+                hintTick = 0;
+                ApplicationEx.dbHelper.setUserValue((int) hintTick,
+                        DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
+                playAudio("hint");
+                indicateHint();
+            } 
+        });
+        hintText = (TextView) v.findViewById(R.id.HintText);
+        hintTime = (TextView) v.findViewById(R.id.HintTime);
+        if (hintTick > 0)
+            hintTime.setText(Long.toString((hintTick/1000)+1));
+        answerImage = (ImageViewEx) v.findViewById(R.id.AnswerImage);
+        answerImage.bringToFront();
+        retryText = (TextView) v.findViewById(R.id.RetryText);
+        retryButton = (Button) v.findViewById(R.id.RetryButton);
+        retryButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disableButton(true);
+                if (mCallback != null) {
+                    if (ApplicationEx.getConnection()) {
+                        mCallback.setNetworkProblem(false);
+                        if (mCallback.getQuestionId() != null)
+                            resumeQuestion();
+                        else
+                            mCallback.getNextQuestions(false,
+                            		ApplicationEx.sharedPrefs.getInt(
+                            				res.getString(R.string.level_key),
+                            				Constants.HARD));
+                    }
+                    else {
+                        ApplicationEx.showLongToast(R.string.NoConnectionToast);
+                        showNetworkProblem();
+                    }
+                }
+            }
+        });
+        if (!ApplicationEx.sharedPrefs.getString(
+        		res.getString(R.string.scoretext_key), "").equals("")) {
+        	scoreText.setVisibility(View.VISIBLE);
+        	questionText.setVisibility(View.VISIBLE);
+        	answerText.setVisibility(View.VISIBLE);
+        	answerPlace.setVisibility(View.VISIBLE);
+        	answerButton.setVisibility(View.VISIBLE);
+        	hintButton.setVisibility(View.VISIBLE);
+        	skipButton.setVisibility(View.VISIBLE);
+        	hintTime.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        			res.getString(R.string.hinttimevis_key), View.VISIBLE));
+        	hintText.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        			res.getString(R.string.hinttextvis_key), View.INVISIBLE));
+        	skipTime.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        			res.getString(R.string.skiptimevis_key), View.VISIBLE));
+        	skipText.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        			res.getString(R.string.skiptextvis_key), View.INVISIBLE));
+        	hintTime.setText(ApplicationEx.sharedPrefs.getString(
+        			res.getString(R.string.hintnum_key), ""));
+        	skipTime.setText(ApplicationEx.sharedPrefs.getString(
+        			res.getString(R.string.skipnum_key), ""));
+        }
+        return v;
     }
     
     private class WrongTimer extends CountDownTimer {
@@ -289,7 +529,6 @@ public class FragmentQuiz extends FragmentBase {
         
         protected void onProgressUpdate(Void... nothing) {
             answerText.setText("");
-            Log.i(Constants.LOG_TAG, "blanking answer");
             answerButton.setText("LOADING");
             //imm.restartInput(answerText);
         }
@@ -392,402 +631,13 @@ public class FragmentQuiz extends FragmentBase {
         protected void onProgressUpdate(Void... nothing) {
             answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
             answerPlace.setVisibility(View.VISIBLE);
-            Log.w(Constants.LOG_TAG, "HintTask setHint: " + answerTextHint);
             answerText.setHint(answerTextHint);
-            Log.i(Constants.LOG_TAG, "restart input HintTask");
             imm.restartInput(answerText);
         }
         
         @Override
         protected void onCancelled(Void nothing) {
         }
-    }
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-    	toolTipView = (ViewGroup) inflater.inflate(R.layout.tooltip,
-                (ViewGroup) getActivity().findViewById(R.id.ToolTipLayout));
-        View v = inflater.inflate(R.layout.slidingquiz, container, false);
-        slidingMenu = (SlidingMenu) v.findViewById(R.id.SlidingMenu);
-        statsButton = (RelativeLayout) v.findViewById(R.id.StatsButton);
-        statsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null)
-					mCallback.onStatsPressed();
-			}
-        });
-        switchButton = (RelativeLayout) v.findViewById(R.id.SwitchButton);
-        switchButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null)
-	                mCallback.setBackground(mCallback.getBackground(), true);
-			}
-        });
-        reportButton = (RelativeLayout) v.findViewById(R.id.ReportButton);
-        reportButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				ApplicationEx.reportQuestion(mCallback.getQuestionId(),
-	                    mCallback.getQuestion(), mCallback.getCorrectAnswer(),
-	                    mCallback.getQuestionScore());
-			}
-        });
-        shareButton = (RelativeLayout) v.findViewById(R.id.ShareButton);
-        shareButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null)
-	                mCallback.shareScreenshot();
-			}
-        });
-        nameButton = (RelativeLayout) v.findViewById(R.id.NameButton);
-        nameButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null)
-	                mCallback.showNameDialog();
-			}
-        });
-        exitButton = (RelativeLayout) v.findViewById(R.id.ExitButton);
-        exitButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				getActivity().moveTaskToBack(true);
-			}
-        });
-        logoutButton = (RelativeLayout) v.findViewById(R.id.LogoutButton);
-        logoutText = (TextView) v.findViewById(R.id.LogoutText);
-        if (mCallback.getUserId() != null) {
-            if (ApplicationEx.dbHelper.hasUser(mCallback.getUserId()) &&
-                    !ApplicationEx.dbHelper.isAnonUser(mCallback.getUserId())) {
-                if (mCallback.getDisplayName() != null)
-                	logoutText.setText("Logout (" + mCallback.getDisplayName() +
-                			")");
-                statsButton.setVisibility(View.VISIBLE);
-                nameButton.setVisibility(View.VISIBLE);
-            }
-            else {
-            	statsButton.setVisibility(View.GONE);
-            	nameButton.setVisibility(View.GONE);
-            }
-        }
-        else {
-        	statsButton.setVisibility(View.GONE);
-        	nameButton.setVisibility(View.GONE);
-        }
-        logoutButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null) {
-	                ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
-	                mCallback.setLoggingOut(true);
-	                mCallback.setQuestionId(null);
-	                mCallback.setQuestion(null);
-	                mCallback.setCorrectAnswer(null);
-	                mCallback.setQuestionCategory(null);
-	                mCallback.setQuestionScore(null);
-	                mCallback.setNextQuestionId(null);
-	                mCallback.setNextQuestion(null);
-	                mCallback.setNextCorrectAnswer(null);
-	                mCallback.setNextQuestionCategory(null);
-	                mCallback.setNextQuestionScore(null);
-	                mCallback.setThirdQuestionId(null);
-	                mCallback.setThirdQuestion(null);
-	                mCallback.setThirdCorrectAnswer(null);
-	                mCallback.setThirdQuestionCategory(null);
-	                mCallback.setThirdQuestionScore(null);
-	                mCallback.logOut(true);
-	            }
-			}
-        });
-        soundsButton = (RelativeLayout) v.findViewById(R.id.SoundsButton);
-        soundsText = (CheckedTextView) v.findViewById(R.id.SoundsText);
-        soundsText.setChecked(sharedPrefs.getBoolean(
-        		getString(R.string.sound_key), true));
-        soundsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				soundsText.toggle();
-				sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
-	                    !sharedPrefs.getBoolean(getString(R.string.sound_key),
-	                            true))
-	                .commit();
-			}
-        });
-        notificationsButton = (RelativeLayout) v.findViewById(
-        		R.id.NotificationsButton);
-        notificationsText = (CheckedTextView) v.findViewById(
-        		R.id.NotificationsText);
-        notificationsText.setChecked(sharedPrefs.getBoolean(
-        		getString(R.string.notification_key), true));
-        notificationsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				notificationsText.toggle();
-				sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-	                    !sharedPrefs.getBoolean(
-	                            getString(R.string.notification_key), true))
-	                .commit();
-			}
-        });
-        tipsButton = (RelativeLayout) v.findViewById(R.id.QuickTipsButton);
-        tipsText = (CheckedTextView) v.findViewById(R.id.QuickTipsText);
-        tipsText.setChecked(sharedPrefs.getBoolean(
-        		getString(R.string.quicktip_key), false));
-        tipsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				tipsText.toggle();
-				sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
-	                    !sharedPrefs.getBoolean(
-	                            getString(R.string.quicktip_key), true))
-	                .commit();
-			}
-        });
-        followButton = (RelativeLayout) v.findViewById(R.id.FollowButton);
-        followButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				startActivity(getOpenTwitterIntent());
-			}
-        });
-        likeButton = (RelativeLayout) v.findViewById(R.id.LikeButton);
-        likeButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				startActivity(getOpenFacebookIntent());
-			}
-        });
-		backgroundImage = (ImageView) v.findViewById(R.id.Background);
-		setBackground(getBackgroundDrawable(mCallback.getBackground()));
-        scoreText = (TextView) v.findViewById(R.id.ScoreText);
-        scoreText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCallback != null)
-                    mCallback.onStatsPressed();
-            }
-        });
-        scoreText.setText(sharedPrefs.getString(
-        		getString(R.string.scoretext_key), ""));
-        questionText = (TextView) v.findViewById(R.id.QuestionText);
-        questionText.setMovementMethod(new ScrollingMovementMethod());
-        questionText.setText(sharedPrefs.getString(
-        		getString(R.string.questiontext_key), ""));
-        answerText = (EditText) v.findViewById(R.id.QuestionAnswer);
-        answerText.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                    KeyEvent event) {
-                if (mCallback != null && !mCallback.getNetworkProblem() &&
-                        !mCallback.isNewQuestion() &&
-                        (actionId == EditorInfo.IME_ACTION_DONE ||
-                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    answerButton.setBackgroundResource(
-                            R.drawable.button_disabled);
-                    answerButton.setTextColor(res.getColor(R.color.light_gray));
-                    answerButton.setText("ENTER");
-                    answerButton.setEnabled(false);
-                    String entry = null;
-                    entry = v.getEditableText().toString();
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                        new VerifyTask(mCallback.getUserId(),
-                                mCallback.getQuestionId(),
-                                mCallback.getQuestionHint()).execute(entry);
-                    else
-                        new VerifyTask(mCallback.getUserId(),
-                                mCallback.getQuestionId(),
-                                mCallback.getQuestionHint()).executeOnExecutor(
-                                        AsyncTask.THREAD_POOL_EXECUTOR, entry);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    return true;
-                }
-                else
-                    return false;
-            } 
-        });
-        answerText.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after){}
-            public void onTextChanged(CharSequence s, int start, int before,
-                    int count){
-            	Log.i(Constants.LOG_TAG, "new text: " + s);
-                /*
-                savedAnswer = s == null ? "" : s.toString();
-                ApplicationEx.dbHelper.setUserValue(savedAnswer,
-                        DatabaseHelper.COL_ANSWER, mCallback.getUserId());
-                */
-            }
-        });
-        answerText.setText(sharedPrefs.getString(
-        		getString(R.string.answertext_key), ""));
-        answerText.setHint(sharedPrefs.getString(
-        		getString(R.string.hinttext_key), ""));
-        answerPlace = (TextView) v.findViewById(R.id.AnswerText);
-        answerPlace.setText(sharedPrefs.getString(
-        		getString(R.string.placetext_key), ""));
-        answerButton = (Button) v.findViewById(R.id.QuestionButton);
-        answerButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                answerButton.setBackgroundResource(R.drawable.button_disabled);
-                answerButton.setTextColor(res.getColor(R.color.light_gray));
-                answerButton.setEnabled(false);
-                if (mCallback != null) {
-                    if (mCallback.isNewQuestion()) {
-                    	answerButton.setText("NEXT");
-                        if (Build.VERSION.SDK_INT <
-                                Build.VERSION_CODES.HONEYCOMB)
-                            new NextTask().execute();
-                        else
-                            new NextTask().executeOnExecutor(
-                                    AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
-                    	answerButton.setText("ENTER");
-                        if (Build.VERSION.SDK_INT <
-                                Build.VERSION_CODES.HONEYCOMB)
-                            new VerifyTask(mCallback.getUserId(),
-                                    mCallback.getQuestionId(),
-                                    mCallback.getQuestionHint()).execute(
-                                    answerText.getEditableText().toString());
-                        else
-                            new VerifyTask(mCallback.getUserId(),
-                                    mCallback.getQuestionId(),
-                                    mCallback.getQuestionHint())
-                                .executeOnExecutor(
-                                    AsyncTask.THREAD_POOL_EXECUTOR,
-                                    answerText.getEditableText().toString());
-                    }
-                }
-            }
-        });
-        skipButton = (RelativeLayout) v.findViewById(R.id.Skip);
-        skipButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.setIsNewQuestion(true);
-                stageQuestion(mCallback.getUserId(), mCallback.getQuestionId(),
-                        mCallback.getQuestionHint());
-                skipButton.setEnabled(false);
-                playAudio("skip");
-                savedHint = mCallback.getCorrectAnswer();
-                ApplicationEx.dbHelper.setUserValue(savedHint,
-                        DatabaseHelper.COL_HINT, mCallback.getUserId());
-                answerPlace.setText(savedHint);
-                hintButton.setEnabled(false);
-                hintText.setTextColor(res.getColor(R.color.light_gray));
-                hintText.setBackgroundResource(R.drawable.button_disabled);
-                answerButton.setBackgroundResource(R.drawable.button);
-                answerButton.setTextColor(Color.BLACK);
-                answerButton.setText("NEXT");
-                answerButton.setEnabled(true);
-                skipText.setTextColor(res.getColor(R.color.light_gray));
-                skipText.setBackgroundResource(R.drawable.button_disabled);
-                skipPressed = true;
-                ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
-                        DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
-                if (hintTimer != null)
-                    hintTimer.cancel();
-                if (skipTimer != null)
-                    skipTimer.cancel();
-                isCorrect = true;
-                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
-                        DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
-                hintTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) hintTick,
-                        DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-                skipTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) skipTick,
-                        DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
-                saveQuestionScore(true);
-            } 
-        });
-        skipText = (TextView) v.findViewById(R.id.SkipText);
-        skipTime = (TextView) v.findViewById(R.id.SkipTime);
-        if (skipTick > 0)
-            skipTime.setText(Long.toString((skipTick/1000)+1));
-        hintButton = (RelativeLayout) v.findViewById(R.id.Hint);
-        hintButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hintButton.setEnabled(false);
-                hintText.setTextColor(res.getColor(R.color.light_gray));
-                hintText.setBackgroundResource(R.drawable.button_disabled);
-                hintTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) hintTick,
-                        DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-                playAudio("hint");
-                indicateHint();
-            } 
-        });
-        hintText = (TextView) v.findViewById(R.id.HintText);
-        hintTime = (TextView) v.findViewById(R.id.HintTime);
-        if (hintTick > 0)
-            hintTime.setText(Long.toString((hintTick/1000)+1));
-        answerImage = (ImageView) v.findViewById(R.id.AnswerImage);
-        answerImage.bringToFront();
-        retryText = (TextView) v.findViewById(R.id.RetryText);
-        retryButton = (Button) v.findViewById(R.id.RetryButton);
-        retryButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disableButton(true);
-                if (mCallback != null) {
-                    if (ApplicationEx.getConnection()) {
-                        mCallback.setNetworkProblem(false);
-                        if (mCallback.getQuestionId() != null)
-                            resumeQuestion();
-                        else
-                            mCallback.getNextQuestions(false);
-                    }
-                    else {
-                        ApplicationEx.mToast.setText(
-                        		R.string.NoConnectionToast);
-                        ApplicationEx.mToast.show();
-                        showNetworkProblem();
-                    }
-                }
-            }
-        });
-        /*
-        cameraButton = (ImageView) v.findViewById(R.id.CameraButton);
-        cameraButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mCallback != null)
-	                mCallback.shareScreenshot();
-			}
-        });
-        */
-        if (!sharedPrefs.getString(getString(R.string.scoretext_key), "")
-        		.equals("")) {
-        	scoreText.setVisibility(View.VISIBLE);
-        	questionText.setVisibility(View.VISIBLE);
-        	answerText.setVisibility(View.VISIBLE);
-        	answerPlace.setVisibility(View.VISIBLE);
-        	answerButton.setVisibility(View.VISIBLE);
-        	hintButton.setVisibility(View.VISIBLE);
-        	skipButton.setVisibility(View.VISIBLE);
-        	//cameraButton.setVisibility(View.VISIBLE);
-        	hintTime.setVisibility(sharedPrefs.getInt(
-        			getString(R.string.hinttimevis_key), View.VISIBLE));
-        	hintText.setVisibility(sharedPrefs.getInt(
-        			getString(R.string.hinttextvis_key), View.INVISIBLE));
-        	skipTime.setVisibility(sharedPrefs.getInt(
-        			getString(R.string.skiptimevis_key), View.VISIBLE));
-        	skipText.setVisibility(sharedPrefs.getInt(
-        			getString(R.string.skiptextvis_key), View.INVISIBLE));
-        	hintTime.setText(sharedPrefs.getString(
-        			getString(R.string.hintnum_key), ""));
-        	skipTime.setText(sharedPrefs.getString(
-        			getString(R.string.skipnum_key), ""));
-        }
-        return v;
     }
     
     @Override
@@ -850,9 +700,7 @@ public class FragmentQuiz extends FragmentBase {
                 DatabaseHelper.COL_HINT, mCallback.getUserId());
         answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
         answerPlace.setVisibility(View.VISIBLE);
-        Log.w(Constants.LOG_TAG, "resumeQuestion setHint: " + answerTextHint);
         answerText.setHint(answerTextHint);
-        Log.i(Constants.LOG_TAG, "restart input resumeQuestion");
         imm.restartInput(answerText);
         answerButton.setVisibility(View.VISIBLE);
         answerButton.setBackgroundResource(R.drawable.button);
@@ -957,12 +805,15 @@ public class FragmentQuiz extends FragmentBase {
             if (ApplicationEx.getConnection()) {
                 mCallback.saveUserScore(mCallback.getCurrentScore());
                 if (mCallback.getQuestionId() != null) {
-                	Log.i(Constants.LOG_TAG, "getNextQuestions onResume");
-                    mCallback.getNextQuestions(true);
+                    mCallback.getNextQuestions(true,
+                    		ApplicationEx.sharedPrefs.getInt(
+                    				res.getString(R.string.level_key),
+                    				Constants.HARD));
                     //resumeQuestion();
                 }
                 else {
-                    showNoMoreQuestions();
+                    showNoMoreQuestions(ApplicationEx.sharedPrefs.getInt(
+                    		res.getString(R.string.level_key), Constants.HARD));
                     retryButton.setBackgroundResource(
                             R.drawable.button_disabled);
                     retryButton.setTextColor(
@@ -970,14 +821,29 @@ public class FragmentQuiz extends FragmentBase {
                     retryButton.setText("CHECKING FOR QUESTIONS");
                     retryButton.setVisibility(View.VISIBLE);
                     retryButton.setEnabled(false);
-                    mCallback.getNextQuestions(false);
+                    mCallback.getNextQuestions(false,
+                    		ApplicationEx.sharedPrefs.getInt(
+                    				res.getString(R.string.level_key),
+                    				Constants.HARD));
                 }
             }
             else {
-                ApplicationEx.mToast.setText(R.string.NoConnectionToast);
-                ApplicationEx.mToast.show();
+                ApplicationEx.showLongToast(R.string.NoConnectionToast);
                 showNetworkProblem();
             }
+        }
+        if (!ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.menu_key))) {
+            /*
+	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
+	        		Constants.QUICK_TIP_LEFT | Constants.QUICK_TIP_TOP);
+	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.menu_key), true).commit();
+	        else
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.menu_key), true).apply();
+			*/
         }
     }
     
@@ -989,30 +855,33 @@ public class FragmentQuiz extends FragmentBase {
             hintTimer.cancel();
         if (hintTask != null)
             hintTask.cancel(true);
-        Editor editor = sharedPrefs.edit();
-        editor.putString(getString(R.string.scoretext_key),
+        Editor editor = ApplicationEx.sharedPrefs.edit();
+        editor.putString(res.getString(R.string.scoretext_key),
         		scoreText.getText().toString());
-        editor.putString(getString(R.string.questiontext_key),
+        editor.putString(res.getString(R.string.questiontext_key),
         		questionText.getText().toString());
-        editor.putString(getString(R.string.hinttext_key),
+        editor.putString(res.getString(R.string.hinttext_key),
         		answerText.getHint().toString());
-        editor.putString(getString(R.string.answertext_key),
+        editor.putString(res.getString(R.string.answertext_key),
         		answerText.getText().toString());
-        editor.putString(getString(R.string.placetext_key),
+        editor.putString(res.getString(R.string.placetext_key),
         		answerPlace.getText().toString());
-        editor.putInt(getString(R.string.hinttimevis_key),
+        editor.putInt(res.getString(R.string.hinttimevis_key),
         		hintTime.getVisibility());
-        editor.putInt(getString(R.string.hinttextvis_key),
+        editor.putInt(res.getString(R.string.hinttextvis_key),
         		hintText.getVisibility());
-        editor.putInt(getString(R.string.skiptimevis_key),
+        editor.putInt(res.getString(R.string.skiptimevis_key),
         		skipTime.getVisibility());
-        editor.putInt(getString(R.string.skiptextvis_key),
+        editor.putInt(res.getString(R.string.skiptextvis_key),
         		skipText.getVisibility());
-        editor.putString(getString(R.string.hintnum_key),
+        editor.putString(res.getString(R.string.hintnum_key),
         		hintTime.getText().toString());
-        editor.putString(getString(R.string.skipnum_key),
+        editor.putString(res.getString(R.string.skipnum_key),
         		skipTime.getText().toString());
-        editor.commit();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+        	editor.commit();
+        else
+        	editor.apply();
         super.onPause();
     }
     
@@ -1094,7 +963,6 @@ public class FragmentQuiz extends FragmentBase {
                 answerImage.setVisibility(View.VISIBLE);
                 questionText.setTextColor(Color.GREEN);
                 answerText.setText("");
-                Log.i(Constants.LOG_TAG, "blanking answer");
                 //imm.restartInput(answerText);
                 answerButton.setText("NEXT");
                 answerButton.setEnabled(true);
@@ -1210,11 +1078,15 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     @Override
-    public void showNoMoreQuestions() {
+    public void showNoMoreQuestions(int level) {
         answerImage.setVisibility(View.INVISIBLE);
         questionText.setVisibility(View.VISIBLE);
         questionText.setTextColor(Color.WHITE);
-        questionText.setText("Congratulations!\nYou've answered them all!");
+        if (level == Constants.HARD)
+        	questionText.setText("Congratulations!\nYou've answered them all!\nCheck back often for more questions");
+        else
+        	questionText.setText("Congratulations!\nYou've answered them all!" +
+        			"\nChange level for more questions");
         retryText.setVisibility(View.INVISIBLE);
         answerText.setVisibility(View.INVISIBLE);
         answerPlace.setVisibility(View.INVISIBLE);
@@ -1235,152 +1107,23 @@ public class FragmentQuiz extends FragmentBase {
         enableButton(true);
         if (mCallback != null)
             mCallback.setNetworkProblem(true);
-        answerImage.setVisibility(View.INVISIBLE);
-        questionText.setVisibility(View.INVISIBLE);
-        retryText.setVisibility(View.VISIBLE);
-        answerText.setVisibility(View.INVISIBLE);
-        answerPlace.setVisibility(View.INVISIBLE);
-        answerButton.setVisibility(View.INVISIBLE);
-        if (hintTimer != null)
-            hintTimer.cancel();
-        if (skipTimer != null)
-            skipTimer.cancel();
-        hintButton.setVisibility(View.INVISIBLE);
-        skipButton.setVisibility(View.INVISIBLE);
-        retryButton.setText(getString(R.string.retry));
-        retryButton.setVisibility(View.VISIBLE);
-        scoreText.setVisibility(View.INVISIBLE);
-    }
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_quiz, menu);
-    }
-    
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.SoundMenu)
-                .setCheckable(true)
-                .setChecked(sharedPrefs.getBoolean(
-                        getString(R.string.sound_key), true));
-        menu.findItem(R.id.Notifications)
-                .setCheckable(true)
-                .setChecked(sharedPrefs.getBoolean(
-                        getString(R.string.notification_key), true));
-        menu.findItem(R.id.QuickTips)
-		        .setCheckable(true)
-		        .setChecked(sharedPrefs.getBoolean(
-		                getString(R.string.quicktip_key), true));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            if (sharedPrefs.getBoolean(getString(R.string.sound_key), true))
-                menu.findItem(R.id.SoundMenu).setTitle("\u2714  Sound");
-            else
-                menu.findItem(R.id.SoundMenu).setTitle("Sound");
-            if (sharedPrefs.getBoolean(
-                    getString(R.string.notification_key), true))
-                menu.findItem(R.id.Notifications).setTitle(
-                        "\u2714  Notifications");
-            else
-                menu.findItem(R.id.Notifications).setTitle("Notifications");
-            if (sharedPrefs.getBoolean(getString(R.string.quicktip_key), true))
-                menu.findItem(R.id.QuickTips).setTitle("\u2714  Quick Tips");
-            else
-                menu.findItem(R.id.QuickTips).setTitle("Quick Tips");
-        }
-        super.onPrepareOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-        case R.id.SwitchBackground:
-            if (mCallback != null)
-                mCallback.setBackground(mCallback.getBackground(), true);
-            break;
-        case R.id.LeadersMenu:
-            if (mCallback != null) {
-            	if (!sharedPrefs.contains(getString(R.string.stats_key)) ||
-            			sharedPrefs.getBoolean(getString(R.string.quicktip_key),
-            					false)) {
-                    sharedPrefs.edit().putBoolean(getString(R.string.stats_key),
-                    		true).commit();
-                    CheatSheetMenu.setup(toolTipView, "Touch your score to " +
-                    		"enter Stats & Standings", mCallback.getWidth(),
-                    		mCallback.getHeight());
-                }
-                mCallback.onStatsPressed();
-            }
-            break;
-        case R.id.SoundMenu:
-            item.setChecked(!item.isChecked());
-            sharedPrefs.edit().putBoolean(getString(R.string.sound_key),
-                    !sharedPrefs.getBoolean(getString(R.string.sound_key),
-                            true))
-                .commit();
-            break;
-        case R.id.Notifications:
-            item.setChecked(!item.isChecked());
-            sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                    !sharedPrefs.getBoolean(
-                            getString(R.string.notification_key), true))
-                .commit();
-            break;
-        case R.id.QuickTips:
-            item.setChecked(!item.isChecked());
-            sharedPrefs.edit().putBoolean(getString(R.string.quicktip_key),
-                    !sharedPrefs.getBoolean(
-                            getString(R.string.quicktip_key), true))
-                .commit();
-            break;
-        case R.id.ReportMenu:
-            ApplicationEx.reportQuestion(mCallback.getQuestionId(),
-                    mCallback.getQuestion(), mCallback.getCorrectAnswer(),
-                    mCallback.getQuestionScore());
-            break;
-        case R.id.NameMenu:
-            if (mCallback != null)
-                mCallback.showNameDialog();
-            break;
-        case R.id.LogoutMenu:
-            if (mCallback != null) {
-                ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
-                mCallback.setLoggingOut(true);
-                mCallback.setQuestionId(null);
-                mCallback.setQuestion(null);
-                mCallback.setCorrectAnswer(null);
-                mCallback.setQuestionCategory(null);
-                mCallback.setQuestionScore(null);
-                mCallback.setNextQuestionId(null);
-                mCallback.setNextQuestion(null);
-                mCallback.setNextCorrectAnswer(null);
-                mCallback.setNextQuestionCategory(null);
-                mCallback.setNextQuestionScore(null);
-                mCallback.setThirdQuestionId(null);
-                mCallback.setThirdQuestion(null);
-                mCallback.setThirdCorrectAnswer(null);
-                mCallback.setThirdQuestionCategory(null);
-                mCallback.setThirdQuestionScore(null);
-                mCallback.logOut(true);
-            }
-            break;
-        case R.id.ScreenMenu:
-            if (mCallback != null)
-                mCallback.shareScreenshot();
-            break;
-        case R.id.ExitMenu:
-            getActivity().moveTaskToBack(true);
-            break;
-        case R.id.FollowMenu:
-            startActivity(getOpenTwitterIntent());
-            break;
-        case R.id.LikeMenu:
-            startActivity(getOpenFacebookIntent());
-            break;
-        default:
-            super.onOptionsItemSelected(item);
-            break;
-        }
-        return true;
+        try {
+	        answerImage.setVisibility(View.INVISIBLE);
+	        questionText.setVisibility(View.INVISIBLE);
+	        retryText.setVisibility(View.VISIBLE);
+	        answerText.setVisibility(View.INVISIBLE);
+	        answerPlace.setVisibility(View.INVISIBLE);
+	        answerButton.setVisibility(View.INVISIBLE);
+	        if (hintTimer != null)
+	            hintTimer.cancel();
+	        if (skipTimer != null)
+	            skipTimer.cancel();
+	        hintButton.setVisibility(View.INVISIBLE);
+	        skipButton.setVisibility(View.INVISIBLE);
+	        retryButton.setText(res.getString(R.string.retry));
+	        retryButton.setVisibility(View.VISIBLE);
+	        scoreText.setVisibility(View.INVISIBLE);
+        } catch (NullPointerException e) {}
     }
     
     @Override
@@ -1438,29 +1181,14 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     @Override
-	public void setBackground(Drawable background) {
-    	if (backgroundImage != null) {
-    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-    			backgroundImage.setBackgroundDrawable(background);
-    		else
-    			backgroundImage.setBackground(background);
-    	}
-    }
-    
-    @Override
-	public Drawable getBackground() {
-    	if (backgroundImage == null)
-    		return null;
-    	else
-    		return backgroundImage.getBackground();
-	}
-    
-    @Override
-	public void toggleMenu() {
-    	if (!slidingMenu.isBehindShowing())
-    		slidingMenu.showBehind();
-    	else
-    		slidingMenu.showAbove();
+    public void showRetry() {
+        retryButton.setBackgroundResource(
+                R.drawable.button_disabled);
+        retryButton.setTextColor(
+                res.getColor(R.color.light_gray));
+        retryButton.setText("CHECKING FOR QUESTIONS");
+        retryButton.setVisibility(View.VISIBLE);
+        retryButton.setEnabled(false);
     }
     
 }

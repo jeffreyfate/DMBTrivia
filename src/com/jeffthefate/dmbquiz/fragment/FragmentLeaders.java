@@ -2,26 +2,24 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.ArrayList;
 
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.LeaderAdapter;
 import com.jeffthefate.dmbquiz.R;
 
 public class FragmentLeaders extends FragmentBase {
-    
-    private ViewGroup leadersLayout;
     
     private TextView userText;
     private TextView userAnswerText;
@@ -32,6 +30,7 @@ public class FragmentLeaders extends FragmentBase {
     private TextView leaderText;
     private ListView leaderList;
     
+    private TextView userRank;
     private TextView userName;
     private TextView userScore;
     
@@ -43,12 +42,18 @@ public class FragmentLeaders extends FragmentBase {
     private ArrayList<String> scoreList;
     private ArrayList<String> userIdList;
     
+    private long perfTime;
+    
     public FragmentLeaders() {}
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	perfTime = System.currentTimeMillis();
+    	if (mCallback != null) {
+    		mCallback.setHomeAsUp(true);
+    		mCallback.setInSetlist(false);
+    	}
     }
     
     private boolean isRestored = false;
@@ -56,20 +61,23 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.leaders, container, false);
-        leadersLayout = (ViewGroup) view.findViewById(R.id.ListLayout);
-        setBackground(getBackgroundDrawable(mCallback.getBackground()));
-        userText = (TextView) view.findViewById(R.id.UserText);
-        userAnswerText = (TextView) view.findViewById(R.id.Stat1Name);
-        userAnswers = (TextView) view.findViewById(R.id.Stat1Score);
-        userHintText = (TextView) view.findViewById(R.id.Stat2Name);
-        userHints = (TextView) view.findViewById(R.id.Stat2Score);
-        leaderText = (TextView) view.findViewById(R.id.LeadersText);
-        leaderList = (ListView) view.findViewById(android.R.id.list);
-        userName = (TextView) view.findViewById(R.id.UserName);
-        userScore = (TextView) view.findViewById(R.id.UserScore);
-        createdText = (TextView) view.findViewById(R.id.LastQuestionText);
-        createdDate = (TextView) view.findViewById(R.id.LastQuestionDate);
+    	super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.leaders, container, false);
+        background = (ImageViewEx) v.findViewById(R.id.Background);
+        setBackgroundBitmap(mCallback.getBackground(), "leaders");
+        Log.e(Constants.LOG_TAG, "PERF TIME: " + (System.currentTimeMillis()-perfTime));
+        userText = (TextView) v.findViewById(R.id.UserText);
+        userAnswerText = (TextView) v.findViewById(R.id.Stat1Name);
+        userAnswers = (TextView) v.findViewById(R.id.Stat1Score);
+        userHintText = (TextView) v.findViewById(R.id.Stat2Name);
+        userHints = (TextView) v.findViewById(R.id.Stat2Score);
+        leaderText = (TextView) v.findViewById(R.id.LeadersText);
+        leaderList = (ListView) v.findViewById(android.R.id.list);
+        userRank = (TextView) v.findViewById(R.id.UserRank);
+        userName = (TextView) v.findViewById(R.id.UserName);
+        userScore = (TextView) v.findViewById(R.id.UserScore);
+        createdText = (TextView) v.findViewById(R.id.LastQuestionText);
+        createdDate = (TextView) v.findViewById(R.id.LastQuestionDate);
         if (savedInstanceState != null) {
             userText.setText(savedInstanceState.getString("userText"));
             userAnswerText.setText(savedInstanceState.getString(
@@ -77,6 +85,7 @@ public class FragmentLeaders extends FragmentBase {
             userAnswers.setText(savedInstanceState.getString("userAnswers"));
             userHintText.setText(savedInstanceState.getString("userHintText"));
             userHints.setText(savedInstanceState.getString("userHints"));
+            userRank.setText(savedInstanceState.getString("userRank"));
             userName.setText(savedInstanceState.getString("userName"));
             userScore.setText(savedInstanceState.getString("userScore"));
             leaderText.setText(savedInstanceState.getString("leaderText"));
@@ -113,6 +122,9 @@ public class FragmentLeaders extends FragmentBase {
                                 mCallback.getUserId()));
                 userHints.setText(ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_USER_HINTS, mCallback.getUserId()));
+                userRank.setText(ApplicationEx.dbHelper.getUserStringValue(
+                		DatabaseHelper.COL_USER_RANK_TEXT,
+                				mCallback.getUserId()));
                 userName.setText(ApplicationEx.dbHelper.getUserStringValue(
                         DatabaseHelper.COL_USER_NAME_TEXT,
                                 mCallback.getUserId()));
@@ -144,7 +156,7 @@ public class FragmentLeaders extends FragmentBase {
                 }
             }
         }
-        return view;
+        return v;
     }
     
     @Override
@@ -155,6 +167,7 @@ public class FragmentLeaders extends FragmentBase {
         outState.putString("userAnswers", userAnswers.getText().toString());
         outState.putString("userHintText", userHintText.getText().toString());
         outState.putString("userHints", userHints.getText().toString());
+        outState.putString("userRank", userRank.getText().toString());
         outState.putString("userName", userName.getText().toString());
         outState.putString("userScore", userScore.getText().toString());
         outState.putString("leaderText", leaderText.getText().toString());
@@ -179,6 +192,8 @@ public class FragmentLeaders extends FragmentBase {
                 DatabaseHelper.COL_USER_HINT_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userHints.getText().toString(),
                 DatabaseHelper.COL_USER_HINTS, mCallback.getUserId());
+        ApplicationEx.dbHelper.setUserValue(userRank.getText().toString(),
+                DatabaseHelper.COL_USER_RANK_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userName.getText().toString(),
                 DatabaseHelper.COL_USER_NAME_TEXT, mCallback.getUserId());
         ApplicationEx.dbHelper.setUserValue(userScore.getText().toString(),
@@ -195,17 +210,22 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        if (mCallback != null && !sharedPrefs.contains(
-                getString(R.string.dialog_key))) {
+        if (mCallback != null && !ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.dialog_key))) {
             mCallback.showScoreDialog();
-            sharedPrefs.edit().putBoolean(getString(R.string.dialog_key), true)
-                    .commit();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	            ApplicationEx.sharedPrefs.edit().putBoolean(
+	            		res.getString(R.string.dialog_key), true).commit();
+            else
+	            ApplicationEx.sharedPrefs.edit().putBoolean(
+	            		res.getString(R.string.dialog_key), true).apply();
         }
         if (!isRestored && mCallback != null &&
                 mCallback.getLeadersState() != null) {
             Bundle leadersBundle = mCallback.getLeadersState();
             userAnswers.setText(leadersBundle.getString("userAnswers"));
             userHints.setText(leadersBundle.getString("userHints"));
+            userRank.setText(leadersBundle.getString("userRank"));
             userName.setText(leadersBundle.getString("userName"));
             userScore.setText(leadersBundle.getString("userScore"));
             rankList = leadersBundle.getStringArrayList("rank");
@@ -224,55 +244,19 @@ public class FragmentLeaders extends FragmentBase {
                         new int[] {R.id.text1, R.id.text2}));
             }
         }
-    }
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_stats, menu);
-    }
-    
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.Notifications)
-            .setCheckable(true)
-            .setChecked(sharedPrefs.getBoolean(
-                    getString(R.string.notification_key), true));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            if (sharedPrefs.getBoolean(
-                    getString(R.string.notification_key), true))
-                menu.findItem(R.id.Notifications).setTitle(
-                "\u2714  Notifications");
-            else
-                menu.findItem(R.id.Notifications).setTitle("Notifications");
+        if (!ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.menu_key))) {
+            /*
+	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
+	        		Constants.QUICK_TIP_LEFT);
+	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.menu_key), true).commit();
+	        else
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        			res.getString(R.string.menu_key), true).apply();
+			*/
         }
-        super.onPrepareOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-        case R.id.NameMenu:
-            if (mCallback != null)
-                mCallback.showNameDialog();
-            break;
-        case R.id.ScreenMenu:
-            if (mCallback != null)
-                mCallback.shareScreenshot();
-            break;
-        case R.id.Notifications:
-            sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                    !sharedPrefs.getBoolean(
-                            getString(R.string.notification_key), true))
-                .commit();
-            break;
-        case R.id.BackMenu:
-            getActivity().onBackPressed();
-            break;
-        default:
-            super.onOptionsItemSelected(item);
-            break;
-        }
-        return true;
     }
     
     @Override
@@ -283,23 +267,5 @@ public class FragmentLeaders extends FragmentBase {
                 mCallback.setUserName(displayName);
         }
     }
-    
-    @Override
-	public void setBackground(Drawable background) {
-    	if (leadersLayout != null) {
-    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-    			leadersLayout.setBackgroundDrawable(background);
-    		else
-    			leadersLayout.setBackground(background);
-    	}
-    }
-	
-	@Override
-	public Drawable getBackground() {
-		if (leadersLayout == null)
-    		return null;
-    	else
-    		return leadersLayout.getBackground();
-	}
     
 }

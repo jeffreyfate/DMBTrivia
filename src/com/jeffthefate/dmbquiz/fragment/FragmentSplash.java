@@ -2,17 +2,12 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -20,13 +15,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -36,7 +30,6 @@ import com.parse.ParseUser;
 
 public class FragmentSplash extends FragmentBase {
     
-	private RelativeLayout splashLayout;
     private EditText loginUsername;
     private EditText loginPassword;
     private LinearLayout emailButtonLayout;
@@ -44,8 +37,8 @@ public class FragmentSplash extends FragmentBase {
     private TextView loginButton;
     private TextView signupButton;
     private TextView resetButton;
-    private ImageView facebookLogin;
-    private ImageView twitterLogin;
+    private ImageViewEx facebookLogin;
+    private ImageViewEx twitterLogin;
     private TextView playButton;
     private TextView emailButton;
     private LinearLayout emailLayout;
@@ -56,15 +49,36 @@ public class FragmentSplash extends FragmentBase {
     private boolean isSignedUp = false;
     
     public FragmentSplash() {}
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	if (mCallback != null)
+    		mCallback.setHomeAsUp(true);
+    }
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!ApplicationEx.sharedPrefs.contains(
+        		res.getString(R.string.notification_key))) {
+        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	            		res.getString(R.string.notification_key), true).commit();
+        	else
+		        ApplicationEx.sharedPrefs.edit().putBoolean(
+		        		res.getString(R.string.notification_key), true).apply();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        setRetainInstance(true);
-        View view = inflater.inflate(R.layout.splash, container, false);
-        splashLayout = (RelativeLayout) view.findViewById(R.id.SplashLayout);
-        setBackground(getBackgroundDrawable(mCallback.getBackground()));
-        loginUsername = (EditText) view.findViewById(R.id.LoginUsername);
+    	super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.splash, container, false);
+        background = (ImageViewEx) v.findViewById(R.id.Background);
+        setBackgroundBitmap(mCallback.getBackground(), "splash");
+        loginUsername = (EditText) v.findViewById(R.id.LoginUsername);
         loginUsername.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
@@ -85,7 +99,7 @@ public class FragmentSplash extends FragmentBase {
                 }
             } 
         });
-        loginPassword = (EditText) view.findViewById(R.id.LoginPassword);
+        loginPassword = (EditText) v.findViewById(R.id.LoginPassword);
         loginPassword.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
@@ -103,9 +117,9 @@ public class FragmentSplash extends FragmentBase {
             } 
         });
         emailButtonLayout = 
-                (LinearLayout) view.findViewById(R.id.EmailButtonLayout);
-        buttonLayout = (LinearLayout) view.findViewById(R.id.ButtonLayout);
-        loginButton = (TextView) view.findViewById(R.id.LoginButton);
+                (LinearLayout) v.findViewById(R.id.EmailButtonLayout);
+        buttonLayout = (LinearLayout) v.findViewById(R.id.ButtonLayout);
+        loginButton = (TextView) v.findViewById(R.id.LoginButton);
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +130,7 @@ public class FragmentSplash extends FragmentBase {
                 processLogin(false);
             } 
         });
-        signupButton = (TextView) view.findViewById(R.id.SignupButton);
+        signupButton = (TextView) v.findViewById(R.id.SignupButton);
         signupButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +141,7 @@ public class FragmentSplash extends FragmentBase {
                 processLogin(true);
             } 
         });
-        resetButton = (TextView) view.findViewById(R.id.ResetButton);
+        resetButton = (TextView) v.findViewById(R.id.ResetButton);
         resetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +154,7 @@ public class FragmentSplash extends FragmentBase {
                 			loginUsername.getText().toString().trim());
             } 
         });
-        facebookLogin = (ImageView) view.findViewById(R.id.FacebookLoginButton);
+        facebookLogin = (ImageViewEx) v.findViewById(R.id.FacebookLoginButton);
         facebookLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +163,7 @@ public class FragmentSplash extends FragmentBase {
                             null);
             }
         });
-        twitterLogin = (ImageView) view.findViewById(R.id.TwitterLoginButton);
+        twitterLogin = (ImageViewEx) v.findViewById(R.id.TwitterLoginButton);
         twitterLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,17 +172,36 @@ public class FragmentSplash extends FragmentBase {
                             null);
             }
         });
-        playButton = (TextView) view.findViewById(R.id.JustPlayButton);
+        playButton = (TextView) v.findViewById(R.id.JustPlayButton);
         playButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCallback != null)
+                if (mCallback != null) {
+                    /*
+                	if (!ApplicationEx.sharedPrefs.contains(
+                				res.getString(R.string.justplay_key)) ||
+                				ApplicationEx.sharedPrefs.getBoolean(
+            					res.getString(R.string.quicktip_key), false)) {
+                		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+	                		ApplicationEx.sharedPrefs.edit().putBoolean(
+	                        		res.getString(R.string.justplay_key), true)
+	                    		.commit();
+                		else
+	                		ApplicationEx.sharedPrefs.edit().putBoolean(
+	                        		res.getString(R.string.justplay_key), true)
+	                    		.apply();
+                        showQuickTipMenu(quickTipMenuView, "Stats & Standings" +
+	                    		" isn't available for Just Play users",
+	                    		Constants.QUICK_TIP_TOP);
+                    }
+                    */
                     mCallback.onLoginPressed(FragmentBase.LOGIN_ANON, null,
                             null);
+                }
             } 
         });
-        emailLayout = (LinearLayout) view.findViewById(R.id.EmailLayout);
-        emailButton = (TextView) view.findViewById(R.id.EmailButton);
+        emailLayout = (LinearLayout) v.findViewById(R.id.EmailLayout);
+        emailButton = (TextView) v.findViewById(R.id.EmailButton);
         emailButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,16 +214,22 @@ public class FragmentSplash extends FragmentBase {
                     buttonLayout.setVisibility(View.GONE);
             } 
         });
-        return view;
+        return v;
     }
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!sharedPrefs.contains(getString(R.string.notification_key)))
-            sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                    true).commit();
-        setHasOptionsMenu(true);
+    public void onResume() {
+    	super.onResume();
+	    /*
+        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
+        		Constants.QUICK_TIP_LEFT);
+		*/
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+        	ApplicationEx.sharedPrefs.edit().putBoolean(
+        			res.getString(R.string.menu_key), true).commit();
+        else
+        	ApplicationEx.sharedPrefs.edit().putBoolean(
+        			res.getString(R.string.menu_key), true).apply();
     }
     
     private void processLogin(boolean signUp) {
@@ -213,39 +252,14 @@ public class FragmentSplash extends FragmentBase {
                                 username, password);
                 }
             }
-            else {
-                ApplicationEx.mToast.setText(
+            else
+                ApplicationEx.showLongToast(
                         "Password must be at least 4 characters");
-                ApplicationEx.mToast.show();
-            }
         }
-        else {
-            ApplicationEx.mToast.setText("Enter valid email");
-            ApplicationEx.mToast.show();
-        }
-    }
-    /*
-    private TranslateAnimation createAnimation(long offset, boolean right) {
-        int xDest = dm.widthPixels;
-        if (!right)
-            xDest = xDest*-1;
-        TranslateAnimation anim = new TranslateAnimation(xDest, 0, 0, 0);
-        anim.setDuration(800);
-        anim.setFillAfter(true);
-        anim.setStartOffset(offset);
-        return anim;
+        else
+            ApplicationEx.showLongToast("Enter valid email");
     }
     
-    private TranslateAnimation createUnAnimation(boolean right) {
-        int xDest = dm.widthPixels;
-        if (!right)
-            xDest = xDest*-1;
-        TranslateAnimation anim = new TranslateAnimation(0, xDest, 0 , 0);
-        anim.setDuration(0);
-        anim.setFillAfter(true);
-        return anim;
-    }
-    */
     private void checkSignedUp(String username) {
         ParseQuery query = ParseUser.getQuery();
         query.whereEqualTo("username", username);
@@ -272,93 +286,5 @@ public class FragmentSplash extends FragmentBase {
             } 
         });
     }
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_splash, menu);
-    }
-    
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.Notifications)
-            .setCheckable(true)
-            .setChecked(sharedPrefs.getBoolean(
-                    getString(R.string.notification_key), true));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            if (sharedPrefs.getBoolean(
-                    getString(R.string.notification_key), true))
-                menu.findItem(R.id.Notifications).setTitle(
-                "\u2714  Notifications");
-            else
-                menu.findItem(R.id.Notifications).setTitle("Notifications");
-        }
-        super.onPrepareOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-        case R.id.SwitchBackground:
-            if (mCallback != null)
-                mCallback.setBackground(mCallback.getBackground(), true);
-            break;
-        case R.id.Notifications:
-            sharedPrefs.edit().putBoolean(getString(R.string.notification_key),
-                    !sharedPrefs.getBoolean(
-                            getString(R.string.notification_key), true))
-                .commit();
-            break;
-        case R.id.ExitMenu:
-            getActivity().moveTaskToBack(true);
-            break;
-        case R.id.InfoMenu:
-            if (mCallback != null)
-                mCallback.onInfoPressed();
-            break;
-        case R.id.FollowMenu:
-            Uri uri = Uri.parse("http://www.twitter.com/dmbtrivia");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
-            break;
-        case R.id.LikeMenu:
-            startActivity(getOpenFacebookIntent(ApplicationEx.getApp()));
-            break;
-        default:
-            super.onOptionsItemSelected(item);
-            break;
-        }
-        return true;
-    }
-    
-    public static Intent getOpenFacebookIntent(Context context) {
-
-        try {
-            context.getPackageManager().getPackageInfo("com.facebook.katana",
-                    0);
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("fb://profile/401123586629428"));
-        } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.facebook.com/DMBTrivia"));
-        }
-    }
-    
-    @Override
-	public void setBackground(Drawable background) {
-    	if (splashLayout != null) {
-    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-    			splashLayout.setBackgroundDrawable(background);
-    		else
-    			splashLayout.setBackground(background);
-    	}
-    }
-	
-	@Override
-	public Drawable getBackground() {
-		if (splashLayout == null)
-    		return null;
-    	else
-    		return splashLayout.getBackground();
-	}
     
 }

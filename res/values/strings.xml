@@ -35,34 +35,52 @@
     <string name="usernameHint">email address</string>
     <string name="passwordHint">password</string>
     
+    <string name="LoadSetlist">Setlist</string>
     <string name="SwitchBackground">Switch Background</string>
+    <string name="LevelTitle">Level</string>
     <string name="SoundsTitle">Sounds</string>
+    <string name="NotificationSoundsTitle">Sound</string>
+    <string name="NotificationVibrateTitle">Vibrate</string>
+    <string name="NotificationBothTitle">Sound &amp; Vibrate</string>
+    <string name="NotificationTypeStandardTitle">Standard Sound</string>
+    <string name="NotificationTypeAlbumTitle">Album Specific</string>
     <string name="LeadersTitle">Stats &amp; Standings</string>
     <string name="LogoutTitle">Logout</string>
     <string name="ExitTitle">Exit</string>
     <string name="BackTitle">Back</string>
     <string name="InfoTitle">FAQ</string>
     <string name="FollowTitle">Follow @dmbtrivia</string>
-    <string name="LikeTitle">DMB Trivia on Facebook</string>
+    <string name="LikeTitle">Like DMB Trivia</string>
     <string name="ReportTitle">Report Question</string>
     <string name="ShareScreen">Share Screenshot</string>
     <string name="NotificationsTitle">Notifications</string>
+    <string name="SetlistNotificationsTitle">Setlist Updates</string>
     <string name="NameTitle">Edit Display Name</string>
     <string name="QuickTipsTitle">Quick Tips</string>
     
     <string name="ScoreDialogTitle">Scoring Notes</string>
     <string name="NameDialogTitle">Edit Display Name</string>
     
-    <string name="InfoText">DMB Trivia Mini-FAQ:\n\nQ: Why does my score go down?\nA: When anyone gets a question correct, the score for that question decreases.  Everyone\'s score is recalculated periodically to use the new question scores.\n\nQ: How are the question values calculated?\nA: A question\'s value is calculated based on the number of times it has been correctly answered/skipped.  The maxiumum point value for a quesiton is 1000 (hardest) and the minimum is 100 (easiest).\n\nQ: Does using a hint penalize me?\nA: Using a hint cuts the value you can earn for answering that question correct in half.\n\nQ: Why are answers revealed?\nA: The goal was to make a trivia game that would attempt to inspire people to seek out new DMB audio, stories, etc.  By revealing the answer we feel the app is more than a test or a quiz.  Hopefully it inspires people to get more interested in the band and their music.\n\nQ: How many questions are there?\nA: Over 1500 - More can be added without an application update so overtime the number will grow and questions about current tours/DMB news should be incorportated.\n\nQ: What if I find an error in a question or a question that can\'t be answered?\nA: Please report that issue to us @dmbtrivia or via email jaybtv5@gmail.com or choose Report Question from the menu.\n\nQ: These questions are impossible - how do people know so much about DMB tours and dates?\nA: The Dave Matthews Band allows live audio recording of their concerts which are then shared by tapers.  DMB also provides realtime setlist information on their website during shows.  There\'s a large community of fans who download/collect live audio recordings and/or also follow and discuss show setlists.  If these questions prove difficult for most their score values will increase.  See below for a few good fan websites that may help you follow upcoming DMB tours and or revist old shows and setlists.\n\nQ: Who developed this game?\nA: @jeffthefate (Coder) &amp; @Copperpot5 (Audio/Question set).\n\nQ: My friend/etc has an iPhone - is there an iPhone version coming soon?\nA: We have no plans to develop an iphone version of "DMBTrivia" at this time for a variety of reasons.\n\nOfficial DMB site for realtime setlist, merch, etc: www.dmband.com\nDMB Setlists, Songs Statistics, Guest Information, etc: www.dmbalmanac.com\nFree live/legal downloads of DMB audio recordings: www.dreamingtree.org\nGeneral forum discussion: www.antsmarching.org\nMP3 rarity and tour highlights: www.dontburnthepig.org\n\nMany rarities and highlights can also be found on YouTube.\n\nFeel free to ask general DMB questions to @dmbtrivia as well.  We\'re friendly and always looking to help fans find the DMB info/fan media they\'re looking for.</string>
+    <string name="InfoText">DMB Trivia Mini-FAQ:\n\nQ: Do the point values reflect a question\'s difficulty?\nA: Yes unless the questions are new.  All new questions start with a point value of 1000.  The application will lower point values for a question by small amount each time the question is answered correctly and will increase the point value for questions when they are skipped.  So in general questions with point values close to 1000 are difficult whereas questions closer to 100 (the minimum possible point value) are easier.\n\nQ: Do I lose points for guessing/getting something wrong?\nA: No.\n\nQ: Do I lose points for skipping a question?\nA: No.\n\nQ: What happens if I use \"hint\"?\nA: The hint feature will reveal some of the letters in the masked answer but it also decreases the amount of points you\'ll get if you then answer the question correctly.\n\nQ: If I skip will I be able to play that question again?\nA: Yes but with 2000+ questions it may take a while for that question to reappear.\n\nQ: Why are answers displayed when a question is skipped?\nA: The goal was to make a trivia game that would attempt to inspire people to seek out new DMB audio, stories, etc. By revealing the answer we feel the app is more than a test or a quiz. Hopefully it inspires people to get more interested in the band and their music.\n\nQ: How are the question values calculated?\nA: A question\'s value is calculated based on the number of times it has been correctly answered and/or skipped. The maximum point value for a question is 1000 (hardest) and the minimum is 100 (easiest).\n\nQ: Does using a hint penalize me?\nA: Using a hint cuts the value you can earn for answering that question correctly in half.\n\nQ: Why did my total score change since the last time I played?!?!\nA: Since the point values for questions change depending on how the performance of other players (w/ more frequently answered questions decreasing in value and skipped questions increasing in value) all scores in our database will fluctuate a bit.  User scores are recalculated based on the current values of the questions they\'ve answered.  This recalculation happens every time they login.  We do this to keep the game fair regardless of how quickly you play the newest questions.  The max value for any given question will always be the same for all players.\n\nQ: I haven\'t played any new questions but my score on the scoreboard changed.\nA: See above.  Question values are always going up or down slightly to adjust for difficulty.  The score you see is based on what the point values are for questions at this moment not necessarily when you answered them (although question scores will stabilize after more and more players play them).\n\nQ: How many questions are there?\nA: When we released of our first version (Nov 2012) we had 1300 DMB questions available.  At the start of the 2013 DMB summer tour have over 2000 DMB questions available and that will continue to grow.  The questions are stored on a cloud and we add new ones without the need for an application update.  You can see the date of the most recent question in the Stats/Standing menu.\n\nQ: I\'m seeing a message saying I\'ve completed all the questions.  Will there be more?\nA: Yes.  Questions are generally added at least once a month and we have the ability to send a push notification when new questions are added.  Reopen the app to the question screen if you want to check and see if there are more playable questions.  You can also check in Stats/Standings to see when the most recent question was added.\n\nQ: When I play the game there is new score and I can\'t find the list of high scores. \nA: Scoring is only enabled if you are logged in.  If you log into \"Just Play\" you won\'t see a score nor will you have access to the stats/standing screen.  Logout and login using Facebook, Twitter, or Email.\n\nQ: I\'ve completed all the questions for now and I\'d like to start over.  Can I do that?\nA: The best way is to logout of whichever method you logged in and then create a new account using one of the other methods (Twitter, FB, Email).  If you feel you need to have a specific login &amp; associated stats cleared completely from our cloud you\'ll need to get in touch w/ Jeff or I via @dmbtrivia or our Facebook page. \n\nQ: What if I find an error in a question or a question that can\'t be answered?\nA: While on the question open the left side menu and pick report question.  All reported questions appear on a report which we review and use to make corrections/adjustments.\n\nQ: These questions are impossible - how do people know so much about DMB tours and dates?\nA: The Dave Matthews Band allows live audio recording of their concerts which are then shared by tapers. DMB also provides realtime setlist information on their website during shows. There\'s a large community of fans who download collect live audio recordings and or also follow and discuss show setlists.  Our scoring system will also reward you for knowing the answer to questions others skip often.\n\nQ: Who developed this game?\nA: Jeff Fate @jeffthefate (Code) and  Jason Stessel @Copperpot5 Audio/Questions/etc\n\nQ: My friend etc has an iPhone - is there an iPhone version coming soon?\nA: We don\'t have resources to develop a version of our DMBTrivia app for any other platforms at this time.  Free apps don\'t pay for devices to test on nor hundreds of hours of time :)\n\nQ: I _love_ this app! Can I donate?\nA: We don\'t ask for donations but if you have a burning desire to buy us a beer send us a tweet or msg on FB.</string>
     <string name="ScoreDialogText">•Wrong answers DON\'T subtract points\n•Using a Hint cuts the possible score in half\n•Your score is recalculated often and may decrease\n•Global question score decreases for each correct answer\n•Global question score increases for each Skip\n•Maximum question value is 1000\n•Minimum question value is 100\n•This makes the harder questions worth more and the easy questions worth less</string>
     
-    <string name="ToolTipTitle">- Quick Tip -</string>
+    <string name="ToolTipTitle">Quick Tip</string>
     
     <string name="sound_key">sound</string>
     <string name="dialog_key">dialog</string>
     <string name="notification_key">notification</string>
+    <string name="notificationsound_key">notificationSound</string>
+    <string name="notificationtype_key">notificationType</string>
     <string name="correct_key">correct</string>
     <string name="quicktip_key">quicktip</string>
+    <string name="justplay_key">justplay</string>
+    <string name="level_key">level</string>
+    
+    <string name="hard_key">hard</string>
+    <string name="medium_key">medium</string>
+    <string name="easy_key">easy</string>
+    
+    <string name="menu_key">menu</string>
     
     <string name="stats_key">stats</string>
     
@@ -91,6 +109,11 @@
     
     <string name="ActionsTitle">ACTIONS</string>
     <string name="SettingsTitle">SETTINGS</string>
+    <string name="SetlistTitle">SETLIST UPDATES</string>
     <string name="SocialTitle">SOCIAL</string>
+    
+    <string name="left">Left Quick Tip</string>
+    
+    <string name="SetlistMenu">Setlist</string>
     
 </resources>

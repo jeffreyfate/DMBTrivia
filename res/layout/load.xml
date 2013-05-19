@@ -3,6 +3,13 @@
     android:id="@+id/LoadLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/background_dark"
+        android:contentDescription="@string/backgroundImage" />
     <ProgressBar
         android:id="@+id/Progress"
         android:layout_width="wrap_content"

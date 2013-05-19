@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jeffthefate.dmbquiz.RelativeLayoutEx xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black" >
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="@color/background_dark"
         android:contentDescription="@string/backgroundImage" />
     <TextView
         android:id="@+id/ScoreText"
@@ -41,7 +42,7 @@
         android:textColorHint="@color/dark_gray"
         android:background="@drawable/edit_text"
         android:visibility="invisible" />
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/AnswerImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -221,7 +222,7 @@
         </RelativeLayout>
     </RelativeLayout>
     <!--
-    <ImageView
+    <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/CameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -266,4 +267,4 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
     -->
-</RelativeLayout>
+</com.jeffthefate.dmbquiz.RelativeLayoutEx>
