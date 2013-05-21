@@ -13,7 +13,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
@@ -21,6 +20,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.R;
@@ -31,13 +31,11 @@ public class PushReceiver extends BroadcastReceiver {
     private NotificationCompat.Builder nBuilder;
     private NotificationManager nManager;
     private Notification notification;
-    private Resources res;
     private SharedPreferences sharedPrefs;
     
     @Override
     public void onReceive(Context context, Intent intent) {
         // {"action":"com.jeffthefate.dmb.ACTION_NEW_QUESTIONS"}
-        res = context.getResources();
         nManager = (NotificationManager) ApplicationEx.getApp()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
@@ -58,7 +56,7 @@ public class PushReceiver extends BroadcastReceiver {
                             Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 nBuilder = new NotificationCompat.Builder(
                         ApplicationEx.getApp());
-                nBuilder.setLargeIcon(BitmapFactory.decodeResource(res,
+                nBuilder.setLargeIcon(BitmapFactory.decodeResource(ResourcesSingleton.instance(),
                             R.drawable.notification_large)).
                     setSmallIcon(R.drawable.notification_large).
                     setWhen(System.currentTimeMillis()).
@@ -125,11 +123,11 @@ public class PushReceiver extends BroadcastReceiver {
                     sharedPrefs.getBoolean(ApplicationEx.getApp().getString(
                             R.string.notification_key), true)) {
                 ApplicationEx.createNotificationUri(
-                        ApplicationEx.findMatchingAudio(res,
+                        ApplicationEx.findMatchingAudio(ResourcesSingleton.instance(),
                                 ApplicationEx.latestSong));
                 nBuilder = new NotificationCompat.Builder(
                         ApplicationEx.getApp());
-                Bitmap largeIcon = ApplicationEx.resizeImage(res,
+                Bitmap largeIcon = ApplicationEx.resizeImage(ResourcesSingleton.instance(),
                         ApplicationEx.findMatchingImage(
                                 ApplicationEx.latestSong));
                 nBuilder.setLargeIcon(largeIcon).
@@ -139,7 +137,7 @@ public class PushReceiver extends BroadcastReceiver {
                     setContentTitle(ApplicationEx.latestSong).
                     setLights(0xffff0000, 2000, 10000);
                 switch (SharedPreferencesSingleton.instance().getInt(
-                        res.getString(R.string.notificationsound_key), 0)) {
+                		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
                 case 0:
                     nBuilder.setVibrate(new long[]{0, 500, 100, 500});
                     nBuilder.setSound(ApplicationEx.notificationSound);

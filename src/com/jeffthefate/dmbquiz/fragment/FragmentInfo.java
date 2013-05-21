@@ -32,7 +32,7 @@ public class FragmentInfo extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.info, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-		setBackgroundBitmap(mCallback.getBackground(), "splash");
+		setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
         doneButton = (Button) v.findViewById(R.id.DoneButton);
         doneButton.setOnClickListener(new OnClickListener() {
             @Override

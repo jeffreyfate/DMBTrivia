@@ -66,7 +66,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     public static String cacheLocation = null;
     private static Toast mToast;
-    private static SharedPreferences sharedPrefs;
     /**
      * Last song reported via Parse and server application
      */
@@ -160,6 +159,27 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     		if (dbHelper == null)
     			dbHelper = DatabaseHelper.getInstance();
     		return dbHelper;
+    	}
+    }
+    
+    /**
+     * Singleton of the Resources used by the application
+     * @author Jeff
+     */
+    public static class ResourcesSingleton {
+    	private ResourcesSingleton() {}
+    	
+    	private static Resources res = null;
+    	
+    	/**
+    	 * Get an instance, creating it if necessary, of the shared preferences
+    	 * object for the application
+    	 * @return shared preferences object for the application's preferences
+    	 */
+    	public static Resources instance() {
+    		if (res == null)
+    			res = getApp().getResources();
+    		return res;
     	}
     }
     
@@ -340,7 +360,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     public static void setStringArrayPref(String key,
             ArrayList<String> answers) {
-        SharedPreferences.Editor editor = sharedPrefs.edit();
+        SharedPreferences.Editor editor = SharedPreferencesSingleton.instance().edit();
         if (answers == null)
             editor.remove(key);
         else {
@@ -695,7 +715,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @param backgroundDrawable	drawable for the current orientation
      */
     public static void setBackgroundDrawable(Drawable backgroundDrawable) {
-        switch(app.getResources().getConfiguration().orientation) {
+        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
             ApplicationEx.portraitBackgroundDrawable = backgroundDrawable;
             break;
@@ -713,7 +733,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @return current drawable for the login, question and stats background
      */
     public static Drawable getBackgroundDrawable() {
-        switch(app.getResources().getConfiguration().orientation) {
+        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
             return ApplicationEx.portraitBackgroundDrawable;
         case Configuration.ORIENTATION_LANDSCAPE:
@@ -729,7 +749,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @param setlistDrawable	drawable for the current orientation
      */
     public static void setSetlistDrawable(Drawable setlistDrawable) {
-        switch(app.getResources().getConfiguration().orientation) {
+        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
             ApplicationEx.portraitSetlistDrawable = setlistDrawable;
             break;
@@ -747,7 +767,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @return current drawable for the setlist background
      */
     public static Drawable getSetlistDrawable() {
-        switch(app.getResources().getConfiguration().orientation) {
+        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
             return ApplicationEx.portraitSetlistDrawable;
         case Configuration.ORIENTATION_LANDSCAPE:

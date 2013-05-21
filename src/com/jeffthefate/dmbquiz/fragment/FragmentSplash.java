@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
@@ -62,13 +63,13 @@ public class FragmentSplash extends FragmentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.notification_key))) {
+        		ResourcesSingleton.instance().getString(R.string.notification_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		res.getString(R.string.notification_key), true).commit();
+	        			ResourcesSingleton.instance().getString(R.string.notification_key), true).commit();
         	else
 		        SharedPreferencesSingleton.instance().edit().putBoolean(
-		        		res.getString(R.string.notification_key), true).apply();
+		        		ResourcesSingleton.instance().getString(R.string.notification_key), true).apply();
         }
     }
 
@@ -78,7 +79,7 @@ public class FragmentSplash extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.splash, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground(), "splash");
+        setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
         loginUsername = (EditText) v.findViewById(R.id.LoginUsername);
         loginUsername.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
@@ -227,10 +228,10 @@ public class FragmentSplash extends FragmentBase {
 		*/
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
         	SharedPreferencesSingleton.instance().edit().putBoolean(
-        			res.getString(R.string.menu_key), true).commit();
+        			ResourcesSingleton.instance().getString(R.string.menu_key), true).commit();
         else
         	SharedPreferencesSingleton.instance().edit().putBoolean(
-        			res.getString(R.string.menu_key), true).apply();
+        			ResourcesSingleton.instance().getString(R.string.menu_key), true).apply();
     }
     
     private void processLogin(boolean signUp) {

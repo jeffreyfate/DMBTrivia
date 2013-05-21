@@ -84,7 +84,6 @@ public class FragmentPager extends FragmentBase {
                         mCallback.slidingMenu().setTouchModeAbove(
                                 SlidingMenu.TOUCHMODE_NONE);
                         mCallback.setInSetlist(true);
-                        mCallback.setNewSetlist(false);
                         break;
                     default:
                         mCallback.slidingMenu().setTouchModeAbove(
@@ -122,7 +121,6 @@ public class FragmentPager extends FragmentBase {
                 mCallback.slidingMenu().setTouchModeAbove(
                         SlidingMenu.TOUCHMODE_NONE);
                 mCallback.setInSetlist(true);
-                mCallback.setNewSetlist(false);
             }
             else {
                 viewPager.setCurrentItem(0);

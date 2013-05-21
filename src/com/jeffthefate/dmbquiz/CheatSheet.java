@@ -23,6 +23,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
+
 /**
  * Helper class for showing cheat sheets (tooltips) for icon-only UI elements on long-press. This is
  * already default platform behavior for icon-only {@link android.app.ActionBar} items and tabs.
@@ -118,9 +120,9 @@ public class CheatSheet {
         final int viewWidth = view.getWidth();
         final int viewHeight = view.getHeight();
         final int viewCenterX = screenPos[0] + viewWidth / 2;
-        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        final int screenWidth = ResourcesSingleton.instance().getDisplayMetrics().widthPixels;
         final int estimatedToastHeight = (int) (ESTIMATED_TOAST_HEIGHT_DIPS
-                * context.getResources().getDisplayMetrics().density);
+                * ResourcesSingleton.instance().getDisplayMetrics().density);
 
         Toast cheatSheet = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         boolean showBelow = screenPos[1] < estimatedToastHeight;

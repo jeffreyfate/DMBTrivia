@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
@@ -39,7 +40,7 @@ public class FragmentLoad extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.load, container, false);
         background = (ImageViewEx) view.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground(), "leaders");
+        setBackgroundBitmap(mCallback.getBackground()/*, "leaders"*/);
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);
@@ -108,7 +109,7 @@ public class FragmentLoad extends FragmentBase {
     public void disableButton(boolean isRetry) {
         if (isRetry) {
             retryButton.setBackgroundResource(R.drawable.button_disabled);
-            retryButton.setTextColor(res.getColor(R.color.light_gray));
+            retryButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             retryButton.setEnabled(false);
         }
     }

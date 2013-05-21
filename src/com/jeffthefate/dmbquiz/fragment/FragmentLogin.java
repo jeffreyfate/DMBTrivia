@@ -7,14 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
@@ -42,7 +40,7 @@ public class FragmentLogin extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.load, container, false);
         background = (ImageViewEx) view.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground(), "splash");
+        setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);
@@ -81,7 +79,7 @@ public class FragmentLogin extends FragmentBase {
                 retryButton.setVisibility(View.INVISIBLE);
                 progress.setVisibility(View.VISIBLE);
                 if (mCallback.isLoggingOut())
-                    mCallback.logOut(true);
+                    mCallback.logOut();
             }
             else {
                 ApplicationEx.showLongToast(R.string.NoConnectionToast);
@@ -89,7 +87,7 @@ public class FragmentLogin extends FragmentBase {
             }
         }
     }
-    
+    /*
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (nextAnim == 0)
@@ -110,7 +108,7 @@ public class FragmentLogin extends FragmentBase {
 
         return anim;
     }
-    
+    */
     @Override
     public void showNetworkProblem() {
         enableButton(true);
@@ -139,7 +137,7 @@ public class FragmentLogin extends FragmentBase {
     public void disableButton(boolean isRetry) {
         if (isRetry) {
             retryButton.setBackgroundResource(R.drawable.button_disabled);
-            retryButton.setTextColor(res.getColor(R.color.light_gray));
+            retryButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             retryButton.setEnabled(false);
         }
     }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
@@ -66,7 +67,7 @@ public class FragmentLeaders extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.leaders, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground(), "leaders");
+        setBackgroundBitmap(mCallback.getBackground()/*, "leaders"*/);
         Log.e(Constants.LOG_TAG, "PERF TIME: " + (System.currentTimeMillis()-perfTime));
         userText = (TextView) v.findViewById(R.id.UserText);
         userAnswerText = (TextView) v.findViewById(R.id.Stat1Name);
@@ -213,14 +214,14 @@ public class FragmentLeaders extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (mCallback != null && !SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.dialog_key))) {
+        		ResourcesSingleton.instance().getString(R.string.dialog_key))) {
             mCallback.showScoreDialog();
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	            SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		res.getString(R.string.dialog_key), true).commit();
+	            		ResourcesSingleton.instance().getString(R.string.dialog_key), true).commit();
             else
 	            SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		res.getString(R.string.dialog_key), true).apply();
+	            		ResourcesSingleton.instance().getString(R.string.dialog_key), true).apply();
         }
         if (!isRestored && mCallback != null &&
                 mCallback.getLeadersState() != null) {
@@ -247,7 +248,7 @@ public class FragmentLeaders extends FragmentBase {
             }
         }
         if (!SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.menu_key))) {
+        		ResourcesSingleton.instance().getString(R.string.menu_key))) {
             /*
 	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
 	        		Constants.QUICK_TIP_LEFT);

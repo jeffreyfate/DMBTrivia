@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -21,6 +20,7 @@ import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -36,8 +36,6 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     protected ImageViewEx background;
     
-    protected Resources res;
-    
     public static final int LOGIN_FACEBOOK = 0;
     public static final int LOGIN_TWITTER = 1;
     public static final int LOGIN_ANON = 2;
@@ -47,7 +45,6 @@ public class FragmentBase extends Fragment implements UiCallback {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        res = getResources();
         try {
             mCallback = (OnButtonListener) activity;
         } catch (ClassCastException e) {
@@ -203,7 +200,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         } catch (IllegalAccessException e1) {e1.printStackTrace();}
         if (PreferenceManager.getDefaultSharedPreferences(
                 ApplicationEx.getApp()).getBoolean(
-                		res.getString(R.string.sound_key), false))
+                		ResourcesSingleton.instance().getString(R.string.sound_key), false))
             getAudioFocus(currentAudio);
     }
     
@@ -224,14 +221,14 @@ public class FragmentBase extends Fragment implements UiCallback {
         super.onPause();
     }
     
-    protected void setBackgroundBitmap(String name, String screen) {
+    protected void setBackgroundBitmap(String name/*, String screen*/) {
         Drawable backgroundDrawable = ApplicationEx.getBackgroundDrawable();
         if (backgroundDrawable == null) {
             Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
         	if (name == null)
-        	    mCallback.setBackground("splash4", false, screen);
+        	    mCallback.setBackground("splash4", false/*, screen*/);
         	else
-        	    mCallback.setBackground(name, false, screen);
+        	    mCallback.setBackground(name, false/*, screen*/);
         }
         else {
             if (background != null) {
@@ -261,15 +258,15 @@ public class FragmentBase extends Fragment implements UiCallback {
 	public void toggleSounds() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
     		SharedPreferencesSingleton.instance().edit().putBoolean(
-    				res.getString(R.string.sound_key),
+    				ResourcesSingleton.instance().getString(R.string.sound_key),
     				!SharedPreferencesSingleton.instance().getBoolean(
-    						res.getString(R.string.sound_key),true))
+    						ResourcesSingleton.instance().getString(R.string.sound_key),true))
 				.commit();
     	else
     		SharedPreferencesSingleton.instance().edit().putBoolean(
-    				res.getString(R.string.sound_key),
+    				ResourcesSingleton.instance().getString(R.string.sound_key),
     				!SharedPreferencesSingleton.instance().getBoolean(
-    						res.getString(R.string.sound_key),true))
+    						ResourcesSingleton.instance().getString(R.string.sound_key),true))
 				.apply();
     }
     
@@ -277,15 +274,15 @@ public class FragmentBase extends Fragment implements UiCallback {
 	public void toggleNotifications() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			res.getString(R.string.notification_key),
+	    			ResourcesSingleton.instance().getString(R.string.notification_key),
 	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		res.getString(R.string.notification_key), true))
+	                		ResourcesSingleton.instance().getString(R.string.notification_key), true))
 	            .commit();
     	else
 	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			res.getString(R.string.notification_key),
+	    			ResourcesSingleton.instance().getString(R.string.notification_key),
 	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		res.getString(R.string.notification_key), true))
+	                		ResourcesSingleton.instance().getString(R.string.notification_key), true))
 	            .apply();
     }
     
@@ -293,15 +290,15 @@ public class FragmentBase extends Fragment implements UiCallback {
 	public void toggleTips() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			res.getString(R.string.quicktip_key),
+	    			ResourcesSingleton.instance().getString(R.string.quicktip_key),
 	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		res.getString(R.string.quicktip_key), true))
+	                		ResourcesSingleton.instance().getString(R.string.quicktip_key), true))
 	            .commit();
     	else
 	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			res.getString(R.string.quicktip_key),
+	    			ResourcesSingleton.instance().getString(R.string.quicktip_key),
 	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		res.getString(R.string.quicktip_key), true))
+	                		ResourcesSingleton.instance().getString(R.string.quicktip_key), true))
 	            .apply();
     }
     
@@ -335,7 +332,7 @@ public class FragmentBase extends Fragment implements UiCallback {
             mCallback.setThirdCorrectAnswer(null);
             mCallback.setThirdQuestionCategory(null);
             mCallback.setThirdQuestionScore(null);
-            mCallback.logOut(true);
+            mCallback.logOut();
         }
     }
     

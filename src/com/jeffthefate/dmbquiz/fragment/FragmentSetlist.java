@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -112,7 +113,7 @@ public class FragmentSetlist extends FragmentBase {
         */
 		background = (ImageViewEx) v.findViewById(R.id.Background);
 		mCallback.setlistBackground(
-		        res.getResourceEntryName(R.drawable.setlist), background);
+				ResourcesSingleton.instance().getResourceEntryName(R.drawable.setlist), background);
 		/*
 		try {
 		    background.setImageDrawable(mCallback.getDrawable(R.drawable.setlist));
@@ -217,7 +218,7 @@ public class FragmentSetlist extends FragmentBase {
     @Override
     public void disableButton(boolean isRetry) {
         retryButton.setBackgroundResource(R.drawable.button_disabled);
-        retryButton.setTextColor(res.getColor(R.color.light_gray));
+        retryButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
         retryButton.setEnabled(false);
     }
     

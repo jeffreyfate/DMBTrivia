@@ -30,6 +30,7 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
@@ -94,22 +95,22 @@ public class FragmentQuiz extends FragmentBase {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (!SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.sound_key))) {
+        		ResourcesSingleton.instance().getString(R.string.sound_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		res.getString(R.string.sound_key), true).commit();
+	            		ResourcesSingleton.instance().getString(R.string.sound_key), true).commit();
         	else
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		res.getString(R.string.sound_key), true).apply();
+	            		ResourcesSingleton.instance().getString(R.string.sound_key), true).apply();
         }
         if (!SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.quicktip_key))) {
+        		ResourcesSingleton.instance().getString(R.string.quicktip_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			res.getString(R.string.quicktip_key),false).commit();
+	        			ResourcesSingleton.instance().getString(R.string.quicktip_key),false).commit();
         	else
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			res.getString(R.string.quicktip_key),false).apply();
+	        			ResourcesSingleton.instance().getString(R.string.quicktip_key),false).apply();
         }
         imm = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
@@ -188,7 +189,7 @@ public class FragmentQuiz extends FragmentBase {
         });
         */
 		background = (ImageViewEx) v.findViewById(R.id.Background);
-		setBackgroundBitmap(mCallback.getBackground(), "quiz");
+		setBackgroundBitmap(mCallback.getBackground()/*, "quiz"*/);
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
         scoreText.setOnClickListener(new OnClickListener() {
             @Override
@@ -198,11 +199,11 @@ public class FragmentQuiz extends FragmentBase {
             }
         });
         scoreText.setText(SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.scoretext_key), ""));
+        		ResourcesSingleton.instance().getString(R.string.scoretext_key), ""));
         questionText = (TextView) v.findViewById(R.id.QuestionText);
         questionText.setMovementMethod(new ScrollingMovementMethod());
         questionText.setText(SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.questiontext_key), ""));
+        		ResourcesSingleton.instance().getString(R.string.questiontext_key), ""));
         answerText = (EditText) v.findViewById(R.id.QuestionAnswer);
         answerText.setOnEditorActionListener(new OnEditorActionListener() {
             @SuppressLint("NewApi")
@@ -215,7 +216,7 @@ public class FragmentQuiz extends FragmentBase {
                         event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     answerButton.setBackgroundResource(
                             R.drawable.button_disabled);
-                    answerButton.setTextColor(res.getColor(R.color.light_gray));
+                    answerButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                     answerButton.setText("ENTER");
                     answerButton.setEnabled(false);
                     String entry = null;
@@ -250,18 +251,18 @@ public class FragmentQuiz extends FragmentBase {
             }
         });
         answerText.setText(SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.answertext_key), ""));
+        		ResourcesSingleton.instance().getString(R.string.answertext_key), ""));
         answerText.setHint(SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.hinttext_key), ""));
+        		ResourcesSingleton.instance().getString(R.string.hinttext_key), ""));
         answerPlace = (TextView) v.findViewById(R.id.AnswerText);
         answerPlace.setText(SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.placetext_key), ""));
+        		ResourcesSingleton.instance().getString(R.string.placetext_key), ""));
         answerButton = (Button) v.findViewById(R.id.QuestionButton);
         answerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 answerButton.setBackgroundResource(R.drawable.button_disabled);
-                answerButton.setTextColor(res.getColor(R.color.light_gray));
+                answerButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 answerButton.setEnabled(false);
                 if (mCallback != null) {
                     if (mCallback.isNewQuestion()) {
@@ -306,13 +307,13 @@ public class FragmentQuiz extends FragmentBase {
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 answerPlace.setText(savedHint);
                 hintButton.setEnabled(false);
-                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 hintText.setBackgroundResource(R.drawable.button_disabled);
                 answerButton.setBackgroundResource(R.drawable.button);
                 answerButton.setTextColor(Color.BLACK);
                 answerButton.setText("NEXT");
                 answerButton.setEnabled(true);
-                skipText.setTextColor(res.getColor(R.color.light_gray));
+                skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 skipText.setBackgroundResource(R.drawable.button_disabled);
                 skipPressed = true;
                 DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
@@ -342,7 +343,7 @@ public class FragmentQuiz extends FragmentBase {
             @Override
             public void onClick(View v) {
                 hintButton.setEnabled(false);
-                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 hintText.setBackgroundResource(R.drawable.button_disabled);
                 hintTick = 0;
                 DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
@@ -371,7 +372,7 @@ public class FragmentQuiz extends FragmentBase {
                         else
                             mCallback.getNextQuestions(false,
                             		SharedPreferencesSingleton.instance().getInt(
-                            				res.getString(R.string.level_key),
+                            				ResourcesSingleton.instance().getString(R.string.level_key),
                             				Constants.HARD));
                     }
                     else {
@@ -382,7 +383,7 @@ public class FragmentQuiz extends FragmentBase {
             }
         });
         if (!SharedPreferencesSingleton.instance().getString(
-        		res.getString(R.string.scoretext_key), "").equals("")) {
+        		ResourcesSingleton.instance().getString(R.string.scoretext_key), "").equals("")) {
         	scoreText.setVisibility(View.VISIBLE);
         	questionText.setVisibility(View.VISIBLE);
         	answerText.setVisibility(View.VISIBLE);
@@ -391,17 +392,17 @@ public class FragmentQuiz extends FragmentBase {
         	hintButton.setVisibility(View.VISIBLE);
         	skipButton.setVisibility(View.VISIBLE);
         	hintTime.setVisibility(SharedPreferencesSingleton.instance().getInt(
-        			res.getString(R.string.hinttimevis_key), View.VISIBLE));
+        			ResourcesSingleton.instance().getString(R.string.hinttimevis_key), View.VISIBLE));
         	hintText.setVisibility(SharedPreferencesSingleton.instance().getInt(
-        			res.getString(R.string.hinttextvis_key), View.INVISIBLE));
+        			ResourcesSingleton.instance().getString(R.string.hinttextvis_key), View.INVISIBLE));
         	skipTime.setVisibility(SharedPreferencesSingleton.instance().getInt(
-        			res.getString(R.string.skiptimevis_key), View.VISIBLE));
+        			ResourcesSingleton.instance().getString(R.string.skiptimevis_key), View.VISIBLE));
         	skipText.setVisibility(SharedPreferencesSingleton.instance().getInt(
-        			res.getString(R.string.skiptextvis_key), View.INVISIBLE));
+        			ResourcesSingleton.instance().getString(R.string.skiptextvis_key), View.INVISIBLE));
         	hintTime.setText(SharedPreferencesSingleton.instance().getString(
-        			res.getString(R.string.hintnum_key), ""));
+        			ResourcesSingleton.instance().getString(R.string.hintnum_key), ""));
         	skipTime.setText(SharedPreferencesSingleton.instance().getString(
-        			res.getString(R.string.skipnum_key), ""));
+        			ResourcesSingleton.instance().getString(R.string.skipnum_key), ""));
         }
         return v;
     }
@@ -545,12 +546,12 @@ public class FragmentQuiz extends FragmentBase {
     public void disableButton(boolean isRetry) {
         if (!isRetry) {
             answerButton.setBackgroundResource(R.drawable.button_disabled);
-            answerButton.setTextColor(res.getColor(R.color.light_gray));
+            answerButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             answerButton.setEnabled(false);
         }
         else {
             retryButton.setBackgroundResource(R.drawable.button_disabled);
-            retryButton.setTextColor(res.getColor(R.color.light_gray));
+            retryButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             retryButton.setEnabled(false);
         }
     }
@@ -721,9 +722,9 @@ public class FragmentQuiz extends FragmentBase {
                 questionText.setTextColor(Color.WHITE);
                 answerImage.setVisibility(View.INVISIBLE);
             }
-            hintText.setTextColor(res.getColor(R.color.light_gray));
+            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             hintText.setBackgroundResource(R.drawable.button_disabled);
-            skipText.setTextColor(res.getColor(R.color.light_gray));
+            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             skipText.setBackgroundResource(R.drawable.button_disabled);
             hintTick = 0;
             DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
@@ -752,7 +753,7 @@ public class FragmentQuiz extends FragmentBase {
         if (hintTimer != null)
             hintTimer.cancel();
         if (hintPressed) {
-            hintText.setTextColor(res.getColor(R.color.light_gray));
+            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             hintText.setBackgroundResource(R.drawable.button_disabled);
             hintText.setVisibility(View.VISIBLE);
             hintTime.setVisibility(View.INVISIBLE);
@@ -775,7 +776,7 @@ public class FragmentQuiz extends FragmentBase {
         skipButton.setEnabled(false);
         skipButton.setVisibility(View.VISIBLE);
         if (skipPressed) {
-            skipText.setTextColor(res.getColor(R.color.light_gray));
+            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
             skipText.setBackgroundResource(R.drawable.button_disabled);
             skipText.setVisibility(View.VISIBLE);
             skipTime.setVisibility(View.INVISIBLE);
@@ -809,23 +810,23 @@ public class FragmentQuiz extends FragmentBase {
                 if (mCallback.getQuestionId() != null) {
                     mCallback.getNextQuestions(true,
                     		SharedPreferencesSingleton.instance().getInt(
-                    				res.getString(R.string.level_key),
+                    				ResourcesSingleton.instance().getString(R.string.level_key),
                     				Constants.HARD));
                     //resumeQuestion();
                 }
                 else {
                     showNoMoreQuestions(SharedPreferencesSingleton.instance().getInt(
-                    		res.getString(R.string.level_key), Constants.HARD));
+                    		ResourcesSingleton.instance().getString(R.string.level_key), Constants.HARD));
                     retryButton.setBackgroundResource(
                             R.drawable.button_disabled);
                     retryButton.setTextColor(
-                            res.getColor(R.color.light_gray));
+                            ResourcesSingleton.instance().getColor(R.color.light_gray));
                     retryButton.setText("CHECKING FOR QUESTIONS");
                     retryButton.setVisibility(View.VISIBLE);
                     retryButton.setEnabled(false);
                     mCallback.getNextQuestions(false,
                     		SharedPreferencesSingleton.instance().getInt(
-                    				res.getString(R.string.level_key),
+                    				ResourcesSingleton.instance().getString(R.string.level_key),
                     				Constants.HARD));
                 }
             }
@@ -835,16 +836,16 @@ public class FragmentQuiz extends FragmentBase {
             }
         }
         if (!SharedPreferencesSingleton.instance().contains(
-        		res.getString(R.string.menu_key))) {
+        		ResourcesSingleton.instance().getString(R.string.menu_key))) {
             /*
 	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
 	        		Constants.QUICK_TIP_LEFT | Constants.QUICK_TIP_TOP);
 	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			res.getString(R.string.menu_key), true).commit();
+	        			ResourcesSingleton.instance().getString(R.string.menu_key), true).commit();
 	        else
 	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			res.getString(R.string.menu_key), true).apply();
+	        			ResourcesSingleton.instance().getString(R.string.menu_key), true).apply();
 			*/
         }
     }
@@ -858,27 +859,27 @@ public class FragmentQuiz extends FragmentBase {
         if (hintTask != null)
             hintTask.cancel(true);
         Editor editor = SharedPreferencesSingleton.instance().edit();
-        editor.putString(res.getString(R.string.scoretext_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.scoretext_key),
         		scoreText.getText().toString());
-        editor.putString(res.getString(R.string.questiontext_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.questiontext_key),
         		questionText.getText().toString());
-        editor.putString(res.getString(R.string.hinttext_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.hinttext_key),
         		answerText.getHint().toString());
-        editor.putString(res.getString(R.string.answertext_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.answertext_key),
         		answerText.getText().toString());
-        editor.putString(res.getString(R.string.placetext_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.placetext_key),
         		answerPlace.getText().toString());
-        editor.putInt(res.getString(R.string.hinttimevis_key),
+        editor.putInt(ResourcesSingleton.instance().getString(R.string.hinttimevis_key),
         		hintTime.getVisibility());
-        editor.putInt(res.getString(R.string.hinttextvis_key),
+        editor.putInt(ResourcesSingleton.instance().getString(R.string.hinttextvis_key),
         		hintText.getVisibility());
-        editor.putInt(res.getString(R.string.skiptimevis_key),
+        editor.putInt(ResourcesSingleton.instance().getString(R.string.skiptimevis_key),
         		skipTime.getVisibility());
-        editor.putInt(res.getString(R.string.skiptextvis_key),
+        editor.putInt(ResourcesSingleton.instance().getString(R.string.skiptextvis_key),
         		skipText.getVisibility());
-        editor.putString(res.getString(R.string.hintnum_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.hintnum_key),
         		hintTime.getText().toString());
-        editor.putString(res.getString(R.string.skipnum_key),
+        editor.putString(ResourcesSingleton.instance().getString(R.string.skipnum_key),
         		skipTime.getText().toString());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
         	editor.commit();
@@ -970,9 +971,9 @@ public class FragmentQuiz extends FragmentBase {
                 answerButton.setEnabled(true);
                 answerButton.setBackgroundResource(R.drawable.button);
                 answerButton.setTextColor(Color.BLACK);
-                hintText.setTextColor(res.getColor(R.color.light_gray));
+                hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 hintText.setBackgroundResource(R.drawable.button_disabled);
-                skipText.setTextColor(res.getColor(R.color.light_gray));
+                skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 skipText.setBackgroundResource(R.drawable.button_disabled);
             }
             else {
@@ -1122,7 +1123,7 @@ public class FragmentQuiz extends FragmentBase {
 	            skipTimer.cancel();
 	        hintButton.setVisibility(View.INVISIBLE);
 	        skipButton.setVisibility(View.INVISIBLE);
-	        retryButton.setText(res.getString(R.string.retry));
+	        retryButton.setText(ResourcesSingleton.instance().getString(R.string.retry));
 	        retryButton.setVisibility(View.VISIBLE);
 	        scoreText.setVisibility(View.INVISIBLE);
         } catch (NullPointerException e) {}
@@ -1187,7 +1188,7 @@ public class FragmentQuiz extends FragmentBase {
         retryButton.setBackgroundResource(
                 R.drawable.button_disabled);
         retryButton.setTextColor(
-                res.getColor(R.color.light_gray));
+                ResourcesSingleton.instance().getColor(R.color.light_gray));
         retryButton.setText("CHECKING FOR QUESTIONS");
         retryButton.setVisibility(View.VISIBLE);
         retryButton.setEnabled(false);
