@@ -397,9 +397,17 @@ public class ActivityMain extends SlidingFragmentActivity implements
         connReceiver = new ConnectionReceiver();
         slidingMenu = getSlidingMenu();
         slidingMenu.setShadowWidthRes(R.dimen.shadow_width);
-        slidingMenu.setBehindOffsetRes(R.dimen.actionbar_home_width);
+        slidingMenu.setBehindOffsetRes(R.dimen.menu_width_port);
         slidingMenu.setFadeDegree(0.35f);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
+        case Configuration.ORIENTATION_LANDSCAPE:
+        	slidingMenu.setBehindOffsetRes(R.dimen.menu_width_land);
+            break;
+        default:
+        	slidingMenu.setBehindOffsetRes(R.dimen.menu_width_port);
+            break;
+        }
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notification_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
