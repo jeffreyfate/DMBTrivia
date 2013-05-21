@@ -57,6 +57,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.BitmapDrawableEx;
 import com.jeffthefate.dmbquiz.CheatSheet;
 import com.jeffthefate.dmbquiz.CheatSheetMenu;
@@ -359,16 +361,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
             lowest = savedInstanceState.getInt("lowest");
             highest = savedInstanceState.getInt("highest");
             networkProblem = savedInstanceState.getBoolean("networkProblem");
-            ApplicationEx.dbHelper.setUserValue(networkProblem ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
         }
         else {
-            userId = ApplicationEx.dbHelper.getCurrUser();
+            userId = DatabaseHelperSingleton.instance().getCurrUser();
             if (userId != null)
                 getPersistedData(userId);
         }
         if (userId == null) {
-            userId = ApplicationEx.dbHelper.getCurrUser();
+            userId = DatabaseHelperSingleton.instance().getCurrUser();
             if (userId != null)
                 getUserData(userId);
         }
@@ -376,20 +378,20 @@ public class ActivityMain extends SlidingFragmentActivity implements
         if (userId != null) {
             if (splashBackground == null)
                 splashBackground =
-                        ApplicationEx.dbHelper.getSplashBackground(userId);
+                        DatabaseHelperSingleton.instance().getSplashBackground(userId);
             if (quizBackground == null)
                 quizBackground =
-                        ApplicationEx.dbHelper.getQuizBackground(userId);
+                        DatabaseHelperSingleton.instance().getQuizBackground(userId);
             if (leadersBackground == null)
                 leadersBackground =
-                        ApplicationEx.dbHelper.getLeadersBackground(userId);
+                        DatabaseHelperSingleton.instance().getLeadersBackground(userId);
         }
         */
         if (userId != null) {
             if (portBackground == null)
-                portBackground = ApplicationEx.dbHelper.getPortBackground(userId);
+                portBackground = DatabaseHelperSingleton.instance().getPortBackground(userId);
             if (landBackground == null)
-                landBackground = ApplicationEx.dbHelper.getLandBackground(userId);
+                landBackground = DatabaseHelperSingleton.instance().getLandBackground(userId);
         }
         nManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
@@ -399,42 +401,42 @@ public class ActivityMain extends SlidingFragmentActivity implements
         slidingMenu.setBehindOffsetRes(R.dimen.actionbar_home_width);
         slidingMenu.setFadeDegree(0.35f);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
                 res.getString(R.string.notification_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                ApplicationEx.sharedPrefs.edit().putBoolean(
+                SharedPreferencesSingleton.instance().edit().putBoolean(
                         res.getString(R.string.notification_key), true).commit();
             else
-                ApplicationEx.sharedPrefs.edit().putBoolean(
+                SharedPreferencesSingleton.instance().edit().putBoolean(
                         res.getString(R.string.notification_key), true).apply();
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
                 res.getString(R.string.level_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                ApplicationEx.sharedPrefs.edit().putInt(
+                SharedPreferencesSingleton.instance().edit().putInt(
                         res.getString(R.string.level_key),
                         Constants.HARD).commit();
             else
-                ApplicationEx.sharedPrefs.edit().putInt(
+                SharedPreferencesSingleton.instance().edit().putInt(
                         res.getString(R.string.level_key),
                         Constants.HARD).apply();
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
                 res.getString(R.string.notificationsound_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                ApplicationEx.sharedPrefs.edit().putInt(
+                SharedPreferencesSingleton.instance().edit().putInt(
                         res.getString(R.string.notificationsound_key), 0).commit();
             else
-                ApplicationEx.sharedPrefs.edit().putInt(
+                SharedPreferencesSingleton.instance().edit().putInt(
                         res.getString(R.string.notificationsound_key), 0).apply();
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
                 res.getString(R.string.notificationtype_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                ApplicationEx.sharedPrefs.edit().putBoolean(
+                SharedPreferencesSingleton.instance().edit().putBoolean(
                         res.getString(R.string.notificationtype_key), true).commit();
             else
-                ApplicationEx.sharedPrefs.edit().putBoolean(
+                SharedPreferencesSingleton.instance().edit().putBoolean(
                         res.getString(R.string.notificationtype_key), true).apply();
         }
         refreshSlidingMenu();
@@ -573,19 +575,19 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     getStatsTask.cancel(true);
                 showQuiz(true, false);
                 inLoad = false;
-                ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(inLoad ? 1 : 0,
                         DatabaseHelper.COL_IN_LOAD, userId);
             }
             else if (inStats) {
                 inStats = false;
-                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(inStats ? 1 : 0,
                         DatabaseHelper.COL_IN_STATS, userId);
                 showQuiz(true, false);
             }
             else if (inInfo) {
                 showSplash(true, false);
                 inInfo = false;
-                ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(inInfo ? 1 : 0,
                         DatabaseHelper.COL_IN_INFO, userId);
             }
             else if (isLogging) {
@@ -916,15 +918,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 switch(res.getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
                     portBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     landBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                    DatabaseHelperSingleton.instance().setLandBackground(userId, landBackground);
                     break;
                 default:
                     portBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                     break;
                 }
                 if (isCancelled())
@@ -932,17 +934,17 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 /*
                 Log.d(Constants.LOG_TAG, "SWITCH: " + currentBackground);
                 if (screen.equals("splash")) {
-                    ApplicationEx.dbHelper.setSplashBackground(userId,
+                    DatabaseHelperSingleton.instance().setSplashBackground(userId,
                             currentBackground);
                     splashBackground = currentBackground;
                 }
                 else if (screen.equals("quiz")) {
-                    ApplicationEx.dbHelper.setQuizBackground(userId,
+                    DatabaseHelperSingleton.instance().setQuizBackground(userId,
                             currentBackground);
                     quizBackground = currentBackground;
                 }
                 else if (screen.equals("leaders")) {
-                    ApplicationEx.dbHelper.setLeadersBackground(userId,
+                    DatabaseHelperSingleton.instance().setLeadersBackground(userId,
                             currentBackground);
                     leadersBackground = currentBackground;
                 }
@@ -1016,15 +1018,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 switch(res.getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
                     portBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     landBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                    DatabaseHelperSingleton.instance().setLandBackground(userId, landBackground);
                     break;
                 default:
                     portBackground = res.getResourceEntryName(currentId);
-                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                     break;
                 }
                 if (isCancelled())
@@ -1171,12 +1173,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             if (getScoreTask != null)
                 getScoreTask.cancel(true);
-            if (ApplicationEx.dbHelper.isAnonUser(userId)) {
+            if (DatabaseHelperSingleton.instance().isAnonUser(userId)) {
                 if (correctAnswers != null)
                     correctAnswers.clear();
                 else
                     correctAnswers = new ArrayList<String>();
-                getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+                getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
 						res.getString(R.string.level_key),
 						Constants.HARD));
             }
@@ -1184,7 +1186,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 publishProgress();
             if (displayName == null && !isCancelled()) {
                 displayName = user.getString("displayName");
-                ApplicationEx.dbHelper.setUserValue(displayName, 
+                DatabaseHelperSingleton.instance().setUserValue(displayName, 
                         DatabaseHelper.COL_DISPLAY_NAME, userId);
             }
             return null;
@@ -1208,15 +1210,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
             if (userId != null) {
                 switch(res.getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
-                    setBackground(ApplicationEx.dbHelper.getPortBackground(userId),
+                    setBackground(DatabaseHelperSingleton.instance().getPortBackground(userId),
                             false, "quiz");
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
-                    setBackground(ApplicationEx.dbHelper.getLandBackground(userId),
+                    setBackground(DatabaseHelperSingleton.instance().getLandBackground(userId),
                             false, "quiz");
                     break;
                 default:
-                    setBackground(ApplicationEx.dbHelper.getPortBackground(userId),
+                    setBackground(DatabaseHelperSingleton.instance().getPortBackground(userId),
                             false, "quiz");
                     break;
                 }
@@ -1381,9 +1383,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
 					highest = 1000;
 				int easy = ((highest-lowest) / 3) + lowest;
 				int med = ((easy-lowest) * 2) + lowest;				
-				ApplicationEx.dbHelper.setUserValue(easy,
+				DatabaseHelperSingleton.instance().setUserValue(easy,
 						DatabaseHelper.COL_EASY, userId);
-				ApplicationEx.dbHelper.setUserValue(med,
+				DatabaseHelperSingleton.instance().setUserValue(med,
 						DatabaseHelper.COL_MEDIUM, userId);
 			} catch (ParseException e) {
 				Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
@@ -1420,7 +1422,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     } catch (IllegalStateException exception) {}
                 }
                 else
-                    getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+                    getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
     						res.getString(R.string.level_key),
     						Constants.HARD));
             }
@@ -1439,7 +1441,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             user = ParseUser.getCurrentUser();
         if (user != null && displayName == null) {
             displayName = user.getString("displayName");
-            ApplicationEx.dbHelper.setUserValue(displayName, 
+            DatabaseHelperSingleton.instance().setUserValue(displayName, 
                     DatabaseHelper.COL_DISPLAY_NAME, userId);
         }
         if (inStats)
@@ -1452,10 +1454,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
         */
         else {
             isLogging = false;
-            ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(isLogging ? 1 : 0,
                     DatabaseHelper.COL_LOGGING, userId);
             loggedIn = true;
-            ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(loggedIn ? 1 : 0,
                     DatabaseHelper.COL_LOGGED_IN, userId);
             showQuiz(false, false);
         }
@@ -1485,13 +1487,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void onStatsPressed() {
         inLoad = true;
-        ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(inLoad ? 1 : 0,
                 DatabaseHelper.COL_IN_LOAD, userId);
         showLoad();
         if (getStatsTask != null)
             getStatsTask.cancel(true);
         getStatsTask = new GetStatsTask(
-                ApplicationEx.dbHelper.getScore(userId));
+                DatabaseHelperSingleton.instance().getScore(userId));
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
             getStatsTask.execute();
@@ -1521,16 +1523,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
             emailSignup(user, pass);
             break;
         }
-        ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(isLogging ? 1 : 0,
                 DatabaseHelper.COL_LOGGING, userId);
     }
     
     private void goToQuiz() {
         isLogging = false;
-        ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(isLogging ? 1 : 0,
                 DatabaseHelper.COL_LOGGING, userId);
         loggedIn = true;
-        ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(loggedIn ? 1 : 0,
                 DatabaseHelper.COL_LOGGED_IN, userId);
         showQuiz(false, false);
     }
@@ -1556,10 +1558,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 } else {
                     newUser = user.isNew();
                     userId = user.getObjectId();
-                    if (!ApplicationEx.dbHelper.hasUser(userId))
-                        ApplicationEx.dbHelper.addUser(user, "Facebook");
+                    if (!DatabaseHelperSingleton.instance().hasUser(userId))
+                        DatabaseHelperSingleton.instance().addUser(user, "Facebook");
                     else
-                        ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
+                        DatabaseHelperSingleton.instance().setOffset(1, user.getObjectId());
                     getFacebookDisplayName(user);
                     if (isLogging)
                         setupUser(newUser);
@@ -1589,7 +1591,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
 					                    user.saveEventually();
 					                }
 					                catch (RuntimeException e) {}
-					                ApplicationEx.dbHelper.setUserValue(
+					                DatabaseHelperSingleton.instance().setUserValue(
 					                		displayName,
 					                		DatabaseHelper.COL_DISPLAY_NAME,
 					                		userId);
@@ -1633,10 +1635,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                         catch (RuntimeException e) {}
                     }
-                    if (!ApplicationEx.dbHelper.hasUser(user.getObjectId()))
-                        ApplicationEx.dbHelper.addUser(user, "Twitter");
+                    if (!DatabaseHelperSingleton.instance().hasUser(user.getObjectId()))
+                        DatabaseHelperSingleton.instance().addUser(user, "Twitter");
                     else
-                        ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
+                        DatabaseHelperSingleton.instance().setOffset(1, user.getObjectId());
                     if (isLogging)
                         setupUser(newUser);
                 }
@@ -1663,12 +1665,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    if (!ApplicationEx.dbHelper.hasUser(
+                                    if (!DatabaseHelperSingleton.instance().hasUser(
                                                 user.getObjectId()))
-                                        ApplicationEx.dbHelper.addUser(user,
+                                        DatabaseHelperSingleton.instance().addUser(user,
                                                 "Anonymous");
                                     else
-                                        ApplicationEx.dbHelper.setOffset(1,
+                                        DatabaseHelperSingleton.instance().setOffset(1,
                                                 user.getObjectId());
                                     if (isLogging)
                                         setupUser(newUser);
@@ -1697,10 +1699,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (err == null) {
                     newUser = user.isNew();
                     userId = user.getObjectId();
-                    if (!ApplicationEx.dbHelper.hasUser(userId))
-                        ApplicationEx.dbHelper.addUser(user, "Email");
+                    if (!DatabaseHelperSingleton.instance().hasUser(userId))
+                        DatabaseHelperSingleton.instance().addUser(user, "Email");
                     else
-                        ApplicationEx.dbHelper.setOffset(1, user.getObjectId());
+                        DatabaseHelperSingleton.instance().setOffset(1, user.getObjectId());
                     if (isLogging)
                         setupUser(newUser);
                 }
@@ -1746,10 +1748,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                         catch (RuntimeException e) {}
                     }
-                    if (!ApplicationEx.dbHelper.hasUser(userId))
-                        ApplicationEx.dbHelper.addUser(user, "Email");
+                    if (!DatabaseHelperSingleton.instance().hasUser(userId))
+                        DatabaseHelperSingleton.instance().addUser(user, "Email");
                     else
-                        ApplicationEx.dbHelper.setOffset(1, userId);
+                        DatabaseHelperSingleton.instance().setOffset(1, userId);
                     if (isLogging)
                         setupUser(newUser);
                 }
@@ -1840,7 +1842,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected Void doInBackground(Void... nothing) {
             loggedIn = false;
-            Editor editor = ApplicationEx.sharedPrefs.edit();
+            Editor editor = SharedPreferencesSingleton.instance().edit();
             editor.putString(res.getString(R.string.scoretext_key), "");
             editor.putString(res.getString(R.string.questiontext_key), "");
             editor.putString(res.getString(R.string.hinttext_key), "");
@@ -1867,11 +1869,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
             if (getStatsTask != null)
                 getStatsTask.cancel(true);
             if (userId != null) {
-                ApplicationEx.dbHelper.setUserValue(isLogging ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(isLogging ? 1 : 0,
                         DatabaseHelper.COL_LOGGING, userId);
-                ApplicationEx.dbHelper.setUserValue(loggedIn ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(loggedIn ? 1 : 0,
                         DatabaseHelper.COL_LOGGED_IN, userId);
-                ApplicationEx.dbHelper.setOffset(0, userId);
+                DatabaseHelperSingleton.instance().setOffset(0, userId);
             }
             ParseUser.logOut();
             user = null;
@@ -1908,7 +1910,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     public void onInfoPressed(boolean fresh) {
         try {
             inInfo = true;
-            ApplicationEx.dbHelper.setUserValue(inInfo ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(inInfo ? 1 : 0,
                     DatabaseHelper.COL_IN_INFO, userId);
             FragmentInfo fInfo = new FragmentInfo();
             currFrag = fInfo;
@@ -2037,7 +2039,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             currFrag = fSetlist;
             setBackground(currentBackground, false);
             inSetlist = true;
-            ApplicationEx.dbHelper.setUserValue(inSetlist ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(inSetlist ? 1 : 0,
                     DatabaseHelper.COL_IN_SETLIST, userId);
             invalidateOptionsMenu();
         } catch (IllegalStateException e) {}
@@ -2067,7 +2069,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     Integer.toString(correctAnswers.size()));
             if (isCancelled())
                 return null;
-            ApplicationEx.dbHelper.clearLeaders();
+            DatabaseHelperSingleton.instance().clearLeaders();
             ArrayList<String> devList = new ArrayList<String>();
             devList.add("unPF5wRxnK");
             devList.add("LuzjEBVnC8");
@@ -2156,10 +2158,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	leadersBundle.putString("userRank", "");
             if (!isCancelled()) {
                 inStats = true;
-                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(inStats ? 1 : 0,
                         DatabaseHelper.COL_IN_STATS, userId);
                 inLoad = false;
-                ApplicationEx.dbHelper.setUserValue(inLoad ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(inLoad ? 1 : 0,
                         DatabaseHelper.COL_IN_LOAD, userId);
             }
             return null;
@@ -2209,7 +2211,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     leadersBundle.putString("userScore",
                             Integer.toString(tempInt));
                 limit++;
-                ApplicationEx.dbHelper.addLeader(userId,
+                DatabaseHelperSingleton.instance().addLeader(userId,
                         rankList.get(rankList.size()-1),
                         userList.get(userList.size()-1),
                         scoreList.get(scoreList.size()-1),
@@ -2235,7 +2237,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             user.saveEventually();
         }
         catch (RuntimeException e) {}
-        ApplicationEx.dbHelper.setScore(currTemp, userId);
+        DatabaseHelperSingleton.instance().setScore(currTemp, userId);
     }
     
     @Override
@@ -2312,14 +2314,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 	query = new ParseQuery("Question");
                 	query.whereNotContainedIn("objectId", tempQuestions);
                 	if (level == Constants.EASY) {
-                		int easy = ApplicationEx.dbHelper.getUserIntValue(
+                		int easy = DatabaseHelperSingleton.instance().getUserIntValue(
         						DatabaseHelper.COL_EASY, userId);
                 		if (easy <= 0)
                 			easy = 600;
                 		query.whereLessThanOrEqualTo("score", easy);
                 	}
                 	else if (level == Constants.MEDIUM) {
-                		int med = ApplicationEx.dbHelper.getUserIntValue(
+                		int med = DatabaseHelperSingleton.instance().getUserIntValue(
         						DatabaseHelper.COL_MEDIUM, userId);
                 		if (med <= 0)
                 			med = 800;
@@ -2450,7 +2452,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             }
                             getStage(userId, stageList, resumed);
                             if (!isCancelled())
-                                ApplicationEx.dbHelper.setQuestions(userId,
+                                DatabaseHelperSingleton.instance().setQuestions(userId,
                                         questionId, question, correctAnswer,
                                         questionCategory, questionScore,
                                         questionHint, questionSkip,
@@ -2465,7 +2467,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                     }
                     else if (!isCancelled()) {
-                        ApplicationEx.dbHelper.setQuestions(userId, questionId,
+                        DatabaseHelperSingleton.instance().setQuestions(userId, questionId,
                                 question, correctAnswer, questionCategory,
                                 questionScore, questionHint, questionSkip,
                                 nextQuestionId, nextQuestion, nextCorrectAnswer,
@@ -2524,7 +2526,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
                 else {
                     if (questionId == null)
-                        currFrag.showNoMoreQuestions(ApplicationEx.sharedPrefs
+                        currFrag.showNoMoreQuestions(SharedPreferencesSingleton.instance()
                         		.getInt(res.getString(R.string.level_key),
                     						Constants.HARD));
                     else if (!resumed)
@@ -2687,22 +2689,22 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             if (isCancelled())
                                 return null;
                             portBackground =
-                                ApplicationEx.dbHelper.getPortBackground(userId);
+                                DatabaseHelperSingleton.instance().getPortBackground(userId);
                             landBackground =
-                                ApplicationEx.dbHelper.getLandBackground(userId);
+                                DatabaseHelperSingleton.instance().getLandBackground(userId);
                             if (getBackground() == null) {
                                 switch(res.getConfiguration().orientation) {
                                 case Configuration.ORIENTATION_PORTRAIT:
                                     portBackground = "splash4";
-                                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                                     break;
                                 case Configuration.ORIENTATION_LANDSCAPE:
                                     landBackground = "splash4";
-                                    ApplicationEx.dbHelper.setLandBackground(userId, landBackground);
+                                    DatabaseHelperSingleton.instance().setLandBackground(userId, landBackground);
                                     break;
                                 default:
                                     portBackground = "splash4";
-                                    ApplicationEx.dbHelper.setPortBackground(userId, portBackground);
+                                    DatabaseHelperSingleton.instance().setPortBackground(userId, portBackground);
                                     break;
                                 }
                             }
@@ -2746,9 +2748,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
             new BackgroundTask(questionId).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR);
         newQuestion = false;
-        ApplicationEx.dbHelper.setUserValue(newQuestion ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
-        getNextQuestions(false, ApplicationEx.sharedPrefs.getInt(
+        getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
 				res.getString(R.string.level_key),
 				Constants.HARD));
     }
@@ -2966,7 +2968,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void setIsNewQuestion(boolean isNewQuestion) {
         newQuestion = isNewQuestion;
-        ApplicationEx.dbHelper.setUserValue(newQuestion ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
     }
 
@@ -3011,7 +3013,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             catch (RuntimeException e) {}
         }
         if (userId != null)
-            ApplicationEx.dbHelper.setUserValue(displayName, 
+            DatabaseHelperSingleton.instance().setUserValue(displayName, 
                     DatabaseHelper.COL_DISPLAY_NAME, userId);
     }
     
@@ -3063,69 +3065,69 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private void getPersistedData(String userId) {
-        loggedIn = ApplicationEx.dbHelper.getUserIntValue(
+        loggedIn = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_LOGGED_IN, userId) == 1 ? true : false;
-        isLogging = ApplicationEx.dbHelper.getUserIntValue(
+        isLogging = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_LOGGING, userId) == 1 ? true : false;
-        inLoad = ApplicationEx.dbHelper.getUserIntValue(
+        inLoad = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_LOAD, userId) == 1 ? true : false;
-        inStats = ApplicationEx.dbHelper.getUserIntValue(
+        inStats = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_STATS, userId) == 1 ? true : false;
-        inInfo = ApplicationEx.dbHelper.getUserIntValue(
+        inInfo = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_INFO, userId) == 1 ? true : false;
-        inSetlist = ApplicationEx.dbHelper.getUserIntValue(
+        inSetlist = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_SETLIST, userId) == 1 ? true : false;
-        newSetlist = ApplicationEx.dbHelper.getUserIntValue(
+        newSetlist = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_NEW_SETLIST, userId) == 1 ? true : false;
         getUserData(userId);
-        networkProblem = ApplicationEx.dbHelper.getUserIntValue(
+        networkProblem = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_NETWORK_PROBLEM, userId) == 1 ? true : false;
     }
     
     private void getUserData(String userId) {
         /*
-        splashBackground = ApplicationEx.dbHelper.getUserStringValue(
+        splashBackground = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_SPLASH_BACKGROUND, userId);
-        quizBackground = ApplicationEx.dbHelper.getUserStringValue(
+        quizBackground = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_QUIZ_BACKGROUND, userId);
         Log.i(Constants.LOG_TAG, "getUserData background: " + quizBackground);
-        leadersBackground = ApplicationEx.dbHelper.getUserStringValue(
+        leadersBackground = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_LEADERS_BACKGROUND, userId);
         */
-        portBackground = ApplicationEx.dbHelper.getPortBackground(userId);
-        landBackground = ApplicationEx.dbHelper.getLandBackground(userId);
-        questionId = ApplicationEx.dbHelper.getCurrQuestionId(userId);
-        question = ApplicationEx.dbHelper.getCurrQuestionQuestion(userId);
-        correctAnswer = ApplicationEx.dbHelper.getCurrQuestionAnswer(userId);
-        questionScore = ApplicationEx.dbHelper.getCurrQuestionScore(userId);
+        portBackground = DatabaseHelperSingleton.instance().getPortBackground(userId);
+        landBackground = DatabaseHelperSingleton.instance().getLandBackground(userId);
+        questionId = DatabaseHelperSingleton.instance().getCurrQuestionId(userId);
+        question = DatabaseHelperSingleton.instance().getCurrQuestionQuestion(userId);
+        correctAnswer = DatabaseHelperSingleton.instance().getCurrQuestionAnswer(userId);
+        questionScore = DatabaseHelperSingleton.instance().getCurrQuestionScore(userId);
         questionCategory =
-                ApplicationEx.dbHelper.getCurrQuestionCategory(userId);
-        questionHint = ApplicationEx.dbHelper.getCurrQuestionHint(userId);
-        questionSkip = ApplicationEx.dbHelper.getCurrQuestionSkip(userId);
-        nextQuestionId = ApplicationEx.dbHelper.getNextQuestionId(userId);
-        nextQuestion = ApplicationEx.dbHelper.getNextQuestionQuestion(userId);
+                DatabaseHelperSingleton.instance().getCurrQuestionCategory(userId);
+        questionHint = DatabaseHelperSingleton.instance().getCurrQuestionHint(userId);
+        questionSkip = DatabaseHelperSingleton.instance().getCurrQuestionSkip(userId);
+        nextQuestionId = DatabaseHelperSingleton.instance().getNextQuestionId(userId);
+        nextQuestion = DatabaseHelperSingleton.instance().getNextQuestionQuestion(userId);
         nextCorrectAnswer =
-                ApplicationEx.dbHelper.getNextQuestionAnswer(userId);
-        nextQuestionScore = ApplicationEx.dbHelper.getNextQuestionScore(userId);
+                DatabaseHelperSingleton.instance().getNextQuestionAnswer(userId);
+        nextQuestionScore = DatabaseHelperSingleton.instance().getNextQuestionScore(userId);
         nextQuestionCategory =
-                ApplicationEx.dbHelper.getNextQuestionCategory(userId);
-        nextQuestionHint = ApplicationEx.dbHelper.getNextQuestionHint(userId);
-        nextQuestionSkip = ApplicationEx.dbHelper.getNextQuestionSkip(userId);
-        thirdQuestionId = ApplicationEx.dbHelper.getThirdQuestionId(userId);
-        thirdQuestion = ApplicationEx.dbHelper.getThirdQuestionQuestion(userId);
+                DatabaseHelperSingleton.instance().getNextQuestionCategory(userId);
+        nextQuestionHint = DatabaseHelperSingleton.instance().getNextQuestionHint(userId);
+        nextQuestionSkip = DatabaseHelperSingleton.instance().getNextQuestionSkip(userId);
+        thirdQuestionId = DatabaseHelperSingleton.instance().getThirdQuestionId(userId);
+        thirdQuestion = DatabaseHelperSingleton.instance().getThirdQuestionQuestion(userId);
         thirdCorrectAnswer =
-                ApplicationEx.dbHelper.getThirdQuestionAnswer(userId);
-        thirdQuestionScore = ApplicationEx.dbHelper.getThirdQuestionScore(
+                DatabaseHelperSingleton.instance().getThirdQuestionAnswer(userId);
+        thirdQuestionScore = DatabaseHelperSingleton.instance().getThirdQuestionScore(
                 userId);
         thirdQuestionCategory =
-                ApplicationEx.dbHelper.getThirdQuestionCategory(userId);
-        thirdQuestionHint = ApplicationEx.dbHelper.getThirdQuestionHint(userId);
-        thirdQuestionSkip = ApplicationEx.dbHelper.getThirdQuestionSkip(userId);
-        newQuestion = ApplicationEx.dbHelper.getUserIntValue(
+                DatabaseHelperSingleton.instance().getThirdQuestionCategory(userId);
+        thirdQuestionHint = DatabaseHelperSingleton.instance().getThirdQuestionHint(userId);
+        thirdQuestionSkip = DatabaseHelperSingleton.instance().getThirdQuestionSkip(userId);
+        newQuestion = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_NEW_QUESTION, userId) == 1 ? true : false;
-        displayName = ApplicationEx.dbHelper.getUserStringValue(
+        displayName = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_DISPLAY_NAME, userId);
-        currScore = ApplicationEx.dbHelper.getUserIntValue(
+        currScore = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_SCORE, userId);
         correctAnswers = ApplicationEx.getStringArrayPref(
         		res.getString(R.string.correct_key));
@@ -3267,15 +3269,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             slidingMenu.showContent();
-            if (!ApplicationEx.sharedPrefs.contains(
+            if (!SharedPreferencesSingleton.instance().contains(
                     res.getString(R.string.stats_key)) ||
-                ApplicationEx.sharedPrefs.getBoolean(
+                SharedPreferencesSingleton.instance().getBoolean(
                             res.getString(R.string.quicktip_key), false)) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                    ApplicationEx.sharedPrefs.edit().putBoolean(
+                    SharedPreferencesSingleton.instance().edit().putBoolean(
                             res.getString(R.string.stats_key), true).commit();
                 else
-                    ApplicationEx.sharedPrefs.edit().putBoolean(
+                    SharedPreferencesSingleton.instance().edit().putBoolean(
                             res.getString(R.string.stats_key), true).apply();
                 showQuickTipMenu(quickTipMenuView,
                         "Touch your score to enter Stats & Standings",
@@ -3286,14 +3288,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public void showQuickTip(View view, String message) {
-        if (ApplicationEx.sharedPrefs.getBoolean(
+        if (SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.quicktip_key), false))
             CheatSheet.setup(view, message);
     }
 
     @Override
     public void showQuickTipMenu(ViewGroup view, String message, int location) {
-        if (ApplicationEx.sharedPrefs.getBoolean(
+        if (SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.quicktip_key), false))
             CheatSheetMenu.setup(view, message, getWidth(), getHeight(),
                     location);
@@ -3365,7 +3367,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationSoundsImage);
             notificationSoundText = (TextView) slidingMenu.findViewById(
                     R.id.NotificationSoundsText);
-            int soundSetting = ApplicationEx.sharedPrefs.getInt(
+            int soundSetting = SharedPreferencesSingleton.instance().getInt(
                     res.getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
             switch (soundSetting) {
@@ -3383,7 +3385,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 @Override
                 public void onClick(View arg0) {
                     if (slidingMenu.isMenuShowing()) {
-                        int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                        int soundSetting = SharedPreferencesSingleton.instance().getInt(
                                 res.getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
                         case 0:
@@ -3401,12 +3403,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                         notificationSoundImage.setImageLevel(soundSetting);
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            ApplicationEx.sharedPrefs.edit().putInt(
+                            SharedPreferencesSingleton.instance().edit().putInt(
                                     res.getString(R.string.notificationsound_key),
                                     soundSetting)
                             .commit();
                         else
-                            ApplicationEx.sharedPrefs.edit().putInt(
+                            SharedPreferencesSingleton.instance().edit().putInt(
                                     res.getString(R.string.notificationsound_key),
                                     soundSetting)
                             .apply();
@@ -3419,7 +3421,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationTypeImage);
             notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
                     R.id.NotificationTypeText);
-            notificationAlbumText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+            notificationAlbumText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                     res.getString(R.string.notificationtype_key), true));
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -3427,12 +3429,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (slidingMenu.isMenuShowing()) {
                         notificationAlbumText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.notificationtype_key),
                                     notificationAlbumText.isChecked())
                             .commit();
                         else
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.notificationtype_key),
                                     notificationAlbumText.isChecked())
                             .apply();
@@ -3529,8 +3531,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             if (getUserId() != null) {
-                if (ApplicationEx.dbHelper.hasUser(getUserId()) &&
-                        !ApplicationEx.dbHelper.isAnonUser(getUserId())) {
+                if (DatabaseHelperSingleton.instance().hasUser(getUserId()) &&
+                        !DatabaseHelperSingleton.instance().isAnonUser(getUserId())) {
                     if (getDisplayName() != null)
                         logoutText.setText("Logout (" + getDisplayName() + ")");
                     statsButton.setVisibility(View.VISIBLE);
@@ -3548,7 +3550,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    ApplicationEx.dbHelper.setOffset(0, getUserId());
+                    DatabaseHelperSingleton.instance().setOffset(0, getUserId());
                     setLoggingOut(true);
                     setQuestionId(null);
                     setQuestion(null);
@@ -3581,7 +3583,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             levelButton = (RelativeLayout) slidingMenu.findViewById(R.id.LevelButton);
             levelImage = (ImageViewEx) slidingMenu.findViewById(R.id.LevelImage);
             levelText = (TextView) slidingMenu.findViewById(R.id.LevelText);
-            switch (ApplicationEx.sharedPrefs.getInt(
+            switch (SharedPreferencesSingleton.instance().getInt(
                     res.getString(R.string.level_key),Constants.HARD)) {
             case Constants.EASY:
                 levelText.setText(res.getString(R.string.LevelTitle) + " (Easy)");
@@ -3600,15 +3602,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 @Override
                 public void onClick(View arg0) {
                     if (slidingMenu.isMenuShowing()) {
-                        switch (ApplicationEx.sharedPrefs.getInt(
+                        switch (SharedPreferencesSingleton.instance().getInt(
                             res.getString(R.string.level_key), Constants.HARD)) {
                         case Constants.EASY:
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.MEDIUM).commit();
                             else
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.MEDIUM).apply();
                             levelText.setText(res.getString(R.string.LevelTitle) +
@@ -3617,11 +3619,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             break;
                         case Constants.MEDIUM:
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.HARD).commit();
                             else
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.HARD).apply();
                             levelText.setText(res.getString(R.string.LevelTitle) +
@@ -3630,11 +3632,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             break;
                         case Constants.HARD:
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.EASY).commit();
                             else
-                                ApplicationEx.sharedPrefs.edit().putInt(
+                                SharedPreferencesSingleton.instance().edit().putInt(
                                         res.getString(R.string.level_key),
                                         Constants.EASY).apply();
                             levelText.setText(res.getString(R.string.LevelTitle) +
@@ -3644,7 +3646,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                         if (getQuestion() == null) {
                             getNextQuestions(false,
-                                    ApplicationEx.sharedPrefs.getInt(
+                                    SharedPreferencesSingleton.instance().getInt(
                                     res.getString(R.string.level_key),
                                     Constants.HARD));
                             if (currFrag != null)
@@ -3656,7 +3658,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             */
             soundsButton = (RelativeLayout) slidingMenu.findViewById(R.id.SoundsButton);
             soundsText = (CheckedTextView) slidingMenu.findViewById(R.id.SoundsText);
-            soundsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+            soundsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                     res.getString(R.string.sound_key), true));
             soundsButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -3664,15 +3666,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (slidingMenu.isMenuShowing()) {
                         soundsText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.sound_key),
-                                    !ApplicationEx.sharedPrefs.getBoolean(
+                                    !SharedPreferencesSingleton.instance().getBoolean(
                                             res.getString(R.string.sound_key), true))
                             .commit();
                         else
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.sound_key),
-                                    !ApplicationEx.sharedPrefs.getBoolean(
+                                    !SharedPreferencesSingleton.instance().getBoolean(
                                             res.getString(R.string.sound_key), true))
                             .apply();
                     }
@@ -3684,7 +3686,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationSoundsImage);
             notificationSoundText = (TextView) slidingMenu.findViewById(
                     R.id.NotificationSoundsText);
-            int soundSetting = ApplicationEx.sharedPrefs.getInt(
+            int soundSetting = SharedPreferencesSingleton.instance().getInt(
                     res.getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
             switch (soundSetting) {
@@ -3702,7 +3704,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 @Override
                 public void onClick(View arg0) {
                     if (slidingMenu.isMenuShowing()) {
-                        int soundSetting = ApplicationEx.sharedPrefs.getInt(
+                        int soundSetting = SharedPreferencesSingleton.instance().getInt(
                                 res.getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
                         case 0:
@@ -3720,12 +3722,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                         notificationSoundImage.setImageLevel(soundSetting);
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            ApplicationEx.sharedPrefs.edit().putInt(
+                            SharedPreferencesSingleton.instance().edit().putInt(
                                     res.getString(R.string.notificationsound_key),
                                     soundSetting)
                             .commit();
                         else
-                            ApplicationEx.sharedPrefs.edit().putInt(
+                            SharedPreferencesSingleton.instance().edit().putInt(
                                     res.getString(R.string.notificationsound_key),
                                     soundSetting)
                             .apply();
@@ -3738,7 +3740,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationTypeImage);
             notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
                     R.id.NotificationTypeText);
-            notificationAlbumText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+            notificationAlbumText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                     res.getString(R.string.notificationtype_key), true));
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -3746,12 +3748,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (slidingMenu.isMenuShowing()) {
                         notificationAlbumText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.notificationtype_key),
                                     notificationAlbumText.isChecked())
                             .commit();
                         else
-                            ApplicationEx.sharedPrefs.edit().putBoolean(
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
                                     res.getString(R.string.notificationtype_key),
                                     notificationAlbumText.isChecked())
                             .apply();
@@ -3803,7 +3805,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             public void onClosed() {
                                 slidingMenu.setOnClosedListener(null);
                                 inStats = false;
-                                ApplicationEx.dbHelper.setUserValue(inStats ? 1 : 0,
+                                DatabaseHelperSingleton.instance().setUserValue(inStats ? 1 : 0,
                                         DatabaseHelper.COL_IN_STATS, userId);
                                 showQuiz(true, false);
                             }
@@ -3837,7 +3839,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 R.id.NotificationsButton);
         notificationsText = (CheckedTextView) slidingMenu.findViewById(
                 R.id.NotificationsText);
-        notificationsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+        notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.notification_key), true));
         if (notificationSoundButton != null &&
                 notificationAlbumButton != null) {
@@ -3887,12 +3889,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         }
                     }
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                        SharedPreferencesSingleton.instance().edit().putBoolean(
                                 res.getString(R.string.notification_key),
                                 notificationsText.isChecked())
                         .commit();
                     else
-                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                        SharedPreferencesSingleton.instance().edit().putBoolean(
                                 res.getString(R.string.notification_key),
                                 notificationsText.isChecked())
                         .apply();
@@ -3902,7 +3904,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         /*
         tipsButton = (RelativeLayout) slidingMenu.findViewById(R.id.QuickTipsButton);
         tipsText = (CheckedTextView) slidingMenu.findViewById(R.id.QuickTipsText);
-        tipsText.setChecked(ApplicationEx.sharedPrefs.getBoolean(
+        tipsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.quicktip_key), false));
         tipsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -3910,15 +3912,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (slidingMenu.isMenuShowing()) {
                     tipsText.toggle();
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                        SharedPreferencesSingleton.instance().edit().putBoolean(
                                 res.getString(R.string.quicktip_key),
-                                !ApplicationEx.sharedPrefs.getBoolean(
+                                !SharedPreferencesSingleton.instance().getBoolean(
                                         res.getString(R.string.quicktip_key), true))
                         .commit();
                     else
-                        ApplicationEx.sharedPrefs.edit().putBoolean(
+                        SharedPreferencesSingleton.instance().edit().putBoolean(
                                 res.getString(R.string.quicktip_key),
-                                !ApplicationEx.sharedPrefs.getBoolean(
+                                !SharedPreferencesSingleton.instance().getBoolean(
                                         res.getString(R.string.quicktip_key), true))
                         .apply();
                 }
@@ -3982,7 +3984,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void setInSetlist(boolean inSetlist) {
         this.inSetlist = inSetlist;
-        ApplicationEx.dbHelper.setUserValue(inSetlist ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(inSetlist ? 1 : 0,
                 DatabaseHelper.COL_IN_SETLIST, userId);
         refreshMenu();
         /*
@@ -4000,7 +4002,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void setNewSetlist(boolean newSetlist) {
         this.newSetlist = newSetlist;
-        ApplicationEx.dbHelper.setUserValue(newSetlist ? 1 : 0,
+        DatabaseHelperSingleton.instance().setUserValue(newSetlist ? 1 : 0,
                 DatabaseHelper.COL_NEW_SETLIST, userId);
     }
     /*

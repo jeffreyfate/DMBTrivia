@@ -56,24 +56,42 @@ import com.parse.SaveCallback;
  */
 @SuppressLint("ShowToast")
 public class ApplicationEx extends Application implements OnStacktraceListener {
-    // TODO Get the latest setlist and store it for easy access
-    /**
-     * The application's context
-     */
+
     private static Context app;
-    public static DatabaseHelper dbHelper;
     private static boolean mHasConnection = false;
     private static boolean mIsActive = false;
     private static ConnectivityManager connMan;
+    /**
+     * Path to the application's external cache
+     */
     public static String cacheLocation = null;
-    public static Toast mToast;
-    public static SharedPreferences sharedPrefs;
+    private static Toast mToast;
+    private static SharedPreferences sharedPrefs;
+    /**
+     * Last song reported via Parse and server application
+     */
     public static String latestSong;
+    /**
+     * Last setlist reported via Parse
+     */
     public static String setlist;
+    /**
+     * Last song time stamp reported via Parse and server application
+     */
     public static String setlistStamp;
+    /**
+     * Last setlist reported, broken in to an
+     * {@link java.util.ArrayList ArrayList} of Strings
+     */
     public static ArrayList<String> setlistList;
+    /**
+     * Location of notification sound for the last reported song
+     */
     public static Uri notificationSound;
     private static Trie<String, SongInfo> songMap;
+    /**
+     * Time date format for the updated time stamp
+     */
     public static SimpleDateFormat df = new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
     
     private static Drawable portraitBackgroundDrawable;
@@ -81,6 +99,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static Drawable portraitSetlistDrawable;
     private static Drawable landSetlistDrawable;
     
+    /**
+     * Holds an image and audio clip that are associated with each other
+     * @author Jeff Fate
+     */
     private static class SongInfo {
         private int image;
         private int audio;
@@ -99,6 +121,48 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         }
     }
     
+    /**
+     * Singleton of the SharedPreferences used by the application
+     * @author Jeff
+     */
+    public static class SharedPreferencesSingleton {
+    	private SharedPreferencesSingleton() {}
+    	
+    	private static SharedPreferences sharedPrefs = null;
+    	
+    	/**
+    	 * Get an instance, creating it if necessary, of the shared preferences
+    	 * object for the application
+    	 * @return shared preferences object for the application's preferences
+    	 */
+    	public static SharedPreferences instance() {
+    		if (sharedPrefs == null)
+    			sharedPrefs = PreferenceManager.getDefaultSharedPreferences(app);
+    		return sharedPrefs;
+    	}
+    }
+    
+    /**
+     * Singleton of the DatabaseHelper used by the application
+     * @author Jeff
+     */
+    public static class DatabaseHelperSingleton {
+    	private DatabaseHelperSingleton() {}
+    	
+    	private static DatabaseHelper dbHelper = null;
+    	
+    	/**
+    	 * Get an instance, creating it if necessary, of the shared preferences
+    	 * object for the application
+    	 * @return shared preferences object for the application's preferences
+    	 */
+    	public static DatabaseHelper instance() {
+    		if (dbHelper == null)
+    			dbHelper = DatabaseHelper.getInstance();
+    		return dbHelper;
+    	}
+    }
+    
     @SuppressLint("NewApi")
 	@Override
     public void onCreate() {
@@ -113,7 +177,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         };
         app = this;
         mToast = Toast.makeText(app, "", Toast.LENGTH_LONG);
-        dbHelper = DatabaseHelper.getInstance();
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             cacheLocation = getExternalCacheDir().getAbsolutePath();
@@ -142,8 +205,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             mHasConnection = false;
         else
             mHasConnection = nInfo.isConnected();
-        dbHelper.checkUpgrade();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(app);
+        DatabaseHelperSingleton.instance().checkUpgrade();
         getSetlist();
         generateSongMap();
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
@@ -151,7 +213,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     }
     /**
      * Used by other classes to get the application's global context.
-     * @return  the context of the application
+     * @return the context of the application
      */
     public static Context getApp() {
         return app;
@@ -171,6 +233,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         } catch (ExceptionInInitializerError e) {};
     }
     
+    /**
+     * Reports question to Parse to indicate there is an error in the question
+     * or answer
+     * @param questionId	identifier in the Parse class
+     * @param question		question text
+     * @param answer		answer text
+     * @param score			current score
+     */
     public static void reportQuestion(String questionId, String question,
             String answer, String score) {
         if (questionId != null && question != null && answer != null &&
@@ -191,14 +261,25 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	showLongToast("Report sent, thank you");
     }
     
+    /**
+     * Set indication if there is a network connection
+     * @param hasConnection true if application is reporting a connection
+     */
     public static void setConnection(boolean hasConnection) {
         mHasConnection = hasConnection;
     }
     
+    /**
+     * Reports if the application has a network connection
+     * @return true if the application reports having a connection
+     */
     public static boolean getConnection() {
         return mHasConnection;
     }
     
+    /**
+     * Remove all cached files for this application, including directories
+     */
     public void clearApplicationData() {
         File cache = getCacheDir();
         File appDir = new File(cache.getParent());
@@ -210,7 +291,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             }
         }
     }
-
+    
+    /**
+     * Helper to delete a directory in file structure
+     * @param dir directory to be deleted
+     * @return true if delete was successful
+     */
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
@@ -223,18 +309,35 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         return dir.delete();
     }
     
+    /**
+     * Determines if the app is currently active, visible to the user
+     * @return true if active, false otherwise
+     */
     public static boolean isActive() {
         return mIsActive;
     }
     
+    /**
+     * Indicate that the application is active, visible to user
+     */
     public static void setActive() {
         mIsActive = true;
     }
     
+    /**
+     * Indicate that the application is not active, visible to user
+     */
     public static void setInactive() {
         mIsActive = false;
     }
     
+    /**
+     * Set preference of {@link java.util.ArrayList ArrayList} of
+     * {@link java.lang.String Strings} to key
+     * @param key		corresponding to this preference
+     * @param answers	{@link java.util.ArrayList ArrayList} of
+     * 					{@link java.lang.String Strings} to assign to the key
+     */
     public static void setStringArrayPref(String key,
             ArrayList<String> answers) {
         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -252,7 +355,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         else
         	editor.apply();
     }
-
+    
+    /**
+     * Get string array preference given a specific key
+     * @param key used to find preference
+     * @return an {@link java.util.ArrayList ArrayList} of
+     * 		   {@link java.lang.String Strings} containing the preference
+     * 		   matching the given key
+     */
     public static ArrayList<String> getStringArrayPref(String key) {
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(app);
@@ -272,6 +382,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         return answers;
     }
     
+    /**
+     * Display an application-wide toast message, with short timeout
+     * @param message string to display
+     */
     public static void showShortToast(String message) {
     	if (mToast != null) {
     		mToast.setText(message);
@@ -280,6 +394,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     	}
     }
     
+    /**
+     * Display an application-wide toast message, with long timeout
+     * @param message string to display
+     */
     public static void showLongToast(String message) {
     	if (mToast != null) {
     		mToast.setText(message);
@@ -288,10 +406,19 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     	}
     }
     
+    /**
+     * Display an application-wide toast message, with long timeout
+     * @param messageId resource id of string to display
+     */
     public static void showLongToast(int messageId) {
     	showLongToast(app.getString(messageId));
     }
     
+    /**
+     * Fetch the most recent setlist from the Parse service, along with the last
+     * updated time and send broadcast to any receivers that there is a new
+     * setlist to show.
+     */
     public static void getSetlist() {
         ParseQuery setlistQuery = new ParseQuery("Setlist");
         setlistQuery.addDescendingOrder("setDate");
@@ -320,10 +447,18 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         });
     }
     
+    /**
+     * Create a string list, separating each line of the setlist to an
+     * individual string
+     */
     public static void parseSetlist() {
         setlistList = new ArrayList<String>(Arrays.asList(setlist.split("\n")));
     }
     
+    /**
+     * Make the URI for the audio to add to the notification
+     * @param soundId resource id of the audio
+     */
     public static void createNotificationUri(int soundId) {
         StringBuilder sb = new StringBuilder();
         sb.append("android.resource://");
@@ -333,6 +468,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         notificationSound = Uri.parse(sb.toString());
     }
     
+    /**
+     * Create the map that associates song titles to images and audio for the
+     * notifications
+     */
     private static void generateSongMap() {
         songMap = new PatriciaTrie<String, SongInfo>(StringKeyAnalyzer.CHAR);
         
@@ -473,6 +612,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songMap.put("encore", new SongInfo(R.drawable.notification_large, R.raw.endofset));
     }
     
+    /**
+     * Get the image that matches the given song title for the notification
+     * @param songTitle	title of the song to match
+     * @return id for the image resource that matches
+     */
     public static int findMatchingImage(String songTitle) {
         songTitle = StringUtils.remove(songTitle, "*");
         songTitle = StringUtils.remove(songTitle, "+");
@@ -487,6 +631,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             return R.drawable.notification_large;
     }
     
+    /**
+     * Get the audio that matches the current song for the notification.
+     * @param res		resources object to retrieve the audio from
+     * @param songTitle	title of song to match
+     * @return id for the audio that matches
+     */
     public static int findMatchingAudio(Resources res, String songTitle) {
         songTitle = StringUtils.remove(songTitle, "*");
         songTitle = StringUtils.remove(songTitle, "+");
@@ -496,7 +646,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         Entry<String, SongInfo> entry = songMap.select(songTitle);
-        if (ApplicationEx.sharedPrefs.getBoolean(
+        if (SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.notificationtype_key), true) &&
                 songTitle.startsWith(entry.getKey()))
             return entry.getValue().getAudio();
@@ -504,7 +654,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             return R.raw.general;
     }
     
-    public static Bitmap resizeImage(Resources res, int resId) {
+    /**
+     * Resizes image for the large notification image.
+     * @param res	resources object to retrieve the bitmap from
+     * @param resId	id of the image to create bitmap from
+     * @return bitmap to be used as the large notification image
+     */
+    @SuppressLint("InlinedApi")
+	public static Bitmap resizeImage(Resources res, int resId) {
         Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
         if (resId == R.drawable.notification_large)
             return bitmap;
@@ -532,6 +689,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         return smallBitmap;
     }
     
+    /**
+     * Set the current drawable for login, question and stats background,
+     * specific to the orientation.
+     * @param backgroundDrawable	drawable for the current orientation
+     */
     public static void setBackgroundDrawable(Drawable backgroundDrawable) {
         switch(app.getResources().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
@@ -545,6 +707,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         }
     }
     
+    /**
+     * Current drawable for the login, question and stats background.  Both
+     * portrait and landscape are held here to reduce work when rotating.
+     * @return current drawable for the login, question and stats background
+     */
     public static Drawable getBackgroundDrawable() {
         switch(app.getResources().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
@@ -556,6 +723,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         }
     }
     
+    /**
+     * Set the current drawable for setlist background, specific to the
+     * orientation.
+     * @param setlistDrawable	drawable for the current orientation
+     */
     public static void setSetlistDrawable(Drawable setlistDrawable) {
         switch(app.getResources().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
@@ -569,6 +741,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         }
     }
     
+    /**
+     * Current drawable for the setlist background.  Both portrait and landscape
+     * are held here to reduce work when rotating.
+     * @return current drawable for the setlist background
+     */
     public static Drawable getSetlistDrawable() {
         switch(app.getResources().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:

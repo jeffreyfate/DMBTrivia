@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -91,22 +93,22 @@ public class FragmentQuiz extends FragmentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.sound_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	            		res.getString(R.string.sound_key), true).commit();
         	else
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	            		res.getString(R.string.sound_key), true).apply();
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.quicktip_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.quicktip_key),false).commit();
         	else
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.quicktip_key),false).apply();
         }
         imm = (InputMethodManager) getActivity().getSystemService(
@@ -114,49 +116,49 @@ public class FragmentQuiz extends FragmentBase {
         if (savedInstanceState != null) {
             /*
             savedAnswer = savedInstanceState.getString("answer");
-            ApplicationEx.dbHelper.setUserValue(savedAnswer,
+            DatabaseHelperSingleton.instance().setUserValue(savedAnswer,
                     DatabaseHelper.COL_ANSWER, mCallback.getUserId());
             */
             savedHint = savedInstanceState.getString("hint");
-            ApplicationEx.dbHelper.setUserValue(savedHint,
+            DatabaseHelperSingleton.instance().setUserValue(savedHint,
                     DatabaseHelper.COL_HINT, mCallback.getUserId());
             skipTick = savedInstanceState.getLong("skipTick");
-            ApplicationEx.dbHelper.setUserValue((int) skipTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
             hintTick = savedInstanceState.getLong("hintTick");
-            ApplicationEx.dbHelper.setUserValue((int) hintTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
             hintPressed = savedInstanceState.getBoolean("hintPressed");
-            ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
             skipPressed = savedInstanceState.getBoolean("skipPressed");
-            ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                     DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
             isCorrect = savedInstanceState.getBoolean("isCorrect");
-            ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                     DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
         }
         else {
             if (mCallback.getUserId() != null) {
                 /*
-                savedAnswer = ApplicationEx.dbHelper.getUserStringValue(
+                savedAnswer = DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_ANSWER, mCallback.getUserId());
                 if (savedAnswer != null && savedAnswer.equals(""))
                     savedAnswer = null;
                 */
-                savedHint = ApplicationEx.dbHelper.getUserStringValue(
+                savedHint = DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
-                skipTick = ApplicationEx.dbHelper.getUserIntValue(
+                skipTick = DatabaseHelperSingleton.instance().getUserIntValue(
                         DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
-                hintTick = ApplicationEx.dbHelper.getUserIntValue(
+                hintTick = DatabaseHelperSingleton.instance().getUserIntValue(
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-                hintPressed = ApplicationEx.dbHelper.getUserIntValue(
+                hintPressed = DatabaseHelperSingleton.instance().getUserIntValue(
                         DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId())
                             == 1 ? true : false;
-                skipPressed = ApplicationEx.dbHelper.getUserIntValue(
+                skipPressed = DatabaseHelperSingleton.instance().getUserIntValue(
                         DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId())
                             == 1 ? true : false;
-                isCorrect = ApplicationEx.dbHelper.getUserIntValue(
+                isCorrect = DatabaseHelperSingleton.instance().getUserIntValue(
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId())
                             == 1 ? true : false;
             }
@@ -165,9 +167,9 @@ public class FragmentQuiz extends FragmentBase {
             hintTick = 15000;
         if (skipTick < 0)
             skipTick = 17000;
-        ApplicationEx.dbHelper.setUserValue((int) hintTick,
+        DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                 DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue((int) skipTick,
+        DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                 DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
     }
     
@@ -195,11 +197,11 @@ public class FragmentQuiz extends FragmentBase {
                     mCallback.onStatsPressed();
             }
         });
-        scoreText.setText(ApplicationEx.sharedPrefs.getString(
+        scoreText.setText(SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.scoretext_key), ""));
         questionText = (TextView) v.findViewById(R.id.QuestionText);
         questionText.setMovementMethod(new ScrollingMovementMethod());
-        questionText.setText(ApplicationEx.sharedPrefs.getString(
+        questionText.setText(SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.questiontext_key), ""));
         answerText = (EditText) v.findViewById(R.id.QuestionAnswer);
         answerText.setOnEditorActionListener(new OnEditorActionListener() {
@@ -242,17 +244,17 @@ public class FragmentQuiz extends FragmentBase {
                     int count){
                 /*
                 savedAnswer = s == null ? "" : s.toString();
-                ApplicationEx.dbHelper.setUserValue(savedAnswer,
+                DatabaseHelperSingleton.instance().setUserValue(savedAnswer,
                         DatabaseHelper.COL_ANSWER, mCallback.getUserId());
                 */
             }
         });
-        answerText.setText(ApplicationEx.sharedPrefs.getString(
+        answerText.setText(SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.answertext_key), ""));
-        answerText.setHint(ApplicationEx.sharedPrefs.getString(
+        answerText.setHint(SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.hinttext_key), ""));
         answerPlace = (TextView) v.findViewById(R.id.AnswerText);
-        answerPlace.setText(ApplicationEx.sharedPrefs.getString(
+        answerPlace.setText(SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.placetext_key), ""));
         answerButton = (Button) v.findViewById(R.id.QuestionButton);
         answerButton.setOnClickListener(new OnClickListener() {
@@ -300,7 +302,7 @@ public class FragmentQuiz extends FragmentBase {
                 skipButton.setEnabled(false);
                 playAudio("skip");
                 savedHint = mCallback.getCorrectAnswer();
-                ApplicationEx.dbHelper.setUserValue(savedHint,
+                DatabaseHelperSingleton.instance().setUserValue(savedHint,
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 answerPlace.setText(savedHint);
                 hintButton.setEnabled(false);
@@ -313,20 +315,20 @@ public class FragmentQuiz extends FragmentBase {
                 skipText.setTextColor(res.getColor(R.color.light_gray));
                 skipText.setBackgroundResource(R.drawable.button_disabled);
                 skipPressed = true;
-                ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                         DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
                 if (hintTimer != null)
                     hintTimer.cancel();
                 if (skipTimer != null)
                     skipTimer.cancel();
                 isCorrect = true;
-                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
                 hintTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) hintTick,
+                DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
                 skipTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) skipTick,
+                DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                         DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
                 saveQuestionScore(true);
             } 
@@ -343,7 +345,7 @@ public class FragmentQuiz extends FragmentBase {
                 hintText.setTextColor(res.getColor(R.color.light_gray));
                 hintText.setBackgroundResource(R.drawable.button_disabled);
                 hintTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) hintTick,
+                DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
                 playAudio("hint");
                 indicateHint();
@@ -368,7 +370,7 @@ public class FragmentQuiz extends FragmentBase {
                             resumeQuestion();
                         else
                             mCallback.getNextQuestions(false,
-                            		ApplicationEx.sharedPrefs.getInt(
+                            		SharedPreferencesSingleton.instance().getInt(
                             				res.getString(R.string.level_key),
                             				Constants.HARD));
                     }
@@ -379,7 +381,7 @@ public class FragmentQuiz extends FragmentBase {
                 }
             }
         });
-        if (!ApplicationEx.sharedPrefs.getString(
+        if (!SharedPreferencesSingleton.instance().getString(
         		res.getString(R.string.scoretext_key), "").equals("")) {
         	scoreText.setVisibility(View.VISIBLE);
         	questionText.setVisibility(View.VISIBLE);
@@ -388,17 +390,17 @@ public class FragmentQuiz extends FragmentBase {
         	answerButton.setVisibility(View.VISIBLE);
         	hintButton.setVisibility(View.VISIBLE);
         	skipButton.setVisibility(View.VISIBLE);
-        	hintTime.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        	hintTime.setVisibility(SharedPreferencesSingleton.instance().getInt(
         			res.getString(R.string.hinttimevis_key), View.VISIBLE));
-        	hintText.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        	hintText.setVisibility(SharedPreferencesSingleton.instance().getInt(
         			res.getString(R.string.hinttextvis_key), View.INVISIBLE));
-        	skipTime.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        	skipTime.setVisibility(SharedPreferencesSingleton.instance().getInt(
         			res.getString(R.string.skiptimevis_key), View.VISIBLE));
-        	skipText.setVisibility(ApplicationEx.sharedPrefs.getInt(
+        	skipText.setVisibility(SharedPreferencesSingleton.instance().getInt(
         			res.getString(R.string.skiptextvis_key), View.INVISIBLE));
-        	hintTime.setText(ApplicationEx.sharedPrefs.getString(
+        	hintTime.setText(SharedPreferencesSingleton.instance().getString(
         			res.getString(R.string.hintnum_key), ""));
-        	skipTime.setText(ApplicationEx.sharedPrefs.getString(
+        	skipTime.setText(SharedPreferencesSingleton.instance().getString(
         			res.getString(R.string.skipnum_key), ""));
         }
         return v;
@@ -432,7 +434,7 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         public void onTick(long millisUntilFinished) {
             skipTick = millisUntilFinished;
-            ApplicationEx.dbHelper.setUserValue((int) skipTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
             skipTime.setText(Long.toString((millisUntilFinished/1000)-1));
             skipText.setVisibility(View.INVISIBLE);
@@ -449,7 +451,7 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         public void onFinish() {
             skipTick = 0;
-            ApplicationEx.dbHelper.setUserValue((int) skipTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
         }
     }
@@ -473,7 +475,7 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         public void onTick(long millisUntilFinished) {
             hintTick = millisUntilFinished;
-            ApplicationEx.dbHelper.setUserValue((int) hintTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
             hintTime.setText(Long.toString((millisUntilFinished/1000)+1));
             hintText.setVisibility(View.INVISIBLE);
@@ -496,7 +498,7 @@ public class FragmentQuiz extends FragmentBase {
             hintText.setBackgroundResource(R.drawable.button);
             hintTime.setVisibility(View.INVISIBLE);
             hintTick = 0;
-            ApplicationEx.dbHelper.setUserValue((int) hintTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
         }
     }
@@ -507,22 +509,22 @@ public class FragmentQuiz extends FragmentBase {
             publishProgress();
             //savedAnswer = null;
             skipTick = 17000;
-            ApplicationEx.dbHelper.setUserValue((int) skipTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
             hintTick = 15000;
-            ApplicationEx.dbHelper.setUserValue((int) hintTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
             hintPressed = false;
-            ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
             skipPressed = false;
-            ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                     DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
             savedHint = "";
-            ApplicationEx.dbHelper.setUserValue("",
+            DatabaseHelperSingleton.instance().setUserValue("",
                     DatabaseHelper.COL_HINT, mCallback.getUserId());
             isCorrect = false;
-            ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                     DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
             return null;
         }
@@ -607,7 +609,7 @@ public class FragmentQuiz extends FragmentBase {
                 return null;
             mCallback.setQuestionHint(true);
             hintPressed = true;
-            ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
             if (isCancelled())
                 return null;
@@ -620,7 +622,7 @@ public class FragmentQuiz extends FragmentBase {
             if (isCancelled())
                 return null;
             savedHint = sb.toString();
-            ApplicationEx.dbHelper.setUserValue(savedHint,
+            DatabaseHelperSingleton.instance().setUserValue(savedHint,
                     DatabaseHelper.COL_HINT, mCallback.getUserId());
             if (isCancelled())
                 return null;
@@ -643,7 +645,7 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void resetHint() {
         savedHint = "";
-        ApplicationEx.dbHelper.setUserValue("",
+        DatabaseHelperSingleton.instance().setUserValue("",
                 DatabaseHelper.COL_HINT, mCallback.getUserId());
     }
     
@@ -696,7 +698,7 @@ public class FragmentQuiz extends FragmentBase {
             }
             savedHint = answer;
         }
-        ApplicationEx.dbHelper.setUserValue(savedHint,
+        DatabaseHelperSingleton.instance().setUserValue(savedHint,
                 DatabaseHelper.COL_HINT, mCallback.getUserId());
         answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
         answerPlace.setVisibility(View.VISIBLE);
@@ -724,16 +726,16 @@ public class FragmentQuiz extends FragmentBase {
             skipText.setTextColor(res.getColor(R.color.light_gray));
             skipText.setBackgroundResource(R.drawable.button_disabled);
             hintTick = 0;
-            ApplicationEx.dbHelper.setUserValue((int) hintTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                     DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
             skipTick = 0;
-            ApplicationEx.dbHelper.setUserValue((int) skipTick,
+            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                     DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
             skipPressed = true;
-            ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                     DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
             hintPressed = true;
-            ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
         }
         else {
@@ -742,7 +744,7 @@ public class FragmentQuiz extends FragmentBase {
             questionText.setTextColor(Color.WHITE);
             answerImage.setVisibility(View.INVISIBLE);
             skipPressed = false;
-            ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                     DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
         }
         hintButton.setEnabled(false);
@@ -806,13 +808,13 @@ public class FragmentQuiz extends FragmentBase {
                 mCallback.saveUserScore(mCallback.getCurrentScore());
                 if (mCallback.getQuestionId() != null) {
                     mCallback.getNextQuestions(true,
-                    		ApplicationEx.sharedPrefs.getInt(
+                    		SharedPreferencesSingleton.instance().getInt(
                     				res.getString(R.string.level_key),
                     				Constants.HARD));
                     //resumeQuestion();
                 }
                 else {
-                    showNoMoreQuestions(ApplicationEx.sharedPrefs.getInt(
+                    showNoMoreQuestions(SharedPreferencesSingleton.instance().getInt(
                     		res.getString(R.string.level_key), Constants.HARD));
                     retryButton.setBackgroundResource(
                             R.drawable.button_disabled);
@@ -822,7 +824,7 @@ public class FragmentQuiz extends FragmentBase {
                     retryButton.setVisibility(View.VISIBLE);
                     retryButton.setEnabled(false);
                     mCallback.getNextQuestions(false,
-                    		ApplicationEx.sharedPrefs.getInt(
+                    		SharedPreferencesSingleton.instance().getInt(
                     				res.getString(R.string.level_key),
                     				Constants.HARD));
                 }
@@ -832,16 +834,16 @@ public class FragmentQuiz extends FragmentBase {
                 showNetworkProblem();
             }
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.menu_key))) {
             /*
 	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
 	        		Constants.QUICK_TIP_LEFT | Constants.QUICK_TIP_TOP);
 	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.menu_key), true).commit();
 	        else
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.menu_key), true).apply();
 			*/
         }
@@ -855,7 +857,7 @@ public class FragmentQuiz extends FragmentBase {
             hintTimer.cancel();
         if (hintTask != null)
             hintTask.cancel(true);
-        Editor editor = ApplicationEx.sharedPrefs.edit();
+        Editor editor = SharedPreferencesSingleton.instance().edit();
         editor.putString(res.getString(R.string.scoretext_key),
         		scoreText.getText().toString());
         editor.putString(res.getString(R.string.questiontext_key),
@@ -908,18 +910,18 @@ public class FragmentQuiz extends FragmentBase {
                 publishProgress();
                 playAudio("correct");
                 hintTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) hintTick,
+                DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
                         DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
                 skipTick = 0;
-                ApplicationEx.dbHelper.setUserValue((int) skipTick,
+                DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                         DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
                 hintPressed = true;
-                ApplicationEx.dbHelper.setUserValue(hintPressed ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                         DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
                 skipPressed = true;
-                ApplicationEx.dbHelper.setUserValue(skipPressed ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
                         DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
-                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
                 if (wrongTimer != null)
                     wrongTimer.cancel();
@@ -929,7 +931,7 @@ public class FragmentQuiz extends FragmentBase {
                 isCorrect = false;
                 playAudio("wrong");
                 publishProgress();
-                ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+                DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
             }
             return null;
@@ -938,7 +940,7 @@ public class FragmentQuiz extends FragmentBase {
         protected void onProgressUpdate(Void... nothing) {
             if (isCorrect) {
                 if (mCallback.getCurrentScore() > -1 &&
-                        !ApplicationEx.dbHelper.isAnonUser(userId)) {
+                        !DatabaseHelperSingleton.instance().isAnonUser(userId)) {
                     scoreText.setText(
                             Integer.toString(mCallback.getCurrentScore()));
                     scoreText.setVisibility(View.VISIBLE);
@@ -950,7 +952,7 @@ public class FragmentQuiz extends FragmentBase {
                 if (skipTimer != null)
                     skipTimer.cancel();
                 savedHint = mCallback.getCorrectAnswer();
-                ApplicationEx.dbHelper.setUserValue(savedHint,
+                DatabaseHelperSingleton.instance().setUserValue(savedHint,
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 answerPlace.setText(savedHint);
                 hintText.setVisibility(View.VISIBLE);
@@ -992,7 +994,7 @@ public class FragmentQuiz extends FragmentBase {
             if (isCorrect)
                 saveQuestionScore(false);
             isCorrect = false;
-            ApplicationEx.dbHelper.setUserValue(isCorrect ? 1 : 0,
+            DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                     DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
         }
         

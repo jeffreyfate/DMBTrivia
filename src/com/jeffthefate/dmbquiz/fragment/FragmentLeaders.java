@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -108,41 +110,41 @@ public class FragmentLeaders extends FragmentBase {
         else if (mCallback != null && (mCallback.getLeadersState() == null ||
                 mCallback.getLeadersState().isEmpty())) {
             if (mCallback.getUserId() != null) {
-                userText.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userText.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_TEXT, mCallback.getUserId()));
                 userAnswerText.setText(
-                        ApplicationEx.dbHelper.getUserStringValue(
+                        DatabaseHelperSingleton.instance().getUserStringValue(
                                 DatabaseHelper.COL_USER_ANSWER_TEXT,
                                 mCallback.getUserId()));
-                userAnswers.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userAnswers.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_ANSWERS,
                                 mCallback.getUserId()));
-                userHintText.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userHintText.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_HINT_TEXT,
                                 mCallback.getUserId()));
-                userHints.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userHints.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_HINTS, mCallback.getUserId()));
-                userRank.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userRank.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                 		DatabaseHelper.COL_USER_RANK_TEXT,
                 				mCallback.getUserId()));
-                userName.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userName.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_NAME_TEXT,
                                 mCallback.getUserId()));
-                userScore.setText(ApplicationEx.dbHelper.getUserStringValue(
+                userScore.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_USER_SCORE_TEXT,
                                 mCallback.getUserId()));
-                leaderText.setText(ApplicationEx.dbHelper.getUserStringValue(
+                leaderText.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_LEADER_TEXT, mCallback.getUserId()));
-                createdText.setText(ApplicationEx.dbHelper.getUserStringValue(
+                createdText.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_CREATED_TEXT,
                                 mCallback.getUserId()));
-                createdDate.setText(ApplicationEx.dbHelper.getUserStringValue(
+                createdDate.setText(DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_CREATED_DATE,
                                 mCallback.getUserId()));
-                rankList = ApplicationEx.dbHelper.getLeaderRanks();
-                userList = ApplicationEx.dbHelper.getLeaderUsers();
-                scoreList = ApplicationEx.dbHelper.getLeaderScores();
-                userIdList = ApplicationEx.dbHelper.getLeaderIds();
+                rankList = DatabaseHelperSingleton.instance().getLeaderRanks();
+                userList = DatabaseHelperSingleton.instance().getLeaderUsers();
+                scoreList = DatabaseHelperSingleton.instance().getLeaderScores();
+                userIdList = DatabaseHelperSingleton.instance().getLeaderIds();
                 if (mCallback.getUserId() != null && rankList != null &&
                         userList != null && scoreList != null &&
                         userIdList != null) {
@@ -182,27 +184,27 @@ public class FragmentLeaders extends FragmentBase {
     
     @Override
     public void onPause() {
-        ApplicationEx.dbHelper.setUserValue(userText.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userText.getText().toString(),
                 DatabaseHelper.COL_USER_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userAnswerText.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userAnswerText.getText().toString(),
                 DatabaseHelper.COL_USER_ANSWER_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userAnswers.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userAnswers.getText().toString(),
                 DatabaseHelper.COL_USER_ANSWERS, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userHintText.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userHintText.getText().toString(),
                 DatabaseHelper.COL_USER_HINT_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userHints.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userHints.getText().toString(),
                 DatabaseHelper.COL_USER_HINTS, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userRank.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userRank.getText().toString(),
                 DatabaseHelper.COL_USER_RANK_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userName.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userName.getText().toString(),
                 DatabaseHelper.COL_USER_NAME_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(userScore.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(userScore.getText().toString(),
                 DatabaseHelper.COL_USER_SCORE_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(leaderText.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(leaderText.getText().toString(),
                 DatabaseHelper.COL_LEADER_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(createdText.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(createdText.getText().toString(),
                 DatabaseHelper.COL_CREATED_TEXT, mCallback.getUserId());
-        ApplicationEx.dbHelper.setUserValue(createdDate.getText().toString(),
+        DatabaseHelperSingleton.instance().setUserValue(createdDate.getText().toString(),
                 DatabaseHelper.COL_CREATED_DATE, mCallback.getUserId());
         super.onPause();
     }
@@ -210,14 +212,14 @@ public class FragmentLeaders extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        if (mCallback != null && !ApplicationEx.sharedPrefs.contains(
+        if (mCallback != null && !SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.dialog_key))) {
             mCallback.showScoreDialog();
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	            ApplicationEx.sharedPrefs.edit().putBoolean(
+	            SharedPreferencesSingleton.instance().edit().putBoolean(
 	            		res.getString(R.string.dialog_key), true).commit();
             else
-	            ApplicationEx.sharedPrefs.edit().putBoolean(
+	            SharedPreferencesSingleton.instance().edit().putBoolean(
 	            		res.getString(R.string.dialog_key), true).apply();
         }
         if (!isRestored && mCallback != null &&
@@ -244,16 +246,16 @@ public class FragmentLeaders extends FragmentBase {
                         new int[] {R.id.text1, R.id.text2}));
             }
         }
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.menu_key))) {
             /*
 	        showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
 	        		Constants.QUICK_TIP_LEFT);
 	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.menu_key), true).commit();
 	        else
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	        			res.getString(R.string.menu_key), true).apply();
 			*/
         }

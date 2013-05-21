@@ -21,6 +21,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
@@ -137,7 +138,7 @@ public class PushReceiver extends BroadcastReceiver {
                     setTicker(ApplicationEx.latestSong).
                     setContentTitle(ApplicationEx.latestSong).
                     setLights(0xffff0000, 2000, 10000);
-                switch (ApplicationEx.sharedPrefs.getInt(
+                switch (SharedPreferencesSingleton.instance().getInt(
                         res.getString(R.string.notificationsound_key), 0)) {
                 case 0:
                     nBuilder.setVibrate(new long[]{0, 500, 100, 500});

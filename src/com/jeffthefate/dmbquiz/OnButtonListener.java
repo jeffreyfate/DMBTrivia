@@ -1,10 +1,10 @@
 package com.jeffthefate.dmbquiz;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public interface OnButtonListener {
     public void setBackground(String name, boolean showNew, String screen);

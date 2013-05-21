@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-//import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -21,12 +20,15 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
 import com.parse.Parse;
+//import android.graphics.drawable.TransitionDrawable;
 
 public class FragmentBase extends Fragment implements UiCallback {
     
@@ -258,15 +260,15 @@ public class FragmentBase extends Fragment implements UiCallback {
     @SuppressLint("NewApi")
 	public void toggleSounds() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-    		ApplicationEx.sharedPrefs.edit().putBoolean(
+    		SharedPreferencesSingleton.instance().edit().putBoolean(
     				res.getString(R.string.sound_key),
-    				!ApplicationEx.sharedPrefs.getBoolean(
+    				!SharedPreferencesSingleton.instance().getBoolean(
     						res.getString(R.string.sound_key),true))
 				.commit();
     	else
-    		ApplicationEx.sharedPrefs.edit().putBoolean(
+    		SharedPreferencesSingleton.instance().edit().putBoolean(
     				res.getString(R.string.sound_key),
-    				!ApplicationEx.sharedPrefs.getBoolean(
+    				!SharedPreferencesSingleton.instance().getBoolean(
     						res.getString(R.string.sound_key),true))
 				.apply();
     }
@@ -274,15 +276,15 @@ public class FragmentBase extends Fragment implements UiCallback {
     @SuppressLint("NewApi")
 	public void toggleNotifications() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    	SharedPreferencesSingleton.instance().edit().putBoolean(
 	    			res.getString(R.string.notification_key),
-	                !ApplicationEx.sharedPrefs.getBoolean(
+	                !SharedPreferencesSingleton.instance().getBoolean(
 	                		res.getString(R.string.notification_key), true))
 	            .commit();
     	else
-	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    	SharedPreferencesSingleton.instance().edit().putBoolean(
 	    			res.getString(R.string.notification_key),
-	                !ApplicationEx.sharedPrefs.getBoolean(
+	                !SharedPreferencesSingleton.instance().getBoolean(
 	                		res.getString(R.string.notification_key), true))
 	            .apply();
     }
@@ -290,15 +292,15 @@ public class FragmentBase extends Fragment implements UiCallback {
     @SuppressLint("NewApi")
 	public void toggleTips() {
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    	SharedPreferencesSingleton.instance().edit().putBoolean(
 	    			res.getString(R.string.quicktip_key),
-	                !ApplicationEx.sharedPrefs.getBoolean(
+	                !SharedPreferencesSingleton.instance().getBoolean(
 	                		res.getString(R.string.quicktip_key), true))
 	            .commit();
     	else
-	    	ApplicationEx.sharedPrefs.edit().putBoolean(
+	    	SharedPreferencesSingleton.instance().edit().putBoolean(
 	    			res.getString(R.string.quicktip_key),
-	                !ApplicationEx.sharedPrefs.getBoolean(
+	                !SharedPreferencesSingleton.instance().getBoolean(
 	                		res.getString(R.string.quicktip_key), true))
 	            .apply();
     }
@@ -316,7 +318,7 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     public void logOut() {
     	if (mCallback != null) {
-            ApplicationEx.dbHelper.setOffset(0, mCallback.getUserId());
+            DatabaseHelperSingleton.instance().setOffset(0, mCallback.getUserId());
             mCallback.setLoggingOut(true);
             mCallback.setQuestionId(null);
             mCallback.setQuestion(null);

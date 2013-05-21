@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.FindCallback;
@@ -60,13 +61,13 @@ public class FragmentSplash extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!ApplicationEx.sharedPrefs.contains(
+        if (!SharedPreferencesSingleton.instance().contains(
         		res.getString(R.string.notification_key))) {
         	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	ApplicationEx.sharedPrefs.edit().putBoolean(
+	        	SharedPreferencesSingleton.instance().edit().putBoolean(
 	            		res.getString(R.string.notification_key), true).commit();
         	else
-		        ApplicationEx.sharedPrefs.edit().putBoolean(
+		        SharedPreferencesSingleton.instance().edit().putBoolean(
 		        		res.getString(R.string.notification_key), true).apply();
         }
     }
@@ -178,16 +179,16 @@ public class FragmentSplash extends FragmentBase {
             public void onClick(View v) {
                 if (mCallback != null) {
                     /*
-                	if (!ApplicationEx.sharedPrefs.contains(
+                	if (!SharedPreferencesSingleton.instance().contains(
                 				res.getString(R.string.justplay_key)) ||
-                				ApplicationEx.sharedPrefs.getBoolean(
+                				SharedPreferencesSingleton.instance().getBoolean(
             					res.getString(R.string.quicktip_key), false)) {
                 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	                		ApplicationEx.sharedPrefs.edit().putBoolean(
+	                		SharedPreferencesSingleton.instance().edit().putBoolean(
 	                        		res.getString(R.string.justplay_key), true)
 	                    		.commit();
                 		else
-	                		ApplicationEx.sharedPrefs.edit().putBoolean(
+	                		SharedPreferencesSingleton.instance().edit().putBoolean(
 	                        		res.getString(R.string.justplay_key), true)
 	                    		.apply();
                         showQuickTipMenu(quickTipMenuView, "Stats & Standings" +
@@ -225,10 +226,10 @@ public class FragmentSplash extends FragmentBase {
         		Constants.QUICK_TIP_LEFT);
 		*/
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-        	ApplicationEx.sharedPrefs.edit().putBoolean(
+        	SharedPreferencesSingleton.instance().edit().putBoolean(
         			res.getString(R.string.menu_key), true).commit();
         else
-        	ApplicationEx.sharedPrefs.edit().putBoolean(
+        	SharedPreferencesSingleton.instance().edit().putBoolean(
         			res.getString(R.string.menu_key), true).apply();
     }
     

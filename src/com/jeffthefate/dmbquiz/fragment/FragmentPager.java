@@ -21,7 +21,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
@@ -50,11 +50,11 @@ public class FragmentPager extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userId = ApplicationEx.dbHelper.getCurrUser();
+        userId = DatabaseHelperSingleton.instance().getCurrUser();
         if (userId != null) {
-            loggedIn = ApplicationEx.dbHelper.getUserIntValue(
+            loggedIn = DatabaseHelperSingleton.instance().getUserIntValue(
                     DatabaseHelper.COL_LOGGED_IN, userId) == 1 ? true : false;
-            inStats = ApplicationEx.dbHelper.getUserIntValue(
+            inStats = DatabaseHelperSingleton.instance().getUserIntValue(
                     DatabaseHelper.COL_IN_STATS, userId) == 1 ? true : false;
         }
         fragment = getFragmentForPager();

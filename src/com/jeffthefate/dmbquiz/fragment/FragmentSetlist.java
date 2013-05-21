@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -47,12 +48,12 @@ public class FragmentSetlist extends FragmentBase {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             savedSet = savedInstanceState.getString("set");
-            ApplicationEx.dbHelper.setUserValue(savedSet,
+            DatabaseHelperSingleton.instance().setUserValue(savedSet,
                     DatabaseHelper.COL_SETLIST, mCallback.getUserId());
         }
         else {
             if (mCallback.getUserId() != null) {
-                savedSet = ApplicationEx.dbHelper.getUserStringValue(
+                savedSet = DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_SETLIST, mCallback.getUserId());
             }
         }
