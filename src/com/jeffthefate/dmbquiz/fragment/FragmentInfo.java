@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
-import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 
 public class FragmentInfo extends FragmentBase {
 

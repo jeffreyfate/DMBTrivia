@@ -17,17 +17,10 @@
 package com.jeffthefate.dmbquiz;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
-
-import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
