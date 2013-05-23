@@ -6,6 +6,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -17,6 +24,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
@@ -221,14 +230,14 @@ public class FragmentBase extends Fragment implements UiCallback {
         super.onPause();
     }
     
-    protected void setBackgroundBitmap(String name/*, String screen*/) {
-        Drawable backgroundDrawable = ApplicationEx.getBackgroundDrawable();
-        if (backgroundDrawable == null) {
+    protected void setBackgroundBitmap(String name, String screen) {
+        Bitmap backgroundBitmap = ApplicationEx.getBackgroundBitmap();
+        if (backgroundBitmap == null) {
             Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
         	if (name == null)
-        	    mCallback.setBackground("splash4", false/*, screen*/);
+        	    mCallback.setBackground("splash4", false, screen);
         	else
-        	    mCallback.setBackground(name, false/*, screen*/);
+        	    mCallback.setBackground(name, false, screen);
         }
         else {
             if (background != null) {
@@ -249,7 +258,18 @@ public class FragmentBase extends Fragment implements UiCallback {
                 else
                     background.setImageDrawable(backgroundDrawable);
                 */
-                background.setImageDrawable(backgroundDrawable);
+            	background.setImageDrawable(null);
+            	BitmapDrawable bitmapDrawable = new BitmapDrawable(
+            			ResourcesSingleton.instance(), backgroundBitmap);
+            	if (screen.equalsIgnoreCase("info") ||
+            			screen.equalsIgnoreCase("leaders"))
+            		bitmapDrawable.setColorFilter(new PorterDuffColorFilter(
+                			ResourcesSingleton.instance().getColor(
+                					R.color.background_dark),
+        					PorterDuff.Mode.SRC_ATOP));
+            	else
+            		bitmapDrawable.setColorFilter(null);
+                background.setImageDrawable(bitmapDrawable);
             }
         }
     }
@@ -365,17 +385,23 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     @Override
     public void setDisplayName(String displayName) {}
-
+    /*
     @Override
 	public void setBackground(Bitmap newBackground) {
-    	if (background != null && newBackground != null)
+    	if (background != null && newBackground != null) {
+    		background.setImageBitmap(null);
 			background.setImageBitmap(newBackground);
+    	}
     }
-    
+    */
     @Override
-    public void setBackground(Drawable newBackground) {
+    public void setBackground(Bitmap newBackground) {
         if (background != null && newBackground != null) {
-            background.setImageDrawable(newBackground);
+        	background.setImageDrawable(null);
+        	BitmapDrawable bitmapDrawable = new BitmapDrawable(
+        			ResourcesSingleton.instance(), newBackground);
+        	bitmapDrawable.setColorFilter(null);
+            background.setImageDrawable(bitmapDrawable);
         }
     }
 	

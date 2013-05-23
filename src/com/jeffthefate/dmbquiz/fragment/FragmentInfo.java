@@ -1,6 +1,10 @@
 package com.jeffthefate.dmbquiz.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +14,7 @@ import android.widget.Button;
 
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 
 public class FragmentInfo extends FragmentBase {
 
@@ -32,7 +37,7 @@ public class FragmentInfo extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.info, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-		setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
+		setBackgroundBitmap(mCallback.getBackground(), "info");
         doneButton = (Button) v.findViewById(R.id.DoneButton);
         doneButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -41,6 +46,20 @@ public class FragmentInfo extends FragmentBase {
             } 
         });
         return v;
+    }
+    
+    @Override
+    public void setBackground(Bitmap newBackground) {
+    	if (background != null && newBackground != null) {
+        	background.setImageDrawable(null);
+        	BitmapDrawable bitmapDrawable = new BitmapDrawable(
+        			ResourcesSingleton.instance(), newBackground);
+        	bitmapDrawable.setColorFilter(new PorterDuffColorFilter(
+        			ResourcesSingleton.instance().getColor(
+        					R.color.background_dark),
+					PorterDuff.Mode.SRC_ATOP));
+        	background.setImageDrawable(bitmapDrawable);
+        }
     }
     
 }

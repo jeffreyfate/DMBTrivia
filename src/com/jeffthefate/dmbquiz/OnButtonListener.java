@@ -1,5 +1,6 @@
 package com.jeffthefate.dmbquiz;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
@@ -12,7 +13,7 @@ public interface OnButtonListener {
 	 * @param showNew	true if changing the background, false if setting it for
 	 * 					the first time (initializing)
 	 */
-    public void setBackground(String name, boolean showNew/*, String screen*/);
+    public void setBackground(String name, boolean showNew, String screen);
     /**
      * Return the current (non-setlist) background name, based on orientation
      * @return
@@ -456,5 +457,5 @@ public interface OnButtonListener {
      * @param resId id of the image to generate a drawable of
      * @return drawable of image from resource id
      */
-    public BitmapDrawable getDrawable(int resId);
+    public Bitmap getBitmap(int resId);
 }

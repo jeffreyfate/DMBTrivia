@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -93,10 +94,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     public static SimpleDateFormat df = new SimpleDateFormat("h:mm a zzz", Locale.getDefault());
     
-    private static Drawable portraitBackgroundDrawable;
-    private static Drawable landBackgroundDrawable;
-    private static Drawable portraitSetlistDrawable;
-    private static Drawable landSetlistDrawable;
+    private static Bitmap portraitBackgroundBitmap;
+    private static Bitmap landBackgroundBitmap;
+    private static Bitmap portraitSetlistBitmap;
+    private static Bitmap landSetlistBitmap;
     
     /**
      * Holds an image and audio clip that are associated with each other
@@ -714,13 +715,13 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * specific to the orientation.
      * @param backgroundDrawable	drawable for the current orientation
      */
-    public static void setBackgroundDrawable(Drawable backgroundDrawable) {
+    public static void setBackgroundBitmap(Bitmap backgroundDrawable) {
         switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
-            ApplicationEx.portraitBackgroundDrawable = backgroundDrawable;
+            ApplicationEx.portraitBackgroundBitmap = backgroundDrawable;
             break;
         case Configuration.ORIENTATION_LANDSCAPE:
-            ApplicationEx.landBackgroundDrawable = backgroundDrawable;
+            ApplicationEx.landBackgroundBitmap = backgroundDrawable;
             break;
         default:
             break;
@@ -732,14 +733,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * portrait and landscape are held here to reduce work when rotating.
      * @return current drawable for the login, question and stats background
      */
-    public static Drawable getBackgroundDrawable() {
+    public static Bitmap getBackgroundBitmap() {
         switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
-            return ApplicationEx.portraitBackgroundDrawable;
+            return ApplicationEx.portraitBackgroundBitmap;
         case Configuration.ORIENTATION_LANDSCAPE:
-            return ApplicationEx.landBackgroundDrawable;
+            return ApplicationEx.landBackgroundBitmap;
         default:
-            return ApplicationEx.portraitBackgroundDrawable;
+            return ApplicationEx.portraitBackgroundBitmap;
         }
     }
     
@@ -748,13 +749,13 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * orientation.
      * @param setlistDrawable	drawable for the current orientation
      */
-    public static void setSetlistDrawable(Drawable setlistDrawable) {
+    public static void setSetlistBitmap(Bitmap setlistDrawable) {
         switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
-            ApplicationEx.portraitSetlistDrawable = setlistDrawable;
+            ApplicationEx.portraitSetlistBitmap = setlistDrawable;
             break;
         case Configuration.ORIENTATION_LANDSCAPE:
-            ApplicationEx.landSetlistDrawable = setlistDrawable;
+            ApplicationEx.landSetlistBitmap = setlistDrawable;
             break;
         default:
             break;
@@ -766,14 +767,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * are held here to reduce work when rotating.
      * @return current drawable for the setlist background
      */
-    public static Drawable getSetlistDrawable() {
+    public static Bitmap getSetlistBitmap() {
         switch(ResourcesSingleton.instance().getConfiguration().orientation) {
         case Configuration.ORIENTATION_PORTRAIT:
-            return ApplicationEx.portraitSetlistDrawable;
+            return ApplicationEx.portraitSetlistBitmap;
         case Configuration.ORIENTATION_LANDSCAPE:
-            return ApplicationEx.landSetlistDrawable;
+            return ApplicationEx.landSetlistBitmap;
         default:
-            return ApplicationEx.portraitSetlistDrawable;
+            return ApplicationEx.portraitSetlistBitmap;
         }
     }
 

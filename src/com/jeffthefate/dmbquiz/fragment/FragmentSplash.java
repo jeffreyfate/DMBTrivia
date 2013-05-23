@@ -79,7 +79,7 @@ public class FragmentSplash extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.splash, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
+        setBackgroundBitmap(mCallback.getBackground(), "splash");
         loginUsername = (EditText) v.findViewById(R.id.LoginUsername);
         loginUsername.setOnEditorActionListener(new OnEditorActionListener() {
             @Override

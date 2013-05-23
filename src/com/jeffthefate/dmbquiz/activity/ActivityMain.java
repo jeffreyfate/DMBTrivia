@@ -175,18 +175,18 @@ public class ActivityMain extends SlidingFragmentActivity implements
         public void enableButton(boolean isRetry);
         public void setDisplayName(String displayName);
         public Drawable getBackground();
-        public void setBackground(Bitmap background);
+        //public void setBackground(Bitmap background);
         public void showRetry();
         public int getPage();
         public void setPage(int page);
-        public void setBackground(Drawable newBackground);
+        public void setBackground(Bitmap newBackground);
     }
     
     private NotificationManager nManager;
     
     private ConnectionReceiver connReceiver;
     
-    private BitmapDrawable tempDrawable;
+    private Bitmap tempBitmap;
     //private BitmapDrawableEx[] arrayDrawable = new BitmapDrawableEx[2];
     //private BitmapDrawableEx oldBitmapDrawable = null;
     
@@ -447,6 +447,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true).apply();
         }
         refreshSlidingMenu();
+        getWindow().setBackgroundDrawable(null);
     }
     
     private void getPersistedData(String userId) {
@@ -846,7 +847,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
-    public class GetScoreTask extends AsyncTask<Void, Void, Void> {
+    private class GetScoreTask extends AsyncTask<Void, Void, Void> {
         private boolean show;
         private boolean restore;
         private String userId;
@@ -1828,7 +1829,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         @Override
                         public void onClosed() {
                             slidingMenu.setOnClosedListener(null);
-                            setBackground(getBackground(), true/*, "leaders"*/);
+                            setBackground(getBackground(), true, "load");
                         }
                     });
                     slidingMenu.showContent();
@@ -1979,8 +1980,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
      */
     @SuppressLint("NewApi")
 	@Override
-    public void setBackground(final String name, final boolean showNew/*,
-            final String screen*/) {
+    public void setBackground(final String name, final boolean showNew,
+            final String screen) {
         if (!showNew) {
             if (name == null)
                 return;
@@ -1989,23 +1990,25 @@ public class ActivityMain extends SlidingFragmentActivity implements
             int resourceId = ResourcesSingleton.instance().getIdentifier(name, "drawable", getPackageName());
             try {
                 if (name.equals("setlist")) {
-                    ApplicationEx.setSetlistDrawable(getDrawable(resourceId));
-                    if (currFrag != null)
-                        currFrag.setBackground(ApplicationEx.getSetlistDrawable());
+                    ApplicationEx.setSetlistBitmap(getBitmap(resourceId));
+                    if (currFrag != null) {
+                        currFrag.setBackground(ApplicationEx.getSetlistBitmap());
+                    }
                 }
                 else {
                     if (fieldsList.indexOf(resourceId) >= 0)
-                        ApplicationEx.setBackgroundDrawable(getDrawable(resourceId));
+                        ApplicationEx.setBackgroundBitmap(getBitmap(resourceId));
                     else
-                        ApplicationEx.setBackgroundDrawable(getDrawable(R.drawable.splash4));
-                    if (currFrag != null)
-                        currFrag.setBackground(ApplicationEx.getBackgroundDrawable());
+                        ApplicationEx.setBackgroundBitmap(getBitmap(R.drawable.splash4));
+                    if (currFrag != null) {
+                        currFrag.setBackground(ApplicationEx.getBackgroundBitmap());
+                    }
                 }
             } catch (RuntimeException err) {
                 Log.e(Constants.LOG_TAG, "Failed to set background!", err);
                 if (setBackgroundWaitTask != null)
                     setBackgroundWaitTask.cancel(true);
-                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew/*, screen*/);
+                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew, screen);
                 if (Build.VERSION.SDK_INT <
                         Build.VERSION_CODES.HONEYCOMB)
                     setBackgroundWaitTask.execute();
@@ -2028,7 +2031,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         else {
         	if (setBackgroundTask != null)
         		setBackgroundTask.cancel(true);
-        	setBackgroundTask = new SetBackgroundTask(name, showNew/*, screen*/, null);
+        	setBackgroundTask = new SetBackgroundTask(name, showNew, screen, null);
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
             	setBackgroundTask.execute();
@@ -2040,16 +2043,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
         private String name;
         private boolean showNew;
-        //private String screen;
+        private String screen;
         
         private int currentId;
         private int resourceId;
         
-        private SetBackgroundTask(String name, boolean showNew,/* String screen,*/
+        private SetBackgroundTask(String name, boolean showNew, String screen,
                 ImageViewEx background) {
             this.name = name;
             this.showNew = showNew;
-            //this.screen = screen;
+            this.screen = screen;
         }
         
         @Override
@@ -2109,7 +2112,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     return null;
                 if (currentId != resourceId) {
                     try {
-                        tempDrawable = getDrawable(currentId);
+                    	ApplicationEx.setBackgroundBitmap(getBitmap(currentId));
                         if (isCancelled())
                             return null;
                         /*
@@ -2129,8 +2132,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             arrayDrawable[1] = tempDrawable;
                         }
                         */
-                        if (isCancelled())
-                            return null;
                     } catch (OutOfMemoryError memErr) {
                         if (isCancelled())
                             return null;
@@ -2141,13 +2142,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             return null;
                         switch(ResourcesSingleton.instance().getConfiguration().orientation) {
                         case Configuration.ORIENTATION_PORTRAIT:
-                            setBackground(portBackground, showNew/*, screen*/);
+                            setBackground(portBackground, showNew, screen);
                             break;
                         case Configuration.ORIENTATION_LANDSCAPE:
-                            setBackground(landBackground, showNew/*, screen*/);
+                            setBackground(landBackground, showNew, screen);
                             break;
                         default:
-                            setBackground(portBackground, showNew/*, screen*/);
+                            setBackground(portBackground, showNew, screen);
                             break;
                         }
                     }
@@ -2157,13 +2158,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         return null;
                     switch(ResourcesSingleton.instance().getConfiguration().orientation) {
                     case Configuration.ORIENTATION_PORTRAIT:
-                        setBackground(portBackground, showNew/*, screen*/);
+                        setBackground(portBackground, showNew, screen);
                         break;
                     case Configuration.ORIENTATION_LANDSCAPE:
-                        setBackground(landBackground, showNew/*, screen*/);
+                        setBackground(landBackground, showNew, screen);
                         break;
                     default:
-                        setBackground(portBackground, showNew/*, screen*/);
+                        setBackground(portBackground, showNew, screen);
                         break;
                     }
                 }
@@ -2198,9 +2199,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (isCancelled())
                         return null;
                     if (fieldsList.indexOf(resourceId) >= 0)
-                        ApplicationEx.setBackgroundDrawable(getDrawable(resourceId));
+                        ApplicationEx.setBackgroundBitmap(getBitmap(resourceId));
                     else
-                        ApplicationEx.setBackgroundDrawable(getDrawable(R.drawable.splash4));
+                        ApplicationEx.setBackgroundBitmap(getBitmap(R.drawable.splash4));
                 //}
             }
             return null;
@@ -2237,13 +2238,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	                }
 	                */
 	                try {
-                        currFrag.setBackground(((BitmapDrawable)tempDrawable).getBitmap());
+	                	getWindow().setBackgroundDrawable(null);
+                        currFrag.setBackground(ApplicationEx.getBackgroundBitmap());
                     } catch (NullPointerException e) {}
 	                    //background.setImageDrawable(tempDrawable);
 	            }
 	            else {
                     try {
-	                	currFrag.setBackground(ApplicationEx.getBackgroundDrawable());
+                    	getWindow().setBackgroundDrawable(null);
+	                	currFrag.setBackground(ApplicationEx.getBackgroundBitmap());
                     } catch (IllegalArgumentException e) {
                         Log.e(Constants.LOG_TAG, "Failed to set background!", e);
                     } catch (NullPointerException err) {
@@ -2264,7 +2267,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             }
-            ApplicationEx.setBackgroundDrawable(currFrag.getBackground());
+            //ApplicationEx.setBackgroundBitmap(((BitmapDrawable)currFrag.getBackground()).getBitmap());
         	switchButton.setEnabled(true);
         }
     }
@@ -2272,13 +2275,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private class SetBackgroundWaitTask extends AsyncTask<Void, Void, Void> {
         private String name;
         private boolean showNew;
-        //private String screen;
+        private String screen;
         
-        private SetBackgroundWaitTask(String name, boolean showNew/*,
-                String screen*/) {
+        private SetBackgroundWaitTask(String name, boolean showNew,
+                String screen) {
             this.name = name;
             this.showNew = showNew;
-            //this.screen = screen;
+            this.screen = screen;
         }
         
         @Override
@@ -2298,7 +2301,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected void onPostExecute(Void nothing) {
             if (!isCancelled()) {
-                setBackground(name, showNew/*, screen*/);
+                setBackground(name, showNew, screen);
             }
         }
     }
@@ -2323,8 +2326,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
         int resourceId = ResourcesSingleton.instance().getIdentifier(name, "drawable", getPackageName());
         if (background != null) {
             try {
-                ApplicationEx.setSetlistDrawable(getDrawable(resourceId));
-                background.setImageDrawable(ApplicationEx.getSetlistDrawable());
+                ApplicationEx.setSetlistBitmap(getBitmap(resourceId));
+                background.setImageBitmap(null);
+                background.setImageBitmap(ApplicationEx.getSetlistBitmap());
             } catch (OutOfMemoryError memErr) {
                 ApplicationEx.showShortToast("Error setting setlist");
                 /*
@@ -2926,15 +2930,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 switch(ResourcesSingleton.instance().getConfiguration().orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
                     setBackground(DatabaseHelperSingleton.instance().getPortBackground(userId),
-                            false/*, "quiz"*/);
+                            false, "quiz");
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
                     setBackground(DatabaseHelperSingleton.instance().getLandBackground(userId),
-                            false/*, "quiz"*/);
+                            false, "quiz");
                     break;
                 default:
                     setBackground(DatabaseHelperSingleton.instance().getPortBackground(userId),
-                            false/*, "quiz"*/);
+                            false, "quiz");
                     break;
                 }
             }
@@ -3115,7 +3119,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            setBackground(getBackground(), true/*, "quiz"*/);
+            setBackground(getBackground(), true, "quiz");
         }
         
         @Override
@@ -4028,13 +4032,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     @Override
-    public BitmapDrawable getDrawable(int resId) throws OutOfMemoryError {
+    public Bitmap getBitmap(int resId) throws OutOfMemoryError {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPurgeable = true;
         options.inInputShareable = true;
         options.inTempStorage = new byte[16*1024];
-        BitmapDrawable drawable = new BitmapDrawable(ResourcesSingleton.instance(), BitmapFactory.decodeResource(ResourcesSingleton.instance(), resId, options));
-        return drawable;
+        options.inMutable = true;
+        return BitmapFactory.decodeResource(ResourcesSingleton.instance(), resId, options);
     }
     
 }

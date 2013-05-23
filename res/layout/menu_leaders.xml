@@ -6,14 +6,14 @@
     android:scrollbars="none" >
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+	    android:layout_height="wrap_content"
+	    android:background="@android:color/white" >
 	    <LinearLayout
 	        android:id="@+id/ActionsLayout"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
-	        android:layout_alignParentTop="true"
-	        android:background="@android:color/white" >
+	        android:layout_alignParentTop="true" >
 	        <TextView
 	            android:id="@+id/ActionsTitle"
 	            android:layout_width="match_parent"
@@ -24,8 +24,7 @@
 	            android:textSize="16sp"
 	            android:layout_marginTop="8dip"
 	            android:layout_marginBottom="8dip"
-	            android:layout_marginLeft="16dip"
-	            android:background="@android:color/white" />
+	            android:layout_marginLeft="16dip" />
 	        <RelativeLayout
                 android:id="@+id/SwitchButton"
                 android:layout_width="match_parent"
@@ -202,8 +201,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/ActionsLayout"
-            android:background="@android:color/white" >
+            android:layout_below="@id/ActionsLayout" >
             <TextView
                 android:id="@+id/SocialTitle"
                 android:layout_width="match_parent"
@@ -214,8 +212,7 @@
                 android:textSize="16sp"
                 android:paddingTop="8dip"
                 android:paddingBottom="8dip"
-                android:paddingLeft="16dip"
-                android:background="@android:color/white" />
+                android:paddingLeft="16dip" />
             <RelativeLayout
                 android:id="@+id/FollowButton"
                 android:layout_width="match_parent"

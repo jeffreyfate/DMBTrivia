@@ -40,7 +40,7 @@ public class FragmentLoad extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.load, container, false);
         background = (ImageViewEx) view.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground()/*, "leaders"*/);
+        setBackgroundBitmap(mCallback.getBackground(), "load");
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);

@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:background="@color/background_dark"
         android:contentDescription="@string/backgroundImage" />
     <RelativeLayout
         style="@style/SplashLayout" >
@@ -141,7 +140,6 @@
 		        android:text="@string/justPlay"
 		        android:layout_gravity="center"
 		        android:background="@drawable/button"
-		        android:layout_below="@id/EmailLayout"
 		        android:layout_centerHorizontal="true"
 		        android:layout_marginBottom="15dip" />
 		    <TextView

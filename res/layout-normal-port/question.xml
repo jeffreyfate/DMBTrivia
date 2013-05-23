@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.jeffthefate.dmbquiz.RelativeLayoutEx xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black" >
+    android:layout_height="match_parent" >
     <com.jeffthefate.dmbquiz.ImageViewEx
         android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:background="@color/background_dark"
         android:contentDescription="@string/backgroundImage" />
     <TextView
         android:id="@+id/ScoreText"
@@ -66,10 +64,10 @@
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/QuestionAnswer"
-        android:background="@color/background_dark"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="@color/background_dark" />
     <TextView
         android:id="@+id/RetryText"
         android:layout_width="match_parent"

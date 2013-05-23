@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -178,15 +179,15 @@ public class FragmentPager extends FragmentBase {
         ((FragmentQuiz)((PagerAdapter) viewPager.getAdapter()).getFragmentList()
                 .get(0)).resumeQuestion();
     }
-    
+    /*
     @Override
     public void setBackground(Bitmap background) {
         ((FragmentBase)((PagerAdapter) viewPager.getAdapter()).getFragmentList()
                 .get(0)).setBackground(background);
     }
-    
+    */
     @Override
-    public void setBackground(Drawable background) {
+    public void setBackground(Bitmap background) {
         ((FragmentBase)((PagerAdapter) viewPager.getAdapter()).getFragmentList()
                 .get(0)).setBackground(background);
     }

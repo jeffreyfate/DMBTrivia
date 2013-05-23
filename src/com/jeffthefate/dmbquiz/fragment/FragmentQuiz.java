@@ -6,7 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -174,7 +178,8 @@ public class FragmentQuiz extends FragmentBase {
                 DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
     }
     
-    @Override
+    @SuppressLint("ResourceAsColor")
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
@@ -189,7 +194,7 @@ public class FragmentQuiz extends FragmentBase {
         });
         */
 		background = (ImageViewEx) v.findViewById(R.id.Background);
-		setBackgroundBitmap(mCallback.getBackground()/*, "quiz"*/);
+		setBackgroundBitmap(mCallback.getBackground(), "quiz");
         scoreText = (TextView) v.findViewById(R.id.ScoreText);
         scoreText.setOnClickListener(new OnClickListener() {
             @Override
@@ -405,6 +410,17 @@ public class FragmentQuiz extends FragmentBase {
         			ResourcesSingleton.instance().getString(R.string.skipnum_key), ""));
         }
         return v;
+    }
+    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+    	super.onActivityCreated(savedInstanceState);
+    	/*
+    	background.resetColoredViews();
+    	background.addColoredView(questionText,
+        		ResourcesSingleton.instance().getColor(R.color.background_dark));
+    	background.invalidate();
+    	*/
     }
     
     private class WrongTimer extends CountDownTimer {
@@ -798,6 +814,12 @@ public class FragmentQuiz extends FragmentBase {
         }
         //cameraButton.setVisibility(View.VISIBLE);
         updateScoreText();
+        /*
+        background.resetColoredViews();
+        background.addColoredView(questionText,
+        		ResourcesSingleton.instance().getColor(R.color.background_dark));
+    	background.invalidate();
+    	*/
     }
     
     @Override
@@ -1080,7 +1102,8 @@ public class FragmentQuiz extends FragmentBase {
         }
     }
     
-    @Override
+    @SuppressLint("ResourceAsColor")
+	@Override
     public void showNoMoreQuestions(int level) {
         answerImage.setVisibility(View.INVISIBLE);
         questionText.setVisibility(View.VISIBLE);
@@ -1090,6 +1113,12 @@ public class FragmentQuiz extends FragmentBase {
         else
         	questionText.setText("Congratulations!\nYou've answered them all!" +
         			"\nChange level for more questions");
+        /*
+        background.resetColoredViews();
+        background.addColoredView(questionText,
+        		ResourcesSingleton.instance().getColor(R.color.background_dark));
+        background.invalidate();
+        */
         retryText.setVisibility(View.INVISIBLE);
         answerText.setVisibility(View.INVISIBLE);
         answerPlace.setVisibility(View.INVISIBLE);
@@ -1113,6 +1142,10 @@ public class FragmentQuiz extends FragmentBase {
         try {
 	        answerImage.setVisibility(View.INVISIBLE);
 	        questionText.setVisibility(View.INVISIBLE);
+	        /*
+	        background.resetColoredViews();
+	        background.invalidate();
+	        */
 	        retryText.setVisibility(View.VISIBLE);
 	        answerText.setVisibility(View.INVISIBLE);
 	        answerPlace.setVisibility(View.INVISIBLE);
@@ -1193,5 +1226,13 @@ public class FragmentQuiz extends FragmentBase {
         retryButton.setVisibility(View.VISIBLE);
         retryButton.setEnabled(false);
     }
-    
+    /*
+    @Override
+    public void setBackground(Bitmap newBackground) {
+        if (background != null && newBackground != null) {
+        	background.setBitmap(newBackground);
+        	background.invalidate();
+        }
+    }
+    */
 }

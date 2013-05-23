@@ -3,6 +3,10 @@ package com.jeffthefate.dmbquiz.fragment;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,7 +71,7 @@ public class FragmentLeaders extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.leaders, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground()/*, "leaders"*/);
+        setBackgroundBitmap(mCallback.getBackground(), "leaders");
         Log.e(Constants.LOG_TAG, "PERF TIME: " + (System.currentTimeMillis()-perfTime));
         userText = (TextView) v.findViewById(R.id.UserText);
         userAnswerText = (TextView) v.findViewById(R.id.Stat1Name);
@@ -268,6 +272,20 @@ public class FragmentLeaders extends FragmentBase {
             userName.setText(displayName);
             if (mCallback != null)
                 mCallback.setUserName(displayName);
+        }
+    }
+    
+    @Override
+    public void setBackground(Bitmap newBackground) {
+    	if (background != null && newBackground != null) {
+        	background.setImageDrawable(null);
+        	BitmapDrawable bitmapDrawable = new BitmapDrawable(
+        			ResourcesSingleton.instance(), newBackground);
+        	bitmapDrawable.setColorFilter(new PorterDuffColorFilter(
+        			ResourcesSingleton.instance().getColor(
+        					R.color.background_dark),
+					PorterDuff.Mode.SRC_ATOP));
+        	background.setImageDrawable(bitmapDrawable);
         }
     }
     

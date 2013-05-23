@@ -40,7 +40,7 @@ public class FragmentLogin extends FragmentBase {
     	super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.load, container, false);
         background = (ImageViewEx) view.findViewById(R.id.Background);
-        setBackgroundBitmap(mCallback.getBackground()/*, "splash"*/);
+        setBackgroundBitmap(mCallback.getBackground(), "splash");
         progress = (ProgressBar) view.findViewById(R.id.Progress);
         networkText = (TextView) view.findViewById(R.id.NetworkText);
         loadingText = (TextView) view.findViewById(R.id.LoadingText);
