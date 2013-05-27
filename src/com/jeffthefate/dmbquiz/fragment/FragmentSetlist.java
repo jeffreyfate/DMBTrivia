@@ -8,7 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -152,8 +156,10 @@ public class FragmentSetlist extends FragmentBase {
         }
         else
             showNetworkProblem();
-        ApplicationEx.getApp().registerReceiver(setlistReceiver,
-                new IntentFilter(Constants.ACTION_UPDATE_SETLIST));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.ACTION_UPDATE_SETLIST);
+        intentFilter.addAction(Constants.ACTION_NEW_SONG);
+        ApplicationEx.getApp().registerReceiver(setlistReceiver, intentFilter);
     }
     
     @Override
@@ -195,10 +201,50 @@ public class FragmentSetlist extends FragmentBase {
     private class SetlistReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getBooleanExtra("success", false))
+        	if (Build.VERSION.SDK_INT <
+                    Build.VERSION_CODES.HONEYCOMB)
+            	new ReceiveTask(context, intent).execute();
+            else
+            	new ReceiveTask(context, intent).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+    
+    private class ReceiveTask extends AsyncTask<Void, Void, Void> {
+    	private Context context;
+    	private Intent intent;
+    	private WakeLock wakeLock;
+    	
+    	private ReceiveTask(Context context, Intent intent) {
+    		this.context = context;
+    		this.intent = intent;
+    	}
+    	
+        @Override
+        protected Void doInBackground(Void... nothing) {
+        	PowerManager pm = 
+                    (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    Constants.SETLIST_WAKE_LOCK);
+            wakeLock.acquire();
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+        	if ((intent.hasExtra("success") &&
+            		intent.getBooleanExtra("success", false)) ||
+            	!intent.hasExtra("success"))
                 updateSetText();
             else
                 showNetworkProblem();
+        	wakeLock.release();
         }
     }
     
