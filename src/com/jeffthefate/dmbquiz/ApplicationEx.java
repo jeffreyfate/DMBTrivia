@@ -228,7 +228,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         getSetlist();
         generateSongMap();
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.saveEventually();
+        // TODO Remove if memory issues resolved
+        try {
+        	installation.saveEventually();
+        } catch (RuntimeException e) {}
     }
     /**
      * Used by other classes to get the application's global context.
@@ -383,9 +386,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * 		   matching the given key
      */
     public static ArrayList<String> getStringArrayPref(String key) {
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(app);
-        String json = sharedPrefs.getString(key, null);
+        String json = SharedPreferencesSingleton.instance().getString(key, null);
         ArrayList<String> answers = null;
         if (json != null) {
             answers = new ArrayList<String>();
@@ -681,7 +682,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     @SuppressLint("InlinedApi")
 	public static Bitmap resizeImage(Resources res, int resId) {
-        Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
+        Bitmap bitmap = null;
+        try {
+        	bitmap = BitmapFactory.decodeResource(res, resId);
+        } catch (OutOfMemoryError e) {
+        	return BitmapFactory.decodeResource(res, R.drawable.notification_large);
+        }
         if (resId == R.drawable.notification_large)
             return bitmap;
         double ratio = (double) ((double)bitmap.getHeight() / 

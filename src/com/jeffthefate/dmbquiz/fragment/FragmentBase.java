@@ -133,21 +133,13 @@ public class FragmentBase extends Fragment implements UiCallback {
             case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying())
-                        mediaPlayer.stop();
-                }
-                break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying())
-                        mediaPlayer.stop();
-                }
-                break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (mediaPlayer != null) {
-                    if (mediaPlayer.isPlaying())
-                        mediaPlayer.stop();
+                	try {
+	                    if (mediaPlayer.isPlaying())
+	                        mediaPlayer.stop();
+                	} catch (IllegalStateException e) {}
                 }
                 break;
             }
@@ -166,6 +158,7 @@ public class FragmentBase extends Fragment implements UiCallback {
                         mediaPlayer.stop();
                     mediaPlayer.reset();
                     mediaPlayer.release();
+                    mediaPlayer = null;
                 }
                 mediaPlayer = MediaPlayer.create(ApplicationEx.getApp(),
                         resource);
@@ -181,12 +174,16 @@ public class FragmentBase extends Fragment implements UiCallback {
                     public boolean onError(MediaPlayer mp, int what,
                             int extra) {
                         audioManager.abandonAudioFocus(afChangeListener);
-                        mp.reset();
-                        mp.release();
+                        try {
+	                        mp.reset();
+	                        mp.release();
+                        } catch (IllegalStateException e) {
+                        } catch (NullPointerException e) {}
                         return true;
                     } 
                 });
-            } catch (IllegalStateException e) {}
+            } catch (IllegalStateException e) {
+            } catch (NullPointerException e) {}
         }
     }
     
@@ -199,10 +196,14 @@ public class FragmentBase extends Fragment implements UiCallback {
         } while (!fields[rawIndex].getName().contains(type));
         try {
             currentAudio = fields[rawIndex].getInt(null);
-        } catch (IllegalArgumentException e1) {e1.printStackTrace();
-        } catch (IllegalAccessException e1) {e1.printStackTrace();}
-        if (PreferenceManager.getDefaultSharedPreferences(
-                ApplicationEx.getApp()).getBoolean(
+        } catch (IllegalArgumentException e1) {
+        	currentAudio = R.raw.correct1;
+        	e1.printStackTrace();
+        } catch (IllegalAccessException e1) {
+        	currentAudio = R.raw.correct1;
+        	e1.printStackTrace();
+    	}
+        if (SharedPreferencesSingleton.instance().getBoolean(
                 		ResourcesSingleton.instance().getString(R.string.sound_key), false))
             getAudioFocus(currentAudio);
     }

@@ -93,6 +93,7 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long perfTime = System.currentTimeMillis();
         setHasOptionsMenu(true);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.sound_key))) {
@@ -179,6 +180,7 @@ public class FragmentQuiz extends FragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
+    	long perfTime = System.currentTimeMillis();
         View v = inflater.inflate(R.layout.question, container, false);
         /*
         ViewTreeObserver vto = slidingMenu.getViewTreeObserver(); 
@@ -596,7 +598,10 @@ public class FragmentQuiz extends FragmentBase {
         
         @Override
         protected Void doInBackground(Void... nothing) {
-            if (isCancelled())
+            if (isCancelled() || mCallback == null ||
+            		mCallback.getCorrectAnswer() == null ||
+            		mCallback.getUserId() == null ||
+            		mCallback.getQuestionScore() == null)
                 return null;
             StringBuilder sb = new StringBuilder(mCallback.getCorrectAnswer()
                     .replaceAll("\\s+", " "));
@@ -664,7 +669,8 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
-        if (mCallback.isCorrectAnswer(mCallback.getQuestionId()) &&
+        if (mCallback != null && mCallback.getQuestionId() != null &&
+        		mCallback.isCorrectAnswer(mCallback.getQuestionId()) &&
                 !mCallback.isNewQuestion()) {
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
@@ -821,6 +827,7 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
+        long perfTime = System.currentTimeMillis();
         if (mCallback != null) {
         	mCallback.setLoggingOut(false);
             if (ApplicationEx.getConnection()) {

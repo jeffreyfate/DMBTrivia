@@ -175,8 +175,8 @@ public class FragmentPager extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
-        ((FragmentQuiz)((PagerAdapter) viewPager.getAdapter()).getFragmentList()
-                .get(0)).resumeQuestion();
+        ((PagerAdapter) viewPager.getAdapter()).getFragmentList()
+                .get(0).resumeQuestion();
     }
     /*
     @Override
@@ -187,14 +187,14 @@ public class FragmentPager extends FragmentBase {
     */
     @Override
     public void setBackground(Bitmap background) {
-        ((FragmentBase)((PagerAdapter) viewPager.getAdapter()).getFragmentList()
-                .get(0)).setBackground(background);
+        ((PagerAdapter) viewPager.getAdapter()).getFragmentList()
+                .get(0).setBackground(background);
     }
     
     @Override
     public Drawable getBackground() {
-        return ((FragmentBase)((PagerAdapter) viewPager.getAdapter())
-                .getFragmentList().get(0)).getBackground();
+        return ((PagerAdapter) viewPager.getAdapter())
+                .getFragmentList().get(0).getBackground();
     }
     
     public FragmentBase getFragmentForPager() {

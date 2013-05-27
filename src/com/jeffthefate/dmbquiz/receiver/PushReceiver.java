@@ -31,18 +31,15 @@ public class PushReceiver extends BroadcastReceiver {
     private NotificationCompat.Builder nBuilder;
     private NotificationManager nManager;
     private Notification notification;
-    private SharedPreferences sharedPrefs;
     
     @Override
     public void onReceive(Context context, Intent intent) {
         // {"action":"com.jeffthefate.dmb.ACTION_NEW_QUESTIONS"}
         nManager = (NotificationManager) ApplicationEx.getApp()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
-                ApplicationEx.getApp());
         String action = intent.getAction();
         if (action.equals(Constants.ACTION_NEW_QUESTIONS)) {
-            if (!ApplicationEx.isActive() && sharedPrefs.getBoolean(
+            if (!ApplicationEx.isActive() && SharedPreferencesSingleton.instance().getBoolean(
                     ApplicationEx.getApp().getString(R.string.notification_key),
                     true)) {
                 // Show notification that starts app
@@ -120,7 +117,7 @@ public class PushReceiver extends BroadcastReceiver {
             if (ApplicationEx.latestSong != null &&
                     !ApplicationEx.latestSong.equals("null") &&
                     !ApplicationEx.latestSong.equals("") &&
-                    sharedPrefs.getBoolean(ApplicationEx.getApp().getString(
+                    SharedPreferencesSingleton.instance().getBoolean(ApplicationEx.getApp().getString(
                             R.string.notification_key), true)) {
                 ApplicationEx.createNotificationUri(
                         ApplicationEx.findMatchingAudio(ResourcesSingleton.instance(),

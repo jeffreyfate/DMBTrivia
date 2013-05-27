@@ -1171,6 +1171,17 @@ public class ActivityMain extends SlidingFragmentActivity implements
      * Sliding menu methods and associated methods/classes
      */
     private void refreshSlidingMenu() {
+    	// TODO Add option for notification song clips
+    	// Checking the option for the first time goes and gets the records for
+    	// the audio clips and saves how many in the database
+    	// The audio clips are downloaded from Parse into an external cache
+    	// directory
+    	// Whenever the app is created, it checks the number of audio in that
+    	// directory against how many were found and count stored in database
+    	// When the are updated, a push notification is sent with the names or
+    	// ids of ones to be re-downloaded
+    	// All the records for audio and image files that correspond to a song
+    	// are stored in a database table on device
         if (!loggedIn) {
             setBehindContentView(R.layout.menu_splash);
             infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
@@ -2364,7 +2375,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
             facebookLogin();
             break;
         case FragmentBase.LOGIN_TWITTER:
-            twitterLogin();
+        	try {
+        		twitterLogin();
+        	} catch (IllegalArgumentException e) {}
             break;
         case FragmentBase.LOGIN_ANON:
             anonymousLogin();
@@ -2425,12 +2438,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
 							@Override
 							public void onCompleted(GraphUser graphUser,
 									Response response) {
-								if (user != null) {
+								if (user != null && graphUser != null &&
+										response != null &&
+										response.getError() == null) {
 									displayName = graphUser.getFirstName() +
 											" " + graphUser.getLastName()
 													.substring(0, 1) + ".";
-					                user.put("displayName", displayName);
+									// TODO Deal with object has outstanding network connection
 					                try {
+					                	user.put("displayName", displayName);
 					                    user.saveEventually();
 					                }
 					                catch (RuntimeException e) {}
@@ -2680,8 +2696,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
             leadersBundle.putString("userId", userId);
             leadersBundle.putString("userName", displayName);
             leadersBundle.putString("userScore", Integer.toString(currScore));
-            leadersBundle.putString("userAnswers",
-                    Integer.toString(correctAnswers.size()));
+            try {
+	            leadersBundle.putString("userAnswers",
+	                    Integer.toString(correctAnswers.size()));
+            } catch (NullPointerException e) {
+            	leadersBundle.putString("userAnswers", "Error!");
+            }
             if (isCancelled())
                 return null;
             DatabaseHelperSingleton.instance().clearLeaders();
@@ -3583,7 +3603,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         goToQuiz();
                     } catch (IllegalStateException exception) {}
                 }
-                else {
+                else if (currFrag != null) {
                     currFrag.resumeQuestion();
                     resumed = true;
                 }
@@ -3856,9 +3876,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
             v1.buildDrawingCache();
             bitmap = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
+        } catch (OutOfMemoryError e) {
+        	ApplicationEx.showLongToast("Oops, try again");
+            e.printStackTrace();
+            return null;
         } catch (NullPointerException e) {
             ApplicationEx.showLongToast("Oops, try again");
-            e.printStackTrace();
+            e.printStackTrace(); 
             return null;
         }
         OutputStream fout = null;
