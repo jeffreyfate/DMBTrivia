@@ -4060,7 +4060,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         options.inPurgeable = true;
         options.inInputShareable = true;
         options.inTempStorage = new byte[16*1024];
-        options.inMutable = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        	options.inMutable = true;
         return BitmapFactory.decodeResource(ResourcesSingleton.instance(), resId, options);
     }
     
