@@ -1314,6 +1314,35 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     notificationAlbumText.isChecked())
                             .apply();
                     }
+                    if (slidingMenu.isMenuShowing()) {
+                        int typeSetting = SharedPreferencesSingleton.instance().getInt(
+                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+                        switch (typeSetting) {
+                        case 0:
+                            notificationSoundText.setText(R.string.NotificationTypeAlbumTitle);
+                            typeSetting = 1;
+                            break;
+                        case 1:
+                            notificationSoundText.setText(R.string.NotificationTypeSongTitle);
+                            typeSetting = 2;
+                            break;
+                        case 2:
+                            notificationSoundText.setText(R.string.NotificationTypeStandardTitle);
+                            typeSetting = 0;
+                            break;
+                        }
+                        notificationAlbumImage.setImageLevel(typeSetting);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            SharedPreferencesSingleton.instance().edit().putInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
+                            		typeSetting)
+                            .commit();
+                        else
+                            SharedPreferencesSingleton.instance().edit().putInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
+                            		typeSetting)
+                            .apply();
+                    }
                 }
             });
         }
@@ -1620,7 +1649,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                	if (slidingMenu.isMenuShowing()) {
                         notificationAlbumText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
                             SharedPreferencesSingleton.instance().edit().putBoolean(
@@ -1631,6 +1660,35 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             SharedPreferencesSingleton.instance().edit().putBoolean(
                             		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
                                     notificationAlbumText.isChecked())
+                            .apply();
+                    }
+                    if (slidingMenu.isMenuShowing()) {
+                        int typeSetting = SharedPreferencesSingleton.instance().getInt(
+                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+                        switch (typeSetting) {
+                        case 0:
+                            notificationSoundText.setText(R.string.NotificationTypeAlbumTitle);
+                            typeSetting = 1;
+                            break;
+                        case 1:
+                            notificationSoundText.setText(R.string.NotificationTypeSongTitle);
+                            typeSetting = 2;
+                            break;
+                        case 2:
+                            notificationSoundText.setText(R.string.NotificationTypeStandardTitle);
+                            typeSetting = 0;
+                            break;
+                        }
+                        notificationAlbumImage.setImageLevel(typeSetting);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            SharedPreferencesSingleton.instance().edit().putInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
+                            		typeSetting)
+                            .commit();
+                        else
+                            SharedPreferencesSingleton.instance().edit().putInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
+                            		typeSetting)
                             .apply();
                     }
                 }
@@ -3885,7 +3943,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             e.printStackTrace(); 
             return null;
         }
-        OutputStream fout = null;
+        FileOutputStream fout = null;
         File imageFile = new File(path);
 
         try {

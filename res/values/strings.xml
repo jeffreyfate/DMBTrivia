@@ -44,6 +44,7 @@
     <string name="NotificationBothTitle">Sound &amp; Vibrate</string>
     <string name="NotificationTypeStandardTitle">Standard Sound</string>
     <string name="NotificationTypeAlbumTitle">Album Specific</string>
+    <string name="NotificationTypeSongTitle">Song Specific</string>
     <string name="LeadersTitle">Stats &amp; Standings</string>
     <string name="LogoutTitle">Logout</string>
     <string name="ExitTitle">Exit</string>
@@ -75,6 +76,7 @@
     <string name="quicktip_key">quicktip</string>
     <string name="justplay_key">justplay</string>
     <string name="level_key">level</string>
+    <string name="song_audio_key">songAudio</string>
     
     <string name="hard_key">hard</string>
     <string name="medium_key">medium</string>

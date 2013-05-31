@@ -1,6 +1,9 @@
 package com.jeffthefate.dmbquiz;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +45,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -206,6 +210,13 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 path.setWritable(true, false);
             }
             path.mkdirs();
+            path = new File(cacheLocation + Constants.AUDIO_LOCATION);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
+                path.setExecutable(true, false);
+                path.setReadable(true, false);
+                path.setWritable(true, false);
+            }
+            path.mkdirs();
         }
         /*
         Parse.initialize(this, "6pJz1oVHAwZ7tfOuvHfQCRz6AVKZzg1itFVfzx2q",
@@ -232,6 +243,27 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         try {
         	installation.saveEventually();
         } catch (RuntimeException e) {}
+        String notificationType = ResourcesSingleton.instance().getString(
+        		R.string.notificationtype_key);
+        try {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+            SharedPreferencesSingleton.instance().edit().putInt(
+            		notificationType,
+            		SharedPreferencesSingleton.instance().getBoolean(
+            				notificationType, false) ? 1 : 0)
+            .commit();
+        else
+        	SharedPreferencesSingleton.instance().edit().putInt(
+            		notificationType,
+            		SharedPreferencesSingleton.instance().getBoolean(
+            				notificationType, false) ? 1 : 0)
+            .apply();
+        } catch (ClassCastException e) {}
+        if (SharedPreferencesSingleton.instance().getBoolean(
+        		ResourcesSingleton.instance().getString(
+        				R.string.song_audio_key), false))
+	        downloadSongClips(DatabaseHelperSingleton.instance()
+	        		.getNotificatationsToDownload());
     }
     /**
      * Used by other classes to get the application's global context.
@@ -489,6 +521,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     }
     
     /**
+     * Make the URI for the audio to add to the notification
+     * @param soundPath path of the audio
+     */
+    public static void createNotificationUri(String soundPath) {
+        notificationSound = Uri.parse(soundPath);
+    }
+    
+    /**
      * Create the map that associates song titles to images and audio for the
      * notifications
      */
@@ -630,6 +670,21 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songMap.put("the song that jane likes", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
         
         songMap.put("encore", new SongInfo(R.drawable.notification_large, R.raw.endofset));
+        
+        for (Entry<String, SongInfo> entry : songMap.entrySet()) {
+        	String songName = entry.getKey();
+        	SongInfo info = entry.getValue();
+        	String songFile = StringUtils.remove(
+        			StringUtils.remove(
+        					StringUtils.remove(songName, " "), "'"), "#");
+        	if (DatabaseHelperSingleton.instance().hasNotificationSong(
+        			songFile))
+        		DatabaseHelperSingleton.instance().addNotification(songFile,
+        				info.getImage(), info.getAudio());
+        	else
+        		DatabaseHelperSingleton.instance().updateNotification(songFile,
+        				info.getImage(), info.getAudio());
+        }
     }
     
     /**
@@ -641,14 +696,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "*");
         songTitle = StringUtils.remove(songTitle, "+");
         songTitle = StringUtils.remove(songTitle, "~");
-        songTitle = StringUtils.remove(songTitle, "Ä");
+        songTitle = StringUtils.remove(songTitle, "ï¿½");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
-        Entry<String, SongInfo> entry = songMap.select(songTitle);
-        if (songTitle.startsWith(entry.getKey()))
-            return entry.getValue().getImage();
-        else
-            return R.drawable.notification_large;
+        return DatabaseHelperSingleton.instance().getNotificationImage(
+        		songTitle);
     }
     
     /**
@@ -657,21 +709,39 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @param songTitle	title of song to match
      * @return id for the audio that matches
      */
-    public static int findMatchingAudio(Resources res, String songTitle) {
+    public static int findMatchingAlbumAudio(String songTitle) {
         songTitle = StringUtils.remove(songTitle, "*");
         songTitle = StringUtils.remove(songTitle, "+");
         songTitle = StringUtils.remove(songTitle, "~");
-        songTitle = StringUtils.remove(songTitle, "Ä");
+        songTitle = StringUtils.remove(songTitle, "ï¿½");
         songTitle = StringUtils.remove(songTitle, "(");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         Entry<String, SongInfo> entry = songMap.select(songTitle);
         if (SharedPreferencesSingleton.instance().getBoolean(
-                res.getString(R.string.notificationtype_key), true) &&
+                ResourcesSingleton.instance().getString(
+                		R.string.notificationtype_key), true) &&
                 songTitle.startsWith(entry.getKey()))
             return entry.getValue().getAudio();
         else
             return R.raw.general;
+    }
+    
+    /**
+     * Get the audio that matches the current song for the notification.
+     * @param res		resources object to retrieve the audio from
+     * @param songTitle	title of song to match
+     * @return path for the audio that matches
+     */
+    public static String findMatchingSongAudio(String songTitle) {
+        songTitle = StringUtils.remove(songTitle, "*");
+        songTitle = StringUtils.remove(songTitle, "+");
+        songTitle = StringUtils.remove(songTitle, "~");
+        songTitle = StringUtils.remove(songTitle, "ï¿½");
+        songTitle = StringUtils.remove(songTitle, "(");
+        songTitle = StringUtils.strip(songTitle);
+        songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
+        return songTitle;
     }
     
     /**
@@ -780,6 +850,74 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         default:
             return ApplicationEx.portraitSetlistBitmap;
         }
+    }
+    
+    public static void downloadSongClips(List<String> songs) {
+    	SongDownloadTask songDownloadTask = new SongDownloadTask(songs);
+    	if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+        	songDownloadTask.execute();
+        else
+        	songDownloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    
+    private static class SongDownloadTask extends AsyncTask<Void, Void, Void> {
+    	List<String> songs;
+    	
+    	private SongDownloadTask(List<String> songs) {
+    		this.songs = songs;
+    	}
+    	
+    	@Override
+        protected Void doInBackground(Void... nothing) {
+    		FileOutputStream fout = null;
+            File audioFile = null;
+            StringBuilder sb = new StringBuilder();
+    		ParseFile file = null;
+    		ParseQuery query = new ParseQuery("Audio");
+    		if (songs != null)
+    			query.whereContainedIn("name", songs);
+    		try {
+				List<ParseObject> audioList = query.find();
+				String name = "";
+				for (ParseObject audio : audioList) {
+					name = audio.getString("name");
+					DatabaseHelperSingleton.instance()
+							.songNotificationDownloaded(name, false);
+					sb.setLength(0);
+					sb.append(cacheLocation);
+					sb.append(Constants.AUDIO_LOCATION);
+					sb.append(name);
+					sb.append(".mp3");
+					audioFile = new File(sb.toString());
+					file = (ParseFile) audio.get("file");
+					try {
+						fout = new FileOutputStream(audioFile);
+						fout.write(file.getData());
+						fout.flush();
+						fout.close();
+						DatabaseHelperSingleton.instance()
+								.songNotificationDownloaded(name, true);
+					} catch (ParseException e) {
+						Log.e(Constants.LOG_TAG, "Couldn't get data from " +
+								"ParseFile " + audio.getString("name"), e);
+						if (e.getCode() == ParseException.CONNECTION_FAILED) {
+							DatabaseHelperSingleton.instance()
+									.songNotificationDownloaded(name, false);
+						}
+					} catch (FileNotFoundException e) {
+						Log.e(Constants.LOG_TAG, sb.toString() + " not found!",
+								e);
+					} catch (IOException e) {
+						Log.e(Constants.LOG_TAG, "Can't write to " +
+								sb.toString(), e);
+					}
+	    		}
+			} catch (ParseException e) {
+				Log.e(Constants.LOG_TAG, "Couldn't find audio!", e);
+			}
+    		return null;
+    	}
     }
 
 }

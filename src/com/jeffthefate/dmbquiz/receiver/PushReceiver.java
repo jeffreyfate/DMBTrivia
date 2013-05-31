@@ -1,8 +1,11 @@
 package com.jeffthefate.dmbquiz.receiver;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +24,8 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
@@ -102,6 +107,8 @@ public class PushReceiver extends BroadcastReceiver {
             else if (action.equals(Constants.ACTION_NEW_SONG)) {
                 JSONObject json = null;
                 try {
+                	if (!intent.hasExtra("com.parse.Data"))
+                		throw new JSONException("No data sent!");
                     json = new JSONObject(intent.getExtras().getString(
                             "com.parse.Data"));
                     ApplicationEx.latestSong = json.getString("song");
@@ -152,9 +159,16 @@ public class PushReceiver extends BroadcastReceiver {
                         !ApplicationEx.latestSong.equals("") &&
                         SharedPreferencesSingleton.instance().getBoolean(ApplicationEx.getApp().getString(
                                 R.string.notification_key), true)) {
-                    ApplicationEx.createNotificationUri(
-                            ApplicationEx.findMatchingAudio(ResourcesSingleton.instance(),
-                                    ApplicationEx.latestSong));
+                	if (SharedPreferencesSingleton.instance().getBoolean(
+                    		ResourcesSingleton.instance().getString(
+                    				R.string.song_audio_key), false))
+                		ApplicationEx.createNotificationUri(
+                				ApplicationEx.findMatchingSongAudio(
+                						ApplicationEx.latestSong));
+                	else
+	                    ApplicationEx.createNotificationUri(
+	                            ApplicationEx.findMatchingAlbumAudio(
+	                            		ApplicationEx.latestSong));
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());
                     Bitmap largeIcon = ApplicationEx.resizeImage(ResourcesSingleton.instance(),
@@ -201,6 +215,22 @@ public class PushReceiver extends BroadcastReceiver {
                     nManager.notify(null, Constants.NOTIFICATION_NEW_QUESTIONS,
                             notification);
                 }
+            }
+            else if (action.equals(Constants.ACTION_UPDATE_AUDIO)) {
+            	JSONObject json = null;
+                try {
+                	if (!intent.hasExtra("com.parse.Data"))
+                		throw new JSONException("No data sent!");
+                    json = new JSONObject(intent.getExtras().getString(
+                            "com.parse.Data"));
+                    JSONArray songsArray = json.getJSONArray("songs");
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<String>>(){}.getType();
+                    List<String> list = gson.fromJson(songsArray.toString(), type);
+            		ApplicationEx.downloadSongClips(list);
+            	} catch (JSONException e) {
+            		Log.e(Constants.LOG_TAG, "Bad JSON data!", e);
+            	}
             }
             /*
              * JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));

@@ -12,6 +12,7 @@ public class Constants {
     
     public static final String SCREENS_LOCATION = "Screenshots" +
             File.separator;
+    public static final String AUDIO_LOCATION = "Audio" + File.separator;
     
     public static final String ACTION_NEW_QUESTIONS =
             "com.jeffthefate.dmb.ACTION_NEW_QUESTIONS";
@@ -19,6 +20,8 @@ public class Constants {
             "com.jeffthefate.dmb.ACTION_NEW_SONG";
     public static final String ACTION_UPDATE_SETLIST =
             "com.jeffthefate.dmb.ACTION_UPDATE_SETLIST";
+    public static final String ACTION_UPDATE_AUDIO =
+            "com.jeffthefate.dmb.ACTION_UPDATE_AUDIO";
     
     public static final int NOTIFICATION_NEW_QUESTIONS = 3641;
     

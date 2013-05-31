@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     public static final String USER_TABLE = "User";
     public static final String LEADER_TABLE = "Leader";
+    public static final String NOTIFICATION_TABLE = "Notification";
     
     public static final String COL_USER_ID = "UserId";
     public static final String COL_USER_TYPE = "Type";
@@ -103,6 +105,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USER = "User";
     public static final String COL_LEADER_SCORE = "Score";
     public static final String COL_LEADER_ID = "LeaderId";
+    
+    public static final String COL_SONG = "Song";
+    public static final String COL_COVER = "Cover";
+    public static final String COL_ALBUM_AUDIO = "AlbumAudio";
+    public static final String COL_SONG_DOWNLOADED = "SongDownloaded";
     /**
      * Create User table string
      */
@@ -155,6 +162,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COL_USER + " TEXT, " + COL_LEADER_SCORE + " TEXT, " +
             COL_LEADER_ID + " TEXT)";
     /**
+     * Create Notification table string
+     */
+    private static final String CREATE_NOTIFICATION_TABLE = "CREATE TABLE " +
+            NOTIFICATION_TABLE + " (" + COL_SONG + " TEXT, " + COL_COVER +
+            " INTEGER DEFAULT -1, " + COL_ALBUM_AUDIO + " INTEGER DEFAULT -1, "
+            + COL_SONG_DOWNLOADED + " INTEGER DEFAULT 0)";
+    /**
      * Create the helper object that creates and manages the database.
      * 
      * @param context
@@ -182,12 +196,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_LEADER_TABLE);
+        db.execSQL(CREATE_NOTIFICATION_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + LEADER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + NOTIFICATION_TABLE);
         onCreate(db);
     }    
     /**
@@ -887,6 +903,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return background;
     }
     
+    public int getNotificationImage(String song) {
+    	int cover = R.drawable.notification_large;
+    	if (song == null)
+    		return cover;
+    	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_COVER},
+                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+        if (cur.moveToFirst())
+            cover = cur.getInt(cur.getColumnIndex(COL_COVER));
+        cur.close();
+        return cover;
+    }
+    
+    public int getNotificationAlbumAudio(String song) {
+    	if (song == null)
+    		return -1;
+    	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_ALBUM_AUDIO},
+                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+    	int audio = -1;
+        if (cur.moveToFirst())
+        	audio = cur.getInt(cur.getColumnIndex(COL_ALBUM_AUDIO));
+        cur.close();
+        return audio;
+    }
+    
+    public boolean hasNotificationSong(String song) {
+    	boolean hasSong = false;
+    	if (song == null)
+    		return hasSong;
+    	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_SONG},
+                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+        if (cur.moveToFirst())
+        	hasSong = true;
+        cur.close();
+        return hasSong;
+    }
+    
+    public void updateNotification(String song, int cover, int albumAudio) {
+    	ContentValues cv = new ContentValues();
+    	cv.put(COL_COVER, cover);
+    	cv.put(COL_ALBUM_AUDIO, albumAudio);
+    	updateRecord(cv, NOTIFICATION_TABLE, COL_SONG + "=?",
+                new String[] {DatabaseUtils.sqlEscapeString(song)});
+    }
+    
+    public void addNotification(String song, int cover, int albumAudio) {
+    	ContentValues cv = new ContentValues();
+    	cv.put(COL_SONG, song);
+    	cv.put(COL_COVER, cover);
+    	cv.put(COL_ALBUM_AUDIO, albumAudio);
+    	insertRecord(cv, NOTIFICATION_TABLE, COL_SONG);
+    }
+    
+    public void songNotificationDownloaded(String song, boolean isDownloaded) {
+    	if (!hasNotificationSong(song))
+    		return;
+    	ContentValues cv = new ContentValues();
+    	cv.put(COL_SONG_DOWNLOADED, isDownloaded ? 1 : 0);
+    	updateRecord(cv, NOTIFICATION_TABLE, COL_SONG + "=?",
+                new String[] {DatabaseUtils.sqlEscapeString(song)});
+    }
+    
+    public ArrayList<String> getNotificatationsToDownload() {
+    	ArrayList<String> songs = new ArrayList<String>();
+    	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_SONG},
+    			COL_SONG_DOWNLOADED + "=?", new String[] {"1"}, null, null,
+    			null);
+        if (cur.moveToFirst()) {
+        	do {
+        		songs.add(cur.getString(cur.getColumnIndex(COL_SONG)));
+        	} while (cur.moveToNext());
+        }
+        cur.close();
+        return songs;
+    }
+    
     public void checkUpgrade() {
         Cursor cur = db.query(USER_TABLE, null, null, null, null, null, null);
         String[] colArray = cur.getColumnNames();
@@ -1333,6 +1424,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } catch (SQLException e) {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " +
                         CREATE_LEADER_TABLE);
+            }
+        }
+        upgrade = true;
+        cur = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'",
+                null);
+        if (cur.moveToFirst()) {
+            do {
+                if (cur.getString(cur.getColumnIndex("name")).equals(
+                        NOTIFICATION_TABLE))
+                    upgrade = false;
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        if (upgrade) {
+            try {
+                db.execSQL(CREATE_NOTIFICATION_TABLE);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " +
+                        CREATE_NOTIFICATION_TABLE);
+            }
+        }
+        cur = db.query(NOTIFICATION_TABLE, null, null, null, null, null, null);
+        colArray = cur.getColumnNames();
+        colList = Arrays.asList(colArray);
+        cur.close();
+        if (!colList.contains(COL_SONG_DOWNLOADED)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
+                    COL_CURR_QUESTION_HINT + " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
     }
