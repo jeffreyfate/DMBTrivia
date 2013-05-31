@@ -218,7 +218,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private TextView notificationSoundText;
     private ImageViewEx notificationSoundImage;
     private RelativeLayout notificationAlbumButton;
-    private CheckedTextView notificationAlbumText;
+    private TextView notificationAlbumText;
     private ImageViewEx notificationAlbumImage;
     //protected RelativeLayout tipsButton;
     //protected CheckedTextView tipsText;
@@ -1294,40 +1294,39 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationTypeButton);
             notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
                     R.id.NotificationTypeImage);
-            notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
+            notificationAlbumText = (TextView) slidingMenu.findViewById(
                     R.id.NotificationTypeText);
-            notificationAlbumText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
-            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true));
+            int typeSetting = SharedPreferencesSingleton.instance().getInt(
+            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+            notificationAlbumImage.setImageLevel(typeSetting);
+            switch (soundSetting) {
+            case 0:
+                notificationAlbumText.setText(R.string.NotificationBothTitle);
+                break;
+            case 1:
+                notificationAlbumText.setText(R.string.NotificationSoundsTitle);
+                break;
+            case 2:
+                notificationAlbumText.setText(R.string.NotificationVibrateTitle);
+                break;
+            }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
-                        notificationAlbumText.toggle();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                                    notificationAlbumText.isChecked())
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                                    notificationAlbumText.isChecked())
-                            .apply();
-                    }
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
                         switch (typeSetting) {
                         case 0:
-                            notificationSoundText.setText(R.string.NotificationTypeAlbumTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                             typeSetting = 1;
                             break;
                         case 1:
-                            notificationSoundText.setText(R.string.NotificationTypeSongTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                             typeSetting = 2;
                             break;
                         case 2:
-                            notificationSoundText.setText(R.string.NotificationTypeStandardTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                             typeSetting = 0;
                             break;
                         }
@@ -1642,40 +1641,39 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.id.NotificationTypeButton);
             notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
                     R.id.NotificationTypeImage);
-            notificationAlbumText = (CheckedTextView) slidingMenu.findViewById(
+            notificationAlbumText = (TextView) slidingMenu.findViewById(
                     R.id.NotificationTypeText);
-            notificationAlbumText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
-            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true));
+            int typeSetting = SharedPreferencesSingleton.instance().getInt(
+            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+            notificationAlbumImage.setImageLevel(typeSetting);
+            switch (soundSetting) {
+            case 0:
+                notificationAlbumText.setText(R.string.NotificationBothTitle);
+                break;
+            case 1:
+                notificationAlbumText.setText(R.string.NotificationSoundsTitle);
+                break;
+            case 2:
+                notificationAlbumText.setText(R.string.NotificationVibrateTitle);
+                break;
+            }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	if (slidingMenu.isMenuShowing()) {
-                        notificationAlbumText.toggle();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                                    notificationAlbumText.isChecked())
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                                    notificationAlbumText.isChecked())
-                            .apply();
-                    }
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
                         switch (typeSetting) {
                         case 0:
-                            notificationSoundText.setText(R.string.NotificationTypeAlbumTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                             typeSetting = 1;
                             break;
                         case 1:
-                            notificationSoundText.setText(R.string.NotificationTypeSongTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                             typeSetting = 2;
                             break;
                         case 2:
-                            notificationSoundText.setText(R.string.NotificationTypeStandardTitle);
+                            notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                             typeSetting = 0;
                             break;
                         }
