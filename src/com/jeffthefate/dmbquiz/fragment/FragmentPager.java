@@ -197,6 +197,12 @@ public class FragmentPager extends FragmentBase {
                 .getFragmentList().get(0).getBackground();
     }
     
+    @Override
+    public void updateSetText() {
+    	((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
+    			.updateSetText();
+    }
+    
     public FragmentBase getFragmentForPager() {
         if (!loggedIn)
             return new FragmentSplash();

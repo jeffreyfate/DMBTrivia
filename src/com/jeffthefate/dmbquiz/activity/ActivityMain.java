@@ -620,6 +620,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
         registerReceiver(connReceiver,
                 new IntentFilter(Constants.ACTION_CONNECTION));
+        currFrag.updateSetText();
         /*
         if (!inSetlist) {
             if (invalidateWaitTask != null)
