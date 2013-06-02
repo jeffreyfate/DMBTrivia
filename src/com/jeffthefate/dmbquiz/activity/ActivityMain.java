@@ -62,6 +62,7 @@ import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
 import com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog;
+import com.jeffthefate.dmbquiz.fragment.FragmentFaq;
 import com.jeffthefate.dmbquiz.fragment.FragmentInfo;
 import com.jeffthefate.dmbquiz.fragment.FragmentLeaders;
 import com.jeffthefate.dmbquiz.fragment.FragmentLoad;
@@ -113,6 +114,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private boolean inLoad = false;
     private boolean inStats = false;
     private boolean inInfo = false;
+    private boolean inFaq = false;
     private boolean inSetlist = false;
     
     private String questionId;
@@ -306,6 +308,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             inLoad = savedInstanceState.getBoolean("inLoad");
             inStats = savedInstanceState.getBoolean("inStats");
             inInfo = savedInstanceState.getBoolean("inInfo");
+            inFaq = savedInstanceState.getBoolean("inFaq");
             inSetlist = savedInstanceState.getBoolean("inSetlist");
             /*
             splashBackground = savedInstanceState.getString(
@@ -460,6 +463,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 DatabaseHelper.COL_IN_STATS, userId) == 1 ? true : false;
         inInfo = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_INFO, userId) == 1 ? true : false;
+        inFaq = DatabaseHelperSingleton.instance().getUserIntValue(
+                DatabaseHelper.COL_IN_FAQ, userId) == 1 ? true : false;
         inSetlist = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_IN_SETLIST, userId) == 1 ? true : false;
         getUserData(userId);
@@ -532,6 +537,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         outState.putBoolean("inLoad", inLoad);
         outState.putBoolean("inStats", inStats);
         outState.putBoolean("inInfo", inInfo);
+        outState.putBoolean("inFaq", inFaq);
         outState.putBoolean("inSetlist", inSetlist);
         /*
         outState.putString("splashBackground", splashBackground);
@@ -612,6 +618,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         if (inInfo)
             onInfoPressed();
+        if (inFaq)
+        	onFaqPressed();
         /*
         if (inSetlist)
             showSetlist(false);
@@ -620,7 +628,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
         nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
         registerReceiver(connReceiver,
                 new IntentFilter(Constants.ACTION_CONNECTION));
-        currFrag.updateSetText();
         /*
         if (!inSetlist) {
             if (invalidateWaitTask != null)
@@ -737,7 +744,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public void onBackPressed() {
-        if (!inStats && !inLoad && !isLogging && !inInfo)
+        if (!inStats && !inLoad && !isLogging && !inInfo && !inFaq)
             moveTaskToBack(true);
         else {
             if (inLoad) {
@@ -747,6 +754,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 inLoad = false;
                 DatabaseHelperSingleton.instance().setUserValue(inLoad ? 1 : 0,
                         DatabaseHelper.COL_IN_LOAD, userId);
+            }
+            else if (inFaq) {
+                showLeaders();
+                inFaq = false;
+                DatabaseHelperSingleton.instance().setUserValue(inFaq ? 1 : 0,
+                        DatabaseHelper.COL_IN_FAQ, userId);
             }
             else if (inStats) {
                 inStats = false;
@@ -792,6 +805,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         	else
         		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
         	refreshSlidingMenu();
+        	currFrag.updateSetText();
         } catch (IllegalStateException e) {}
     }
     
@@ -812,6 +826,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             refreshSlidingMenu();
+            currFrag.updateSetText();
         } catch (IllegalStateException e) {}
     }
     
@@ -1734,6 +1749,30 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     if (slidingMenu.isMenuShowing())
                         showNameDialog();
+                }
+            });
+            infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
+            infoButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                Thread infoThread = new Thread() {
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(500);
+                                        } catch (InterruptedException e) {}
+                                        onFaqPressed();
+                                    }
+                                };
+                                infoThread.start();
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
                 }
             });
             exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
@@ -2736,6 +2775,27 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     R.anim.slide_out_bottom);
             */
             ft.replace(android.R.id.content, fLoad, "fLoad")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
+            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        } catch (IllegalStateException e) {}
+    }
+    
+    @Override
+    public void onFaqPressed(/*boolean fresh*/) {
+        try {
+            inFaq = true;
+            DatabaseHelperSingleton.instance().setUserValue(inFaq ? 1 : 0,
+                    DatabaseHelper.COL_IN_FAQ, userId);
+            FragmentFaq fFaq = new FragmentFaq();
+            currFrag = fFaq;
+            FragmentTransaction ft = fMan.beginTransaction();
+            /*
+            if (!fresh)
+                ft.setCustomAnimations(R.anim.slide_in_top,
+                        R.anim.slide_out_top);
+            */
+            ft.replace(android.R.id.content, fFaq, "fFaq")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
@@ -4091,7 +4151,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (setlistItem != null)
                     setlistItem.setVisible(false);
             }
-            else if (!inStats && !inInfo && !inLoad && !isLogging) {
+            else if (!inStats && !inInfo && !inFaq && !inLoad && !isLogging) {
                 if (shareItem != null)
                     shareItem.setVisible(false);
                 if (setlistItem != null)

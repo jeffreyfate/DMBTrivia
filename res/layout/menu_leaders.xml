@@ -124,6 +124,30 @@
                     android:textSize="20sp" />
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/InfoButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                android:background="@drawable/button_black" >
+                <com.jeffthefate.dmbquiz.ImageViewEx
+                    android:id="@+id/InfoImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_faq_inverse"
+                    android:contentDescription="@string/InfoTitle" />
+                <TextView
+                    android:id="@+id/InfoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/InfoImage"
+                    android:layout_centerVertical="true"
+                    android:text="@string/InfoTitle"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+            <RelativeLayout
                 android:id="@+id/ExitButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"

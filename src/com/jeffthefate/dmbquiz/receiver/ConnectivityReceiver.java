@@ -45,8 +45,9 @@ public class ConnectivityReceiver extends BroadcastReceiver {
                 ApplicationEx.setConnection(
                         nInfo == null ? false : nInfo.isConnected());
                 ApplicationEx.getApp().sendBroadcast(i);
-                if (nInfo.isConnected() && SharedPreferencesSingleton.instance()
-                		.getInt(ResourcesSingleton.instance().getString(
+                if (nInfo != null && nInfo.isConnected() &&
+                		SharedPreferencesSingleton.instance().getInt(
+            				ResourcesSingleton.instance().getString(
                 				R.string.notificationtype_key), 0) == 2 &&
             				!ApplicationEx.isDownloading())
                 	ApplicationEx.downloadSongClips(

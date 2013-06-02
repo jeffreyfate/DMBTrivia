@@ -49,6 +49,10 @@ public interface OnButtonListener {
      * info is fetched
      */
     public void onStatsPressed();
+    /**
+     * FAQ button is pressed in the stats screen; score FAQ is displayed
+     */
+    public void onFaqPressed();
     
     /**
      * Grab the leaders information that was previously fetched; used by leaders

@@ -78,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_IN_LOAD = "InLoad";
     public static final String COL_IN_STATS = "InStats";
     public static final String COL_IN_INFO = "InInfo";
+    public static final String COL_IN_FAQ = "InFaq";
     public static final String COL_IN_SETLIST = "InSetlist";
     public static final String COL_NEW_SETLIST = "NewSetlist";
     public static final String COL_NEW_QUESTION = "NewQuestion";
@@ -142,7 +143,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " INTEGER DEFAULT 0, " + COL_LOGGING + " INTEGER DEFAULT 0, " +
             COL_IN_LOAD + " INTEGER DEFAULT 0, " + COL_IN_STATS +
             " INTEGER DEFAULT 0, " + COL_IN_INFO + " INTEGER DEFAULT 0, " +
-            COL_IN_SETLIST + " INTEGER DEFAULT 0, " + COL_NEW_SETLIST +
+            COL_IN_FAQ + " INTEGER DEFAULT 0, " + COL_IN_SETLIST +
+            " INTEGER DEFAULT 0, " + COL_NEW_SETLIST +
             " INTEGER DEFAULT 0, " + COL_NEW_QUESTION +
             " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME +
             " TEXT, " + COL_USER_TEXT + " TEXT, " + COL_USER_ANSWER_TEXT +
@@ -1185,6 +1187,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (!colList.contains(COL_IN_INFO)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_INFO +
+                    " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_IN_FAQ)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_FAQ +
                     " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);

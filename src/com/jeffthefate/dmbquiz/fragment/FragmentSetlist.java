@@ -190,12 +190,15 @@ public class FragmentSetlist extends FragmentBase {
     */
     @Override
     public void updateSetText() {
-        retryButton.setVisibility(View.GONE);
-        networkText.setVisibility(View.GONE);
-        setText.setText(ApplicationEx.setlist);
-        setText.setVisibility(View.VISIBLE);
-        stampText.setText(ApplicationEx.setlistStamp);
-        stampText.setVisibility(View.VISIBLE);
+    	if (retryButton != null && networkText != null && setText != null &&
+    			stampText != null) {
+    		retryButton.setVisibility(View.GONE);
+	        networkText.setVisibility(View.GONE);
+	        setText.setText(ApplicationEx.setlist);
+	        setText.setVisibility(View.VISIBLE);
+	        stampText.setText(ApplicationEx.setlistStamp);
+	        stampText.setVisibility(View.VISIBLE);
+    	}
     }
     
     private class SetlistReceiver extends BroadcastReceiver {

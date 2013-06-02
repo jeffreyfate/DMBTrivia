@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/InfoLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <com.jeffthefate.dmbquiz.ImageViewEx
+        android:id="@+id/Background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/backgroundImage" />
+    <ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:fillViewport="true"
+	    android:scrollbars="none" >
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="center"
+		    android:orientation="vertical" >
+		    <TextView
+		        android:id="@+id/InfoText"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:layout_marginTop="10dip"
+		        android:layout_marginBottom="10dip"
+		        android:layout_weight="0.2"
+		        android:gravity="center"
+		        android:text="@string/FaqText"
+		        android:textColor="@android:color/white"
+		        android:textSize="18sp"
+		        android:textStyle="bold" />
+		    <Button
+		        android:id="@+id/DoneButton"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:text="@string/done"
+		        android:textColor="@android:color/black"
+		        android:textStyle="bold"
+		        android:layout_gravity="center"
+		        android:layout_marginBottom="10dip"
+		        android:layout_marginLeft="20dip"
+		        android:layout_marginRight="20dip"
+		        android:background="@drawable/button"
+		        android:layout_weight="0.8" />
+		</LinearLayout>
+	</ScrollView>
+</RelativeLayout>
