@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -908,7 +907,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	if (song == null)
     		return cover;
     	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_COVER},
-                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+                COL_SONG + "=?", new String[] {song}, null, null, null);
         if (cur.moveToFirst())
             cover = cur.getInt(cur.getColumnIndex(COL_COVER));
         cur.close();
@@ -919,7 +918,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	if (song == null)
     		return -1;
     	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_ALBUM_AUDIO},
-                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+                COL_SONG + "=?", new String[] {song}, null, null, null);
     	int audio = -1;
         if (cur.moveToFirst())
         	audio = cur.getInt(cur.getColumnIndex(COL_ALBUM_AUDIO));
@@ -932,7 +931,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	if (song == null)
     		return hasSong;
     	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_SONG},
-                COL_SONG + "=?", new String[] {DatabaseUtils.sqlEscapeString(song)}, null, null, null);
+                COL_SONG + "=?", new String[] {song}, null, null, null);
         if (cur.moveToFirst())
         	hasSong = true;
         cur.close();
@@ -944,7 +943,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	cv.put(COL_COVER, cover);
     	cv.put(COL_ALBUM_AUDIO, albumAudio);
     	updateRecord(cv, NOTIFICATION_TABLE, COL_SONG + "=?",
-                new String[] {DatabaseUtils.sqlEscapeString(song)});
+                new String[] {song});
     }
     
     public void addNotification(String song, int cover, int albumAudio) {
@@ -961,19 +960,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	ContentValues cv = new ContentValues();
     	cv.put(COL_SONG_DOWNLOADED, isDownloaded ? 1 : 0);
     	updateRecord(cv, NOTIFICATION_TABLE, COL_SONG + "=?",
-                new String[] {DatabaseUtils.sqlEscapeString(song)});
+                new String[] {song});
     }
     
     public ArrayList<String> getNotificatationsToDownload() {
     	ArrayList<String> songs = new ArrayList<String>();
     	Cursor cur = db.query(NOTIFICATION_TABLE, new String[] {COL_SONG},
-    			COL_SONG_DOWNLOADED + "=?", new String[] {"1"}, null, null,
+    			COL_SONG_DOWNLOADED + "=?", new String[] {"0"}, null, null,
     			null);
         if (cur.moveToFirst()) {
         	do {
         		songs.add(cur.getString(cur.getColumnIndex(COL_SONG)));
         	} while (cur.moveToNext());
         }
+        else
+        	songs = null;
         cur.close();
         return songs;
     }
@@ -1450,8 +1451,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         colList = Arrays.asList(colArray);
         cur.close();
         if (!colList.contains(COL_SONG_DOWNLOADED)) {
-            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
-                    COL_CURR_QUESTION_HINT + " INTEGER DEFAULT 0";
+            sqlString = "ALTER TABLE " + NOTIFICATION_TABLE + " ADD " +
+            		COL_SONG_DOWNLOADED + " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {

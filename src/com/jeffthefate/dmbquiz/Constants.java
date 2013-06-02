@@ -24,6 +24,7 @@ public class Constants {
             "com.jeffthefate.dmb.ACTION_UPDATE_AUDIO";
     
     public static final int NOTIFICATION_NEW_QUESTIONS = 3641;
+    public static final int NOTIFICATION_NEW_SONG = 3440;
     
     public static final int QUICK_TIP_TOP = 1;
     public static final int QUICK_TIP_CENTER = 2;
@@ -37,5 +38,7 @@ public class Constants {
     
     public static final String PUSH_WAKE_LOCK = "PushReceiverWakeLock";
     public static final String SETLIST_WAKE_LOCK = "SetlistWakeLock";
+    
+    public static final String PUSH_WIFI_LOCK = "PushReceiverWifiLock";
     
 }

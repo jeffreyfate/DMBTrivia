@@ -1,12 +1,12 @@
 com.jeffthefate.dmbquiz.ApplicationEx:
-    306:315:public void clearApplicationData()
-    323:331:public static boolean deleteDir(java.io.File)
+    339:348:public void clearApplicationData()
+    356:364:public static boolean deleteDir(java.io.File)
 com.jeffthefate.dmbquiz.ApplicationEx$DatabaseHelperSingleton:
-    148:148:private ApplicationEx$DatabaseHelperSingleton()
+    154:154:private ApplicationEx$DatabaseHelperSingleton()
 com.jeffthefate.dmbquiz.ApplicationEx$ResourcesSingleton:
-    169:169:private ApplicationEx$ResourcesSingleton()
+    175:175:private ApplicationEx$ResourcesSingleton()
 com.jeffthefate.dmbquiz.ApplicationEx$SharedPreferencesSingleton:
-    127:127:private ApplicationEx$SharedPreferencesSingleton()
+    133:133:private ApplicationEx$SharedPreferencesSingleton()
 com.jeffthefate.dmbquiz.BitmapDrawableEx
 com.jeffthefate.dmbquiz.BuildConfig
 com.jeffthefate.dmbquiz.CheatSheet
@@ -20,7 +20,9 @@ com.jeffthefate.dmbquiz.Constants:
     public static final java.lang.String ACTION_NEW_QUESTIONS
     public static final java.lang.String ACTION_NEW_SONG
     public static final java.lang.String ACTION_UPDATE_SETLIST
+    public static final java.lang.String ACTION_UPDATE_AUDIO
     public static final int NOTIFICATION_NEW_QUESTIONS
+    public static final int NOTIFICATION_NEW_SONG
     public static final int QUICK_TIP_TOP
     public static final int QUICK_TIP_CENTER
     public static final int QUICK_TIP_BOTTOM
@@ -31,11 +33,13 @@ com.jeffthefate.dmbquiz.Constants:
     public static final int HARD
     public static final java.lang.String PUSH_WAKE_LOCK
     public static final java.lang.String SETLIST_WAKE_LOCK
+    public static final java.lang.String PUSH_WIFI_LOCK
     6:6:public Constants()
 com.jeffthefate.dmbquiz.DatabaseHelper:
     private static final java.lang.String DB_NAME
     public static final java.lang.String USER_TABLE
     public static final java.lang.String LEADER_TABLE
+    public static final java.lang.String NOTIFICATION_TABLE
     public static final java.lang.String COL_USER_ID
     public static final java.lang.String COL_USER_TYPE
     public static final java.lang.String COL_SCORE
@@ -101,15 +105,21 @@ com.jeffthefate.dmbquiz.DatabaseHelper:
     public static final java.lang.String COL_USER
     public static final java.lang.String COL_LEADER_SCORE
     public static final java.lang.String COL_LEADER_ID
+    public static final java.lang.String COL_SONG
+    public static final java.lang.String COL_COVER
+    public static final java.lang.String COL_ALBUM_AUDIO
+    public static final java.lang.String COL_SONG_DOWNLOADED
     private static final java.lang.String CREATE_USER_TABLE
     private static final java.lang.String CREATE_LEADER_TABLE
-    264:270:public java.lang.String getLeaderUserId()
-    819:826:public long setSplashBackground(java.lang.String,java.lang.String)
-    830:839:public java.lang.String getSplashBackground(java.lang.String)
-    843:850:public long setQuizBackground(java.lang.String,java.lang.String)
-    854:863:public java.lang.String getQuizBackground(java.lang.String)
-    867:874:public long setLeadersBackground(java.lang.String,java.lang.String)
-    878:887:public java.lang.String getLeadersBackground(java.lang.String)
+    private static final java.lang.String CREATE_NOTIFICATION_TABLE
+    280:286:public java.lang.String getLeaderUserId()
+    835:842:public long setSplashBackground(java.lang.String,java.lang.String)
+    846:855:public java.lang.String getSplashBackground(java.lang.String)
+    859:866:public long setQuizBackground(java.lang.String,java.lang.String)
+    870:879:public java.lang.String getQuizBackground(java.lang.String)
+    883:890:public long setLeadersBackground(java.lang.String,java.lang.String)
+    894:903:public java.lang.String getLeadersBackground(java.lang.String)
+    919:927:public int getNotificationAlbumAudio(java.lang.String)
 com.jeffthefate.dmbquiz.ImageViewEx:
     private android.graphics.RectF targetRect
     78:79:public void addColoredView(android.view.View,java.lang.Integer)
@@ -174,25 +184,24 @@ com.jeffthefate.dmbquiz.VersionedInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$GingerbreadInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$HoneycombInvalidateOptions
 com.jeffthefate.dmbquiz.activity.ActivityMain:
-    private android.graphics.Bitmap tempBitmap
-    3192:3192:public java.lang.String getQuestionCategory()
-    3212:3212:public boolean getQuestionSkip()
-    3217:3217:public java.lang.String getNextQuestionId()
-    3227:3227:public java.lang.String getNextQuestion()
-    3237:3237:public java.lang.String getNextCorrectAnswer()
-    3247:3247:public java.lang.String getNextQuestionScore()
-    3257:3257:public java.lang.String getNextQuestionCategory()
-    3267:3267:public boolean getNextQuestionHint()
-    3272:3273:public void setNextQuestionHint(boolean)
-    3277:3277:public boolean getNextQuestionSkip()
-    3282:3282:public java.lang.String getThirdQuestionId()
-    3292:3292:public java.lang.String getThirdQuestion()
-    3302:3302:public java.lang.String getThirdCorrectAnswer()
-    3312:3312:public java.lang.String getThirdQuestionScore()
-    3322:3322:public java.lang.String getThirdQuestionCategory()
-    3332:3332:public boolean getThirdQuestionHint()
-    3337:3338:public void setThirdQuestionHint(boolean)
-    3342:3342:public boolean getThirdQuestionSkip()
+    3248:3248:public java.lang.String getQuestionCategory()
+    3268:3268:public boolean getQuestionSkip()
+    3273:3273:public java.lang.String getNextQuestionId()
+    3283:3283:public java.lang.String getNextQuestion()
+    3293:3293:public java.lang.String getNextCorrectAnswer()
+    3303:3303:public java.lang.String getNextQuestionScore()
+    3313:3313:public java.lang.String getNextQuestionCategory()
+    3323:3323:public boolean getNextQuestionHint()
+    3328:3329:public void setNextQuestionHint(boolean)
+    3333:3333:public boolean getNextQuestionSkip()
+    3338:3338:public java.lang.String getThirdQuestionId()
+    3348:3348:public java.lang.String getThirdQuestion()
+    3358:3358:public java.lang.String getThirdCorrectAnswer()
+    3368:3368:public java.lang.String getThirdQuestionScore()
+    3378:3378:public java.lang.String getThirdQuestionCategory()
+    3388:3388:public boolean getThirdQuestionHint()
+    3393:3394:public void setThirdQuestionHint(boolean)
+    3398:3398:public boolean getThirdQuestionSkip()
 com.jeffthefate.dmbquiz.activity.ActivityMain$UiCallback
 com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_FACEBOOK
@@ -200,22 +209,22 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_ANON
     public static final int SIGNUP_EMAIL
     public static final int LOGIN_EMAIL
-    274:286:public void toggleSounds()
-    290:302:public void toggleNotifications()
-    306:318:public void toggleTips()
-    321:324:public void report()
-    327:329:public void changeName()
-    332:352:public void logOut()
-    355:357:public void shareScreen()
-    360:361:public void exit()
-    373:373:public void resetHint()
-    405:408:public android.graphics.drawable.Drawable getBackground()
-    415:415:public void showRetry()
+    273:285:public void toggleSounds()
+    289:301:public void toggleNotifications()
+    305:317:public void toggleTips()
+    320:323:public void report()
+    326:328:public void changeName()
+    331:351:public void logOut()
+    354:356:public void shareScreen()
+    359:360:public void exit()
+    372:372:public void resetHint()
+    404:407:public android.graphics.drawable.Drawable getBackground()
+    414:414:public void showRetry()
 com.jeffthefate.dmbquiz.fragment.FragmentPager:
     196:196:public android.graphics.drawable.Drawable getBackground()
 com.jeffthefate.dmbquiz.fragment.FragmentPager$FixedSpeedScroller:
     225:227:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context)
     234:236:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context,android.view.animation.Interpolator,boolean)
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz:
-    665:668:public void resetHint()
-    1224:1231:public void showRetry()
+    663:666:public void resetHint()
+    1221:1228:public void showRetry()

@@ -101,6 +101,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static Bitmap portraitSetlistBitmap;
     private static Bitmap landSetlistBitmap;
     
+    private static boolean isDownloading = false;
+    
     /**
      * Holds an image and audio clip that are associated with each other
      * @author Jeff Fate
@@ -259,9 +261,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             				notificationType, false) ? 1 : 0)
             .apply();
         } catch (ClassCastException e) {}
-        if (SharedPreferencesSingleton.instance().getBoolean(
-        		ResourcesSingleton.instance().getString(
-        				R.string.song_audio_key), false))
+        if (SharedPreferencesSingleton.instance().getInt(notificationType, 0) ==
+        		2 && !isDownloading())
 	        downloadSongClips(DatabaseHelperSingleton.instance()
 	        		.getNotificatationsToDownload());
     }
@@ -525,7 +526,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @param soundPath path of the audio
      */
     public static void createNotificationUri(String soundPath) {
-        notificationSound = Uri.parse(soundPath);
+    	File file = new File(soundPath);
+    	if (file.exists())
+    		notificationSound = Uri.parse(soundPath);
+    	else
+    		createNotificationUri(R.raw.general);
     }
     
     /**
@@ -677,7 +682,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	String songFile = StringUtils.remove(
         			StringUtils.remove(
         					StringUtils.remove(songName, " "), "'"), "#");
-        	if (DatabaseHelperSingleton.instance().hasNotificationSong(
+        	if (!DatabaseHelperSingleton.instance().hasNotificationSong(
         			songFile))
         		DatabaseHelperSingleton.instance().addNotification(songFile,
         				info.getImage(), info.getAudio());
@@ -699,6 +704,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "�");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
+        songTitle = StringUtils.remove(songTitle, " ");
+    	songTitle = StringUtils.remove(songTitle, "'");
         return DatabaseHelperSingleton.instance().getNotificationImage(
         		songTitle);
     }
@@ -709,7 +716,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * @param songTitle	title of song to match
      * @return id for the audio that matches
      */
-    public static int findMatchingAlbumAudio(String songTitle) {
+    public static void findMatchingAudio(String songTitle) {
         songTitle = StringUtils.remove(songTitle, "*");
         songTitle = StringUtils.remove(songTitle, "+");
         songTitle = StringUtils.remove(songTitle, "~");
@@ -718,30 +725,37 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         Entry<String, SongInfo> entry = songMap.select(songTitle);
-        if (SharedPreferencesSingleton.instance().getBoolean(
+        switch (SharedPreferencesSingleton.instance().getInt(
                 ResourcesSingleton.instance().getString(
-                		R.string.notificationtype_key), true) &&
-                songTitle.startsWith(entry.getKey()))
-            return entry.getValue().getAudio();
-        else
-            return R.raw.general;
-    }
-    
-    /**
-     * Get the audio that matches the current song for the notification.
-     * @param res		resources object to retrieve the audio from
-     * @param songTitle	title of song to match
-     * @return path for the audio that matches
-     */
-    public static String findMatchingSongAudio(String songTitle) {
-        songTitle = StringUtils.remove(songTitle, "*");
-        songTitle = StringUtils.remove(songTitle, "+");
-        songTitle = StringUtils.remove(songTitle, "~");
-        songTitle = StringUtils.remove(songTitle, "�");
-        songTitle = StringUtils.remove(songTitle, "(");
-        songTitle = StringUtils.strip(songTitle);
-        songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
-        return songTitle;
+                		R.string.notificationtype_key), 0)) {
+        case 0:
+        	Log.i(Constants.LOG_TAG, "GENERAL AUDIO");
+        	ApplicationEx.createNotificationUri(R.raw.general);
+        	break;
+        case 1:
+        	Log.i(Constants.LOG_TAG, "ALBUM AUDIO");
+        	Log.i(Constants.LOG_TAG, "SONG TITLE: " + songTitle);
+        	Log.i(Constants.LOG_TAG, "ENTRY: " + entry.getKey());
+        	if (songTitle.startsWith(entry.getKey()))
+        		ApplicationEx.createNotificationUri(entry.getValue().getAudio());
+        	else
+        		ApplicationEx.createNotificationUri(R.raw.general);
+        	break;
+        case 2:
+        	Log.i(Constants.LOG_TAG, "SONG AUDIO");
+        	songTitle = StringUtils.remove(songTitle, " ");
+        	songTitle = StringUtils.remove(songTitle, "'");
+        	StringBuilder sb = new StringBuilder();
+        	sb.append(cacheLocation);
+        	sb.append(Constants.AUDIO_LOCATION);
+        	sb.append(songTitle);
+        	sb.append(".mp3");
+        	ApplicationEx.createNotificationUri(sb.toString());
+        	break;
+    	default:
+    		ApplicationEx.createNotificationUri(R.raw.general);
+        	break;
+        }
     }
     
     /**
@@ -853,6 +867,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     }
     
     public static void downloadSongClips(List<String> songs) {
+    	isDownloading = true;
     	SongDownloadTask songDownloadTask = new SongDownloadTask(songs);
     	if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
@@ -860,7 +875,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         else
         	songDownloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-    
+
     private static class SongDownloadTask extends AsyncTask<Void, Void, Void> {
     	List<String> songs;
     	
@@ -916,8 +931,13 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 			} catch (ParseException e) {
 				Log.e(Constants.LOG_TAG, "Couldn't find audio!", e);
 			}
+    		isDownloading = false;
     		return null;
     	}
+    }
+    
+    public static boolean isDownloading() {
+    	return isDownloading;
     }
 
 }

@@ -10,5 +10,8 @@
     <item
         android:drawable="@drawable/ic_notification_vibrate"
         android:maxLevel="2"/>
+    <item
+        android:drawable="@drawable/ic_silent"
+        android:maxLevel="3"/>
 
 </level-list>

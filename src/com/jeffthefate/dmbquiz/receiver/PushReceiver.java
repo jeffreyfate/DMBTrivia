@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -17,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.PowerManager;
@@ -37,15 +38,25 @@ public class PushReceiver extends BroadcastReceiver {
     
     private NotificationCompat.Builder nBuilder;
     private NotificationManager nManager;
-    private Notification notification;
+    private WakeLock wakeLock;
+	private MulticastLock multicastLock;
     
     @Override
     public void onReceive(Context context, Intent intent) {
+    	Log.i(Constants.LOG_TAG, "PUSH RECEIVED!");
+    	PowerManager pm = 
+                (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                Constants.PUSH_WAKE_LOCK);
+        wakeLock.acquire();
+        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        multicastLock = wm.createMulticastLock(Constants.PUSH_WIFI_LOCK);
+        multicastLock.acquire();
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
-        	new ReceiveTask(context, intent).execute();
+        	new ReceiveTask(intent).execute();
         else
-        	new ReceiveTask(context, intent).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        	new ReceiveTask(intent).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
     private static String getUpdatedDateString(long millis) {
@@ -56,27 +67,21 @@ public class PushReceiver extends BroadcastReceiver {
     }
     
     private class ReceiveTask extends AsyncTask<Void, Void, Void> {
-    	private Context context;
     	private Intent intent;
-    	private WakeLock wakeLock;
     	
-    	private ReceiveTask(Context context, Intent intent) {
-    		this.context = context;
+    	private ReceiveTask(Intent intent) {
     		this.intent = intent;
     	}
     	
         @Override
         protected Void doInBackground(Void... nothing) {
         	// {"action":"com.jeffthefate.dmb.ACTION_NEW_QUESTIONS"}
-        	PowerManager pm = 
-                    (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    Constants.PUSH_WAKE_LOCK);
-            wakeLock.acquire();
+        	Log.i(Constants.LOG_TAG, "TASK STARTED!");
             nManager = (NotificationManager) ApplicationEx.getApp()
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             String action = intent.getAction();
             if (action.equals(Constants.ACTION_NEW_QUESTIONS)) {
+            	Log.i(Constants.LOG_TAG, "NEW QUESTIONS!");
                 if (!ApplicationEx.isActive() && SharedPreferencesSingleton.instance().getBoolean(
                         ApplicationEx.getApp().getString(R.string.notification_key),
                         true)) {
@@ -99,12 +104,12 @@ public class PushReceiver extends BroadcastReceiver {
                         setContentText("Touch to play DMB Trivia").
                         setContentIntent(pendingIntent);
                     nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
-                    notification = nBuilder.build();
                     nManager.notify(null, Constants.NOTIFICATION_NEW_QUESTIONS,
-                            notification);
+                    		nBuilder.build());
                 }
             }
             else if (action.equals(Constants.ACTION_NEW_SONG)) {
+            	Log.i(Constants.LOG_TAG, "NEW SONG!");
                 JSONObject json = null;
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
@@ -159,16 +164,8 @@ public class PushReceiver extends BroadcastReceiver {
                         !ApplicationEx.latestSong.equals("") &&
                         SharedPreferencesSingleton.instance().getBoolean(ApplicationEx.getApp().getString(
                                 R.string.notification_key), true)) {
-                	if (SharedPreferencesSingleton.instance().getBoolean(
-                    		ResourcesSingleton.instance().getString(
-                    				R.string.song_audio_key), false))
-                		ApplicationEx.createNotificationUri(
-                				ApplicationEx.findMatchingSongAudio(
-                						ApplicationEx.latestSong));
-                	else
-	                    ApplicationEx.createNotificationUri(
-	                            ApplicationEx.findMatchingAlbumAudio(
-	                            		ApplicationEx.latestSong));
+                	Log.i(Constants.LOG_TAG, "LATEST SONG: " + ApplicationEx.latestSong);
+                	ApplicationEx.findMatchingAudio(ApplicationEx.latestSong);
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());
                     Bitmap largeIcon = ApplicationEx.resizeImage(ResourcesSingleton.instance(),
@@ -210,13 +207,13 @@ public class PushReceiver extends BroadcastReceiver {
                         sb.append(ApplicationEx.setlistList.get(3));
                         nBuilder.setContentText(sb.toString());
                     }
-                    nManager.cancel(Constants.NOTIFICATION_NEW_QUESTIONS);
-                    notification = nBuilder.build();
-                    nManager.notify(null, Constants.NOTIFICATION_NEW_QUESTIONS,
-                            notification);
+                    nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
+                    nManager.notify(null, Constants.NOTIFICATION_NEW_SONG,
+                    		nBuilder.build());
                 }
             }
             else if (action.equals(Constants.ACTION_UPDATE_AUDIO)) {
+            	Log.i(Constants.LOG_TAG, "UPDATE_AUDIO!");
             	JSONObject json = null;
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
@@ -227,7 +224,8 @@ public class PushReceiver extends BroadcastReceiver {
                     Gson gson = new Gson();
                     Type type = new TypeToken<List<String>>(){}.getType();
                     List<String> list = gson.fromJson(songsArray.toString(), type);
-            		ApplicationEx.downloadSongClips(list);
+                    if (!ApplicationEx.isDownloading())
+                    	ApplicationEx.downloadSongClips(list);
             	} catch (JSONException e) {
             		Log.e(Constants.LOG_TAG, "Bad JSON data!", e);
             	}
@@ -244,6 +242,7 @@ public class PushReceiver extends BroadcastReceiver {
         
         @Override
         protected void onPostExecute(Void nothing) {
+        	multicastLock.release();
         	wakeLock.release();
         }
     }

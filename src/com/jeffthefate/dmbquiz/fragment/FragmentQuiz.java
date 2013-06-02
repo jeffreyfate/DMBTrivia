@@ -93,7 +93,6 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long perfTime = System.currentTimeMillis();
         setHasOptionsMenu(true);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.sound_key))) {
@@ -180,7 +179,6 @@ public class FragmentQuiz extends FragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	long perfTime = System.currentTimeMillis();
         View v = inflater.inflate(R.layout.question, container, false);
         /*
         ViewTreeObserver vto = slidingMenu.getViewTreeObserver(); 
@@ -827,7 +825,6 @@ public class FragmentQuiz extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        long perfTime = System.currentTimeMillis();
         if (mCallback != null) {
         	mCallback.setLoggingOut(false);
             if (ApplicationEx.getConnection()) {

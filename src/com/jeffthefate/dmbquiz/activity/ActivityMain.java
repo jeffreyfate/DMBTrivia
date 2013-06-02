@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +61,7 @@ import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
+import com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentInfo;
 import com.jeffthefate.dmbquiz.fragment.FragmentLeaders;
 import com.jeffthefate.dmbquiz.fragment.FragmentLoad;
@@ -185,7 +185,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     private ConnectionReceiver connReceiver;
     
-    private Bitmap tempBitmap;
+    //private Bitmap tempBitmap;
     //private BitmapDrawableEx[] arrayDrawable = new BitmapDrawableEx[2];
     //private BitmapDrawableEx oldBitmapDrawable = null;
     
@@ -1171,17 +1171,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
      * Sliding menu methods and associated methods/classes
      */
     private void refreshSlidingMenu() {
-    	// TODO Add option for notification song clips
-    	// Checking the option for the first time goes and gets the records for
-    	// the audio clips and saves how many in the database
-    	// The audio clips are downloaded from Parse into an external cache
-    	// directory
-    	// Whenever the app is created, it checks the number of audio in that
-    	// directory against how many were found and count stored in database
-    	// When the are updated, a push notification is sent with the names or
-    	// ids of ones to be re-downloaded
-    	// All the records for audio and image files that correspond to a song
-    	// are stored in a database table on device
         if (!loggedIn) {
             setBehindContentView(R.layout.menu_splash);
             infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
@@ -1255,6 +1244,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
             case 2:
                 notificationSoundText.setText(R.string.NotificationVibrateTitle);
                 break;
+            case 3:
+                notificationSoundText.setText(R.string.NotificationSilentTitle);
+                break;
             }
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1273,6 +1265,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             break;
                         case 2:
                             notificationSoundText.setText(R.string.NotificationBothTitle);
+                            soundSetting = 3;
+                            break;
+                        case 3:
+                            notificationSoundText.setText(R.string.NotificationSilentTitle);
                             soundSetting = 0;
                             break;
                         }
@@ -1299,15 +1295,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
             notificationAlbumImage.setImageLevel(typeSetting);
-            switch (soundSetting) {
+            switch (typeSetting) {
             case 0:
-                notificationAlbumText.setText(R.string.NotificationBothTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                 break;
             case 1:
-                notificationAlbumText.setText(R.string.NotificationSoundsTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                 break;
             case 2:
-                notificationAlbumText.setText(R.string.NotificationVibrateTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                 break;
             }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
@@ -1324,6 +1320,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         case 1:
                             notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                             typeSetting = 2;
+                            if (DatabaseHelperSingleton.instance()
+                            		.getNotificatationsToDownload() != null)
+                            	showDownloadDialog();
                             break;
                         case 2:
                             notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
@@ -1602,6 +1601,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
             case 2:
                 notificationSoundText.setText(R.string.NotificationVibrateTitle);
                 break;
+            case 3:
+                notificationSoundText.setText(R.string.NotificationSilentTitle);
+                break;
             }
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1620,6 +1622,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             break;
                         case 2:
                             notificationSoundText.setText(R.string.NotificationBothTitle);
+                            soundSetting = 3;
+                            break;
+                        case 3:
+                            notificationSoundText.setText(R.string.NotificationSilentTitle);
                             soundSetting = 0;
                             break;
                         }
@@ -1646,15 +1652,15 @@ public class ActivityMain extends SlidingFragmentActivity implements
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
             notificationAlbumImage.setImageLevel(typeSetting);
-            switch (soundSetting) {
+            switch (typeSetting) {
             case 0:
-                notificationAlbumText.setText(R.string.NotificationBothTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                 break;
             case 1:
-                notificationAlbumText.setText(R.string.NotificationSoundsTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                 break;
             case 2:
-                notificationAlbumText.setText(R.string.NotificationVibrateTitle);
+                notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                 break;
             }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
@@ -1671,6 +1677,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         case 1:
                             notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                             typeSetting = 2;
+                            if (DatabaseHelperSingleton.instance()
+                            		.getNotificatationsToDownload() != null)
+                            	showDownloadDialog();
                             break;
                         case 2:
                             notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
@@ -3120,6 +3129,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
         newFragment.show(getSupportFragmentManager(), "dName");
     }
     
+    public void showDownloadDialog() {
+    	DialogFragment newFragment = new FragmentDownloadDialog();
+    	newFragment.show(getSupportFragmentManager(), "dDownload");
+    }
+    
     @Override
     public void next() {
         if (Build.VERSION.SDK_INT <
@@ -4094,6 +4108,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public boolean getGoToSetlist() {
+    	if (goToSetlist)
+    		nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
         return goToSetlist;
     }
     
@@ -4116,9 +4132,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
         options.inPurgeable = true;
         options.inInputShareable = true;
         options.inTempStorage = new byte[16*1024];
+        options.inSampleSize = 2;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         	options.inMutable = true;
-        return BitmapFactory.decodeResource(ResourcesSingleton.instance(), resId, options);
+        return BitmapFactory.decodeResource(ResourcesSingleton.instance(),
+        		resId, options);
     }
     
 }
