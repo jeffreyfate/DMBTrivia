@@ -268,10 +268,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             				notificationType, false) ? 1 : 0)
             .apply();
         } catch (ClassCastException e) {}
+        /*
         if (SharedPreferencesSingleton.instance().getInt(notificationType, 0) ==
         		2 && !isDownloading())
 	        downloadSongClips(DatabaseHelperSingleton.instance()
 	        		.getNotificatationsToDownload());
+	    */
     }
     /**
      * Used by other classes to get the application's global context.
@@ -750,6 +752,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	else
         		ApplicationEx.createNotificationUri(R.raw.general);
         	break;
+        /*
         case 2:
         	Log.i(Constants.LOG_TAG, "SONG AUDIO");
         	songTitle = StringUtils.remove(songTitle, " ");
@@ -761,6 +764,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	sb.append(".mp3");
         	ApplicationEx.createNotificationUri(sb.toString());
         	break;
+        */
     	default:
     		ApplicationEx.createNotificationUri(R.raw.general);
         	break;
@@ -884,7 +888,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         else
         	songDownloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
+    
     private static class SongDownloadTask extends AsyncTask<Void, Void, Void> {
     	List<String> songs;
     	

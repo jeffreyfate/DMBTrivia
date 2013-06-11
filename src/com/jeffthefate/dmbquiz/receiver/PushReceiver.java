@@ -1,11 +1,8 @@
 package com.jeffthefate.dmbquiz.receiver;
 
-import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,8 +22,6 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
@@ -212,6 +207,7 @@ public class PushReceiver extends BroadcastReceiver {
                     		nBuilder.build());
                 }
             }
+            /*
             else if (action.equals(Constants.ACTION_UPDATE_AUDIO)) {
             	Log.i(Constants.LOG_TAG, "UPDATE_AUDIO!");
             	JSONObject json = null;
@@ -230,6 +226,7 @@ public class PushReceiver extends BroadcastReceiver {
             		Log.e(Constants.LOG_TAG, "Bad JSON data!", e);
             	}
             }
+            */
             /*
              * JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
              */

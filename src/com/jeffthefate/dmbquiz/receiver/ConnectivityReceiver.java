@@ -8,10 +8,6 @@ import android.net.NetworkInfo;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.Constants;
-import com.jeffthefate.dmbquiz.R;
-import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
-import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
-import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 /**
  * Receives when the contexts and widgets should be updated.
  * 
@@ -45,6 +41,7 @@ public class ConnectivityReceiver extends BroadcastReceiver {
                 ApplicationEx.setConnection(
                         nInfo == null ? false : nInfo.isConnected());
                 ApplicationEx.getApp().sendBroadcast(i);
+                /*
                 if (nInfo != null && nInfo.isConnected() &&
                 		SharedPreferencesSingleton.instance().getInt(
             				ResourcesSingleton.instance().getString(
@@ -53,6 +50,7 @@ public class ConnectivityReceiver extends BroadcastReceiver {
                 	ApplicationEx.downloadSongClips(
                 			DatabaseHelperSingleton.instance()
                     				.getNotificatationsToDownload());
+                */
             }
         }
     }

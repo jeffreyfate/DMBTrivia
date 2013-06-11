@@ -20,8 +20,10 @@ public class Constants {
             "com.jeffthefate.dmb.ACTION_NEW_SONG";
     public static final String ACTION_UPDATE_SETLIST =
             "com.jeffthefate.dmb.ACTION_UPDATE_SETLIST";
+    /*
     public static final String ACTION_UPDATE_AUDIO =
             "com.jeffthefate.dmb.ACTION_UPDATE_AUDIO";
+	*/
     
     public static final int NOTIFICATION_NEW_QUESTIONS = 3641;
     public static final int NOTIFICATION_NEW_SONG = 3440;

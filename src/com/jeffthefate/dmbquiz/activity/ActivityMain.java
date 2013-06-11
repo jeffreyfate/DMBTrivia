@@ -65,7 +65,6 @@ import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
-import com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentFaq;
 import com.jeffthefate.dmbquiz.fragment.FragmentInfo;
 import com.jeffthefate.dmbquiz.fragment.FragmentLeaders;
@@ -679,7 +678,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private void showLoggedInFragment() {
-        fetchDisplayName();
+        //fetchDisplayName();
         if (user == null)
             user = ParseUser.getCurrentUser();
         if (user != null && displayName == null) {
@@ -707,7 +706,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private void fetchDisplayName() {
-    	// TODO Remove this call?  It is executed each time resumed
         if (userId == null)
             return;
         ParseQuery query = ParseUser.getQuery();
@@ -718,6 +716,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (user != null)
                     displayName = user.getString("displayName");
                 ApplicationEx.addParseQuery();
+                if (getStatsTask != null)
+                    getStatsTask.cancel(true);
+                getStatsTask = new GetStatsTask(
+                        DatabaseHelperSingleton.instance().getScore(userId));
+                if (Build.VERSION.SDK_INT <
+                        Build.VERSION_CODES.HONEYCOMB)
+                    getStatsTask.execute();
+                else
+                    getStatsTask.executeOnExecutor(
+                            AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
     }
@@ -1337,9 +1345,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
             case 1:
                 notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                 break;
+            /*
             case 2:
                 notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                 break;
+            */
             }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1353,16 +1363,20 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             typeSetting = 1;
                             break;
                         case 1:
-                            notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
-                            typeSetting = 2;
+                            notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
+                            typeSetting = 0;
+                            /*
                             if (DatabaseHelperSingleton.instance()
                             		.getNotificatationsToDownload() != null)
                             	showDownloadDialog();
+                        	*/
                             break;
+                        /*
                         case 2:
                             notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                             typeSetting = 0;
                             break;
+                        */
                         }
                         notificationAlbumImage.setImageLevel(typeSetting);
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
@@ -1459,6 +1473,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             });
             logoutButton = (RelativeLayout) slidingMenu.findViewById(R.id.LogoutButton);
             logoutText = (TextView) findViewById(R.id.LogoutText);
+            /*
             nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1484,6 +1499,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 statsButton.setVisibility(View.GONE);
                 nameButton.setVisibility(View.GONE);
             }
+            */
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
@@ -1694,9 +1710,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
             case 1:
                 notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
                 break;
+            /*
             case 2:
                 notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
                 break;
+            */
             }
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1710,16 +1728,20 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             typeSetting = 1;
                             break;
                         case 1:
-                            notificationAlbumText.setText(R.string.NotificationTypeSongTitle);
-                            typeSetting = 2;
+                            notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
+                            typeSetting = 0;
+                            /*
                             if (DatabaseHelperSingleton.instance()
                             		.getNotificatationsToDownload() != null)
                             	showDownloadDialog();
+                        	*/
                             break;
+                        /*
                         case 2:
                             notificationAlbumText.setText(R.string.NotificationTypeStandardTitle);
                             typeSetting = 0;
                             break;
+                        */
                         }
                         notificationAlbumImage.setImageLevel(typeSetting);
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
@@ -2777,16 +2799,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         DatabaseHelperSingleton.instance().setUserValue(inLoad ? 1 : 0,
                 DatabaseHelper.COL_IN_LOAD, userId);
         showLoad();
-        if (getStatsTask != null)
-            getStatsTask.cancel(true);
-        getStatsTask = new GetStatsTask(
-                DatabaseHelperSingleton.instance().getScore(userId));
-        if (Build.VERSION.SDK_INT <
-                Build.VERSION_CODES.HONEYCOMB)
-            getStatsTask.execute();
-        else
-            getStatsTask.executeOnExecutor(
-                    AsyncTask.THREAD_POOL_EXECUTOR);
+        fetchDisplayName();
     }
     
     private void showLoad() {
@@ -2888,19 +2901,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             if (isCancelled())
                 return null;
-            ParseQuery leadersQuery = ParseUser.getQuery();
-            leadersQuery.whereExists("displayName").whereExists("score")
-                    .whereNotContainedIn("objectId", devList)
-                    .orderByDescending("score").setLimit(50);
-            try {
-                getLeaders(leadersQuery.find());
-                ApplicationEx.addParseQuery();
-            } catch (ParseException e) {
-                error = e;
-                publishProgress();
-            }
-            if (isCancelled())
-                return null;
             ParseQuery questionQuery = new ParseQuery("Question");
             questionQuery.orderByDescending("createdAt");
             try {
@@ -2920,10 +2920,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 publishProgress();
             }
             ArrayList<String> ranks = new ArrayList<String>(devList);
+            ArrayList<ParseObject> rankObjects = new ArrayList<ParseObject>();
             ParseQuery rankQuery = ParseUser.getQuery();
             rankQuery.whereExists("displayName");
+            rankQuery.whereExists("score");
             rankQuery.setLimit(1000);
-            rankQuery.addDescendingOrder("score");
+            rankQuery.orderByDescending("score");
             int rank = -1;
             do {
             	rankQuery.whereNotContainedIn("objectId", ranks);
@@ -2934,6 +2936,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	            		break;
 	            	for (int i = 0; i < rankList.size(); i++) {
 	            		ranks.add(rankList.get(i).getObjectId());
+	            		rankObjects.add(rankList.get(i));
 	            		if (rankList.get(i).getObjectId().equals(userId)) {
 	            			rank = ++i;
 	            			break;
@@ -2950,6 +2953,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             } while (!isCancelled());
             if (!leadersBundle.containsKey("userRank"))
             	leadersBundle.putString("userRank", "");
+            getLeaders(rankObjects);
             if (!isCancelled()) {
                 inStats = true;
                 DatabaseHelperSingleton.instance().setUserValue(inStats ? 1 : 0,
@@ -3222,12 +3226,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
         DialogFragment newFragment = new FragmentNameDialog();
         newFragment.show(getSupportFragmentManager(), "dName");
     }
-    
+    /*
     public void showDownloadDialog() {
     	DialogFragment newFragment = new FragmentDownloadDialog();
     	newFragment.show(getSupportFragmentManager(), "dDownload");
     }
-    
+    */
     @Override
     public void next() {
         if (Build.VERSION.SDK_INT <

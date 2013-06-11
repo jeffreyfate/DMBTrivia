@@ -147,6 +147,7 @@
 	                android:textStyle="bold"
 	                android:textSize="20sp" />
 	        </RelativeLayout>
+	        <!-- 
 	        <RelativeLayout
 	            android:id="@+id/NameButton"
 	            android:layout_width="match_parent"
@@ -171,6 +172,7 @@
 	                android:textStyle="bold"
 	                android:textSize="20sp" />
 	        </RelativeLayout>
+	         -->
 	        <RelativeLayout
 	            android:id="@+id/ExitButton"
 	            android:layout_width="match_parent"
