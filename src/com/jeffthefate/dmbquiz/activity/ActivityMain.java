@@ -251,6 +251,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private SetBackgroundWaitTask setBackgroundWaitTask;
     //private SetlistBackgroundWaitTask setlistBackgroundWaitTask;
     
+    private int count = -1;
+    private boolean checkCount = true;
+    
     /**
      * Activity lifecycle methods
      */
@@ -368,6 +371,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             networkProblem = savedInstanceState.getBoolean("networkProblem");
             DatabaseHelperSingleton.instance().setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
+            count = savedInstanceState.getInt("count");
+            checkCount = savedInstanceState.getBoolean("checkCount");
         }
         else {
             userId = DatabaseHelperSingleton.instance().getCurrUser();
@@ -523,6 +528,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 DatabaseHelper.COL_SCORE, userId);
         correctAnswers = ApplicationEx.getStringArrayPref(
         		ResourcesSingleton.instance().getString(R.string.correct_key));
+        count = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_COUNT, userId);
+        checkCount = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_CHECK_COUNT, userId) == 1 ? true : false;
     }
     
     @Override
@@ -580,6 +587,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         outState.putInt("lowest", lowest);
         outState.putInt("highest", highest);
         outState.putBoolean("networkProblem", networkProblem);
+        outState.putInt("count", count);
+        outState.putBoolean("checkCount", true);
         super.onSaveInstanceState(outState);
     }
     
@@ -852,6 +861,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         if (!isLogging && userId != null)
             getScore(false, false, userId, false);
         ApplicationEx.setInactive();
+        DatabaseHelperSingleton.instance().setCheckCount(userId, true);
         Log.d(Constants.LOG_TAG, "Parse queries: " + ApplicationEx.getParseQueries());
         super.onPause();
     }
@@ -2835,6 +2845,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         
         @Override
         protected Void doInBackground(Void... nothing) {
+        	// TODO Use already known values for correct answers and hints
+        	// TODO Use the leaders query to find rank
             leadersBundle = new Bundle();
             leadersBundle.putString("userId", userId);
             leadersBundle.putString("userName", displayName);
@@ -3509,7 +3521,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private class GetNextQuestionsTask extends AsyncTask<Void, Void, Void> {
-        int count = -1;
         List<ParseObject> questionList;
         ParseException error;
         boolean questionNull = false;
@@ -3537,54 +3548,61 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (!force)
                     updateIds();
                 publishProgress();
-                if (tempQuestions == null)
-                	tempQuestions = new ArrayList<String>();
-                else
-                	tempQuestions.clear();
-                if (correctAnswers != null)
-                    tempQuestions.addAll(correctAnswers);
-                if (questionId != null)
-                	tempQuestions.add(questionId);
-                if (nextQuestionId != null)
-                	tempQuestions.add(nextQuestionId);
-                if (thirdQuestionId != null)
-                	tempQuestions.add(thirdQuestionId);
-                ParseQuery query = null;
-                ParseQuery queryFirst = null;
-                ParseQuery querySecond = null;
-                if (level == Constants.HARD) {
-                	queryFirst = new ParseQuery("Question");
-                    queryFirst.whereNotContainedIn("objectId", tempQuestions);
-                    queryFirst.whereLessThanOrEqualTo("score", 1000);
-                    querySecond = new ParseQuery("Question");
-                    querySecond.whereNotContainedIn("objectId", tempQuestions);
-                	querySecond.whereDoesNotExist("score");
-                	ArrayList<ParseQuery> queries = new ArrayList<ParseQuery>();
-                	queries.add(queryFirst);
-                	queries.add(querySecond);
-                	query = ParseQuery.or(queries);
-                }
-                else {
-                	query = new ParseQuery("Question");
-                	query.whereNotContainedIn("objectId", tempQuestions);
-                	if (level == Constants.EASY) {
-                		int easy = DatabaseHelperSingleton.instance().getUserIntValue(
-        						DatabaseHelper.COL_EASY, userId);
-                		if (easy <= 0)
-                			easy = 600;
-                		query.whereLessThanOrEqualTo("score", easy);
-                	}
-                	else if (level == Constants.MEDIUM) {
-                		int med = DatabaseHelperSingleton.instance().getUserIntValue(
-        						DatabaseHelper.COL_MEDIUM, userId);
-                		if (med <= 0)
-                			med = 800;
-                		query.whereLessThanOrEqualTo("score", med);
-                	}
-                }
+                if (questionId != null && nextQuestionId != null &&
+                		thirdQuestionId != null)
+                	return null;
                 try {
-                    count = query.count();
-                    ApplicationEx.addParseQuery();
+                	ParseQuery query = null;
+	                if (tempQuestions == null)
+	                	tempQuestions = new ArrayList<String>();
+	                else
+	                	tempQuestions.clear();
+	                if (correctAnswers != null)
+	                    tempQuestions.addAll(correctAnswers);
+	                if (questionId != null)
+	                	tempQuestions.add(questionId);
+	                if (nextQuestionId != null)
+	                	tempQuestions.add(nextQuestionId);
+	                if (thirdQuestionId != null)
+	                	tempQuestions.add(thirdQuestionId);
+	                ParseQuery queryFirst = null;
+	                ParseQuery querySecond = null;
+	                if (level == Constants.HARD) {
+	                	queryFirst = new ParseQuery("Question");
+	                    queryFirst.whereNotContainedIn("objectId", tempQuestions);
+	                    queryFirst.whereLessThanOrEqualTo("score", 1000);
+	                    querySecond = new ParseQuery("Question");
+	                    querySecond.whereNotContainedIn("objectId", tempQuestions);
+	                	querySecond.whereDoesNotExist("score");
+	                	ArrayList<ParseQuery> queries = new ArrayList<ParseQuery>();
+	                	queries.add(queryFirst);
+	                	queries.add(querySecond);
+	                	query = ParseQuery.or(queries);
+	                }
+	                else {
+	                	query = new ParseQuery("Question");
+	                	query.whereNotContainedIn("objectId", tempQuestions);
+	                	if (level == Constants.EASY) {
+	                		int easy = DatabaseHelperSingleton.instance().getUserIntValue(
+	        						DatabaseHelper.COL_EASY, userId);
+	                		if (easy <= 0)
+	                			easy = 600;
+	                		query.whereLessThanOrEqualTo("score", easy);
+	                	}
+	                	else if (level == Constants.MEDIUM) {
+	                		int med = DatabaseHelperSingleton.instance().getUserIntValue(
+	        						DatabaseHelper.COL_MEDIUM, userId);
+	                		if (med <= 0)
+	                			med = 800;
+	                		query.whereLessThanOrEqualTo("score", med);
+	                	}
+	                }
+	                if (checkCount || count < 0) {
+	                    count = query.count();
+	                    ApplicationEx.addParseQuery();
+	                    checkCount = false;
+	                    DatabaseHelperSingleton.instance().setCheckCount(userId, checkCount);
+	                }
                     if (count > 0 && !isCancelled()) {
                         stageList = new ArrayList<String>();
                         int skip = (int) (Math.random()*count);
@@ -4081,12 +4099,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public void addCorrectAnswer(String correctId) {
-        if (correctAnswers == null) {
+        if (correctAnswers == null)
             correctAnswers = new ArrayList<String>();
-            correctAnswers.add(correctId);
-        }
-        else
-            correctAnswers.add(correctId);
+        correctAnswers.add(correctId);
+        count--;
         ApplicationEx.setStringArrayPref(
         		ResourcesSingleton.instance().getString(R.string.correct_key), correctAnswers);
     }

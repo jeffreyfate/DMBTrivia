@@ -1,6 +1,9 @@
 package com.jeffthefate.dmbquiz.fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,6 +39,7 @@ import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -79,6 +83,8 @@ public class FragmentQuiz extends FragmentBase {
     private String answerTextHint = null;
     
     private InputMethodManager imm;
+    
+    private HashMap<String, Boolean> staged = new HashMap<String, Boolean>();
     
     public FragmentQuiz() {
     }
@@ -299,8 +305,8 @@ public class FragmentQuiz extends FragmentBase {
             @Override
             public void onClick(View v) {
                 mCallback.setIsNewQuestion(true);
-                stageQuestion(mCallback.getUserId(), mCallback.getQuestionId(),
-                        mCallback.getQuestionHint());
+                staged.put(mCallback.getQuestionId(),
+                		mCallback.getQuestionHint());
                 skipButton.setEnabled(false);
                 playAudio("skip");
                 savedHint = mCallback.getCorrectAnswer();
@@ -907,6 +913,8 @@ public class FragmentQuiz extends FragmentBase {
         	editor.commit();
         else
         	editor.apply();
+        if (!staged.isEmpty())
+        	stageQuestions(mCallback.getUserId());
         super.onPause();
     }
     
@@ -1183,35 +1191,42 @@ public class FragmentQuiz extends FragmentBase {
             currScore = currScore / 2;
     }
     
-    private void stageQuestion(final String userId, final String questionId,
-            final boolean questionHint) {
+    private void stageQuestions(final String userId) {
         ParseQuery query = new ParseQuery("Stage");
         query.whereEqualTo("userId", userId);
-        query.whereEqualTo("questionId", questionId);
-        query.getFirstInBackground(new GetCallback() {
+        query.whereContainedIn("questionId", staged.keySet());
+        //query.whereEqualTo("questionId", questionId);
+        query.findInBackground(new FindCallback() {
             @Override
-            public void done(ParseObject answer, ParseException e) {
+            public void done(List<ParseObject> answers, ParseException e) {
                 if (e != null && e.getCode() != 101) {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     showNetworkProblem();
                 }
                 else {
-                    if (answer == null) {
-                        ParseObject stageAnswer = new ParseObject("Stage");
-                        stageAnswer.put("questionId", questionId);
-                        stageAnswer.put("userId", userId);
-                        stageAnswer.put("hint", questionHint);
-                        stageAnswer.put("skip", true);
+                	String currQuestionId = null;
+                	HashMap<String, Boolean> map = new HashMap<String, Boolean>(staged);
+                	staged.clear();
+                	for (ParseObject parseAnswer : answers) {
+                		currQuestionId = parseAnswer.getString("questionId");
+                		parseAnswer.put("hint", map.get(currQuestionId));
+                		parseAnswer.put("skip", true);
                         try {
-                            stageAnswer.saveEventually();
+                        	parseAnswer.saveEventually();
                         } catch (RuntimeException exception) {}
-                    }
-                    else {
-                        answer.put("hint", questionHint);
-                        answer.put("skip", true);
-                        try {
-                            answer.saveEventually();
-                        } catch (RuntimeException exception) {}
+                        map.remove(currQuestionId);
+                	}
+                    if (!map.isEmpty()) {
+                    	ParseObject stageAnswer = new ParseObject("Stage");
+                    	for (Entry<String, Boolean> stage : map.entrySet()) {
+	                        stageAnswer.put("questionId", stage.getKey());
+	                        stageAnswer.put("userId", userId);
+	                        stageAnswer.put("hint", stage.getValue());
+	                        stageAnswer.put("skip", true);
+	                        try {
+	                            stageAnswer.saveEventually();
+	                        } catch (RuntimeException exception) {}
+                    	}
                     }
                 }
                 ApplicationEx.addParseQuery();

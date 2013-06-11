@@ -88,6 +88,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_EASY = "Easy";
     public static final String COL_MEDIUM = "Medium";
     public static final String COL_SETLIST = "Setlist";
+    public static final String COL_COUNT = "Count";
+    public static final String COL_CHECK_COUNT = "CheckCount";
     
     public static final String COL_USER_TEXT = "UserText";
     public static final String COL_USER_ANSWER_TEXT = "UserAnswerText";
@@ -154,7 +156,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " TEXT, " + COL_LEADER_TEXT + " TEXT, " + COL_CREATED_TEXT +
             " TEXT, " + COL_CREATED_DATE + " TEXT, " + COL_SKIP_VIS +
             " INTEGER DEFAULT 0, " + COL_EASY + " INTEGER DEFAULT 0, " +
-            COL_MEDIUM + " INTEGER DEFAULT 0, " + COL_SETLIST + " TEXT)";
+            COL_MEDIUM + " INTEGER DEFAULT 0, " + COL_SETLIST + " TEXT, " +
+            COL_COUNT + " INTEGER DEFAULT -1, " + COL_CHECK_COUNT +
+            " INTEGER DEFAULT 0)";
     /**
      * Create Question table string
      */
@@ -430,6 +434,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             score = cur.getInt(cur.getColumnIndex(COL_SCORE));
         cur.close();
         return score;
+    }
+    
+    public long setCount(String userId, int count) {
+    	ContentValues cv = new ContentValues();
+        cv.put(COL_COUNT, count);
+        if (userId != null)
+            return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                    new String[] {userId});
+        else
+            return -1;
+    }
+    
+    public int getCount(String userId) {
+        if (userId == null)
+            return -2;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_COUNT},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        int count = 0;
+        if (cur.moveToFirst())
+        	count = cur.getInt(cur.getColumnIndex(COL_COUNT));
+        cur.close();
+        return count;
+    }
+    
+    public long setCheckCount(String userId, boolean checkCount) {
+    	ContentValues cv = new ContentValues();
+        cv.put(COL_CHECK_COUNT, checkCount);
+        if (userId != null)
+            return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
+                    new String[] {userId});
+        else
+            return -1;
+    }
+    
+    public boolean getCheckCount(String userId) {
+        if (userId == null)
+            return true;
+        Cursor cur = db.query(USER_TABLE, new String[] {COL_CHECK_COUNT},
+                COL_USER_ID + "=?", new String[] {userId}, null, null, null);
+        boolean checkCount = true;
+        if (cur.moveToFirst())
+        	checkCount = cur.getInt(cur.getColumnIndex(COL_CHECK_COUNT)) == 1 ? true : false;
+        cur.close();
+        return checkCount;
     }
     
     public long setOffset(int offset, String userId) {
@@ -1368,6 +1416,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!colList.contains(COL_SETLIST)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_SETLIST
                     + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_COUNT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_COUNT
+                    + " INTEGER DEFAULT -1";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_CHECK_COUNT)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_CHECK_COUNT
+                    + " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);
             } catch (SQLException e) {
