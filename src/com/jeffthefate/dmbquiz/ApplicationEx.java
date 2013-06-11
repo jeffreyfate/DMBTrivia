@@ -103,6 +103,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     
     private static boolean isDownloading = false;
     
+    private static float textViewHeight = 0.0f;
+    private static float textSize = 0.0f;
+    
+    private static int parseQueries = 0;
+    
     /**
      * Holds an image and audio clip that are associated with each other
      * @author Jeff Fate
@@ -239,6 +244,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             mHasConnection = nInfo.isConnected();
         DatabaseHelperSingleton.instance().checkUpgrade();
         getSetlist();
+        //setlist = "Jun 1 2013\nDave Matthews Band\nBlossom Music Center\nCuyahoga Falls, OH\n\nDancing Nancies ->\nWarehouse\nThe Idea Of You\nBelly Belly Nice\nSave Me\nCaptain\nSeven";
+        //setlistStamp = "Updated:\n8:16 PDT";
         generateSongMap();
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         // TODO Remove if memory issues resolved
@@ -476,6 +483,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         ParseQuery setlistQuery = new ParseQuery("Setlist");
         setlistQuery.addDescendingOrder("setDate");
         setlistQuery.setLimit(1);
+        //setlistQuery.setSkip(5);
         setlistQuery.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> setlists, ParseException e) {
@@ -489,13 +497,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                     setlist = setlists.get(0).getString("set");
                     df.setTimeZone(TimeZone.getDefault());
                     StringBuilder sb = new StringBuilder();
-                    sb.append("Updated:\n");
+                    sb.append("\nUpdated:\n");
                     sb.append(DateFormat.format(df.toLocalizedPattern(), setlists.get(0).getUpdatedAt()));
                     setlistStamp = sb.toString();
                     parseSetlist();
                     intent.putExtra("success", true);
                 }
                 app.sendBroadcast(intent);
+                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -939,5 +948,33 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     public static boolean isDownloading() {
     	return isDownloading;
     }
+    
+	public static float getTextViewHeight() {
+		return textViewHeight;
+	}
+	
+	public static void setTextViewHeight(float textViewHeight) {
+		ApplicationEx.textViewHeight = textViewHeight;
+	}
+	
+	public static float getTextSize() {
+		return textSize;
+	}
+	
+	public static void setTextSize(float textSize) {
+		ApplicationEx.textSize = textSize;
+	}
+	
+	public static int getParseQueries() {
+		return parseQueries;
+	}
+	
+	public static void setParseQueries(int newParseQueries) {
+		parseQueries = newParseQueries;
+	}
+	
+	public static void addParseQuery() {
+		parseQueries++;
+	}
 
 }

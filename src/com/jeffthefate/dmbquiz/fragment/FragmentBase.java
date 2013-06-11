@@ -350,11 +350,6 @@ public class FragmentBase extends Fragment implements UiCallback {
         }
     }
     
-    public void shareScreen() {
-    	if (mCallback != null)
-            mCallback.shareScreenshot();
-    }
-    
     public void exit() {
     	getActivity().moveTaskToBack(true);
     }

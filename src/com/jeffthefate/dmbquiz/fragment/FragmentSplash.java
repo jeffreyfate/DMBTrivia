@@ -285,6 +285,7 @@ public class FragmentSplash extends FragmentBase {
                         isSignedUp = true;
                     }
                 }
+                ApplicationEx.addParseQuery();
             } 
         });
     }

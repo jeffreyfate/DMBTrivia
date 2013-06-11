@@ -197,6 +197,10 @@ public class FragmentPager extends FragmentBase {
                 .getFragmentList().get(0).getBackground();
     }
     
+    public FragmentBase getPage(int position) {
+    	return (FragmentBase) ((FragmentPagerAdapter) viewPager.getAdapter()).getItem(position);
+    }
+    
     @Override
     public void updateSetText() {
     	((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)

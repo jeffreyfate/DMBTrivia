@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
+import com.jeffthefate.dmbquiz.AutoResizeTextView;
+import com.jeffthefate.dmbquiz.AutoResizeTextView.OnTextResizeListener;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
@@ -38,6 +41,13 @@ public class FragmentSetlist extends FragmentBase {
     private Button retryButton;
     private TextView networkText;
     
+    //private RelativeLayout parentLayout;
+    //private RelativeLayout setlistLayout;
+    //private ScrollView setlistScroll;
+    
+    //private boolean textViewResized = false;
+    private float currTextSize = 0.0f;
+	
     public FragmentSetlist() {
     }
     
@@ -80,9 +90,59 @@ public class FragmentSetlist extends FragmentBase {
                 slidingMenu.setThreshold(5);
             } 
         });
+        parentLayout = (RelativeLayout) v.findViewById(R.id.ParentLayout);
+        if (parentLayout != null) {
+	        ViewTreeObserver parentVto = parentLayout.getViewTreeObserver();
+	        parentVto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					if (setText != null && !textViewResized) {
+						int parentHeight = parentLayout.getHeight() -
+								setText.getPaddingTop() -
+								setText.getPaddingBottom();
+						int currHeight = setText.getHeight();
+						int newHeight = currHeight <= parentHeight ? currHeight : parentHeight;
+						setText.setHeight(newHeight);
+						if (ApplicationEx.getTextViewHeight() == 0.0f)
+							ApplicationEx.setTextViewHeight(newHeight);
+					}
+				}
+	        });
+        }
+        
+        setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
+        setlistLayout = (RelativeLayout) v.findViewById(R.id.SetlistLayout);
         */
         setText = (TextView) v.findViewById(R.id.SetText);
+        //setText.setVisibility(View.INVISIBLE);
+        
         stampText = (TextView) v.findViewById(R.id.StampText);
+        if (ApplicationEx.getTextSize() > 0.0f)
+        	stampText.getPaint().setTextSize(ApplicationEx.getTextSize() - 4.0f);
+        if (setText instanceof AutoResizeTextView) {
+        	//((AutoResizeTextView) setText).setExtraTextLines(2);
+        	((AutoResizeTextView) setText).setAddEllipsis(false);
+        	((AutoResizeTextView) setText).setOnResizeListener(
+        			new OnTextResizeListener() {
+				@Override
+				public void onTextResize(TextView textView, float oldSize,
+						float newSize) {
+					Log.w(Constants.LOG_TAG, "onTextResize: " + oldSize + " : " + newSize);
+					/*
+					parentLayout.removeView(setlistLayout);
+					setlistScroll.removeAllViews();
+					setlistScroll.addView(setlistLayout, 0);
+					*/
+					if (stampText != null) {
+						stampText.getPaint().setTextSize(newSize - 4.0f);
+					}
+					ApplicationEx.setTextSize(newSize);
+					//textView.setVisibility(View.VISIBLE);
+					if (currTextSize == 0.0f || newSize <= currTextSize)
+						currTextSize = newSize;
+				}
+        	});
+        }
         /*
         stampText.setOnClickListener(new OnClickListener() {
             @Override
@@ -152,6 +212,10 @@ public class FragmentSetlist extends FragmentBase {
         super.onResume();
         if (!StringUtils.isBlank(ApplicationEx.setlist)) {
             setText.setText(ApplicationEx.setlist);
+            /*
+            if (setText instanceof AutoResizeTextView)
+            	((AutoResizeTextView) setText).resizeText();
+            	*/
             stampText.setText(ApplicationEx.setlistStamp);
         }
         else
@@ -160,6 +224,13 @@ public class FragmentSetlist extends FragmentBase {
         intentFilter.addAction(Constants.ACTION_UPDATE_SETLIST);
         intentFilter.addAction(Constants.ACTION_NEW_SONG);
         ApplicationEx.getApp().registerReceiver(setlistReceiver, intentFilter);
+        /*
+        if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB)
+        	new UpdateSetTextTask().execute();
+        else
+        	new UpdateSetTextTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    	*/
     }
     
     @Override
@@ -190,11 +261,16 @@ public class FragmentSetlist extends FragmentBase {
     */
     @Override
     public void updateSetText() {
-    	if (retryButton != null && networkText != null && setText != null &&
-    			stampText != null) {
+    	if (retryButton != null && networkText != null && setText != null/*&&
+    			stampText != null*/) {
     		retryButton.setVisibility(View.GONE);
 	        networkText.setVisibility(View.GONE);
+	        //setText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	        setText.setText(ApplicationEx.setlist);
+	        /*
+	        if (setText instanceof AutoResizeTextView)
+            	((AutoResizeTextView) setText).resizeText();
+            	*/
 	        setText.setVisibility(View.VISIBLE);
 	        stampText.setText(ApplicationEx.setlistStamp);
 	        stampText.setVisibility(View.VISIBLE);
@@ -277,5 +353,56 @@ public class FragmentSetlist extends FragmentBase {
         retryButton.setTextColor(Color.BLACK);
         retryButton.setEnabled(true);
     }
-    
+    /*
+    private class UpdateSetTextTask extends AsyncTask<Void, Void, Void> {
+    	@Override
+        protected Void doInBackground(Void... nothing) {
+    		ArrayList<String> setLines = new ArrayList<String>();
+    		setLines.add("Gaucho");
+    		setLines.add("Rooftop");
+    		setLines.add("Crush");
+    		setLines.add("Say Goodbye");
+    		setLines.add("Big Eyed Fish ->");
+    		setLines.add("Bartender");
+    		setLines.add("(Kill The Preacher)");
+    		setLines.add("Why I Am");
+    		setLines.add("Granny");
+    		setLines.add("Recently");
+    		setLines.add("Pantala Naga Pampa");
+    		setLines.add("Rapunzel");
+    		setLines.add("");
+    		setLines.add("Encore:");
+    		setLines.add("Oh*");
+    		setLines.add("So Much To Say ->");
+    		setLines.add("Anyone Seen The Bridge ->");
+    		setLines.add("Too Much (Fake) ->");
+    		setLines.add("Ants Marching");
+    		setLines.add("");
+    		setLines.add("Notes:");
+    		setLines.add("* Dave And Tim");
+    		setLines.add("(song name) indicates a partial song");
+    		setLines.add("-> indicates a segue into next song");
+    		do {
+	        	try {
+	        		Thread.sleep(2000);
+	        	} catch (InterruptedException e) {}
+	        	ApplicationEx.setlist = ApplicationEx.setlist.concat("\n").concat(setLines.remove(0));
+	        	publishProgress();
+    		} while (!setLines.isEmpty());
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+        	updateSetText();
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+        }
+    }
+    */
 }

@@ -26,6 +26,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -694,6 +698,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private void fetchDisplayName() {
+    	// TODO Remove this call?  It is executed each time resumed
         if (userId == null)
             return;
         ParseQuery query = ParseUser.getQuery();
@@ -703,6 +708,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             public void done(ParseObject user, ParseException e) {
                 if (user != null)
                     displayName = user.getString("displayName");
+                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -846,6 +852,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         if (!isLogging && userId != null)
             getScore(false, false, userId, false);
         ApplicationEx.setInactive();
+        Log.d(Constants.LOG_TAG, "Parse queries: " + ApplicationEx.getParseQueries());
         super.onPause();
     }
     
@@ -907,6 +914,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         correctQuery);
                 try {
                     scoreList = query.find();
+                    ApplicationEx.addParseQuery();
                     if (scoreList.size() == 0)
                         break;
                     for (ParseObject score : scoreList) {
@@ -1000,6 +1008,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             try {
             	scoreQuery.addAscendingOrder("score");
 				lowest = scoreQuery.getFirst().getInt("score");
+				ApplicationEx.addParseQuery();
 				scoreQuery.addDescendingOrder("score");
 				highest = scoreQuery.getFirst().getInt("score");
 				if (highest == 0)
@@ -2442,8 +2451,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
         if (background != null) {
             try {
                 ApplicationEx.setSetlistBitmap(getBitmap(resourceId));
-                background.setImageBitmap(null);
-                background.setImageBitmap(ApplicationEx.getSetlistBitmap());
+                background.setImageDrawable(null);
+            	BitmapDrawable bitmapDrawable = new BitmapDrawable(
+            			ResourcesSingleton.instance(),
+            			ApplicationEx.getSetlistBitmap());
+        		bitmapDrawable.setColorFilter(new PorterDuffColorFilter(
+            			ResourcesSingleton.instance().getColor(
+            					R.color.background_light),
+    					PorterDuff.Mode.SRC_ATOP));
+                background.setImageDrawable(bitmapDrawable);
+                //background.setImageBitmap(ApplicationEx.getSetlistBitmap());
             } catch (OutOfMemoryError memErr) {
                 ApplicationEx.showShortToast("Error setting setlist");
                 /*
@@ -2845,6 +2862,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                       .whereEqualTo("hint", true);
             try {
                 hints = hintsQuery.count();
+                ApplicationEx.addParseQuery();
                 leadersBundle.putString("userHints", Integer.toString(
                         hints));
             } catch (ParseException e) {
@@ -2864,6 +2882,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .orderByDescending("score").setLimit(50);
             try {
                 getLeaders(leadersQuery.find());
+                ApplicationEx.addParseQuery();
             } catch (ParseException e) {
                 error = e;
                 publishProgress();
@@ -2874,6 +2893,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             questionQuery.orderByDescending("createdAt");
             try {
                 ParseObject question = questionQuery.getFirst();
+                ApplicationEx.addParseQuery();
                 Date questionDate = question.getCreatedAt();
                 Calendar cal = new GregorianCalendar(
                         TimeZone.getTimeZone("GMT"));
@@ -2897,6 +2917,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	rankQuery.whereNotContainedIn("objectId", ranks);
 	            try {
 	            	List<ParseObject> rankList = rankQuery.find();
+	            	ApplicationEx.addParseQuery();
 	            	if (rankList.size() == 0)
 	            		break;
 	            	for (int i = 0; i < rankList.size(); i++) {
@@ -3563,6 +3584,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
                 try {
                     count = query.count();
+                    ApplicationEx.addParseQuery();
                     if (count > 0 && !isCancelled()) {
                         stageList = new ArrayList<String>();
                         int skip = (int) (Math.random()*count);
@@ -3582,6 +3604,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             skip = count-query.getLimit();
                         query.setSkip(skip);
                         questionList = query.find();
+                        ApplicationEx.addParseQuery();
                         if (!questionList.isEmpty() && !isCancelled()) {
                             Number score;
                             ParseObject followQuestion = null;
@@ -3830,6 +3853,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             query.setLimit(questionIds.size());
             try {
                 List<ParseObject> questionList = query.find();
+                ApplicationEx.addParseQuery();
                 if (!questionList.isEmpty()) {
                     for (int i = 0; i < questionList.size(); i++) {
                         if (questionList.get(i).getString("questionId")
@@ -3983,6 +4007,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     private String takeScreenshot() {
+    	// Make file name and create file
         Calendar cal = Calendar.getInstance(TimeZone.getDefault(),
                 Locale.getDefault());
         int calendarMonth = cal.get(Calendar.MONTH)+1;
@@ -3999,14 +4024,25 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 ("0" + calendarSecond) : calendarSecond) + ".jpg";
         String path = ApplicationEx.cacheLocation + Constants.SCREENS_LOCATION +
                 fileName;
-        
+        // Capture the contents of the screen
         Bitmap bitmap = null;
-        View v1 = noConnection.getRootView();
         try {
-            v1.setDrawingCacheEnabled(true);
-            v1.buildDrawingCache();
-            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
+    		View rootView = getWindow().getDecorView();
+            int totalHeight = rootView.getHeight();
+        	int totalWidth = rootView.getWidth();
+            bitmap = Bitmap.createBitmap(totalWidth, totalHeight,
+            		Bitmap.Config.ARGB_8888);                
+            Canvas c = new Canvas(bitmap);
+            rootView.layout(0, 0, totalWidth, totalHeight);
+            rootView.draw(c);
+            /*
+            rootView.buildDrawingCache();
+            bitmap = Bitmap.createBitmap(rootView.getDrawingCache());
+            rootView.destroyDrawingCache();
+            bitmap = Bitmap.createScaledBitmap(bitmap, rootView.getWidth() / 2,
+            		rootView.getHeight() / 2, true);
+            rootView.setDrawingCacheEnabled(false);
+            */
         } catch (OutOfMemoryError e) {
         	ApplicationEx.showLongToast("Oops, try again");
             e.printStackTrace();
@@ -4184,6 +4220,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public boolean getInSetlist() {
+    	if (inSetlist)
+    		nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
         return inSetlist;
     }
     

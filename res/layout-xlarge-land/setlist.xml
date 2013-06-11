@@ -32,7 +32,7 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="32sp" />
             <TextView
                 android:id="@+id/StampText"
                 android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                 android:layout_alignParentRight="true"
                 android:textColor="@color/light_gray"
                 android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="30sp" />
             <TextView
                 android:id="@+id/NetworkText"
                 android:layout_width="match_parent"

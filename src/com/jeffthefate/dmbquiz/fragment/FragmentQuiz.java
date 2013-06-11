@@ -1042,6 +1042,7 @@ public class FragmentQuiz extends FragmentBase {
                         Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                         showNetworkProblem();
                     }
+                    ApplicationEx.addParseQuery();
                 }
             });
         }
@@ -1082,6 +1083,7 @@ public class FragmentQuiz extends FragmentBase {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     showNetworkProblem();
                 }
+                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -1212,6 +1214,7 @@ public class FragmentQuiz extends FragmentBase {
                         } catch (RuntimeException exception) {}
                     }
                 }
+                ApplicationEx.addParseQuery();
             }
         });
     }
