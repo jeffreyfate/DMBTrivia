@@ -43,4 +43,7 @@ public class Constants {
     
     public static final String PUSH_WIFI_LOCK = "PushReceiverWifiLock";
     
+    public static final int CACHED_QUESTIONS = 10;
+    public static final int CACHED_LIMIT = 2;
+    
 }

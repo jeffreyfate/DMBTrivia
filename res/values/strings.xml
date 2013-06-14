@@ -76,6 +76,13 @@
     <string name="notification_key">notification</string>
     <string name="notificationsound_key">notificationSound</string>
     <string name="notificationtype_key">notificationType</string>
+    <string name="questionids_key">questionids</string>
+    <string name="questions_key">questions</string>
+    <string name="questionanswers_key">questionanswers</string>
+    <string name="questioncategories_key">questioncategories</string>
+    <string name="questionscores_key">questionscores</string>
+    <string name="questionhints_key">questionhints</string>
+    <string name="questionskips_key">questionskips</string>
     <string name="correct_key">correct</string>
     <string name="quicktip_key">quicktip</string>
     <string name="justplay_key">justplay</string>

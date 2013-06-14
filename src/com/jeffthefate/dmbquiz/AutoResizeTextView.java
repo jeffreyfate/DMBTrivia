@@ -36,7 +36,7 @@ import android.widget.TextView;
 public class AutoResizeTextView extends TextView {
 
     // Minimum text size for this text view
-    public static final float MIN_TEXT_SIZE = 20;
+    public static final float MIN_TEXT_SIZE = 12;
 
     // Interface for resize notifications
     public interface OnTextResizeListener {
@@ -279,7 +279,7 @@ public class AutoResizeTextView extends TextView {
 
         // Until we either fit within our text view or we had reached our min text size, incrementally try smaller sizes
         while (textHeight > height && targetTextSize > mMinTextSize) {
-            targetTextSize = Math.max(targetTextSize - 1, mMinTextSize);
+            targetTextSize = Math.max(targetTextSize - 0.1f, mMinTextSize);
             textHeight = getTextHeight(text, textPaint, width, targetTextSize);
         }
         

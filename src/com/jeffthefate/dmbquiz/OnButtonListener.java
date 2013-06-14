@@ -100,206 +100,106 @@ public interface OnButtonListener {
      * Updates the background, if necessary, and fetches more questions.
      */
     public void next();
-    
+    /**
+     * Determines if there are any question ids
+     * @return true if empty, false otherwise
+     */
+    public boolean questionIdsEmpty();
     /**
      * Current id for this question
      * @return id associated with this question in Parse
      */
-    public String getQuestionId();
+    public String getQuestionId(int index);
     /**
      * Sets this question's id
      * @param questionId new id for this question; can be null
      */
-    public void setQuestionId(String questionId);
+    public void addQuestionId(String questionId);
+    /**
+     * Clear question id array
+     */
+    public void clearQuestionIds();
     /**
      * Current text for this question
      * @return question text
      */
-    public String getQuestion();
+    public String getQuestion(int index);
     /**
      * Sets the question text for this question
      * @param question new question text; can be null
      */
-    public void setQuestion(String question);
+    public void addQuestion(String question);
+    /**
+     * Clear question array
+     */
+    public void clearQuestions();
     /**
      * Current correct answer for this question
      * @return answer text for this question
      */
-    public String getCorrectAnswer();
+    public String getQuestionAnswer(int index);
     /**
      * Sets the answer text for this question
      * @param nextCorrectAnswer new answer for this question; can be null
      */
-    public void setCorrectAnswer(String correctAnswer);
+    public void addQuestionAnswer(String correctAnswer);
+    /**
+     * Clear correct answer array
+     */
+    public void clearQuestionAnswers();
     /**
      * Current score for this question
      * @return point value for this question
      */
-    public String getQuestionScore();
+    public String getQuestionScore(int index);
     /**
      * Updates the current score value for this question
      * @param questionScore new score for this question
      */
-    public void setQuestionScore(String questionScore);
+    public void addQuestionScore(String questionScore);
+    /**
+     * Clear question score array
+     */
+    public void clearQuestionScores();
     /**
      * Current category for this question
      * @return name of category this question is in
      */
-    public String getQuestionCategory();
+    public String getQuestionCategory(int index);
     /**
      * Sets the new category value for this question
      * @param questionCategory category to be set; can be null
      */
-    public void setQuestionCategory(String questionCategory);
+    public void addQuestionCategory(String questionCategory);
+    /**
+     * Clear question category array
+     */
+    public void clearQuestionCategories();
     /**
      * Current hint value for first cached question
      * @return true if this question was hinted, false otherwise
      */
-    public boolean getQuestionHint();
+    public boolean getQuestionHint(int index);
     /**
      * Sets the new hinted value for this question
      * @param questionHint new hinted value; true if hinted, false
      * 							otherwise
      */
-    public void setQuestionHint(boolean questionHint);
+    public void setQuestionHint(boolean questionHint, int index);
+    public void addQuestionHint(boolean questionHint);
+    /**
+     * Clear question hint array
+     */
+    public void clearQuestionHints();
     /**
      * Current skip value for first cached question
      * @return true if this question was skipped, false otherwise
      */
-    public boolean getQuestionSkip();
+    public boolean getQuestionSkip(int index);
     /**
-     * Current id for this question
-     * @return id associated with this question in Parse
+     * Clear question skip array
      */
-    public String getNextQuestionId();
-    /**
-     * Sets this question's id
-     * @param nextQuestionId new id for this question; can be null
-     */
-    public void setNextQuestionId(String nextQuestionId);
-    /**
-     * Current text for this question
-     * @return question text
-     */
-    public String getNextQuestion();
-    /**
-     * Sets the question text for this question
-     * @param nextQuestion new question text; can be null
-     */
-    public void setNextQuestion(String nextQuestion);
-    /**
-     * Current correct answer for this question
-     * @return answer text for this question
-     */
-    public String getNextCorrectAnswer();
-    /**
-     * Sets the answer text for this question
-     * @param nextCorrectAnswer new answer for this question; can be null
-     */
-    public void setNextCorrectAnswer(String nextCorrectAnswer);
-    /**
-     * Current score for this question
-     * @return point value for this question
-     */
-    public String getNextQuestionScore();
-    /**
-     * Updates the current score value for this question
-     * @param nextQuestionScore new score for this question
-     */
-    public void setNextQuestionScore(String nextQuestionScore);
-    /**
-     * Current category for this question
-     * @return name of category this question is in
-     */
-    public String getNextQuestionCategory();
-    /**
-     * Sets the new category value for this question
-     * @param nextQuestionCategory category to be set; can be null
-     */
-    public void setNextQuestionCategory(String nextQuestionCategory);
-    /**
-     * Current hint value for second cached question
-     * @return true if this question was hinted, false otherwise
-     */
-    public boolean getNextQuestionHint();
-    /**
-     * Sets the new hinted value for this question
-     * @param nextQuestionHint new hinted value; true if hinted, false
-     * 							otherwise
-     */
-    public void setNextQuestionHint(boolean nextQuestionHint);
-    /**
-     * Current skip value for second cached question
-     * @return true if this question was skipped, false otherwise
-     */
-    public boolean getNextQuestionSkip();
-    /**
-     * Current id for this question
-     * @return id associated with this question in Parse
-     */
-    public String getThirdQuestionId();
-    /**
-     * Sets this question's id
-     * @param thirdQuestionId new id for this question; can be null
-     */
-    public void setThirdQuestionId(String thirdQuestionId);
-    /**
-     * Current text for this question
-     * @return question text
-     */
-    public String getThirdQuestion();
-    /**
-     * Sets the question text for this question
-     * @param thirdQuestion new question text; can be null
-     */
-    public void setThirdQuestion(String thirdQuestion);
-    /**
-     * Current correct answer for this question
-     * @return answer text for this question
-     */
-    public String getThirdCorrectAnswer();
-    /**
-     * Sets the answer text for this question
-     * @param thirdCorrectAnswer new answer for this question; can be null
-     */
-    public void setThirdCorrectAnswer(String thirdCorrectAnswer);
-    /**
-     * Current score for this question
-     * @return point value for this question
-     */
-    public String getThirdQuestionScore();
-    /**
-     * Updates the current score value for this question
-     * @param thirdQuestionScore new score for this question
-     */
-    public void setThirdQuestionScore(String thirdQuestionScore);
-    /**
-     * Current category for this question
-     * @return name of category this question is in
-     */
-    public String getThirdQuestionCategory();
-    /**
-     * Sets the new category value for this question
-     * @param thirdQuestionCategory category to be set; can be null
-     */
-    public void setThirdQuestionCategory(String thirdQuestionCategory);
-    /**
-     * Current hint value for third cached question
-     * @return true if this question was hinted, false otherwise
-     */
-    public boolean getThirdQuestionHint();
-    /**
-     * Sets the new hinted value for this question
-     * @param thirdQuestionHint new hinted value; true if hinted, false
-     * 							otherwise
-     */
-    public void setThirdQuestionHint(boolean thirdQuestionHint);
-    /**
-     * Current skip value for third cached question
-     * @return true if this question was skipped, false otherwise
-     */
-    public boolean getThirdQuestionSkip();
-    
+    public void clearQuestionSkips();
     /**
      * Update the cache of questions.
      * 
@@ -365,7 +265,7 @@ public interface OnButtonListener {
      * Capture the current screen and start a share intent using the file path
      * to the captured screenshot
      */
-    public void shareScreenshot();
+    public void shareScreenshot(boolean isSetlist);
     /**
      * Indicate that there is currently no network connectivity
      * @param networkProblem true if there is no network connectivity

@@ -40,7 +40,6 @@ import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -84,7 +83,9 @@ public class FragmentQuiz extends FragmentBase {
     
     private InputMethodManager imm;
     
-    private HashMap<String, Boolean> staged = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> stagedMap = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> saveMap = new HashMap<String, Boolean>();
+    private HashMap<String, Boolean> correctMap = new HashMap<String, Boolean>();
     
     public FragmentQuiz() {
     }
@@ -230,12 +231,12 @@ public class FragmentQuiz extends FragmentBase {
                     entry = v.getEditableText().toString();
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
                         new VerifyTask(mCallback.getUserId(),
-                                mCallback.getQuestionId(),
-                                mCallback.getQuestionHint()).execute(entry);
+                                mCallback.getQuestionId(0),
+                                mCallback.getQuestionHint(0)).execute(entry);
                     else
                         new VerifyTask(mCallback.getUserId(),
-                                mCallback.getQuestionId(),
-                                mCallback.getQuestionHint()).executeOnExecutor(
+                                mCallback.getQuestionId(0),
+                                mCallback.getQuestionHint(0)).executeOnExecutor(
                                         AsyncTask.THREAD_POOL_EXECUTOR, entry);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     return true;
@@ -286,13 +287,13 @@ public class FragmentQuiz extends FragmentBase {
                         if (Build.VERSION.SDK_INT <
                                 Build.VERSION_CODES.HONEYCOMB)
                             new VerifyTask(mCallback.getUserId(),
-                                    mCallback.getQuestionId(),
-                                    mCallback.getQuestionHint()).execute(
+                                    mCallback.getQuestionId(0),
+                                    mCallback.getQuestionHint(0)).execute(
                                     answerText.getEditableText().toString());
                         else
                             new VerifyTask(mCallback.getUserId(),
-                                    mCallback.getQuestionId(),
-                                    mCallback.getQuestionHint())
+                                    mCallback.getQuestionId(0),
+                                    mCallback.getQuestionHint(0))
                                 .executeOnExecutor(
                                     AsyncTask.THREAD_POOL_EXECUTOR,
                                     answerText.getEditableText().toString());
@@ -305,11 +306,12 @@ public class FragmentQuiz extends FragmentBase {
             @Override
             public void onClick(View v) {
                 mCallback.setIsNewQuestion(true);
-                staged.put(mCallback.getQuestionId(),
-                		mCallback.getQuestionHint());
+                stagedMap.put(mCallback.getQuestionId(0),
+                		mCallback.getQuestionHint(0));
+                saveMap.put(mCallback.getQuestionId(0), true);
                 skipButton.setEnabled(false);
                 playAudio("skip");
-                savedHint = mCallback.getCorrectAnswer();
+                savedHint = mCallback.getQuestionAnswer(0);
                 DatabaseHelperSingleton.instance().setUserValue(savedHint,
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 answerPlace.setText(savedHint);
@@ -338,7 +340,6 @@ public class FragmentQuiz extends FragmentBase {
                 skipTick = 0;
                 DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
                         DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
-                saveQuestionScore(true);
             } 
         });
         skipText = (TextView) v.findViewById(R.id.SkipText);
@@ -374,7 +375,7 @@ public class FragmentQuiz extends FragmentBase {
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {
                         mCallback.setNetworkProblem(false);
-                        if (mCallback.getQuestionId() != null)
+                        if (mCallback.getQuestionId(0) != null)
                             resumeQuestion();
                         else
                             mCallback.getNextQuestions(false,
@@ -603,15 +604,15 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         protected Void doInBackground(Void... nothing) {
             if (isCancelled() || mCallback == null ||
-            		mCallback.getCorrectAnswer() == null ||
+            		mCallback.getQuestionAnswer(0) == null ||
             		mCallback.getUserId() == null ||
-            		mCallback.getQuestionScore() == null)
+            		mCallback.getQuestionScore(0) == null)
                 return null;
-            StringBuilder sb = new StringBuilder(mCallback.getCorrectAnswer()
+            StringBuilder sb = new StringBuilder(mCallback.getQuestionAnswer(0)
                     .replaceAll("\\s+", " "));
             if (isCancelled())
                 return null;
-            int textSize = mCallback.getCorrectAnswer().replaceAll("\\s+", " ")
+            int textSize = mCallback.getQuestionAnswer(0).replaceAll("\\s+", " ")
                     .length();
             int replaceSize = textSize / 2;
             int currIndex = -1;
@@ -629,13 +630,13 @@ public class FragmentQuiz extends FragmentBase {
             }
             if (isCancelled())
                 return null;
-            mCallback.setQuestionHint(true);
+            mCallback.setQuestionHint(true, 0);
             hintPressed = true;
             DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
                     DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
             if (isCancelled())
                 return null;
-            if (mCallback.getQuestionScore() != null) {
+            if (mCallback.getQuestionScore(0) != null) {
                 calculateCurrentScore();
                 answerTextHint = Integer.toString(currScore) + " points";
             }
@@ -673,8 +674,8 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
-        if (mCallback != null && mCallback.getQuestionId() != null &&
-        		mCallback.isCorrectAnswer(mCallback.getQuestionId()) &&
+        if (mCallback != null && mCallback.getQuestionId(0) != null &&
+        		mCallback.isCorrectAnswer(mCallback.getQuestionId(0)) &&
                 !mCallback.isNewQuestion()) {
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
@@ -684,17 +685,18 @@ public class FragmentQuiz extends FragmentBase {
                         AsyncTask.THREAD_POOL_EXECUTOR);
             return;
         }
-        Log.d(Constants.LOG_TAG, mCallback.getCorrectAnswer());
+        if (mCallback.getQuestionAnswer(0) != null)
+        	Log.d(Constants.LOG_TAG, mCallback.getQuestionAnswer(0));
         answerText.setVisibility(View.VISIBLE);
-        if (mCallback.getQuestion() != null) {
-            questionText.setText(mCallback.getQuestion());
+        if (mCallback.getQuestion(0) != null) {
+            questionText.setText(mCallback.getQuestion(0));
             questionText.setVisibility(View.VISIBLE);
         }
         /*
         if (savedAnswer != null)
             answerText.setText(savedAnswer);
         */
-        if (mCallback.getQuestionScore() != null) {
+        if (mCallback.getQuestionScore(0) != null) {
             calculateCurrentScore();
             answerTextHint = Integer.toString(currScore) + " points";
         }
@@ -707,7 +709,7 @@ public class FragmentQuiz extends FragmentBase {
         if (savedHint.equals("")) {
             ArrayList<String> answerStrings = new ArrayList<String>();
             int lastSpace = -1;
-            String answer = (mCallback.getCorrectAnswer()
+            String answer = (mCallback.getQuestionAnswer(0)
                     .replaceAll("\\s+", " ")).replaceAll("[0-9a-zA-Z#&]", "*");
             if (answer.length() > 36 && answer.lastIndexOf(" ") > -1) {
                 lastSpace = answer.lastIndexOf(" ");
@@ -735,7 +737,7 @@ public class FragmentQuiz extends FragmentBase {
         if (mCallback.isNewQuestion()) {
             answerButton.setText("NEXT");
             answerButton.setEnabled(true);
-            if (mCallback.isCorrectAnswer(mCallback.getQuestionId())) {
+            if (mCallback.isCorrectAnswer(mCallback.getQuestionId(0))) {
                 answerImage.setImageResource(R.drawable.correct);
                 questionText.setTextColor(Color.GREEN);
                 answerImage.setVisibility(View.VISIBLE);
@@ -834,8 +836,9 @@ public class FragmentQuiz extends FragmentBase {
         if (mCallback != null) {
         	mCallback.setLoggingOut(false);
             if (ApplicationEx.getConnection()) {
-                mCallback.saveUserScore(mCallback.getCurrentScore());
-                if (mCallback.getQuestionId() != null) {
+                //mCallback.saveUserScore(mCallback.getCurrentScore());
+                if (!mCallback.questionIdsEmpty() &&
+                		mCallback.getQuestionId(0) != null) {
                     mCallback.getNextQuestions(true,
                     		SharedPreferencesSingleton.instance().getInt(
                     				ResourcesSingleton.instance().getString(R.string.level_key),
@@ -913,8 +916,10 @@ public class FragmentQuiz extends FragmentBase {
         	editor.commit();
         else
         	editor.apply();
-        if (!staged.isEmpty())
+        if (!stagedMap.isEmpty())
         	stageQuestions(mCallback.getUserId());
+        if (!saveMap.isEmpty())
+        	saveQuestionScores(saveMap);
         super.onPause();
     }
     
@@ -933,7 +938,7 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         protected Void doInBackground(String... entry) {
             String trimmed = entry[0].trim();
-            if (trimmed.equalsIgnoreCase(mCallback.getCorrectAnswer())) {
+            if (trimmed.equalsIgnoreCase(mCallback.getQuestionAnswer(0))) {
                 mCallback.setIsNewQuestion(true);
                 isCorrect = true;
                 mCallback.addCorrectAnswer(questionId);
@@ -956,7 +961,9 @@ public class FragmentQuiz extends FragmentBase {
                         DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
                 if (wrongTimer != null)
                     wrongTimer.cancel();
-                saveAnswer();
+                correctMap.put(questionId, questionHint);
+                if (!correctMap.isEmpty())
+                	saveAnswers(correctMap, mCallback.getUserId());
             }
             else {
                 isCorrect = false;
@@ -982,7 +989,7 @@ public class FragmentQuiz extends FragmentBase {
                     hintTimer.cancel();
                 if (skipTimer != null)
                     skipTimer.cancel();
-                savedHint = mCallback.getCorrectAnswer();
+                savedHint = mCallback.getQuestionAnswer(0);
                 DatabaseHelperSingleton.instance().setUserValue(savedHint,
                         DatabaseHelper.COL_HINT, mCallback.getUserId());
                 answerPlace.setText(savedHint);
@@ -1023,68 +1030,80 @@ public class FragmentQuiz extends FragmentBase {
         @Override
         protected void onPostExecute(Void nothing) {
             if (isCorrect)
-                saveQuestionScore(false);
+            	saveMap.put(mCallback.getQuestionId(0), false);
             isCorrect = false;
             DatabaseHelperSingleton.instance().setUserValue(isCorrect ? 1 : 0,
                     DatabaseHelper.COL_IS_CORRECT, mCallback.getUserId());
         }
-        
-        private void saveAnswer() {
-            ParseQuery query = new ParseQuery("CorrectAnswers");
-            query.whereEqualTo("userId", userId);
-            query.whereEqualTo("questionId", questionId);
-            query.getFirstInBackground(new GetCallback() {
-                @Override
-                public void done(ParseObject answer, ParseException e) {
-                    if (answer == null) {
-                        ParseObject correctAnswer =
-                                new ParseObject("CorrectAnswers");
-                        correctAnswer.put("questionId", questionId);
+    }
+    
+    private void saveAnswers(final HashMap<String, Boolean> correctMap,
+    		final String userId) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CorrectAnswers");
+        query.whereEqualTo("userId", userId);
+        query.whereContainedIn("objectId", correctMap.keySet());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> answers, ParseException e) {
+                if (answers.isEmpty()) {
+                    ParseObject correctAnswer;
+                    for (Entry<String, Boolean> answer :
+                    		correctMap.entrySet()) {
+                    	correctAnswer = new ParseObject("CorrectAnswers");
+                    	correctAnswer.put("questionId", answer.getKey());
                         correctAnswer.put("userId", userId);
-                        correctAnswer.put("hint", questionHint);
+                        correctAnswer.put("hint", answer.getValue());
                         try {
                             correctAnswer.saveEventually();
+                            ApplicationEx.addParseQuery();
+                            correctMap.remove(answer.getKey());
                         } catch (RuntimeException exception) {}
                     }
-                    if (e != null && e.getCode() != 101) {
-                        Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
-                        showNetworkProblem();
-                    }
-                    ApplicationEx.addParseQuery();
                 }
-            });
-        }
-        
+                if (e != null && e.getCode() != 101) {
+                    Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                    showNetworkProblem();
+                }
+                ApplicationEx.addParseQuery();
+            }
+        });
     }
 
-    private void saveQuestionScore(final boolean isSkip) {
-        ParseQuery query = new ParseQuery("Question");
-        query.getInBackground(mCallback.getQuestionId(), new GetCallback() {
+    private void saveQuestionScores(final HashMap<String, Boolean> saveMap) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
+        query.whereContainedIn("objectId", saveMap.keySet());
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(ParseObject question, ParseException e) {
+            public void done(List<ParseObject> questions, ParseException e) {
                 if (e == null) {
                     String currScore;
-                    Number number = question.getNumber("score");
-                    if (number != null) {
-                        int score = number.intValue();
-                        if (isSkip) {
-                            currScore = Integer.toString((int)(score/0.99));
-                            if (Integer.parseInt(currScore) > 1000)
-                                currScore = "1000";
+                    Number number;
+                    boolean isSkip = false;
+                    for (ParseObject question : questions) {
+                    	number = question.getNumber("score");
+                    	isSkip = saveMap.get(question.getObjectId());
+                        if (number != null) {
+                            int score = number.intValue();
+                            if (isSkip) {
+                                currScore = Integer.toString((int)(score/0.99));
+                                if (Integer.parseInt(currScore) > 1000)
+                                    currScore = "1000";
+                            }
+                            else {
+                                currScore = Integer.toString((int)(score*0.99));
+                                if (Integer.parseInt(currScore) < 100)
+                                    currScore = "100";
+                            }
                         }
-                        else {
-                            currScore = Integer.toString((int)(score*0.99));
-                            if (Integer.parseInt(currScore) < 100)
-                                currScore = "100";
+                        else
+                            currScore = "1000";
+                        if (number != null || (number == null && !isSkip)) {
+                            question.put("score", Integer.parseInt(currScore));
+                            try {
+                                question.saveEventually();
+                                ApplicationEx.addParseQuery();
+                            } catch (RuntimeException err) {}
                         }
-                    }
-                    else
-                        currScore = "1000";
-                    if (number != null || (number == null && !isSkip)) {
-                        question.put("score", Integer.parseInt(currScore));
-                        try {
-                            question.saveEventually();
-                        } catch (RuntimeException err) {}
                     }
                 }
                 else {
@@ -1184,19 +1203,19 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private void calculateCurrentScore() {
-        currScore = (int)(Integer.parseInt(mCallback.getQuestionScore())*0.99);
+        currScore = (int)(Integer.parseInt(mCallback.getQuestionScore(0))*0.99);
         if (currScore < 100)
             currScore = 100;
-        if (mCallback.getQuestionHint())
+        if (mCallback.getQuestionHint(0))
             currScore = currScore / 2;
     }
     
     private void stageQuestions(final String userId) {
-        ParseQuery query = new ParseQuery("Stage");
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Stage");
         query.whereEqualTo("userId", userId);
-        query.whereContainedIn("questionId", staged.keySet());
+        query.whereContainedIn("questionId", stagedMap.keySet());
         //query.whereEqualTo("questionId", questionId);
-        query.findInBackground(new FindCallback() {
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> answers, ParseException e) {
                 if (e != null && e.getCode() != 101) {
@@ -1205,14 +1224,15 @@ public class FragmentQuiz extends FragmentBase {
                 }
                 else {
                 	String currQuestionId = null;
-                	HashMap<String, Boolean> map = new HashMap<String, Boolean>(staged);
-                	staged.clear();
+                	HashMap<String, Boolean> map = new HashMap<String, Boolean>(stagedMap);
+                	stagedMap.clear();
                 	for (ParseObject parseAnswer : answers) {
                 		currQuestionId = parseAnswer.getString("questionId");
                 		parseAnswer.put("hint", map.get(currQuestionId));
                 		parseAnswer.put("skip", true);
                         try {
                         	parseAnswer.saveEventually();
+                        	ApplicationEx.addParseQuery();
                         } catch (RuntimeException exception) {}
                         map.remove(currQuestionId);
                 	}
@@ -1225,6 +1245,7 @@ public class FragmentQuiz extends FragmentBase {
 	                        stageAnswer.put("skip", true);
 	                        try {
 	                            stageAnswer.saveEventually();
+	                            ApplicationEx.addParseQuery();
 	                        } catch (RuntimeException exception) {}
                     	}
                     }

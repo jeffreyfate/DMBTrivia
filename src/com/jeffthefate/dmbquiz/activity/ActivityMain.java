@@ -120,27 +120,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private boolean inFaq = false;
     private boolean inSetlist = false;
     
-    private String questionId;
-    private String question;
-    private String correctAnswer;
-    private String questionCategory;
-    private String questionScore;
-    private boolean questionHint = false;
-    private boolean questionSkip = false;
-    private String nextQuestionId;
-    private String nextQuestion;
-    private String nextCorrectAnswer;
-    private String nextQuestionCategory;
-    private String nextQuestionScore;
-    private boolean nextQuestionHint = false;
-    private boolean nextQuestionSkip = false;
-    private String thirdQuestionId;
-    private String thirdQuestion;
-    private String thirdCorrectAnswer;
-    private String thirdQuestionCategory;
-    private String thirdQuestionScore;
-    private boolean thirdQuestionHint = false;
-    private boolean thirdQuestionSkip = false;
+    private ArrayList<String> questionIds = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questions = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questionAnswers = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questionCategories = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questionScores = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questionHints = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+    private ArrayList<String> questionSkips = new ArrayList<String>(Constants.CACHED_QUESTIONS);
     
     private boolean newQuestion = false;
     
@@ -157,7 +143,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     private String displayName;
     private int currScore = -1;
-    private int tempScore = 0;
     
     private UserTask userTask;
     
@@ -184,6 +169,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         public int getPage();
         public void setPage(int page);
         public void setBackground(Bitmap newBackground);
+        public void showResizedSetlist();
+        public void hideResizedSetlist();
     }
     
     private NotificationManager nManager;
@@ -210,7 +197,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private RelativeLayout nameButton;
     private RelativeLayout exitButton;
     private RelativeLayout logoutButton;
-    private TextView logoutText;
+    //private TextView logoutText;
     // TODO Re-add levels
     //protected RelativeLayout levelButton;
     //protected ImageViewEx levelImage;
@@ -250,8 +237,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private SetBackgroundWaitTask setBackgroundWaitTask;
     //private SetlistBackgroundWaitTask setlistBackgroundWaitTask;
     
-    private int count = -1;
-    private boolean checkCount = true;
+    //private int count = -1;
+    //private boolean checkCount = true;
     
     /**
      * Activity lifecycle methods
@@ -328,40 +315,30 @@ public class ActivityMain extends SlidingFragmentActivity implements
             portBackground = savedInstanceState.getString("portBackground");
             landBackground = savedInstanceState.getString("landBackground");
             userId = savedInstanceState.getString("userId");
-            questionId = savedInstanceState.getString("questionId");
-            question = savedInstanceState.getString("question");
-            correctAnswer = savedInstanceState.getString("correctAnswer");
-            questionScore = savedInstanceState.getString("questionScore");
-            questionCategory = savedInstanceState.getString("questionCategory");
-            questionHint = savedInstanceState.getBoolean("questionHint");
-            questionSkip = savedInstanceState.getBoolean("questionSkip");
-            nextQuestionId = savedInstanceState.getString("nextQuestionId");
-            nextQuestion = savedInstanceState.getString("nextQuestion");
-            nextCorrectAnswer = savedInstanceState.getString(
-                    "nextCorrectAnswer");
-            nextQuestionScore = savedInstanceState.getString(
-                    "nextQuestionScore");
-            nextQuestionCategory = savedInstanceState.getString(
-                    "nextQuestionCategory");
-            nextQuestionHint = savedInstanceState.getBoolean(
-                    "nextQuestionHint");
-            nextQuestionSkip = savedInstanceState.getBoolean(
-                    "nextQuestionSkip");
-            thirdQuestionId = savedInstanceState.getString("thirdQuestionId");
-            thirdQuestion = savedInstanceState.getString("thirdQuestion");
-            thirdCorrectAnswer = savedInstanceState.getString(
-                    "thirdCorrectAnswer");
-            thirdQuestionScore = savedInstanceState.getString(
-                    "thirdQuestionScore");
-            thirdQuestionCategory = savedInstanceState.getString(
-                    "thirdQuestionCategory");
-            thirdQuestionHint = savedInstanceState.getBoolean(
-                    "thirdQuestionHint");
-            thirdQuestionSkip = savedInstanceState.getBoolean(
-                    "thirdQuestionSkip");
             newQuestion = savedInstanceState.getBoolean("newQuestion");
             displayName = savedInstanceState.getString("displayName");
             currScore = savedInstanceState.getInt("currScore");
+            questionIds = savedInstanceState.getStringArrayList("questionIds");
+            if (questionIds == null)
+            	questionIds = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questions = savedInstanceState.getStringArrayList("questions");
+            if (questions == null)
+            	questions = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questionAnswers = savedInstanceState.getStringArrayList("questionAnswers");
+            if (questionAnswers == null)
+            	questionAnswers = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questionCategories = savedInstanceState.getStringArrayList("questionCategories");
+            if (questionCategories == null)
+            	questionCategories = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questionScores = savedInstanceState.getStringArrayList("questionScores");
+            if (questionScores == null)
+            	questionScores = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questionHints = savedInstanceState.getStringArrayList("questionHints");
+            if (questionHints == null)
+            	questionHints = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+            questionSkips = savedInstanceState.getStringArrayList("questionSkips");
+            if (questionSkips == null)
+            	questionSkips = new ArrayList<String>(Constants.CACHED_QUESTIONS);
             correctAnswers = savedInstanceState.getStringArrayList(
                     "correctAnswers");
             newUser = savedInstanceState.getBoolean("newUser");
@@ -370,8 +347,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             networkProblem = savedInstanceState.getBoolean("networkProblem");
             DatabaseHelperSingleton.instance().setUserValue(networkProblem ? 1 : 0,
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
-            count = savedInstanceState.getInt("count");
-            checkCount = savedInstanceState.getBoolean("checkCount");
+            //count = savedInstanceState.getInt("count");
+            //checkCount = savedInstanceState.getBoolean("checkCount");
         }
         else {
             userId = DatabaseHelperSingleton.instance().getCurrUser();
@@ -490,45 +467,135 @@ public class ActivityMain extends SlidingFragmentActivity implements
         leadersBackground = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_LEADERS_BACKGROUND, userId);
         */
-        portBackground = DatabaseHelperSingleton.instance().getPortBackground(userId);
-        landBackground = DatabaseHelperSingleton.instance().getLandBackground(userId);
-        questionId = DatabaseHelperSingleton.instance().getCurrQuestionId(userId);
-        question = DatabaseHelperSingleton.instance().getCurrQuestionQuestion(userId);
-        correctAnswer = DatabaseHelperSingleton.instance().getCurrQuestionAnswer(userId);
-        questionScore = DatabaseHelperSingleton.instance().getCurrQuestionScore(userId);
-        questionCategory =
-                DatabaseHelperSingleton.instance().getCurrQuestionCategory(userId);
-        questionHint = DatabaseHelperSingleton.instance().getCurrQuestionHint(userId);
-        questionSkip = DatabaseHelperSingleton.instance().getCurrQuestionSkip(userId);
-        nextQuestionId = DatabaseHelperSingleton.instance().getNextQuestionId(userId);
-        nextQuestion = DatabaseHelperSingleton.instance().getNextQuestionQuestion(userId);
-        nextCorrectAnswer =
-                DatabaseHelperSingleton.instance().getNextQuestionAnswer(userId);
-        nextQuestionScore = DatabaseHelperSingleton.instance().getNextQuestionScore(userId);
-        nextQuestionCategory =
-                DatabaseHelperSingleton.instance().getNextQuestionCategory(userId);
-        nextQuestionHint = DatabaseHelperSingleton.instance().getNextQuestionHint(userId);
-        nextQuestionSkip = DatabaseHelperSingleton.instance().getNextQuestionSkip(userId);
-        thirdQuestionId = DatabaseHelperSingleton.instance().getThirdQuestionId(userId);
-        thirdQuestion = DatabaseHelperSingleton.instance().getThirdQuestionQuestion(userId);
-        thirdCorrectAnswer =
-                DatabaseHelperSingleton.instance().getThirdQuestionAnswer(userId);
-        thirdQuestionScore = DatabaseHelperSingleton.instance().getThirdQuestionScore(
-                userId);
-        thirdQuestionCategory =
-                DatabaseHelperSingleton.instance().getThirdQuestionCategory(userId);
-        thirdQuestionHint = DatabaseHelperSingleton.instance().getThirdQuestionHint(userId);
-        thirdQuestionSkip = DatabaseHelperSingleton.instance().getThirdQuestionSkip(userId);
+        portBackground = DatabaseHelperSingleton.instance().getPortBackground(
+        		userId);
+        landBackground = DatabaseHelperSingleton.instance().getLandBackground(
+        		userId);
         newQuestion = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_NEW_QUESTION, userId) == 1 ? true : false;
         displayName = DatabaseHelperSingleton.instance().getUserStringValue(
                 DatabaseHelper.COL_DISPLAY_NAME, userId);
         currScore = DatabaseHelperSingleton.instance().getUserIntValue(
                 DatabaseHelper.COL_SCORE, userId);
+        questionHints = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(R.string.questionhints_key));
+        if (questionHints == null)
+        	questionHints = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        questionSkips = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(R.string.questionskips_key));
+        if (questionSkips == null)
+        	questionSkips = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        questionIds = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionids_key));
+        if (questionIds == null)
+        	questionIds = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        if (questionIds.isEmpty()) {
+        	String questionId = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionId(userId);
+        	boolean questionHint = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionHint(userId);
+        	if (questionId != null) {
+        		addQuestionId(questionId);
+        		addQuestionHint(questionHint);
+        		addQuestionSkip(false);
+        	}
+        	questionId = DatabaseHelperSingleton.instance()
+        			.getNextQuestionId(userId);
+        	questionHint = DatabaseHelperSingleton.instance()
+        			.getNextQuestionHint(userId);
+        	if (questionId != null) {
+        		addQuestionId(questionId);
+        		addQuestionHint(questionHint);
+        		addQuestionSkip(false);
+        	}
+        	questionId = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionId(userId);
+        	questionHint = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionHint(userId);
+        	if (questionId != null) {
+        		addQuestionId(questionId);
+        		addQuestionHint(questionHint);
+        		addQuestionSkip(false);
+        	}
+        }
+        questions = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questions_key));
+        if (questions == null)
+        	questions = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        if (questions.isEmpty()) {
+        	String question = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionQuestion(userId);
+        	if (question != null)
+        		addQuestion(question);
+        	question = DatabaseHelperSingleton.instance()
+        			.getNextQuestionQuestion(userId);
+        	if (question != null)
+        		addQuestion(question);
+        	question = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionQuestion(userId);
+        	if (question != null)
+        		addQuestion(question);
+        }
+        questionAnswers = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(R.string.questionanswers_key));
+        if (questionAnswers == null)
+        	questionAnswers = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        if (questionAnswers.isEmpty()) {
+        	String questionAnswer = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionAnswer(userId);
+        	if (questionAnswer != null)
+        		addQuestionAnswer(questionAnswer);
+        	questionAnswer = DatabaseHelperSingleton.instance()
+        			.getNextQuestionAnswer(userId);
+        	if (questionAnswer != null)
+        		addQuestionAnswer(questionAnswer);
+        	questionAnswer = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionAnswer(userId);
+        	if (questionAnswer != null)
+        		addQuestionAnswer(questionAnswer);
+        }
+        questionCategories = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(R.string.questioncategories_key));
+        if (questionCategories == null)
+        	questionCategories = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        if (questionCategories.isEmpty()) {
+        	String questionCategory = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionCategory(userId);
+        	if (questionCategory != null)
+        		addQuestionCategory(questionCategory);
+        	questionCategory = DatabaseHelperSingleton.instance()
+        			.getNextQuestionCategory(userId);
+        	if (questionCategory != null)
+        		addQuestionCategory(questionCategory);
+        	questionCategory = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionCategory(userId);
+        	if (questionCategory != null)
+        		addQuestionCategory(questionCategory);
+        }
+        questionScores = ApplicationEx.getStringArrayPref(
+        		ResourcesSingleton.instance().getString(R.string.questionscores_key));
+        if (questionScores == null)
+        	questionScores = new ArrayList<String>(Constants.CACHED_QUESTIONS);
+        if (questionScores.isEmpty()) {
+        	String questionScore = DatabaseHelperSingleton.instance()
+        			.getCurrQuestionScore(userId);
+        	if (questionScore != null)
+        		addQuestionScore(questionScore);
+        	questionScore = DatabaseHelperSingleton.instance()
+        			.getNextQuestionScore(userId);
+        	if (questionScore != null)
+        		addQuestionScore(questionScore);
+        	questionScore = DatabaseHelperSingleton.instance()
+        			.getThirdQuestionScore(userId);
+        	if (questionScore != null)
+        		addQuestionScore(questionScore);
+        }
         correctAnswers = ApplicationEx.getStringArrayPref(
         		ResourcesSingleton.instance().getString(R.string.correct_key));
-        count = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_COUNT, userId);
-        checkCount = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_CHECK_COUNT, userId) == 1 ? true : false;
+        //count = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_COUNT, userId);
+        //checkCount = DatabaseHelperSingleton.instance().getUserIntValue(DatabaseHelper.COL_CHECK_COUNT, userId) == 1 ? true : false;
     }
     
     @Override
@@ -557,37 +624,23 @@ public class ActivityMain extends SlidingFragmentActivity implements
         outState.putString("portBackground", portBackground);
         outState.putString("landBackground", landBackground);
         outState.putString("userId", userId);
-        outState.putString("questionId", questionId);
-        outState.putString("question", question);
-        outState.putString("correctAnswer", correctAnswer);
-        outState.putString("questionCategory", questionCategory);
-        outState.putString("questionScore", questionScore);
-        outState.putBoolean("questionHint", questionHint);
-        outState.putBoolean("questionSkip", questionSkip);
-        outState.putString("nextQuestionId", nextQuestionId);
-        outState.putString("nextQuestion", nextQuestion);
-        outState.putString("nextCorrectAnswer", nextCorrectAnswer);
-        outState.putString("nextQuestionCategory", nextQuestionCategory);
-        outState.putString("nextQuestionScore", nextQuestionScore);
-        outState.putBoolean("nextQuestionHint", nextQuestionHint);
-        outState.putBoolean("nextQuestionSkip", nextQuestionSkip);
-        outState.putString("thirdQuestionId", thirdQuestionId);
-        outState.putString("thirdQuestion", thirdQuestion);
-        outState.putString("thirdCorrectAnswer", thirdCorrectAnswer);
-        outState.putString("thirdQuestionCategory", thirdQuestionCategory);
-        outState.putString("thirdQuestionScore", thirdQuestionScore);
-        outState.putBoolean("thirdQuestionHint", thirdQuestionHint);
-        outState.putBoolean("thirdQuestionSkip", thirdQuestionSkip);
         outState.putBoolean("newQuestion", newQuestion);
         outState.putString("displayName", displayName);
         outState.putInt("currScore", currScore);
+        outState.putStringArrayList("questionIds", questionIds);
+        outState.putStringArrayList("questions", questions);
+        outState.putStringArrayList("questionAnswers", questionAnswers);
+        outState.putStringArrayList("questionCategories", questionCategories);
+        outState.putStringArrayList("questionScores", questionScores);
+        outState.putStringArrayList("questionHints", questionHints);
+        outState.putStringArrayList("questionSkips", questionSkips);
         outState.putStringArrayList("correctAnswers", correctAnswers);
         outState.putBoolean("newUser", newUser);
         outState.putInt("lowest", lowest);
         outState.putInt("highest", highest);
         outState.putBoolean("networkProblem", networkProblem);
-        outState.putInt("count", count);
-        outState.putBoolean("checkCount", true);
+        //outState.putInt("count", count);
+        //outState.putBoolean("checkCount", true);
         super.onSaveInstanceState(outState);
     }
     
@@ -708,11 +761,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void fetchDisplayName() {
         if (userId == null)
             return;
-        ParseQuery query = ParseUser.getQuery();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", userId);
-        query.getInBackground("displayName", new GetCallback() {
+        query.getInBackground("displayName", new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseObject user, ParseException e) {
+            public void done(ParseUser user, ParseException e) {
                 if (user != null)
                     displayName = user.getString("displayName");
                 ApplicationEx.addParseQuery();
@@ -896,6 +949,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         private List<ParseObject> deleteList;
         private Number number;
         private ArrayList<String> tempAnswers;
+        private int tempScore = 0;
         
         private GetScoreTask(boolean show, boolean restore, String userId,
                 boolean newUser) {
@@ -918,16 +972,23 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected Void doInBackground(Void... nothing) {
             int questionScore = -1;
-            ParseQuery correctQuery = new ParseQuery("CorrectAnswers");
+            // Find correct answers for current user
+            ParseQuery<ParseObject> correctQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             correctQuery.whereEqualTo("userId", userId);
             correctQuery.setLimit(1000);
-            ParseQuery query = new ParseQuery("Question");
+            // Find the questions of the correct answers
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
             query.setLimit(1000);
-            ParseQuery deleteQuery = new ParseQuery("CorrectAnswers");
+            // Delete dupes
+            ParseQuery<ParseObject> deleteQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             deleteQuery.whereEqualTo("userId", userId);
+            deleteQuery.setLimit(1000);
             do {
+            	// Find hinted correct answers
                 correctQuery.whereEqualTo("hint", true);
+                // Skip correct answers already found
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
+                // Get the question object of these correct answers
                 query.whereMatchesKeyInQuery("objectId", "questionId",
                         correctQuery);
                 try {
@@ -938,18 +999,24 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     for (ParseObject score : scoreList) {
                         if (isCancelled())
                             return null;
+                        // Delete this answer if we already have it (not the
+                        // question)
+                        // Likely not found too often
                         if (tempAnswers.contains(score.getObjectId()) &&
                                 userId != null) {
                             deleteQuery.whereEqualTo("questionId",
                                     score.getObjectId());
                             deleteList = deleteQuery.find();
+                            ApplicationEx.addParseQuery();
                             for (int i = 1; i < deleteList.size(); i++) {
                                 try {
                                     deleteList.get(i).deleteEventually();
+                                    ApplicationEx.addParseQuery();
                                 } catch (RuntimeException exception) {}
                             }
                         }
                         else {
+                        	// Get this score and add it, reducing it first
                             number = score.getNumber("score");
                             questionScore = number == null ? 1000 :
                                     number.intValue();
@@ -973,7 +1040,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (show && currFrag != null)
                         currFrag.showNetworkProblem();
                 }
+            // Keep going until no more are found
             } while (!isCancelled());
+            // Find the non-hinted ones and add their score, deleting dupes also
             do {
                 correctQuery.whereEqualTo("hint", false);
                 correctQuery.whereNotContainedIn("questionId", tempAnswers);
@@ -981,6 +1050,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         correctQuery);
                 try {
                     scoreList = query.find();
+                    ApplicationEx.addParseQuery();
                     if (scoreList.size() == 0)
                         break;
                     for (ParseObject score : scoreList) {
@@ -991,9 +1061,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             deleteQuery.whereEqualTo("questionId",
                                     score.getObjectId());
                             deleteList = deleteQuery.find();
+                            ApplicationEx.addParseQuery();
                             for (int i = 1; i < deleteList.size(); i++) {
                                 try {
                                     deleteList.get(i).deleteEventually();
+                                    ApplicationEx.addParseQuery();
                                 } catch (RuntimeException exception) {}
                             }
                         }
@@ -1022,12 +1094,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         currFrag.showNetworkProblem();
                 }
             } while (!isCancelled());
+            // TODO Revisit when adding levels back
+            /*
             ParseQuery scoreQuery = new ParseQuery("Question");
             try {
-            	scoreQuery.addAscendingOrder("score");
+            	scoreQuery.orderByAscending("score");
 				lowest = scoreQuery.getFirst().getInt("score");
 				ApplicationEx.addParseQuery();
-				scoreQuery.addDescendingOrder("score");
+				scoreQuery.orderByDescending("score");
 				highest = scoreQuery.getFirst().getInt("score");
 				if (highest == 0)
 					highest = 1000;
@@ -1046,6 +1120,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (show && currFrag != null)
                     currFrag.showNetworkProblem();
 			}
+			*/
             if (!isCancelled()) {
                 currScore = tempScore;
                 tempScore = 0;
@@ -1066,7 +1141,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         
         protected void onProgressUpdate(Void... nothing) {
             if (show) {
-                if (questionId != null) {
+                if (questionIds.size() >= 1 && questionIds.get(0) != null) {
                     try {
                         goToQuiz();
                     } catch (IllegalStateException exception) {}
@@ -1138,8 +1213,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
-    {    
+    public boolean onOptionsItemSelected(MenuItem item) {    
         switch (item.getItemId()) {        
         case android.R.id.home:
             if (currFrag != null) {
@@ -1157,7 +1231,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ApplicationEx.showShortToast("Capturing screen");
             if (screenshotTask != null)
                 screenshotTask.cancel(true);
-            screenshotTask = new ScreenshotTask();
+            screenshotTask = new ScreenshotTask(true);
             if (Build.VERSION.SDK_INT <
                     Build.VERSION_CODES.HONEYCOMB)
                 screenshotTask.execute();
@@ -1173,7 +1247,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
     }
     
-    private class ScreenshotTask extends AsyncTask<Void, Void, Void> { 
+    private class ScreenshotTask extends AsyncTask<Void, Void, Void> {
+    	private boolean isSetlist = false;
+    	
+    	private ScreenshotTask(boolean isSetlist) {
+    		this.isSetlist = isSetlist;
+    	}
+    	
         @Override
         protected Void doInBackground(Void... nothing) {
             try {
@@ -1188,7 +1268,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         
         @Override
         protected void onPostExecute(Void nothing) {
-            shareScreenshot();
+            shareScreenshot(isSetlist);
         }
     }
     
@@ -1436,8 +1516,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                         try {
                                             Thread.sleep(1000);
                                         } catch (InterruptedException e) {}
-                                        ApplicationEx.reportQuestion(getQuestionId(), getQuestion(),
-                                                getCorrectAnswer(), getQuestionScore());
+                                        ApplicationEx.reportQuestion(getQuestionId(0), getQuestion(0),
+                                                getQuestionAnswer(0), getQuestionScore(0));
                                     }
                                 };
                                 shareThread.start();
@@ -1459,7 +1539,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 slidingMenu.setOnClosedListener(null);
                                 if (screenshotTask != null)
                                     screenshotTask.cancel(true);
-                                screenshotTask = new ScreenshotTask();
+                                screenshotTask = new ScreenshotTask(false);
                                 if (Build.VERSION.SDK_INT <
                                         Build.VERSION_CODES.HONEYCOMB)
                                     screenshotTask.execute();
@@ -1472,7 +1552,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             logoutButton = (RelativeLayout) slidingMenu.findViewById(R.id.LogoutButton);
-            logoutText = (TextView) findViewById(R.id.LogoutText);
+            //logoutText = (TextView) findViewById(R.id.LogoutText);
             /*
             nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
             nameButton.setOnClickListener(new OnClickListener() {
@@ -1505,21 +1585,13 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     DatabaseHelperSingleton.instance().setOffset(0, getUserId());
                     setLoggingOut(true);
-                    setQuestionId(null);
-                    setQuestion(null);
-                    setCorrectAnswer(null);
-                    setQuestionCategory(null);
-                    setQuestionScore(null);
-                    setNextQuestionId(null);
-                    setNextQuestion(null);
-                    setNextCorrectAnswer(null);
-                    setNextQuestionCategory(null);
-                    setNextQuestionScore(null);
-                    setThirdQuestionId(null);
-                    setThirdQuestion(null);
-                    setThirdCorrectAnswer(null);
-                    setThirdQuestionCategory(null);
-                    setThirdQuestionScore(null);
+                    clearQuestionIds();
+                    clearQuestions();
+                    clearQuestionAnswers();
+                    clearQuestionCategories();
+                    clearQuestionScores();
+                    clearQuestionHints();
+                    clearQuestionSkips();
                     showLogin();
                     slidingMenu.showContent();
                 }
@@ -1772,7 +1844,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 slidingMenu.setOnClosedListener(null);
                                 if (screenshotTask != null)
                                     screenshotTask.cancel(true);
-                                screenshotTask = new ScreenshotTask();
+                                screenshotTask = new ScreenshotTask(false);
                                 if (Build.VERSION.SDK_INT <
                                         Build.VERSION_CODES.HONEYCOMB)
                                     screenshotTask.execute();
@@ -2602,6 +2674,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
 					                try {
 					                	user.put("displayName", displayName);
 					                    user.saveEventually();
+					                    ApplicationEx.addParseQuery();
 					                }
 					                catch (RuntimeException e) {}
 					                DatabaseHelperSingleton.instance().setUserValue(
@@ -2645,6 +2718,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 ParseTwitterUtils.getTwitter().getScreenName());
                         try {
                             user.saveEventually();
+                            ApplicationEx.addParseQuery();
                         }
                         catch (RuntimeException e) {}
                     }
@@ -2688,6 +2762,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     if (isLogging)
                                         setupUser(newUser);
                                 }
+                                ApplicationEx.addParseQuery();
                             }
                         });
                     }
@@ -2758,6 +2833,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                          username.indexOf("@")+1));
                         try {
                             user.saveEventually();
+                            ApplicationEx.addParseQuery();
                         }
                         catch (RuntimeException e) {}
                     }
@@ -2859,7 +2935,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected Void doInBackground(Void... nothing) {
         	// TODO Use already known values for correct answers and hints
-        	// TODO Use the leaders query to find rank
             leadersBundle = new Bundle();
             leadersBundle.putString("userId", userId);
             leadersBundle.putString("userName", displayName);
@@ -2882,7 +2957,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             devList.add("9LvKnpSEqu");
             if (isCancelled())
                 return null;
-            ParseQuery hintsQuery = new ParseQuery("CorrectAnswers");
+            ParseQuery<ParseObject> hintsQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             hintsQuery.whereEqualTo("userId", userId)
                       .whereEqualTo("hint", true);
             try {
@@ -2901,7 +2976,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             if (isCancelled())
                 return null;
-            ParseQuery questionQuery = new ParseQuery("Question");
+            ParseQuery<ParseObject> questionQuery = new ParseQuery<ParseObject>("Question");
             questionQuery.orderByDescending("createdAt");
             try {
                 ParseObject question = questionQuery.getFirst();
@@ -2921,7 +2996,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             ArrayList<String> ranks = new ArrayList<String>(devList);
             ArrayList<ParseObject> rankObjects = new ArrayList<ParseObject>();
-            ParseQuery rankQuery = ParseUser.getQuery();
+            ParseQuery<ParseUser> rankQuery = ParseUser.getQuery();
             rankQuery.whereExists("displayName");
             rankQuery.whereExists("score");
             rankQuery.setLimit(1000);
@@ -2930,7 +3005,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             do {
             	rankQuery.whereNotContainedIn("objectId", ranks);
 	            try {
-	            	List<ParseObject> rankList = rankQuery.find();
+	            	List<ParseUser> rankList = rankQuery.find();
 	            	ApplicationEx.addParseQuery();
 	            	if (rankList.size() == 0)
 	            		break;
@@ -3236,9 +3311,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
     public void next() {
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
-            new BackgroundTask(questionId).execute();
+            new BackgroundTask(questionIds.get(0)).execute();
         else
-            new BackgroundTask(questionId).executeOnExecutor(
+            new BackgroundTask(questionIds.get(0)).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR);
         newQuestion = false;
         DatabaseHelperSingleton.instance().setUserValue(newQuestion ? 1 : 0,
@@ -3314,200 +3389,120 @@ public class ActivityMain extends SlidingFragmentActivity implements
             
         }
     }
-
-    @Override
-    public String getQuestionId() {
-        return questionId;
-    }
     
     @Override
-    public void setQuestionId(String questionId) {
-        this.questionId = questionId;
+    public boolean questionIdsEmpty() {
+    	return questionIds.isEmpty();
     }
 
     @Override
-    public String getQuestion() {
-        return question;
+    public String getQuestionId(int index) {
+        return questionIds.get(index);
     }
     
     @Override
-    public void setQuestion(String question) {
-        this.question = question;
+    public void addQuestionId(String questionId) {
+    	questionIds.add(questionId);
+    }
+    
+    @Override
+    public void clearQuestionIds() {
+    	questionIds.clear();
     }
 
     @Override
-    public String getCorrectAnswer() {
-        return correctAnswer;
+    public String getQuestion(int index) {
+        return questions.get(index);
     }
     
     @Override
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
+    public void addQuestion(String question) {
+        questions.add(question);
+    }
+    
+    @Override
+    public void clearQuestions() {
+    	questions.clear();
     }
 
     @Override
-    public String getQuestionScore() {
-        return questionScore;
+    public String getQuestionAnswer(int index) {
+        return questionAnswers.get(index);
     }
     
     @Override
-    public void setQuestionScore(String questionScore) {
-        this.questionScore = questionScore;
+    public void addQuestionAnswer(String correctAnswer) {
+        questionAnswers.add(correctAnswer);
+    }
+    
+    @Override
+    public void clearQuestionAnswers() {
+    	questionAnswers.clear();
     }
 
     @Override
-    public String getQuestionCategory() {
-        return questionCategory;
+    public String getQuestionScore(int index) {
+        return questionScores.get(index);
     }
     
     @Override
-    public void setQuestionCategory(String questionCategory) {
-        this.questionCategory = questionCategory;
+    public void addQuestionScore(String questionScore) {
+        questionScores.add(questionScore);
     }
     
     @Override
-    public boolean getQuestionHint() {
-        return questionHint;
-    }
-    
-    @Override
-    public void setQuestionHint(boolean questionHint) {
-        this.questionHint = questionHint;
-    }
-    
-    @Override
-    public boolean getQuestionSkip() {
-        return questionSkip;
+    public void clearQuestionScores() {
+    	questionScores.clear();
     }
 
     @Override
-    public String getNextQuestionId() {
-        return nextQuestionId;
+    public String getQuestionCategory(int index) {
+        return questionCategories.get(index);
     }
     
     @Override
-    public void setNextQuestionId(String nextQuestionId) {
-        this.nextQuestionId = nextQuestionId;
-    }
-
-    @Override
-    public String getNextQuestion() {
-        return nextQuestion;
+    public void addQuestionCategory(String questionCategory) {
+        questionCategories.add(questionCategory);
     }
     
     @Override
-    public void setNextQuestion(String nextQuestion) {
-        this.nextQuestion = nextQuestion;
-    }
-
-    @Override
-    public String getNextCorrectAnswer() {
-        return nextCorrectAnswer;
+    public void clearQuestionCategories() {
+    	questionCategories.clear();
     }
     
     @Override
-    public void setNextCorrectAnswer(String nextCorrectAnswer) {
-        this.nextCorrectAnswer = nextCorrectAnswer;
-    }
-
-    @Override
-    public String getNextQuestionScore() {
-        return nextQuestionScore;
+    public boolean getQuestionHint(int index) {
+        return Boolean.parseBoolean(questionHints.get(index));
     }
     
     @Override
-    public void setNextQuestionScore(String nextQuestionScore) {
-        this.nextQuestionScore = nextQuestionScore;
-    }
-
-    @Override
-    public String getNextQuestionCategory() {
-        return nextQuestionCategory;
+    public void setQuestionHint(boolean questionHint, int index) {
+    	if (questionHints.size() > index)
+    		questionHints.set(index, Boolean.toString(questionHint));
     }
     
     @Override
-    public void setNextQuestionCategory(String nextQuestionCategory) {
-        this.nextQuestionCategory = nextQuestionCategory;
+    public void addQuestionHint(boolean questionHint) {
+        questionHints.add(Boolean.toString(questionHint));
     }
     
     @Override
-    public boolean getNextQuestionHint() {
-        return nextQuestionHint;
+    public void clearQuestionHints() {
+    	questionHints.clear();
+    }
+    
+    private void addQuestionSkip(boolean questionSkip) {
+    	questionSkips.add(Boolean.toString(questionSkip));
     }
     
     @Override
-    public void setNextQuestionHint(boolean nextQuestionHint) {
-        this.nextQuestionHint = nextQuestionHint;
+    public boolean getQuestionSkip(int index) {
+        return Boolean.parseBoolean(questionSkips.get(index));
     }
     
     @Override
-    public boolean getNextQuestionSkip() {
-        return nextQuestionSkip;
-    }
-    
-    @Override
-    public String getThirdQuestionId() {
-        return thirdQuestionId;
-    }
-    
-    @Override
-    public void setThirdQuestionId(String thirdQuestionId) {
-        this.thirdQuestionId = thirdQuestionId;
-    }
-
-    @Override
-    public String getThirdQuestion() {
-        return thirdQuestion;
-    }
-    
-    @Override
-    public void setThirdQuestion(String thirdQuestion) {
-        this.thirdQuestion = thirdQuestion;
-    }
-
-    @Override
-    public String getThirdCorrectAnswer() {
-        return thirdCorrectAnswer;
-    }
-    
-    @Override
-    public void setThirdCorrectAnswer(String thirdCorrectAnswer) {
-        this.thirdCorrectAnswer = thirdCorrectAnswer;
-    }
-
-    @Override
-    public String getThirdQuestionScore() {
-        return thirdQuestionScore;
-    }
-    
-    @Override
-    public void setThirdQuestionScore(String thirdQuestionScore) {
-        this.thirdQuestionScore = thirdQuestionScore;
-    }
-
-    @Override
-    public String getThirdQuestionCategory() {
-        return thirdQuestionCategory;
-    }
-    
-    @Override
-    public void setThirdQuestionCategory(String thirdQuestionCategory) {
-        this.thirdQuestionCategory = thirdQuestionCategory;
-    }
-    
-    @Override
-    public boolean getThirdQuestionHint() {
-        return thirdQuestionHint;
-    }
-    
-    @Override
-    public void setThirdQuestionHint(boolean thirdQuestionHint) {
-        this.thirdQuestionHint = thirdQuestionHint;
-    }
-    
-    @Override
-    public boolean getThirdQuestionSkip() {
-        return thirdQuestionSkip;
+    public void clearQuestionSkips() {
+    	questionSkips.clear();
     }
     
     @Override
@@ -3541,221 +3536,137 @@ public class ActivityMain extends SlidingFragmentActivity implements
         
         @Override
         protected Void doInBackground(Void... nothing) {
-            if (((nextQuestionId == null && thirdQuestionId != null) || 
+        	/*
+            if (((getQuestionId(1) == null && getQuestionId(2) != null) || 
                     correctAnswers != null &&
-                        correctAnswers.contains(nextQuestionId)) &&
+                        correctAnswers.contains(getQuestionId(1))) &&
                             !isCancelled() && !force) {
                 updateIds();
-                getNextQuestions(force, level);
+                if (questionIds.size() <= Constants.CACHED_LIMIT)
+                	getNextQuestions(force, level);
             }
-            else if (!isCancelled()) {
-                if (!force)
+            else */if (!isCancelled()) {
+                if (!force && !questionIdsEmpty())
                     updateIds();
                 publishProgress();
-                if (questionId != null && nextQuestionId != null &&
-                		thirdQuestionId != null)
+                if (questionIds.size() > Constants.CACHED_LIMIT) {
+                	updatePersistedLists();
                 	return null;
+                }
                 try {
-                	ParseQuery query = null;
+                	ParseQuery<ParseObject> query = null;
 	                if (tempQuestions == null)
 	                	tempQuestions = new ArrayList<String>();
 	                else
 	                	tempQuestions.clear();
 	                if (correctAnswers != null)
 	                    tempQuestions.addAll(correctAnswers);
-	                if (questionId != null)
-	                	tempQuestions.add(questionId);
-	                if (nextQuestionId != null)
-	                	tempQuestions.add(nextQuestionId);
-	                if (thirdQuestionId != null)
-	                	tempQuestions.add(thirdQuestionId);
-	                ParseQuery queryFirst = null;
-	                ParseQuery querySecond = null;
+	                tempQuestions.addAll(questionIds);
+	                ParseQuery<ParseObject> queryFirst = null;
+	                ParseQuery<ParseObject> querySecond = null;
 	                if (level == Constants.HARD) {
-	                	queryFirst = new ParseQuery("Question");
-	                    queryFirst.whereNotContainedIn("objectId", tempQuestions);
+	                	queryFirst = new ParseQuery<ParseObject>("Question");
+	                    queryFirst.whereNotContainedIn("objectId",
+	                    		tempQuestions);
 	                    queryFirst.whereLessThanOrEqualTo("score", 1000);
-	                    querySecond = new ParseQuery("Question");
-	                    querySecond.whereNotContainedIn("objectId", tempQuestions);
+	                    querySecond = new ParseQuery<ParseObject>("Question");
+	                    querySecond.whereNotContainedIn("objectId",
+	                    		tempQuestions);
 	                	querySecond.whereDoesNotExist("score");
-	                	ArrayList<ParseQuery> queries = new ArrayList<ParseQuery>();
+	                	ArrayList<ParseQuery<ParseObject>> queries =
+	                			new ArrayList<ParseQuery<ParseObject>>();
 	                	queries.add(queryFirst);
 	                	queries.add(querySecond);
 	                	query = ParseQuery.or(queries);
 	                }
 	                else {
-	                	query = new ParseQuery("Question");
+	                	query = new ParseQuery<ParseObject>("Question");
 	                	query.whereNotContainedIn("objectId", tempQuestions);
 	                	if (level == Constants.EASY) {
-	                		int easy = DatabaseHelperSingleton.instance().getUserIntValue(
-	        						DatabaseHelper.COL_EASY, userId);
+	                		int easy = DatabaseHelperSingleton.instance()
+	                				.getUserIntValue(DatabaseHelper.COL_EASY,
+	                						userId);
 	                		if (easy <= 0)
 	                			easy = 600;
 	                		query.whereLessThanOrEqualTo("score", easy);
 	                	}
 	                	else if (level == Constants.MEDIUM) {
-	                		int med = DatabaseHelperSingleton.instance().getUserIntValue(
-	        						DatabaseHelper.COL_MEDIUM, userId);
+	                		int med = DatabaseHelperSingleton.instance()
+	                				.getUserIntValue(DatabaseHelper.COL_MEDIUM,
+	                						userId);
 	                		if (med <= 0)
 	                			med = 800;
 	                		query.whereLessThanOrEqualTo("score", med);
 	                	}
 	                }
+	                /*
 	                if (checkCount || count < 0) {
 	                    count = query.count();
 	                    ApplicationEx.addParseQuery();
 	                    checkCount = false;
-	                    DatabaseHelperSingleton.instance().setCheckCount(userId, checkCount);
+	                    DatabaseHelperSingleton.instance().setCheckCount(userId,
+	                    		checkCount);
 	                }
-                    if (count > 0 && !isCancelled()) {
+	                */
+                    if (/*count > 0 && */!isCancelled()) {
+                    	query.setLimit(1000);
+                    	query.addDescendingOrder("createdAt");
                         stageList = new ArrayList<String>();
+                        /*
                         int skip = (int) (Math.random()*count);
-                        if (questionId == null)
-                            query.setLimit(3);
-                        else {
-                            if (nextQuestionId == null) {
-                                if (thirdQuestionId == null)
-                                    query.setLimit(2);
-                                else
-                                    query.setLimit(1);
-                            }
-                            else
-                                query.setLimit(1);
-                        }
+                        int limit = Constants.CACHED_QUESTIONS -
+                        		questionIds.size();
+                        query.setLimit(limit);
                         if (query.getLimit() > (count-skip))
                             skip = count-query.getLimit();
                         query.setSkip(skip);
+                        */
                         questionList = query.find();
                         ApplicationEx.addParseQuery();
                         if (!questionList.isEmpty() && !isCancelled()) {
                             Number score;
-                            ParseObject followQuestion = null;
-                            if (questionList.size() == 3) {
-                                ParseObject currQuestion = questionList.get(0);
-                                questionId = currQuestion.getObjectId();
-                                stageList.add(questionId);
-                                question = currQuestion.getString("question");
-                                correctAnswer = currQuestion.getString("answer");
-                                questionCategory = currQuestion.getString(
-                                        "category");
-                                score = currQuestion.getNumber("score");
-                                questionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
-                                currQuestion = questionList.get(1);
-                                nextQuestionId = currQuestion.getObjectId();
-                                stageList.add(nextQuestionId);
-                                nextQuestion = currQuestion.getString(
-                                        "question");
-                                nextCorrectAnswer = currQuestion.getString(
-                                        "answer");
-                                nextQuestionCategory = currQuestion.getString(
-                                        "category");
-                                score = currQuestion.getNumber("score");
-                                nextQuestionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
-                                followQuestion = questionList.get(2);
+                            String questionId;
+                            int index = -1;
+                            ParseObject question;
+                            do {
+                            	index = (int) (Math.random()*questionList.size());
+                            	question = questionList.get(index);
+                            	questionId = question.getObjectId();
+                            	addQuestionId(questionId);
+                            	stageList.add(questionId);
+                            	addQuestion(question.getString("question"));
+                            	addQuestionAnswer(question.getString("answer"));
+                            	addQuestionCategory(
+                            			question.getString("category"));
+                            	score = question.getNumber("score");
+                            	addQuestionScore(score == null ? "1011" :
+                            			Integer.toString(score.intValue()));
+                            	addQuestionHint(false);
+                            	questionSkips.add(Boolean.toString(false));
+                            } while (questionIds.size() < Constants.CACHED_QUESTIONS);
+                            /*
+                            for (ParseObject question : questionList) {
+                            	questionId = question.getObjectId();
+                            	addQuestionId(questionId);
+                            	stageList.add(questionId);
+                            	addQuestion(question.getString("question"));
+                            	addQuestionAnswer(question.getString("answer"));
+                            	addQuestionCategory(
+                            			question.getString("category"));
+                            	score = question.getNumber("score");
+                            	addQuestionScore(score == null ? "1011" :
+                            			Integer.toString(score.intValue()));
+                            	addQuestionHint(false);
+                            	questionSkips.add(Boolean.toString(false));
                             }
-                            else if (questionList.size() == 2 &&
-                                    !isCancelled()) {
-                                ParseObject currQuestion = questionList.get(0);
-                                if (questionId == null) {
-                                    questionId = currQuestion.getObjectId();
-                                    stageList.add(questionId);
-                                    question = currQuestion.getString(
-                                            "question");
-                                    correctAnswer = currQuestion.getString(
-                                            "answer");
-                                    questionCategory = currQuestion.getString(
-                                            "category");
-                                    score = currQuestion.getNumber("score");
-                                    questionScore = score == null ? "1011" :
-                                    Integer.toString(score.intValue());
-                                }
-                                else {
-                                    nextQuestionId = currQuestion.getObjectId();
-                                    stageList.add(nextQuestionId);
-                                    nextQuestion = currQuestion.getString(
-                                            "question");
-                                    nextCorrectAnswer = currQuestion.getString(
-                                            "answer");
-                                    nextQuestionCategory = 
-                                            currQuestion.getString("category");
-                                    score = currQuestion.getNumber("score");
-                                    nextQuestionScore = score == null ? "1011" :
-                                            Integer.toString(score.intValue());
-                                }
-                                followQuestion = questionList.get(1);
-                            }
-                            else {
-                                followQuestion = questionList.get(0);
-                            }
-                            if (questionId == null) {
-                                questionId = followQuestion.getObjectId();
-                                stageList.add(questionId);
-                                question = followQuestion.getString(
-                                        "question");
-                                correctAnswer = followQuestion.getString(
-                                        "answer");
-                                questionCategory = followQuestion.getString(
-                                        "category");
-                                score = followQuestion.getNumber("score");
-                                questionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
-                            }
-                            else if (nextQuestionId == null) {
-                                nextQuestionId = followQuestion.getObjectId();
-                                stageList.add(nextQuestionId);
-                                nextQuestion = followQuestion.getString(
-                                        "question");
-                                nextCorrectAnswer = followQuestion.getString(
-                                        "answer");
-                                nextQuestionCategory = followQuestion.getString(
-                                        "category");
-                                score = followQuestion.getNumber("score");
-                                nextQuestionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
-                            }
-                            else {
-                                thirdQuestionId = followQuestion.getObjectId();
-                                stageList.add(thirdQuestionId);
-                                thirdQuestion = followQuestion.getString(
-                                        "question");
-                                thirdCorrectAnswer = followQuestion.getString(
-                                        "answer");
-                                thirdQuestionCategory = followQuestion.getString(
-                                        "category");
-                                score = followQuestion.getNumber("score");
-                                thirdQuestionScore = score == null ? "1011" :
-                                        Integer.toString(score.intValue());
-                            }
+                            */
                             getStage(userId, stageList, resumed);
                             if (!isCancelled())
-                                DatabaseHelperSingleton.instance().setQuestions(userId,
-                                        questionId, question, correctAnswer,
-                                        questionCategory, questionScore,
-                                        questionHint, questionSkip,
-                                        nextQuestionId, nextQuestion,
-                                        nextCorrectAnswer, nextQuestionCategory,
-                                        nextQuestionScore, nextQuestionHint,
-                                        nextQuestionSkip, thirdQuestionId,
-                                        thirdQuestion, thirdCorrectAnswer,
-                                        thirdQuestionCategory,
-                                        thirdQuestionScore, thirdQuestionHint,
-                                        thirdQuestionSkip);
+                            	updatePersistedLists();
                         }
                     }
-                    else if (!isCancelled()) {
-                        DatabaseHelperSingleton.instance().setQuestions(userId, questionId,
-                                question, correctAnswer, questionCategory,
-                                questionScore, questionHint, questionSkip,
-                                nextQuestionId, nextQuestion, nextCorrectAnswer,
-                                nextQuestionCategory, nextQuestionScore,
-                                nextQuestionHint, nextQuestionSkip,
-                                thirdQuestionId, thirdQuestion,
-                                thirdCorrectAnswer, thirdQuestionCategory,
-                                thirdQuestionScore, thirdQuestionHint,
-                                thirdQuestionSkip);
-                    }
+                    else if (!isCancelled())
+                    	updatePersistedLists();
                 } catch (OutOfMemoryError memErr) {
                 	Log.e(Constants.LOG_TAG, "Error: " + memErr.getMessage());
                 	if (getNextQuestionsTask != null)
@@ -3773,7 +3684,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         
         protected void onProgressUpdate(Void... nothing) {
-            if (questionId != null && !isCancelled()) {
+            if (!questionIdsEmpty() && questionIds.get(0) != null &&
+            		!isCancelled()) {
                 if (!loggedIn) {
                     try {
                         goToQuiz();
@@ -3784,7 +3696,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     resumed = true;
                 }
             }
-            else if (questionId == null)
+            else if (questionIdsEmpty() || questionIds.get(0) == null)
                 questionNull = true;
         }
         
@@ -3803,7 +3715,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     } catch (IllegalStateException exception) {}
                 }
                 else {
-                    if (questionId == null)
+                    if (questionIdsEmpty() || questionIds.get(0) == null)
                         currFrag.showNoMoreQuestions(SharedPreferencesSingleton.instance()
                         		.getInt(ResourcesSingleton.instance().getString(R.string.level_key),
                     						Constants.HARD));
@@ -3814,32 +3726,44 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         
         private void updateIds() {
-            questionId = nextQuestionId;
-            nextQuestionId = thirdQuestionId;
-            thirdQuestionId = null;
-            question = nextQuestion != null ? nextQuestion.trim() :
-                    nextQuestion;
-            nextQuestion = thirdQuestion != null ?
-                    thirdQuestion.trim() : thirdQuestion;
-            thirdQuestion = null;
-            correctAnswer = nextCorrectAnswer != null ?
-                    nextCorrectAnswer.trim() : nextCorrectAnswer;
-            nextCorrectAnswer = thirdCorrectAnswer != null ?
-                    thirdCorrectAnswer.trim() : thirdCorrectAnswer;
-            thirdCorrectAnswer = null;
-            questionCategory = nextQuestionCategory != null ?
-                    nextQuestionCategory.trim() :
-                        nextQuestionCategory;
-            nextQuestionCategory = thirdQuestionCategory != null ?
-                    thirdQuestionCategory.trim() :
-                        thirdQuestionCategory;
-            thirdQuestionCategory = null;
-            questionScore = nextQuestionScore;
-            nextQuestionScore = thirdQuestionScore;
-            thirdQuestionScore = null;
-            questionHint = nextQuestionHint;
-            nextQuestionHint = thirdQuestionHint;
-            thirdQuestionHint = false;
+        	questionIds.remove(0);
+        	questions.remove(0);
+        	questionAnswers.remove(0);
+        	questionCategories.remove(0);
+        	questionScores.remove(0);
+        	questionHints.remove(0);
+        	questionSkips.remove(0);
+        }
+        
+        private void updatePersistedLists() {
+        	ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questionids_key),
+            				questionIds);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questions_key),
+            				questions);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questionanswers_key),
+            				questionAnswers);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questioncategories_key),
+            				questionCategories);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questionscores_key),
+            				questionScores);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questionhints_key),
+            				questionHints);
+            ApplicationEx.setStringArrayPref(
+            		ResourcesSingleton.instance().getString(
+            				R.string.questionskips_key),
+            				questionSkips);
         }
     }
     
@@ -3858,73 +3782,54 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     private class GetStageTask extends AsyncTask<Void, Void, Void> {
         private String userId;
-        ArrayList<String> questionIds;
+        ArrayList<String> ids;
         private boolean resumed = false;
+        private boolean progressed = false;
         
-        private GetStageTask(String userId, ArrayList<String> questionIds,
+        private GetStageTask(String userId, ArrayList<String> ids,
         		boolean resumed) {
             this.userId = userId;
-            this.questionIds = questionIds;
+            this.ids = ids;
             this.resumed = resumed;
         }
         @Override
         protected Void doInBackground(Void... nothing) {
-            ParseQuery query = new ParseQuery("Stage");
+            ParseQuery<ParseObject> query =
+            		new ParseQuery<ParseObject>("Stage");
             query.whereEqualTo("userId", userId);
-            query.whereContainedIn("questionId", questionIds);
-            query.setLimit(questionIds.size());
+            query.whereContainedIn("questionId", ids);
+            query.setLimit(ids.size());
             try {
                 List<ParseObject> questionList = query.find();
                 ApplicationEx.addParseQuery();
+                int index = -1;
                 if (!questionList.isEmpty()) {
                     for (int i = 0; i < questionList.size(); i++) {
-                        if (questionList.get(i).getString("questionId")
-                                .equals(questionId)) {
-                            questionHint = questionList.get(i).getBoolean("hint");
-                            questionSkip = questionList.get(i).getBoolean("skip");
-                            publishProgress();
-                        }
-                        else if (questionList.get(i).getString("questionId")
-                                .equals(nextQuestionId)) {
-                            nextQuestionHint = questionList.get(i)
-                                    .getBoolean("hint");
-                            nextQuestionSkip = questionList.get(i)
-                                    .getBoolean("skip");
-                            if (!questionIds.contains(questionId))
-                                publishProgress();
-                        }
-                        else if (questionList.get(i).getString("questionId")
-                                .equals(thirdQuestionId)) {
-                            thirdQuestionHint = questionList.get(i)
-                                    .getBoolean("hint");
-                            thirdQuestionSkip = questionList.get(i)
-                                    .getBoolean("skip");
-                            if (!questionIds.contains(questionId) &&
-                                    !questionIds.contains(nextQuestionId))
-                                publishProgress();
-                        }
+                    	index = questionIds.indexOf(
+                    			questionList.get(i).getString("questionId"));
+                    	if (index >= 0) {
+                    		questionHints.set(index, Boolean.toString(
+                    				questionList.get(i).getBoolean("hint")));
+                    		questionSkips.set(index, Boolean.toString(
+                    				questionList.get(i).getBoolean("skip")));
+                    		if (!progressed) {
+                    			publishProgress();
+                    			progressed = true;
+                    		}
+                    	}
                     }
                 }
                 else {
-                    for (int i = 0; i < questionIds.size(); i++) {
-                        if (questionIds.get(i).equals(questionId)) {
-                            questionHint = false;
-                            questionSkip = false;
-                            publishProgress();
-                        }
-                        else if (questionIds.get(i).equals(nextQuestionId)) {
-                            nextQuestionHint = false;
-                            nextQuestionSkip = false;
-                            if (!questionIds.contains(questionId))
-                                publishProgress();
-                        }
-                        else if (questionIds.get(i).equals(thirdQuestionId)) {
-                            thirdQuestionHint = false;
-                            thirdQuestionSkip = false;
-                            if (!questionIds.contains(questionId) &&
-                                    !questionIds.contains(nextQuestionId))
-                                publishProgress();
-                        }
+                    for (int i = 0; i < ids.size(); i++) {
+                    	index = questionIds.indexOf(ids.get(i));
+                    	if (index >= 0) {
+                    		questionHints.set(index, Boolean.toString(false));
+                    		questionSkips.set(index, Boolean.toString(false));
+                    		if (!progressed) {
+                    			publishProgress();
+                    			progressed = true;
+                    		}
+                    	}
                     }
                 }
             } catch (ParseException e) {
@@ -3976,6 +3881,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             user.put("displayName", displayName);
             try {
                 user.saveEventually();
+                ApplicationEx.addParseQuery();
             }
             catch (RuntimeException e) {}
         }
@@ -3997,7 +3903,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void addCurrentScore(int addValue) {
         currScore += addValue;
-        saveUserScore(currScore);
+        //saveUserScore(currScore);
     }
     
     @Override
@@ -4005,14 +3911,19 @@ public class ActivityMain extends SlidingFragmentActivity implements
         try {
             user.put("score", currTemp);
             user.saveEventually();
+            ApplicationEx.addParseQuery();
         }
         catch (RuntimeException e) {}
         DatabaseHelperSingleton.instance().setScore(currTemp, userId);
     }
     
     @Override
-    public void shareScreenshot() {
+    public void shareScreenshot(boolean isSetlist) {
+    	if (isSetlist && currFrag != null)
+    		currFrag.showResizedSetlist();
         String path = takeScreenshot();
+        if (isSetlist && currFrag != null)
+    		currFrag.hideResizedSetlist();
         if (path == null)
             return;
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -4106,7 +4017,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         if (correctAnswers == null)
             correctAnswers = new ArrayList<String>();
         correctAnswers.add(correctId);
-        count--;
+        //count--;
         ApplicationEx.setStringArrayPref(
         		ResourcesSingleton.instance().getString(R.string.correct_key), correctAnswers);
     }

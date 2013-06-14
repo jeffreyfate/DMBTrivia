@@ -228,6 +228,18 @@ public class FragmentPager extends FragmentBase {
         viewPager.setCurrentItem(page, true);
     }
     
+    @Override
+	public void showResizedSetlist() {
+    	((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
+				.showResizedSetlist();
+    }
+
+	@Override
+	public void hideResizedSetlist() {
+		((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
+				.hideResizedSetlist();
+	}
+    
     public class FixedSpeedScroller extends Scroller {
 
         private int mDuration = 5000;

@@ -243,7 +243,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         else
             mHasConnection = nInfo.isConnected();
         DatabaseHelperSingleton.instance().checkUpgrade();
-        getSetlist();
         //setlist = "Jun 1 2013\nDave Matthews Band\nBlossom Music Center\nCuyahoga Falls, OH\n\nDancing Nancies ->\nWarehouse\nThe Idea Of You\nBelly Belly Nice\nSave Me\nCaptain\nSeven";
         //setlistStamp = "Updated:\n8:16 PDT";
         generateSongMap();
@@ -251,6 +250,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         // TODO Remove if memory issues resolved
         try {
         	installation.saveEventually();
+        	ApplicationEx.addParseQuery();
         } catch (RuntimeException e) {}
         String notificationType = ResourcesSingleton.instance().getString(
         		R.string.notificationtype_key);
@@ -294,6 +294,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         object.put("stacktrace", stacktrace);
         try {
             object.saveInBackground();
+            ApplicationEx.addParseQuery();
         } catch (ExceptionInInitializerError e) {};
     }
     
@@ -318,6 +319,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 @Override
                 public void done(ParseException arg0) {
                 	showLongToast("Report sent, thank you");
+                	ApplicationEx.addParseQuery();
                 }
             });
         }
@@ -482,11 +484,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * setlist to show.
      */
     public static void getSetlist() {
-        ParseQuery setlistQuery = new ParseQuery("Setlist");
+        ParseQuery<ParseObject> setlistQuery = new ParseQuery<ParseObject>("Setlist");
         setlistQuery.addDescendingOrder("setDate");
         setlistQuery.setLimit(1);
         //setlistQuery.setSkip(5);
-        setlistQuery.findInBackground(new FindCallback() {
+        setlistQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> setlists, ParseException e) {
                 Intent intent = new Intent(Constants.ACTION_UPDATE_SETLIST);
@@ -499,7 +501,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                     setlist = setlists.get(0).getString("set");
                     df.setTimeZone(TimeZone.getDefault());
                     StringBuilder sb = new StringBuilder();
-                    sb.append("\nUpdated:\n");
+                    sb.append("Updated:\n");
                     sb.append(DateFormat.format(df.toLocalizedPattern(), setlists.get(0).getUpdatedAt()));
                     setlistStamp = sb.toString();
                     parseSetlist();
@@ -902,7 +904,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             File audioFile = null;
             StringBuilder sb = new StringBuilder();
     		ParseFile file = null;
-    		ParseQuery query = new ParseQuery("Audio");
+    		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Audio");
     		if (songs != null)
     			query.whereContainedIn("name", songs);
     		try {
@@ -979,6 +981,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	
 	public static void addParseQuery() {
 		parseQueries++;
+		Log.v(Constants.LOG_TAG, "ADDING API CALL: " + parseQueries);
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.jeffthefate.dmbquiz.fragment;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -72,7 +74,50 @@ public class FragmentBase extends Fragment implements UiCallback {
         audioManager = (AudioManager) getActivity().getSystemService(
                 Context.AUDIO_SERVICE);
         fields = R.raw.class.getFields();
+        String fieldName;
+        try {
+        	for (int i = 0; i < fields.length; i++) {
+        		fieldName = fields[i].getName();
+        		if (fieldName.startsWith("correct"))
+        			correctAudio.add(fields[i].getInt(null));
+        		else if (fieldName.startsWith("wrong"))
+        			wrongAudio.add(fields[i].getInt(null));
+        		else if (fieldName.startsWith("hint"))
+        			hintAudio.add(fields[i].getInt(null));
+        		else if (fieldName.startsWith("skip"))
+        			skipAudio.add(fields[i].getInt(null));
+        	}
+        	audioMap.put("correct", correctAudio);
+        	audioMap.put("wrong", wrongAudio);
+        	audioMap.put("hint", hintAudio);
+        	audioMap.put("skip", skipAudio);
+        } catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
+    
+    private void resetAudio(String type) {
+    	fields = R.raw.class.getFields();
+        String fieldName;
+        try {
+        	for (int i = 0; i < fields.length; i++) {
+        		fieldName = fields[i].getName();
+        		if (fieldName.startsWith(type))
+        			audioMap.get(type).add(fields[i].getInt(null));
+        	}
+        } catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     /*
     @Override
     public void onDestroyView() {
@@ -190,25 +235,42 @@ public class FragmentBase extends Fragment implements UiCallback {
      * Play audio for correct/wrong/skip/hint if sound is enabled
      */
     protected void playAudio(String type) {
+    	ArrayList<Integer> tempList = audioMap.get(type);
+    	Log.v(Constants.LOG_TAG, type + " : " + tempList.size());
+    	if (tempList.isEmpty())
+    		resetAudio(type);
+    	int random = (int) (Math.random()*tempList.size());
+    	Log.d(Constants.LOG_TAG, "random : " + random);
+    	currentAudio = tempList.remove(random);
+    	Log.w(Constants.LOG_TAG, "current : " + currentAudio);
+    	Log.i(Constants.LOG_TAG, type + " : " + tempList.size());
+    	/*
         do {
             rawIndex = (int) (Math.random()*fields.length);
         } while (!fields[rawIndex].getName().contains(type));
+        Log.v(Constants.LOG_TAG, fields[rawIndex].getName());
         try {
             currentAudio = fields[rawIndex].getInt(null);
         } catch (IllegalArgumentException e1) {
-        	currentAudio = R.raw.correct1;
         	e1.printStackTrace();
         } catch (IllegalAccessException e1) {
-        	currentAudio = R.raw.correct1;
         	e1.printStackTrace();
     	}
+    	*/
         if (SharedPreferencesSingleton.instance().getBoolean(
-                		ResourcesSingleton.instance().getString(R.string.sound_key), false))
+                		ResourcesSingleton.instance().getString(
+                				R.string.sound_key), false))
             getAudioFocus(currentAudio);
     }
     
     private Field[] fields;
-    private int rawIndex = -1;
+    private ArrayList<Integer> correctAudio = new ArrayList<Integer>();
+    private ArrayList<Integer> wrongAudio = new ArrayList<Integer>();
+    private ArrayList<Integer> hintAudio = new ArrayList<Integer>();
+    private ArrayList<Integer> skipAudio = new ArrayList<Integer>();
+    private HashMap<String, ArrayList<Integer>> audioMap =
+    		new HashMap<String, ArrayList<Integer>>();
+    //private int rawIndex = -1;
     private int currentAudio;
     
     private MediaPlayer mediaPlayer;
@@ -317,9 +379,9 @@ public class FragmentBase extends Fragment implements UiCallback {
     }
     
     public void report() {
-    	ApplicationEx.reportQuestion(mCallback.getQuestionId(),
-                mCallback.getQuestion(), mCallback.getCorrectAnswer(),
-                mCallback.getQuestionScore());
+    	ApplicationEx.reportQuestion(mCallback.getQuestionId(0),
+                mCallback.getQuestion(0), mCallback.getQuestionAnswer(0),
+                mCallback.getQuestionScore(0));
     }
     
     public void changeName() {
@@ -331,21 +393,13 @@ public class FragmentBase extends Fragment implements UiCallback {
     	if (mCallback != null) {
             DatabaseHelperSingleton.instance().setOffset(0, mCallback.getUserId());
             mCallback.setLoggingOut(true);
-            mCallback.setQuestionId(null);
-            mCallback.setQuestion(null);
-            mCallback.setCorrectAnswer(null);
-            mCallback.setQuestionCategory(null);
-            mCallback.setQuestionScore(null);
-            mCallback.setNextQuestionId(null);
-            mCallback.setNextQuestion(null);
-            mCallback.setNextCorrectAnswer(null);
-            mCallback.setNextQuestionCategory(null);
-            mCallback.setNextQuestionScore(null);
-            mCallback.setThirdQuestionId(null);
-            mCallback.setThirdQuestion(null);
-            mCallback.setThirdCorrectAnswer(null);
-            mCallback.setThirdQuestionCategory(null);
-            mCallback.setThirdQuestionScore(null);
+            mCallback.clearQuestionIds();
+            mCallback.clearQuestions();
+            mCallback.clearQuestionAnswers();
+            mCallback.clearQuestionCategories();
+            mCallback.clearQuestionScores();
+            mCallback.clearQuestionHints();
+            mCallback.clearQuestionSkips();
             mCallback.logOut();
         }
     }
@@ -415,5 +469,11 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     @Override
     public void setPage(int page) {}
+
+	@Override
+	public void showResizedSetlist() {}
+
+	@Override
+	public void hideResizedSetlist() {}
 
 }

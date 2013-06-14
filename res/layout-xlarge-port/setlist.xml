@@ -9,16 +9,92 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/SetlistMenu"
         android:scaleType="centerCrop" />
-    <RelativeLayout
-        android:id="@+id/SetlistLayout"
+    <ScrollView
+        android:id="@+id/SetlistScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dip"
-        android:layout_marginTop="8dip" >
-        <com.jeffthefate.dmbquiz.AutoResizeTextView
-            android:id="@+id/SetText"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingBottom="8dip" >
+        <RelativeLayout
+            android:id="@+id/SetlistLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:layout_marginBottom="8dip" >
+            <TextView
+                android:id="@+id/SetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="32sp" />
+            <TextView
+                android:id="@+id/StampText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SetText"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:layout_marginBottom="8dip"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/light_gray"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+            <TextView
+                android:id="@+id/NetworkText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                android:gravity="center"
+                android:text="@string/NoService"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:background="@color/background_dark"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+            <Button
+                android:id="@+id/RetryButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dip"
+                android:text="@string/retry"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/button"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
+                android:layout_below="@id/NetworkText"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:id="@+id/SetlistLayoutShot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dip"
+        android:layout_marginBottom="8dip"
+        android:visibility="invisible" >
+        <com.jeffthefate.dmbquiz.AutoResizeTextView
+            android:id="@+id/SetTextShot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:paddingTop="5dip"
             android:paddingLeft="10dip"
@@ -28,8 +104,9 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="32sp" />
+        <!-- 
         <TextView
-            android:id="@+id/StampText"
+            android:id="@+id/StampTextShot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dip"
@@ -40,37 +117,6 @@
             android:textColor="@color/light_gray"
             android:textStyle="bold"
             android:textSize="1sp" />
-        <TextView
-            android:id="@+id/NetworkText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="20dip"
-            android:layout_marginTop="20dip"
-            android:background="@color/background_dark"
-            android:gravity="center"
-            android:paddingBottom="10dip"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip"
-            android:paddingTop="10dip"
-            android:text="@string/NoService"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-        <Button
-            android:id="@+id/RetryButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dip"
-            android:layout_below="@id/NetworkText"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:background="@drawable/button"
-            android:text="@string/retry"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+         -->
     </RelativeLayout>
 </RelativeLayout>

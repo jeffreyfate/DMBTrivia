@@ -47,7 +47,7 @@
                 android:layout_alignParentRight="true"
                 android:textColor="@color/light_gray"
                 android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 	        <TextView
                 android:id="@+id/NetworkText"
                 android:layout_width="match_parent"
@@ -82,4 +82,39 @@
                 android:visibility="gone" />
         </RelativeLayout>
     </ScrollView>
+    <RelativeLayout
+        android:id="@+id/SetlistLayoutShot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dip"
+        android:layout_marginBottom="8dip"
+        android:visibility="invisible" >
+        <com.jeffthefate.dmbquiz.AutoResizeTextView
+            android:id="@+id/SetTextShot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:paddingTop="5dip"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+        <!-- 
+        <TextView
+            android:id="@+id/StampTextShot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/light_gray"
+            android:textStyle="bold"
+            android:textSize="1sp" />
+         -->
+    </RelativeLayout>
 </RelativeLayout>

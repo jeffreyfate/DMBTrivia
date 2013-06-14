@@ -88,6 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_EASY = "Easy";
     public static final String COL_MEDIUM = "Medium";
     public static final String COL_SETLIST = "Setlist";
+    public static final String COL_SET_STAMP = "SetStamp";
     public static final String COL_COUNT = "Count";
     public static final String COL_CHECK_COUNT = "CheckCount";
     
@@ -118,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE
             + " (" + COL_USER_ID + " STRING PRIMARY KEY, " + COL_USER_TYPE +
             " TEXT, " + COL_SCORE + " INTEGER DEFAULT -1, " + COL_OFFSET +
-            " INTEGER DEFAULT 0, " + COL_CURR_QUESTION_ID + " TEXT, " +
+            " INTEGER DEFAULT 0, " + /*COL_CURR_QUESTION_ID + " TEXT, " +
             COL_CURR_QUESTION_QUESTION + " TEXT, " + COL_CURR_QUESTION_ANSWER +
             " TEXT, " + COL_CURR_QUESTION_CATEGORY + " TEXT, " +
             COL_CURR_QUESTION_SCORE + " TEXT, " + COL_CURR_QUESTION_HINT +
@@ -133,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " TEXT, " + COL_THIRD_QUESTION_CATEGORY + " TEXT, " +
             COL_THIRD_QUESTION_SCORE + " TEXT, " + COL_THIRD_QUESTION_HINT +
             " INTEGER DEFAULT 0, " + COL_THIRD_QUESTION_SKIP +
-            " INTEGER DEFAULT 0, " + COL_PORT_BACKGROUND + " TEXT," +
+            " INTEGER DEFAULT 0, " + */COL_PORT_BACKGROUND + " TEXT," +
             COL_LAND_BACKGROUND + " TEXT," +
             COL_SPLASH_BACKGROUND + " TEXT, " +
             COL_QUIZ_BACKGROUND + " TEXT, " + COL_LEADERS_BACKGROUND + " TEXT, "
@@ -157,8 +158,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             " TEXT, " + COL_CREATED_DATE + " TEXT, " + COL_SKIP_VIS +
             " INTEGER DEFAULT 0, " + COL_EASY + " INTEGER DEFAULT 0, " +
             COL_MEDIUM + " INTEGER DEFAULT 0, " + COL_SETLIST + " TEXT, " +
-            COL_COUNT + " INTEGER DEFAULT -1, " + COL_CHECK_COUNT +
-            " INTEGER DEFAULT 0)";
+            COL_SET_STAMP + " TEXT, " + COL_COUNT + " INTEGER DEFAULT -1, " +
+            COL_CHECK_COUNT + " INTEGER DEFAULT 0)";
     /**
      * Create Question table string
      */
@@ -498,7 +499,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cur.close();
         return userId;
     }
-    
+    /*
     public long setQuestions(String userId, String currQuestionId,
             String currQuestionQuestion, String currQuestionAnswer,
             String currQuestionCategory, String currQuestionScore,
@@ -537,9 +538,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return updateRecord(cv, USER_TABLE, COL_USER_ID + "=?",
                 new String[] {userId});
     }
-    
+    */
     public String getCurrQuestionId(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_ID))
     		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_CURR_QUESTION_ID},
                 COL_USER_ID + "=?", new String[] {userId}, null, null,
@@ -553,7 +555,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getCurrQuestionQuestion(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_QUESTION))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_QUESTION}, COL_USER_ID + "=?",
@@ -567,7 +570,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getCurrQuestionAnswer(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_ANSWER))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_ANSWER}, COL_USER_ID + "=?",
@@ -581,7 +585,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getCurrQuestionCategory(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_CATEGORY))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_CATEGORY}, COL_USER_ID + "=?",
@@ -595,7 +600,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getCurrQuestionScore(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_SCORE))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_SCORE}, COL_USER_ID + "=?",
@@ -609,7 +615,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getCurrQuestionHint(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_HINT))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_HINT}, COL_USER_ID + "=?",
@@ -623,7 +630,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getCurrQuestionSkip(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_CURR_QUESTION_SKIP))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_CURR_QUESTION_SKIP}, COL_USER_ID + "=?",
@@ -637,7 +645,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getNextQuestionId(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_ID))
     		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_NEXT_QUESTION_ID},
                 COL_USER_ID + "=?", new String[] {userId}, null, null,
@@ -651,7 +660,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getNextQuestionQuestion(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_QUESTION))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_QUESTION}, COL_USER_ID + "=?",
@@ -665,7 +675,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getNextQuestionAnswer(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_ANSWER))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_ANSWER}, COL_USER_ID + "=?",
@@ -679,7 +690,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getNextQuestionCategory(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_CATEGORY))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_CATEGORY}, COL_USER_ID + "=?",
@@ -693,7 +705,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getNextQuestionScore(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_SCORE))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_SCORE}, COL_USER_ID + "=?",
@@ -707,7 +720,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getNextQuestionHint(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_HINT))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_HINT}, COL_USER_ID + "=?",
@@ -721,7 +735,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getNextQuestionSkip(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_NEXT_QUESTION_SKIP))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_NEXT_QUESTION_SKIP}, COL_USER_ID + "=?",
@@ -735,7 +750,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getThirdQuestionId(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_ID))
     		return null;
         Cursor cur = db.query(USER_TABLE, new String[] {COL_THIRD_QUESTION_ID},
                 COL_USER_ID + "=?", new String[] {userId}, null, null,
@@ -749,7 +765,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getThirdQuestionQuestion(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_QUESTION))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_QUESTION}, COL_USER_ID + "=?",
@@ -763,7 +780,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getThirdQuestionAnswer(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_ANSWER))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_ANSWER}, COL_USER_ID + "=?",
@@ -777,7 +795,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getThirdQuestionCategory(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_CATEGORY))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_CATEGORY}, COL_USER_ID + "=?",
@@ -791,7 +810,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public String getThirdQuestionScore(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_SCORE))
     		return null;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_SCORE}, COL_USER_ID + "=?",
@@ -805,7 +825,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getThirdQuestionHint(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_HINT))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_HINT}, COL_USER_ID + "=?",
@@ -819,7 +840,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     
     public boolean getThirdQuestionSkip(String userId) {
-    	if (userId == null)
+    	if (userId == null || !checkColumnExists(USER_TABLE,
+    			COL_THIRD_QUESTION_SKIP))
     		return false;
         Cursor cur = db.query(USER_TABLE,
                 new String[] {COL_THIRD_QUESTION_SKIP}, COL_USER_ID + "=?",
@@ -1035,6 +1057,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> colList = Arrays.asList(colArray);
         cur.close();
         String sqlString;
+        /*
         if (!colList.contains(COL_CURR_QUESTION_HINT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " +
                     COL_CURR_QUESTION_HINT + " INTEGER DEFAULT 0";
@@ -1134,6 +1157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        */
         if (!colList.contains(COL_HINT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_HINT +
                     " TEXT";
@@ -1422,6 +1446,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+        if (!colList.contains(COL_SET_STAMP)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_SET_STAMP
+                    + " TEXT";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
         if (!colList.contains(COL_COUNT)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_COUNT
                     + " INTEGER DEFAULT -1";
@@ -1536,6 +1569,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
             }
         }
+    }
+    
+    private boolean checkColumnExists(String table, String column) {
+    	Cursor cur = db.query(table, null, null, null, null, null, null);
+        String[] colArray = cur.getColumnNames();
+        cur.close();
+        List<String> colList = Arrays.asList(colArray);
+        return colList.contains(column);
     }
     
 }

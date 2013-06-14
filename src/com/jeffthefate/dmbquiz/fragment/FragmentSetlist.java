@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
@@ -36,6 +38,7 @@ public class FragmentSetlist extends FragmentBase {
     private TextView setText;
     private TextView stampText;
     private String savedSet;
+    private String savedStamp;
     private SetlistReceiver setlistReceiver;
     
     private Button retryButton;
@@ -43,7 +46,10 @@ public class FragmentSetlist extends FragmentBase {
     
     //private RelativeLayout parentLayout;
     //private RelativeLayout setlistLayout;
-    //private ScrollView setlistScroll;
+    private ScrollView setlistScroll;
+    private RelativeLayout setlistLayoutShot;
+    private AutoResizeTextView setTextShot;
+    //private TextView stampTextShot;
     
     //private boolean textViewResized = false;
     private float currTextSize = 0.0f;
@@ -65,11 +71,17 @@ public class FragmentSetlist extends FragmentBase {
             savedSet = savedInstanceState.getString("set");
             DatabaseHelperSingleton.instance().setUserValue(savedSet,
                     DatabaseHelper.COL_SETLIST, mCallback.getUserId());
+            savedStamp = savedInstanceState.getString("stamp");
+            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
+                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
+            
         }
         else {
             if (mCallback.getUserId() != null) {
                 savedSet = DatabaseHelperSingleton.instance().getUserStringValue(
                         DatabaseHelper.COL_SETLIST, mCallback.getUserId());
+                savedStamp = DatabaseHelperSingleton.instance().getUserStringValue(
+                        DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
             }
         }
         setlistReceiver = new SetlistReceiver();
@@ -113,35 +125,36 @@ public class FragmentSetlist extends FragmentBase {
         setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
         setlistLayout = (RelativeLayout) v.findViewById(R.id.SetlistLayout);
         */
+        setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
         setText = (TextView) v.findViewById(R.id.SetText);
-        //setText.setVisibility(View.INVISIBLE);
-        
         stampText = (TextView) v.findViewById(R.id.StampText);
-        if (ApplicationEx.getTextSize() > 0.0f)
-        	stampText.getPaint().setTextSize(ApplicationEx.getTextSize() - 4.0f);
-        if (setText instanceof AutoResizeTextView) {
-        	//((AutoResizeTextView) setText).setExtraTextLines(2);
-        	((AutoResizeTextView) setText).setAddEllipsis(false);
-        	((AutoResizeTextView) setText).setOnResizeListener(
-        			new OnTextResizeListener() {
-				@Override
-				public void onTextResize(TextView textView, float oldSize,
-						float newSize) {
-					Log.w(Constants.LOG_TAG, "onTextResize: " + oldSize + " : " + newSize);
-					/*
-					parentLayout.removeView(setlistLayout);
-					setlistScroll.removeAllViews();
-					setlistScroll.addView(setlistLayout, 0);
-					*/
-					if (stampText != null) {
-						stampText.getPaint().setTextSize(newSize - 4.0f);
-					}
-					ApplicationEx.setTextSize(newSize);
-					//textView.setVisibility(View.VISIBLE);
-					if (currTextSize == 0.0f || newSize <= currTextSize)
-						currTextSize = newSize;
-				}
-        	});
+        
+        setlistLayoutShot = (RelativeLayout) v.findViewById(
+        		R.id.SetlistLayoutShot);
+        setTextShot = (AutoResizeTextView) v.findViewById(R.id.SetTextShot);
+        /*
+        stampTextShot = (TextView) v.findViewById(R.id.StampTextShot);
+        if (stampTextShot != null && ApplicationEx.getTextSize() > 0.0f)
+        	stampTextShot.getPaint().setTextSize(ApplicationEx.getTextSize() - 4.0f);
+    	*/
+        if (setTextShot != null) {
+	        setTextShot.setAddEllipsis(false);
+	        setTextShot.setOnResizeListener(
+	    		new OnTextResizeListener() {
+	    			@Override
+	    			public void onTextResize(TextView textView, float oldSize,
+	    					float newSize) {
+	    				Log.w(Constants.LOG_TAG, "onTextResize: " + oldSize + " : " + newSize);
+	    				/*
+	    				if (stampTextShot != null)
+	    					stampTextShot.getPaint().setTextSize(newSize - 4.0f);
+    					*/
+	    				ApplicationEx.setTextSize(newSize);
+	    				if (currTextSize == 0.0f || newSize <= currTextSize)
+	    					currTextSize = newSize;
+	    			}
+	    		}
+			);
         }
         /*
         stampText.setOnClickListener(new OnClickListener() {
@@ -165,7 +178,6 @@ public class FragmentSetlist extends FragmentBase {
                     if (notifyIndex >= testSongs.size())
                         notifyIndex = 0;
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 //{ "action": "com.jeffthefate.dmb.ACTION_NEW_SONG", "song": "Ants Marching ", "setlist": "04/28/2013\nDave Matthews Band\nNew Orleans Jazz and Heritage Festival\nNew Orleans, LA\n\nSeven \n(Still Water) \nDon't Drink the Water \nRooftop \nGrey Street \nYou and Me \nShake Me Like a Monkey \nProudest Monkey \nBelly Belly Nice \nJimi Thing \nWhat Would You Say \n#41 \nLouisiana Bayou ->\nAnts Marching \n(song name) indicates a partial song\n-> indicates a fade into the next song\n" }
@@ -212,14 +224,48 @@ public class FragmentSetlist extends FragmentBase {
         super.onResume();
         if (!StringUtils.isBlank(ApplicationEx.setlist)) {
             setText.setText(ApplicationEx.setlist);
+            if (setTextShot != null)
+            	setTextShot.setText(ApplicationEx.setlist);
+            setText.setVisibility(View.VISIBLE);
             /*
             if (setText instanceof AutoResizeTextView)
             	((AutoResizeTextView) setText).resizeText();
             	*/
+            savedSet = ApplicationEx.setlist;
+            DatabaseHelperSingleton.instance().setUserValue(savedSet,
+                    DatabaseHelper.COL_SETLIST, mCallback.getUserId());
             stampText.setText(ApplicationEx.setlistStamp);
+            stampText.setVisibility(View.VISIBLE);
+            /*
+            if (stampTextShot != null)
+            	stampTextShot.setText(ApplicationEx.setlistStamp);
+        	*/
+            savedStamp = ApplicationEx.setlistStamp;
+            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
+                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
         }
-        else
-            showNetworkProblem();
+        else {
+        	if (StringUtils.isBlank(savedSet))
+        		ApplicationEx.getSetlist();
+        	else {
+        		ApplicationEx.setlist = savedSet;
+        		ApplicationEx.setlistStamp = savedStamp;
+        		setText.setText(ApplicationEx.setlist);
+                setText.setVisibility(View.VISIBLE);
+                if (setTextShot != null)
+                	setTextShot.setText(ApplicationEx.setlist);
+                DatabaseHelperSingleton.instance().setUserValue(savedSet,
+                        DatabaseHelper.COL_SETLIST, mCallback.getUserId());
+                stampText.setText(ApplicationEx.setlistStamp);
+                stampText.setVisibility(View.VISIBLE);
+                /*
+                if (stampTextShot != null)
+                	stampTextShot.setText(ApplicationEx.setlistStamp);
+            	*/
+                DatabaseHelperSingleton.instance().setUserValue(savedStamp,
+                        DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
+        	}
+        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.ACTION_UPDATE_SETLIST);
         intentFilter.addAction(Constants.ACTION_NEW_SONG);
@@ -267,13 +313,25 @@ public class FragmentSetlist extends FragmentBase {
 	        networkText.setVisibility(View.GONE);
 	        //setText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	        setText.setText(ApplicationEx.setlist);
+	        if (setTextShot != null)
+            	setTextShot.setText(ApplicationEx.setlist);
+	        savedSet = ApplicationEx.setlist;
+            DatabaseHelperSingleton.instance().setUserValue(savedSet,
+                    DatabaseHelper.COL_SETLIST, mCallback.getUserId());
 	        /*
 	        if (setText instanceof AutoResizeTextView)
             	((AutoResizeTextView) setText).resizeText();
             	*/
 	        setText.setVisibility(View.VISIBLE);
 	        stampText.setText(ApplicationEx.setlistStamp);
+	        savedStamp = ApplicationEx.setlistStamp;
+            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
+                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
 	        stampText.setVisibility(View.VISIBLE);
+	        /*
+	        if (stampTextShot != null)
+	        	stampTextShot.setText(ApplicationEx.setlistStamp);
+        	*/
     	}
     }
     
@@ -405,4 +463,20 @@ public class FragmentSetlist extends FragmentBase {
         }
     }
     */
+    
+    @Override
+	public void showResizedSetlist() {
+    	if (setlistScroll != null && setlistLayoutShot != null) {
+	    	setlistScroll.setVisibility(View.INVISIBLE);
+	    	setlistLayoutShot.setVisibility(View.VISIBLE);
+    	}
+    }
+
+	@Override
+	public void hideResizedSetlist() {
+		if (setlistScroll != null && setlistLayoutShot != null) {
+			setlistScroll.setVisibility(View.VISIBLE);
+	    	setlistLayoutShot.setVisibility(View.INVISIBLE);
+		}
+	}
 }
