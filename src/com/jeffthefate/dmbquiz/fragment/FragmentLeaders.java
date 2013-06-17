@@ -9,20 +9,16 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Tracker;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
-import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.LeaderAdapter;
@@ -51,14 +47,11 @@ public class FragmentLeaders extends FragmentBase {
     private ArrayList<String> scoreList;
     private ArrayList<String> userIdList;
     
-    private long perfTime;
-    
     public FragmentLeaders() {}
     
     @Override
     public void onAttach(Activity activity) {
     	super.onAttach(activity);
-    	perfTime = System.currentTimeMillis();
     	if (mCallback != null) {
     		mCallback.setHomeAsUp(true);
     		mCallback.setInSetlist(false);
@@ -74,7 +67,6 @@ public class FragmentLeaders extends FragmentBase {
         View v = inflater.inflate(R.layout.leaders, container, false);
         background = (ImageViewEx) v.findViewById(R.id.Background);
         setBackgroundBitmap(mCallback.getBackground(), "leaders");
-        Log.e(Constants.LOG_TAG, "PERF TIME: " + (System.currentTimeMillis()-perfTime));
         userText = (TextView) v.findViewById(R.id.UserText);
         userAnswerText = (TextView) v.findViewById(R.id.Stat1Name);
         userAnswers = (TextView) v.findViewById(R.id.Stat1Score);
@@ -216,20 +208,10 @@ public class FragmentLeaders extends FragmentBase {
         super.onPause();
     }
     
-    private GoogleAnalytics googleAnalytics;
-    private Tracker leadersTracker;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	googleAnalytics = GoogleAnalytics.getInstance(getActivity());
-    	leadersTracker = googleAnalytics.getTracker("UA-41733963-1");
-    }
-    
     @Override
     public void onStart() {
     	super.onStart();
-    	leadersTracker.sendView("/FragmentLeaders");
+    	tracker.sendView("ActivityMain/FragmentLeaders");
     }
     
     @Override

@@ -30,6 +30,12 @@ public class FragmentFaq extends FragmentBase {
     		mCallback.setInSetlist(false);
     	}
     }
+    
+    @Override
+    public void onStart() {
+    	super.onStart();
+    	tracker.sendView("ActivityMain/FragmentFaq");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

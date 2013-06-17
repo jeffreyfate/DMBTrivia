@@ -44,7 +44,7 @@ public class FragmentSetlist extends FragmentBase {
     private ScrollView setlistScroll;
     private RelativeLayout setlistLayoutShot;
     private AutoResizeTextView setTextShot;
-
+    
     public FragmentSetlist() {}
     
     @Override

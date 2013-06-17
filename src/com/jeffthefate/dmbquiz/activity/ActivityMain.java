@@ -294,7 +294,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
         */
         Parse.initialize(this, "ImI8mt1EM3NhZNRqYZOyQpNSwlfsswW73mHsZV3R",
                 "hpTbnpuJ34zAFLnpOAXjH583rZGiYQVBWWvuXsTo");
+        // TODO Remove this when we move to using a channel
         PushService.subscribe(this, "", ActivityMain.class);
+        // TODO Add these to update to the setlist channel and remove old
+        //PushService.unsubscribe(app, "");
+        //PushService.subscribe(app, "setlist", ActivityMain.class);
         PushService.setDefaultPushCallback(this, ActivityMain.class);
         fMan = getSupportFragmentManager();
         if (savedInstanceState != null) {

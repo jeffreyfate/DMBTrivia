@@ -40,7 +40,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.jeffthefate.stacktrace.ExceptionHandler;
 import com.jeffthefate.stacktrace.ExceptionHandler.OnStacktraceListener;
 import com.parse.FindCallback;
@@ -52,7 +51,6 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
-import com.parse.PushService;
 import com.parse.SaveCallback;
 
 /**
@@ -242,8 +240,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	installation.saveEventually();
         	ApplicationEx.addParseQuery();
         } catch (RuntimeException e) {}
-        PushService.unsubscribe(app, "");
-        PushService.subscribe(app, "setlist", ActivityMain.class);
         String notificationType = ResourcesSingleton.instance().getString(
         		R.string.notificationtype_key);
         try {

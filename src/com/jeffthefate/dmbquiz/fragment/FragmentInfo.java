@@ -49,6 +49,12 @@ public class FragmentInfo extends FragmentBase {
     }
     
     @Override
+    public void onStart() {
+    	super.onStart();
+    	tracker.sendView("ActivityMain/FragmentInfo");
+    }
+    
+    @Override
     public void setBackground(Bitmap newBackground) {
     	if (background != null && newBackground != null) {
         	background.setImageDrawable(null);

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
@@ -40,6 +42,9 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     protected ImageViewEx background;
     
+    private GoogleAnalytics googleAnalytics;
+    protected Tracker tracker;
+    
     public static final int LOGIN_FACEBOOK = 0;
     public static final int LOGIN_TWITTER = 1;
     public static final int LOGIN_ANON = 2;
@@ -49,6 +54,8 @@ public class FragmentBase extends Fragment implements UiCallback {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        googleAnalytics = GoogleAnalytics.getInstance(activity);
+    	tracker = googleAnalytics.getTracker("UA-41733963-1");
         try {
             mCallback = (OnButtonListener) activity;
         } catch (ClassCastException e) {

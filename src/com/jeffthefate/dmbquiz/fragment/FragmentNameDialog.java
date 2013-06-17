@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
 
@@ -23,9 +25,14 @@ public class FragmentNameDialog extends DialogFragment {
     
     private ActivityMain mActivity;
     
+    private GoogleAnalytics googleAnalytics;
+    private Tracker tracker;
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        googleAnalytics = GoogleAnalytics.getInstance(activity);
+    	tracker = googleAnalytics.getTracker("UA-41733963-1");
         mActivity = (ActivityMain) activity;
     }
     @Override
@@ -70,5 +77,11 @@ public class FragmentNameDialog extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+    
+    @Override
+    public void onStart() {
+    	super.onStart();
+    	tracker.sendView("ActivityMain/FragmentLeaders/FragmentNameDialog");
     }
 }

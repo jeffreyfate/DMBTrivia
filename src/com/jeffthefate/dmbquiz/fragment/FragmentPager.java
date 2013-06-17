@@ -79,11 +79,18 @@ public class FragmentPager extends FragmentBase {
                         mCallback.slidingMenu().setTouchModeAbove(
                                 SlidingMenu.TOUCHMODE_FULLSCREEN);
                         mCallback.setInSetlist(false);
+                        if (((FragmentPagerAdapter) viewPager.getAdapter())
+                        		.getItem(position) instanceof FragmentSplash)
+                        	tracker.sendView("ActivityMain/FragmentSplash");
+                        else if (((FragmentPagerAdapter) viewPager.getAdapter())
+                        		.getItem(position) instanceof FragmentQuiz)
+                        	tracker.sendView("ActivityMain/FragmentQuiz");
                         break;
                     case 1:
                         mCallback.slidingMenu().setTouchModeAbove(
                                 SlidingMenu.TOUCHMODE_NONE);
                         mCallback.setInSetlist(true);
+                        tracker.sendView("ActivityMain/FragmentSetlist");
                         break;
                     default:
                         mCallback.slidingMenu().setTouchModeAbove(
