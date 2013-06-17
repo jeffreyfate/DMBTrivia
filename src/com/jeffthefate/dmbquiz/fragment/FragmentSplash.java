@@ -26,6 +26,7 @@ import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -262,11 +263,11 @@ public class FragmentSplash extends FragmentBase {
     }
     
     private void checkSignedUp(String username) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        ParseQuery query = ParseUser.getQuery();
         query.whereEqualTo("username", username);
-        query.findInBackground(new FindCallback<ParseUser>() {
+        query.findInBackground(new FindCallback() {
             @Override
-            public void done(List<ParseUser> userList,
+            public void done(List<ParseObject> userList,
                     ParseException e) {
                 if (e == null) {
                     if (emailButtonLayout != null)

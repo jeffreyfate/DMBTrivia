@@ -477,11 +477,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * setlist to show.
      */
     public static void getSetlist() {
-        ParseQuery<ParseObject> setlistQuery = new ParseQuery<ParseObject>("Setlist");
+        ParseQuery setlistQuery = new ParseQuery("Setlist");
         setlistQuery.addDescendingOrder("setDate");
         setlistQuery.setLimit(1);
         //setlistQuery.setSkip(5);
-        setlistQuery.findInBackground(new FindCallback<ParseObject>() {
+        setlistQuery.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> setlists, ParseException e) {
             	String setlist = "Error downloading setlist";
@@ -718,6 +718,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "~");
         songTitle = StringUtils.remove(songTitle, "�");
         songTitle = StringUtils.remove(songTitle, "#");
+        songTitle = StringUtils.remove(songTitle, "-");
+        songTitle = StringUtils.remove(songTitle, ">");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         songTitle = StringUtils.remove(songTitle, " ");
@@ -907,7 +909,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             File audioFile = null;
             StringBuilder sb = new StringBuilder();
     		ParseFile file = null;
-    		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Audio");
+    		ParseQuery query = new ParseQuery("Audio");
     		if (songs != null)
     			query.whereContainedIn("name", songs);
     		try {

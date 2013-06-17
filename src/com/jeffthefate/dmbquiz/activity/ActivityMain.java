@@ -781,11 +781,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void fetchDisplayName() {
         if (userId == null)
             return;
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        ParseQuery query = ParseUser.getQuery();
         query.whereEqualTo("objectId", userId);
-        query.getInBackground("displayName", new GetCallback<ParseUser>() {
+        query.getInBackground("displayName", new GetCallback() {
             @Override
-            public void done(ParseUser user, ParseException e) {
+            public void done(ParseObject user, ParseException e) {
                 if (user != null)
                     displayName = user.getString("displayName");
                 ApplicationEx.addParseQuery();
@@ -1000,14 +1000,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
         protected Void doInBackground(Void... nothing) {
             int questionScore = -1;
             // Find correct answers for current user
-            ParseQuery<ParseObject> correctQuery = new ParseQuery<ParseObject>("CorrectAnswers");
+            ParseQuery correctQuery = new ParseQuery("CorrectAnswers");
             correctQuery.whereEqualTo("userId", userId);
             correctQuery.setLimit(1000);
             // Find the questions of the correct answers
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
+            ParseQuery query = new ParseQuery("Question");
             query.setLimit(1000);
             // Delete dupes
-            ParseQuery<ParseObject> deleteQuery = new ParseQuery<ParseObject>("CorrectAnswers");
+            ParseQuery deleteQuery = new ParseQuery("CorrectAnswers");
             deleteQuery.whereEqualTo("userId", userId);
             deleteQuery.setLimit(1000);
             do {
@@ -3209,7 +3209,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             devList.add("9LvKnpSEqu");
             if (isCancelled())
                 return null;
-            ParseQuery<ParseObject> hintsQuery = new ParseQuery<ParseObject>("CorrectAnswers");
+            ParseQuery hintsQuery = new ParseQuery("CorrectAnswers");
             hintsQuery.whereEqualTo("userId", userId)
                       .whereEqualTo("hint", true);
             try {
@@ -3228,7 +3228,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             if (isCancelled())
                 return null;
-            ParseQuery<ParseObject> questionQuery = new ParseQuery<ParseObject>("Question");
+            ParseQuery questionQuery = new ParseQuery("Question");
             questionQuery.orderByDescending("createdAt");
             try {
                 ParseObject question = questionQuery.getFirst();
@@ -3248,7 +3248,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             ArrayList<String> ranks = new ArrayList<String>(devList);
             ArrayList<ParseObject> rankObjects = new ArrayList<ParseObject>();
-            ParseQuery<ParseUser> rankQuery = ParseUser.getQuery();
+            ParseQuery rankQuery = ParseUser.getQuery();
             rankQuery.whereExists("displayName");
             rankQuery.whereExists("score");
             rankQuery.setLimit(1000);
@@ -3257,7 +3257,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             do {
             	rankQuery.whereNotContainedIn("objectId", ranks);
 	            try {
-	            	List<ParseUser> rankList = rankQuery.find();
+	            	List<ParseObject> rankList = rankQuery.find();
 	            	ApplicationEx.addParseQuery();
 	            	if (rankList.size() == 0)
 	            		break;
@@ -3808,7 +3808,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 	return null;
                 }
                 try {
-                	ParseQuery<ParseObject> query = null;
+                	ParseQuery query = null;
 	                if (tempQuestions == null)
 	                	tempQuestions = new ArrayList<String>();
 	                else
@@ -3816,25 +3816,25 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	                if (correctAnswers != null)
 	                    tempQuestions.addAll(correctAnswers);
 	                tempQuestions.addAll(questionIds);
-	                ParseQuery<ParseObject> queryFirst = null;
-	                ParseQuery<ParseObject> querySecond = null;
+	                ParseQuery queryFirst = null;
+	                ParseQuery querySecond = null;
 	                if (level == Constants.HARD) {
-	                	queryFirst = new ParseQuery<ParseObject>("Question");
+	                	queryFirst = new ParseQuery("Question");
 	                    queryFirst.whereNotContainedIn("objectId",
 	                    		tempQuestions);
 	                    queryFirst.whereLessThanOrEqualTo("score", 1000);
-	                    querySecond = new ParseQuery<ParseObject>("Question");
+	                    querySecond = new ParseQuery("Question");
 	                    querySecond.whereNotContainedIn("objectId",
 	                    		tempQuestions);
 	                	querySecond.whereDoesNotExist("score");
-	                	ArrayList<ParseQuery<ParseObject>> queries =
-	                			new ArrayList<ParseQuery<ParseObject>>();
+	                	ArrayList<ParseQuery> queries =
+	                			new ArrayList<ParseQuery>();
 	                	queries.add(queryFirst);
 	                	queries.add(querySecond);
 	                	query = ParseQuery.or(queries);
 	                }
 	                else {
-	                	query = new ParseQuery<ParseObject>("Question");
+	                	query = new ParseQuery("Question");
 	                	query.whereNotContainedIn("objectId", tempQuestions);
 	                	if (level == Constants.EASY) {
 	                		int easy = DatabaseHelperSingleton.instance()
@@ -4050,8 +4050,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         @Override
         protected Void doInBackground(Void... nothing) {
-            ParseQuery<ParseObject> query =
-            		new ParseQuery<ParseObject>("Stage");
+            ParseQuery query =
+            		new ParseQuery("Stage");
             query.whereEqualTo("userId", userId);
             query.whereContainedIn("questionId", ids);
             query.setLimit(ids.size());

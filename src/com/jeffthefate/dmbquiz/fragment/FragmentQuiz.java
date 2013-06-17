@@ -1039,10 +1039,10 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private void saveAnswers(final String userId) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CorrectAnswers");
+        ParseQuery query = new ParseQuery("CorrectAnswers");
         query.whereEqualTo("userId", userId);
         query.whereContainedIn("objectId", correctMap.keySet());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> answers, ParseException e) {
                 if (answers.isEmpty()) {
@@ -1070,9 +1070,9 @@ public class FragmentQuiz extends FragmentBase {
     }
 
     private void saveQuestionScores() {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
+        ParseQuery query = new ParseQuery("Question");
         query.whereContainedIn("objectId", saveMap.keySet());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> questions, ParseException e) {
                 if (e == null) {
@@ -1212,11 +1212,11 @@ public class FragmentQuiz extends FragmentBase {
     }
     
     private void stageQuestions(final String userId) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Stage");
+        ParseQuery query = new ParseQuery("Stage");
         query.whereEqualTo("userId", userId);
         query.whereContainedIn("questionId", stagedMap.keySet());
         //query.whereEqualTo("questionId", questionId);
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> answers, ParseException e) {
                 if (e != null && e.getCode() != 101) {
