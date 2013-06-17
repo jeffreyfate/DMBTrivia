@@ -24,6 +24,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -39,6 +40,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.jeffthefate.stacktrace.ExceptionHandler;
 import com.jeffthefate.stacktrace.ExceptionHandler.OnStacktraceListener;
 import com.parse.FindCallback;
@@ -50,6 +52,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 /**
@@ -69,18 +72,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      */
     public static String cacheLocation = null;
     private static Toast mToast;
-    /**
-     * Last song reported via Parse and server application
-     */
-    public static String latestSong;
-    /**
-     * Last setlist reported via Parse
-     */
-    public static String setlist;
-    /**
-     * Last song time stamp reported via Parse and server application
-     */
-    public static String setlistStamp;
     /**
      * Last setlist reported, broken in to an
      * {@link java.util.ArrayList ArrayList} of Strings
@@ -104,7 +95,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     private static boolean isDownloading = false;
     
     private static float textViewHeight = 0.0f;
-    private static float textSize = 0.0f;
     
     private static int parseQueries = 0;
     
@@ -252,6 +242,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         	installation.saveEventually();
         	ApplicationEx.addParseQuery();
         } catch (RuntimeException e) {}
+        PushService.unsubscribe(app, "");
+        PushService.subscribe(app, "setlist", ActivityMain.class);
         String notificationType = ResourcesSingleton.instance().getString(
         		R.string.notificationtype_key);
         try {
@@ -268,6 +260,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             				notificationType, false) ? 1 : 0)
             .apply();
         } catch (ClassCastException e) {}
+        getSetlist();
         /*
         if (SharedPreferencesSingleton.instance().getInt(notificationType, 0) ==
         		2 && !isDownloading())
@@ -491,10 +484,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         setlistQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> setlists, ParseException e) {
+            	String setlist = "Error downloading setlist";
                 Intent intent = new Intent(Constants.ACTION_UPDATE_SETLIST);
                 if (e != null) {
                     Log.e(Constants.LOG_TAG, "Error getting setlist!", e);
-                    setlist = "Error downloading setlist";
                     intent.putExtra("success", false);
                 }
                 else {
@@ -503,8 +496,17 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");
                     sb.append(DateFormat.format(df.toLocalizedPattern(), setlists.get(0).getUpdatedAt()));
-                    setlistStamp = sb.toString();
-                    parseSetlist();
+                    Editor editor = SharedPreferencesSingleton.instance()
+                    		.edit();
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setlist_key), setlist);
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setstamp_key), sb.toString());
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                    	editor.commit();
+                    else
+                    	editor.apply();
+                    parseSetlist(setlist);
                     intent.putExtra("success", true);
                 }
                 app.sendBroadcast(intent);
@@ -517,7 +519,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * Create a string list, separating each line of the setlist to an
      * individual string
      */
-    public static void parseSetlist() {
+    public static void parseSetlist(String setlist) {
         setlistList = new ArrayList<String>(Arrays.asList(setlist.split("\n")));
     }
     
@@ -715,6 +717,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "+");
         songTitle = StringUtils.remove(songTitle, "~");
         songTitle = StringUtils.remove(songTitle, "�");
+        songTitle = StringUtils.remove(songTitle, "#");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         songTitle = StringUtils.remove(songTitle, " ");
@@ -961,14 +964,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	
 	public static void setTextViewHeight(float textViewHeight) {
 		ApplicationEx.textViewHeight = textViewHeight;
-	}
-	
-	public static float getTextSize() {
-		return textSize;
-	}
-	
-	public static void setTextSize(float textSize) {
-		ApplicationEx.textSize = textSize;
 	}
 	
 	public static int getParseQueries() {

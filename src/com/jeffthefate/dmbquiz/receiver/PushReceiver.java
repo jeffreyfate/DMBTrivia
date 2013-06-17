@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
@@ -106,28 +107,40 @@ public class PushReceiver extends BroadcastReceiver {
             else if (action.equals(Constants.ACTION_NEW_SONG)) {
             	Log.i(Constants.LOG_TAG, "NEW SONG!");
                 JSONObject json = null;
+                String latestSong = "";
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
                 		throw new JSONException("No data sent!");
                     json = new JSONObject(intent.getExtras().getString(
                             "com.parse.Data"));
-                    ApplicationEx.latestSong = json.getString("song");
-                    ApplicationEx.setlist = json.getString("setlist");
+                    latestSong = json.getString("song");
+                    Editor editor = SharedPreferencesSingleton.instance()
+                    		.edit();
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.lastsong_key), latestSong);
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setlist_key), json.getString("setlist"));
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Updated:\n");
+                    sb.append(getUpdatedDateString(
+                    		Long.parseLong(json.getString("timestamp"))));
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setstamp_key), sb.toString());
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                    	editor.commit();
+                    else
+                    	editor.apply();
                     /*
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");
                     sb.append(getUpdatedDateString(System.currentTimeMillis()));
                     ApplicationEx.setlistStamp = sb.toString();
                     */
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Updated:\n");
-                    sb.append(getUpdatedDateString(Long.parseLong(json.getString("timestamp"))));
-                    ApplicationEx.setlistStamp = sb.toString();
                     Intent setIntent = new Intent(Constants.ACTION_UPDATE_SETLIST);
                     setIntent.putExtra("success", true);
                     ApplicationEx.getApp().sendBroadcast(setIntent);
-                    ApplicationEx.parseSetlist();
                     /*
+                    ApplicationEx.parseSetlist();
                     ParseQuery setlistQuery = new ParseQuery("Setlist");
                     setlistQuery.addDescendingOrder("setDate");
                     setlistQuery.setLimit(1);
@@ -154,23 +167,21 @@ public class PushReceiver extends BroadcastReceiver {
                 } catch (JSONException e) {
                     Log.e(Constants.LOG_TAG, "Bad push notification data!", e);
                 }
-                if (ApplicationEx.latestSong != null &&
-                        !ApplicationEx.latestSong.equals("null") &&
-                        !ApplicationEx.latestSong.equals("") &&
-                        SharedPreferencesSingleton.instance().getBoolean(ApplicationEx.getApp().getString(
+                if (latestSong != null && !latestSong.equals("null") &&
+                        !latestSong.equals("") && SharedPreferencesSingleton
+                        .instance().getBoolean(ApplicationEx.getApp().getString(
                                 R.string.notification_key), true)) {
-                	Log.i(Constants.LOG_TAG, "LATEST SONG: " + ApplicationEx.latestSong);
-                	ApplicationEx.findMatchingAudio(ApplicationEx.latestSong);
+                	Log.i(Constants.LOG_TAG, "LATEST SONG: " + latestSong);
+                	ApplicationEx.findMatchingAudio(latestSong);
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());
                     Bitmap largeIcon = ApplicationEx.resizeImage(ResourcesSingleton.instance(),
-                            ApplicationEx.findMatchingImage(
-                                    ApplicationEx.latestSong));
+                            ApplicationEx.findMatchingImage(latestSong));
                     nBuilder.setLargeIcon(largeIcon).
                         setSmallIcon(R.drawable.notification_large).
                         setWhen(System.currentTimeMillis()).
-                        setTicker(ApplicationEx.latestSong).
-                        setContentTitle(ApplicationEx.latestSong).
+                        setTicker(latestSong).
+                        setContentTitle(latestSong).
                         setLights(0xffff0000, 2000, 10000);
                     switch (SharedPreferencesSingleton.instance().getInt(
                     		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {

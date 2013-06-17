@@ -12273,6 +12273,9 @@ com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
     android.graphics.Bitmap portraitSetlistBitmap -> p
     android.graphics.Bitmap landSetlistBitmap -> q
     boolean isDownloading -> r
+    float textViewHeight -> s
+    float textSize -> t
+    int parseQueries -> u
     void onCreate() -> onCreate
     android.content.Context getApp() -> a
     void onStacktrace(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> onStacktrace
@@ -12290,7 +12293,7 @@ com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
     void getSetlist() -> g
     void parseSetlist() -> h
     void createNotificationUri(int) -> a
-    void generateSongMap() -> n
+    void generateSongMap() -> o
     int findMatchingImage(java.lang.String) -> d
     void findMatchingAudio(java.lang.String) -> e
     android.graphics.Bitmap resizeImage(android.content.res.Resources,int) -> a
@@ -12298,10 +12301,11 @@ com.jeffthefate.dmbquiz.ApplicationEx -> com.jeffthefate.dmbquiz.ApplicationEx:
     android.graphics.Bitmap getBackgroundBitmap() -> i
     void setSetlistBitmap(android.graphics.Bitmap) -> b
     android.graphics.Bitmap getSetlistBitmap() -> j
-    void downloadSongClips(java.util.List) -> a
-    boolean isDownloading() -> k
-    android.content.Context access$0() -> l
-    void access$1$1385ff() -> m
+    float getTextSize() -> k
+    void setTextSize(float) -> a
+    int getParseQueries() -> l
+    void addParseQuery() -> m
+    android.content.Context access$0() -> n
 com.jeffthefate.dmbquiz.ApplicationEx$1 -> com.jeffthefate.dmbquiz.a:
     com.jeffthefate.dmbquiz.ApplicationEx this$0 -> a
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
@@ -12318,13 +12322,35 @@ com.jeffthefate.dmbquiz.ApplicationEx$ResourcesSingleton -> com.jeffthefate.dmbq
 com.jeffthefate.dmbquiz.ApplicationEx$SharedPreferencesSingleton -> com.jeffthefate.dmbquiz.f:
     android.content.SharedPreferences sharedPrefs -> a
     android.content.SharedPreferences instance() -> a
-com.jeffthefate.dmbquiz.ApplicationEx$SongDownloadTask -> com.jeffthefate.dmbquiz.g:
-    java.util.List songs -> a
-    java.lang.Void doInBackground$10299ca() -> a
-    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.ApplicationEx$SongInfo -> com.jeffthefate.dmbquiz.h:
+com.jeffthefate.dmbquiz.ApplicationEx$SongInfo -> com.jeffthefate.dmbquiz.g:
     int image -> a
     int audio -> b
+com.jeffthefate.dmbquiz.AutoResizeTextView -> com.jeffthefate.dmbquiz.AutoResizeTextView:
+    com.jeffthefate.dmbquiz.AutoResizeTextView$OnTextResizeListener mTextResizeListener -> a
+    boolean mNeedsResize -> b
+    float mTextSize -> c
+    float mMaxTextSize -> d
+    float mMinTextSize -> e
+    float mSpacingMult -> f
+    float mSpacingAdd -> g
+    boolean mAddEllipsis -> h
+    void onTextChanged(java.lang.CharSequence,int,int,int) -> onTextChanged
+    void onSizeChanged(int,int,int,int) -> onSizeChanged
+    void setOnResizeListener(com.jeffthefate.dmbquiz.AutoResizeTextView$OnTextResizeListener) -> setOnResizeListener
+    void setTextSize(float) -> setTextSize
+    void setTextSize(int,float) -> setTextSize
+    void setLineSpacing(float,float) -> setLineSpacing
+    void setMaxTextSize(float) -> setMaxTextSize
+    float getMaxTextSize() -> getMaxTextSize
+    void setMinTextSize(float) -> setMinTextSize
+    float getMinTextSize() -> getMinTextSize
+    void setAddEllipsis(boolean) -> setAddEllipsis
+    boolean getAddEllipsis() -> getAddEllipsis
+    void onMeasure(int,int) -> onMeasure
+    void onLayout(boolean,int,int,int,int) -> onLayout
+    int getTextHeight(java.lang.CharSequence,android.text.TextPaint,int,float) -> a
+com.jeffthefate.dmbquiz.AutoResizeTextView$OnTextResizeListener -> com.jeffthefate.dmbquiz.h:
+    void onTextResize$49363f51(float,float) -> a
 com.jeffthefate.dmbquiz.Constants -> com.jeffthefate.dmbquiz.i:
     java.lang.String SCREENS_LOCATION -> a
     java.lang.String AUDIO_LOCATION -> b
@@ -12352,45 +12378,39 @@ com.jeffthefate.dmbquiz.DatabaseHelper -> com.jeffthefate.dmbquiz.j:
     boolean isAnonUser(java.lang.String) -> b
     long setScore(int,java.lang.String) -> a
     int getScore(java.lang.String) -> c
+    long setCheckCount$505cbf57(java.lang.String) -> d
     long setOffset(int,java.lang.String) -> b
     java.lang.String getCurrUser() -> g
-    long setQuestions(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,boolean) -> a
-    java.lang.String getCurrQuestionId(java.lang.String) -> d
-    java.lang.String getCurrQuestionQuestion(java.lang.String) -> e
-    java.lang.String getCurrQuestionAnswer(java.lang.String) -> f
-    java.lang.String getCurrQuestionCategory(java.lang.String) -> g
-    java.lang.String getCurrQuestionScore(java.lang.String) -> h
-    boolean getCurrQuestionHint(java.lang.String) -> i
-    boolean getCurrQuestionSkip(java.lang.String) -> j
+    java.lang.String getCurrQuestionId(java.lang.String) -> e
+    java.lang.String getCurrQuestionQuestion(java.lang.String) -> f
+    java.lang.String getCurrQuestionAnswer(java.lang.String) -> g
+    java.lang.String getCurrQuestionCategory(java.lang.String) -> h
+    java.lang.String getCurrQuestionScore(java.lang.String) -> i
+    boolean getCurrQuestionHint(java.lang.String) -> j
     java.lang.String getNextQuestionId(java.lang.String) -> k
     java.lang.String getNextQuestionQuestion(java.lang.String) -> l
     java.lang.String getNextQuestionAnswer(java.lang.String) -> m
     java.lang.String getNextQuestionCategory(java.lang.String) -> n
     java.lang.String getNextQuestionScore(java.lang.String) -> o
     boolean getNextQuestionHint(java.lang.String) -> p
-    boolean getNextQuestionSkip(java.lang.String) -> q
-    java.lang.String getThirdQuestionId(java.lang.String) -> r
-    java.lang.String getThirdQuestionQuestion(java.lang.String) -> s
-    java.lang.String getThirdQuestionAnswer(java.lang.String) -> t
-    java.lang.String getThirdQuestionCategory(java.lang.String) -> u
-    java.lang.String getThirdQuestionScore(java.lang.String) -> v
-    boolean getThirdQuestionHint(java.lang.String) -> w
-    boolean getThirdQuestionSkip(java.lang.String) -> x
+    java.lang.String getThirdQuestionId(java.lang.String) -> q
+    java.lang.String getThirdQuestionQuestion(java.lang.String) -> r
+    java.lang.String getThirdQuestionAnswer(java.lang.String) -> s
+    java.lang.String getThirdQuestionCategory(java.lang.String) -> t
+    java.lang.String getThirdQuestionScore(java.lang.String) -> u
+    boolean getThirdQuestionHint(java.lang.String) -> v
     long setPortBackground(java.lang.String,java.lang.String) -> c
-    java.lang.String getPortBackground(java.lang.String) -> y
+    java.lang.String getPortBackground(java.lang.String) -> w
     long setLandBackground(java.lang.String,java.lang.String) -> d
-    java.lang.String getLandBackground(java.lang.String) -> z
-    int getNotificationImage(java.lang.String) -> A
-    boolean hasNotificationSong(java.lang.String) -> B
+    java.lang.String getLandBackground(java.lang.String) -> x
+    int getNotificationImage(java.lang.String) -> y
+    boolean hasNotificationSong(java.lang.String) -> z
     void updateNotification(java.lang.String,int,int) -> a
     void addNotification(java.lang.String,int,int) -> b
-    void songNotificationDownloaded(java.lang.String,boolean) -> a
-    java.util.ArrayList getNotificatationsToDownload() -> h
-    void checkUpgrade() -> i
+    void checkUpgrade() -> h
+    boolean checkColumnExists(java.lang.String,java.lang.String) -> e
 com.jeffthefate.dmbquiz.ImageViewEx -> com.jeffthefate.dmbquiz.ImageViewEx:
     java.util.HashMap viewMap -> a
-    android.graphics.Bitmap bitmap -> b
-    android.graphics.Paint colorPaint -> c
     void onDetachedFromWindow() -> onDetachedFromWindow
     void setBitmap(android.graphics.Bitmap) -> setBitmap
 com.jeffthefate.dmbquiz.LeaderAdapter -> com.jeffthefate.dmbquiz.k:
@@ -12419,34 +12439,34 @@ com.jeffthefate.dmbquiz.OnButtonListener -> com.jeffthefate.dmbquiz.m:
     void logOut() -> d
     void showScoreDialog() -> e
     void next() -> f
-    java.lang.String getQuestionId() -> g
-    java.lang.String getQuestion() -> h
-    java.lang.String getCorrectAnswer() -> i
-    java.lang.String getQuestionScore() -> j
-    boolean getQuestionHint() -> k
-    void setQuestionHint$1385ff() -> l
+    boolean questionIdsEmpty() -> g
+    java.lang.String getQuestionId$47921032() -> h
+    java.lang.String getQuestion$47921032() -> i
+    java.lang.String getQuestionAnswer$47921032() -> j
+    java.lang.String getQuestionScore$47921032() -> k
+    boolean getQuestionHint$134632() -> l
+    void setQuestionHint$25dace4() -> m
     void getNextQuestions$25dace4(boolean) -> b
-    boolean isNewQuestion() -> m
-    void setIsNewQuestion$1385ff() -> n
-    java.lang.String getUserId() -> o
-    java.lang.String getDisplayName() -> p
-    int getCurrentScore() -> q
+    boolean isNewQuestion() -> n
+    void setIsNewQuestion$1385ff() -> o
+    java.lang.String getUserId() -> p
+    java.lang.String getDisplayName() -> q
+    int getCurrentScore() -> r
     void addCurrentScore(int) -> a
-    void saveUserScore(int) -> b
     void setNetworkProblem(boolean) -> c
-    boolean getNetworkProblem() -> r
+    boolean getNetworkProblem() -> s
     void addCorrectAnswer(java.lang.String) -> a
     boolean isCorrectAnswer(java.lang.String) -> b
     void setUserName(java.lang.String) -> c
-    boolean isNewUser() -> s
+    boolean isNewUser() -> t
     void resetPassword(java.lang.String) -> d
-    boolean isLoggingOut() -> t
+    boolean isLoggingOut() -> u
     void setLoggingOut(boolean) -> d
     void setHomeAsUp(boolean) -> e
-    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu() -> u
-    boolean getGoToSetlist() -> v
+    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu() -> v
+    boolean getGoToSetlist() -> w
     void setInSetlist(boolean) -> f
-    boolean getInSetlist() -> w
+    boolean getInSetlist() -> x
 com.jeffthefate.dmbquiz.R -> com.jeffthefate.dmbquiz.n:
 com.jeffthefate.dmbquiz.R$drawable -> com.jeffthefate.dmbquiz.o:
     int abs__ab_bottom_solid_dark_holo -> abs__ab_bottom_solid_dark_holo
@@ -12680,6 +12700,8 @@ com.jeffthefate.dmbquiz.R$drawable -> com.jeffthefate.dmbquiz.o:
     int ic_notification_music_vibrate -> ic_notification_music_vibrate
     int ic_notification_music_vibrate_disabled -> ic_notification_music_vibrate_disabled
     int ic_notification_music_vibrate_inverse -> ic_notification_music_vibrate_inverse
+    int ic_notification_silent -> ic_notification_silent
+    int ic_notification_silent_disabled -> ic_notification_silent_disabled
     int ic_notification_sound_inverse -> ic_notification_sound_inverse
     int ic_notification_type_inverse -> ic_notification_type_inverse
     int ic_notification_vibrate -> ic_notification_vibrate
@@ -12691,6 +12713,7 @@ com.jeffthefate.dmbquiz.R$drawable -> com.jeffthefate.dmbquiz.o:
     int ic_report_inverse -> ic_report_inverse
     int ic_setlist -> ic_setlist
     int ic_share -> ic_share
+    int ic_silent -> ic_silent
     int ic_song_inverse -> ic_song_inverse
     int ic_sounds -> ic_sounds
     int ic_sounds_inverse -> ic_sounds_inverse
@@ -12947,278 +12970,225 @@ com.jeffthefate.dmbquiz.activity.ActivityMain -> com.jeffthefate.dmbquiz.activit
     boolean inLoad -> n
     boolean inStats -> o
     boolean inInfo -> p
-    boolean inSetlist -> q
-    java.lang.String questionId -> r
-    java.lang.String question -> s
-    java.lang.String correctAnswer -> t
-    java.lang.String questionCategory -> u
-    java.lang.String questionScore -> v
-    boolean questionHint -> w
-    boolean questionSkip -> x
-    java.lang.String nextQuestionId -> y
-    java.lang.String nextQuestion -> z
-    java.lang.String nextCorrectAnswer -> A
-    java.lang.String nextQuestionCategory -> B
-    java.lang.String nextQuestionScore -> C
-    boolean nextQuestionHint -> D
-    boolean nextQuestionSkip -> E
-    java.lang.String thirdQuestionId -> F
-    java.lang.String thirdQuestion -> G
-    java.lang.String thirdCorrectAnswer -> H
-    java.lang.String thirdQuestionCategory -> I
-    java.lang.String thirdQuestionScore -> J
-    boolean thirdQuestionHint -> K
-    boolean thirdQuestionSkip -> L
-    boolean newQuestion -> M
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask getStatsTask -> N
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask getScoreTask -> O
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask getNextQuestionsTask -> P
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask getStageTask -> Q
-    android.os.Bundle leadersBundle -> R
-    java.util.ArrayList rankList -> S
-    java.util.ArrayList userList -> T
-    java.util.ArrayList scoreList -> U
-    java.util.ArrayList userIdList -> V
-    java.lang.String displayName -> W
-    int currScore -> X
-    int tempScore -> Y
-    com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask userTask -> Z
-    java.util.ArrayList correctAnswers -> aa
-    boolean networkProblem -> ab
-    boolean facebookLogin -> ac
-    boolean newUser -> ad
-    android.app.NotificationManager nManager -> ae
-    com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver connReceiver -> af
-    int lowest -> ag
-    int highest -> ah
-    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu -> ai
-    android.widget.RelativeLayout statsButton -> aj
-    android.widget.RelativeLayout switchButton -> ak
-    android.widget.RelativeLayout infoButton -> al
-    android.widget.RelativeLayout reportButton -> am
-    android.widget.RelativeLayout shareButton -> an
-    android.widget.RelativeLayout nameButton -> ao
-    android.widget.RelativeLayout exitButton -> ap
-    android.widget.RelativeLayout logoutButton -> aq
-    android.widget.TextView logoutText -> ar
-    android.widget.RelativeLayout soundsButton -> as
-    android.widget.CheckedTextView soundsText -> at
-    android.widget.RelativeLayout notificationsButton -> au
-    android.widget.CheckedTextView notificationsText -> av
-    android.widget.RelativeLayout notificationSoundButton -> aw
-    android.widget.TextView notificationSoundText -> ax
-    com.jeffthefate.dmbquiz.ImageViewEx notificationSoundImage -> ay
-    android.widget.RelativeLayout notificationAlbumButton -> az
-    android.widget.TextView notificationAlbumText -> aA
-    com.jeffthefate.dmbquiz.ImageViewEx notificationAlbumImage -> aB
-    android.widget.RelativeLayout followButton -> aC
-    android.widget.RelativeLayout likeButton -> aD
-    boolean goToSetlist -> aE
-    com.actionbarsherlock.view.Menu mMenu -> aF
-    com.actionbarsherlock.view.MenuItem shareItem -> aG
-    com.actionbarsherlock.view.MenuItem setlistItem -> aH
-    com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask screenshotTask -> aI
-    com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask setBackgroundTask -> aJ
-    com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundWaitTask setBackgroundWaitTask -> aK
+    boolean inFaq -> q
+    boolean inSetlist -> r
+    java.util.ArrayList questionIds -> s
+    java.util.ArrayList questions -> t
+    java.util.ArrayList questionAnswers -> u
+    java.util.ArrayList questionCategories -> v
+    java.util.ArrayList questionScores -> w
+    java.util.ArrayList questionHints -> x
+    java.util.ArrayList questionSkips -> y
+    boolean newQuestion -> z
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask getStatsTask -> A
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask getScoreTask -> B
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask getNextQuestionsTask -> C
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask getStageTask -> D
+    android.os.Bundle leadersBundle -> E
+    java.util.ArrayList rankList -> F
+    java.util.ArrayList userList -> G
+    java.util.ArrayList scoreList -> H
+    java.util.ArrayList userIdList -> I
+    java.lang.String displayName -> J
+    int currScore -> K
+    com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask userTask -> L
+    java.util.ArrayList correctAnswers -> M
+    boolean networkProblem -> N
+    boolean facebookLogin -> O
+    boolean newUser -> P
+    android.app.NotificationManager nManager -> Q
+    com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver connReceiver -> R
+    int lowest -> S
+    int highest -> T
+    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu -> U
+    android.widget.RelativeLayout statsButton -> V
+    android.widget.RelativeLayout switchButton -> W
+    android.widget.RelativeLayout infoButton -> X
+    android.widget.RelativeLayout reportButton -> Y
+    android.widget.RelativeLayout shareButton -> Z
+    android.widget.RelativeLayout nameButton -> aa
+    android.widget.RelativeLayout exitButton -> ab
+    android.widget.RelativeLayout logoutButton -> ac
+    android.widget.RelativeLayout soundsButton -> ad
+    android.widget.CheckedTextView soundsText -> ae
+    android.widget.RelativeLayout notificationsButton -> af
+    android.widget.CheckedTextView notificationsText -> ag
+    android.widget.RelativeLayout notificationSoundButton -> ah
+    android.widget.TextView notificationSoundText -> ai
+    com.jeffthefate.dmbquiz.ImageViewEx notificationSoundImage -> aj
+    android.widget.RelativeLayout notificationAlbumButton -> ak
+    android.widget.TextView notificationAlbumText -> al
+    com.jeffthefate.dmbquiz.ImageViewEx notificationAlbumImage -> am
+    android.widget.RelativeLayout followButton -> an
+    android.widget.RelativeLayout likeButton -> ao
+    boolean goToSetlist -> ap
+    com.actionbarsherlock.view.Menu mMenu -> aq
+    com.actionbarsherlock.view.MenuItem shareItem -> ar
+    com.actionbarsherlock.view.MenuItem setlistItem -> as
+    com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask screenshotTask -> at
+    com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask setBackgroundTask -> au
+    com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundWaitTask setBackgroundWaitTask -> av
+    int count -> aw
+    boolean checkCount -> ax
     void onCreate(android.os.Bundle) -> onCreate
-    void getUserData(java.lang.String) -> f
+    void getUserData(java.lang.String) -> k
     void onNewIntent(android.content.Intent) -> onNewIntent
     void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     void onResume() -> onResume
-    void showLogin() -> T
-    void showLoggedInFragment() -> U
-    void showLeaders() -> V
-    void checkUser() -> W
+    void showLogin() -> M
+    void showLoggedInFragment() -> N
+    void showLeaders() -> O
+    void checkUser() -> P
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     void onBackPressed() -> onBackPressed
-    void showQuiz$25decb5() -> X
-    void showSplash$25decb5() -> Y
+    void showQuiz$25decb5() -> Q
+    void showSplash$25decb5() -> R
     void onPause() -> onPause
     void getScore(boolean,boolean,java.lang.String,boolean) -> a
     void onDestroy() -> onDestroy
     boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem) -> onOptionsItemSelected
     boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
-    void refreshSlidingMenu() -> Z
-    void openStats() -> x
-    android.content.Intent getOpenFacebookIntent() -> aa
+    void refreshSlidingMenu() -> S
+    void openStats() -> y
+    android.content.Intent getOpenFacebookIntent() -> T
     void setBackground(java.lang.String,boolean,java.lang.String) -> a
     java.lang.String getBackground() -> a
     void setlistBackground(java.lang.String,com.jeffthefate.dmbquiz.ImageViewEx) -> a
     void onLoginPressed(int,java.lang.String,java.lang.String) -> a
     void getFacebookDisplayName(com.parse.ParseUser) -> a
-    void onInfoPressed() -> y
+    void onInfoPressed() -> z
     void onStatsPressed() -> b
+    void onFaqPressed() -> A
     android.os.Bundle getLeadersState() -> c
     void setupUser(boolean) -> a
     void logOut() -> d
     void showScoreDialog() -> e
-    void showNameDialog() -> z
-    void showDownloadDialog() -> A
+    void showNameDialog() -> B
     void next() -> f
-    java.lang.String getQuestionId() -> g
-    void setQuestionId$552c4e01() -> B
-    java.lang.String getQuestion() -> h
-    void setQuestion$552c4e01() -> C
-    java.lang.String getCorrectAnswer() -> i
-    void setCorrectAnswer$552c4e01() -> D
-    java.lang.String getQuestionScore() -> j
-    void setQuestionScore$552c4e01() -> E
-    void setQuestionCategory$552c4e01() -> F
-    boolean getQuestionHint() -> k
-    void setQuestionHint$1385ff() -> l
-    void setNextQuestionId$552c4e01() -> G
-    void setNextQuestion$552c4e01() -> H
-    void setNextCorrectAnswer$552c4e01() -> I
-    void setNextQuestionScore$552c4e01() -> J
-    void setNextQuestionCategory$552c4e01() -> K
-    void setThirdQuestionId$552c4e01() -> L
-    void setThirdQuestion$552c4e01() -> M
-    void setThirdCorrectAnswer$552c4e01() -> N
-    void setThirdQuestionScore$552c4e01() -> O
-    void setThirdQuestionCategory$552c4e01() -> P
+    boolean questionIdsEmpty() -> g
+    java.lang.String getQuestionId$47921032() -> h
+    void addQuestionId(java.lang.String) -> e
+    void clearQuestionIds() -> C
+    java.lang.String getQuestion$47921032() -> i
+    void addQuestion(java.lang.String) -> f
+    void clearQuestions() -> D
+    java.lang.String getQuestionAnswer$47921032() -> j
+    void addQuestionAnswer(java.lang.String) -> g
+    void clearQuestionAnswers() -> E
+    java.lang.String getQuestionScore$47921032() -> k
+    void addQuestionScore(java.lang.String) -> h
+    void clearQuestionScores() -> F
+    void addQuestionCategory(java.lang.String) -> i
+    void clearQuestionCategories() -> G
+    boolean getQuestionHint$134632() -> l
+    void setQuestionHint$25dace4() -> m
+    void addQuestionHint(boolean) -> g
+    void clearQuestionHints() -> H
+    void addQuestionSkip$1385ff() -> U
+    void clearQuestionSkips() -> I
     void getNextQuestions$25dace4(boolean) -> b
-    boolean isNewQuestion() -> m
-    void setIsNewQuestion$1385ff() -> n
-    java.lang.String getUserId() -> o
-    void setDisplayName(java.lang.String) -> e
-    java.lang.String getDisplayName() -> p
-    int getCurrentScore() -> q
+    boolean isNewQuestion() -> n
+    void setIsNewQuestion$1385ff() -> o
+    java.lang.String getUserId() -> p
+    void setDisplayName(java.lang.String) -> j
+    java.lang.String getDisplayName() -> q
+    int getCurrentScore() -> r
     void addCurrentScore(int) -> a
     void saveUserScore(int) -> b
-    void shareScreenshot() -> Q
-    java.lang.String takeScreenshot() -> ab
-    boolean getNetworkProblem() -> r
+    void shareScreenshot() -> J
+    java.lang.String takeScreenshot() -> V
+    boolean getNetworkProblem() -> s
     void setNetworkProblem(boolean) -> c
     void addCorrectAnswer(java.lang.String) -> a
     boolean isCorrectAnswer(java.lang.String) -> b
     void setUserName(java.lang.String) -> c
-    boolean isNewUser() -> s
+    boolean isNewUser() -> t
     void resetPassword(java.lang.String) -> d
-    boolean isLoggingOut() -> t
+    boolean isLoggingOut() -> u
     void setLoggingOut(boolean) -> d
     void setHomeAsUp(boolean) -> e
-    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu() -> u
-    void refreshMenu() -> ac
-    boolean getGoToSetlist() -> v
+    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu slidingMenu() -> v
+    void refreshMenu() -> W
+    boolean getGoToSetlist() -> w
     void setInSetlist(boolean) -> f
-    boolean getInSetlist() -> w
+    boolean getInSetlist() -> x
     android.graphics.Bitmap getBitmap(int) -> c
     com.jeffthefate.dmbquiz.fragment.FragmentBase access$0(com.jeffthefate.dmbquiz.activity.ActivityMain) -> a
-    int access$1(com.jeffthefate.dmbquiz.activity.ActivityMain) -> b
-    void access$2(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> a
-    com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask access$3(com.jeffthefate.dmbquiz.activity.ActivityMain) -> c
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask access$4(com.jeffthefate.dmbquiz.activity.ActivityMain) -> d
-    void access$5(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean,java.lang.String,boolean) -> a
-    void access$6(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> b
-    void access$7(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> c
-    int access$8(com.jeffthefate.dmbquiz.activity.ActivityMain) -> e
-    int access$9(com.jeffthefate.dmbquiz.activity.ActivityMain) -> f
-    void access$10(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> d
-    int access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> g
-    void access$12(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> a
-    java.util.ArrayList access$13(com.jeffthefate.dmbquiz.activity.ActivityMain) -> h
-    java.lang.String access$14(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
-    void access$15(com.jeffthefate.dmbquiz.activity.ActivityMain) -> j
-    void access$16(com.jeffthefate.dmbquiz.activity.ActivityMain) -> k
-    java.util.ArrayList access$17(com.jeffthefate.dmbquiz.activity.ActivityMain) -> l
-    void access$18(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> e
-    int access$19(com.jeffthefate.dmbquiz.activity.ActivityMain) -> m
-    void access$20(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> a
-    java.lang.String access$21(com.jeffthefate.dmbquiz.activity.ActivityMain) -> n
-    java.lang.String access$22(com.jeffthefate.dmbquiz.activity.ActivityMain) -> o
-    void access$23(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> b
-    java.lang.String access$24(com.jeffthefate.dmbquiz.activity.ActivityMain) -> p
-    android.widget.RelativeLayout access$25(com.jeffthefate.dmbquiz.activity.ActivityMain) -> q
-    void access$26(com.jeffthefate.dmbquiz.activity.ActivityMain,android.os.Bundle) -> a
-    android.os.Bundle access$27(com.jeffthefate.dmbquiz.activity.ActivityMain) -> r
-    java.lang.String access$28(com.jeffthefate.dmbquiz.activity.ActivityMain) -> s
-    void access$29(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> a
-    boolean access$30(com.jeffthefate.dmbquiz.activity.ActivityMain) -> t
-    void access$31$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> u
-    boolean access$32(com.jeffthefate.dmbquiz.activity.ActivityMain) -> v
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask access$33(com.jeffthefate.dmbquiz.activity.ActivityMain) -> w
-    void access$34(com.jeffthefate.dmbquiz.activity.ActivityMain) -> x
-    void access$35(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> b
-    void access$36(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> c
-    void access$37(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> d
-    void access$38(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> e
-    java.util.ArrayList access$39(com.jeffthefate.dmbquiz.activity.ActivityMain) -> y
-    java.util.ArrayList access$40(com.jeffthefate.dmbquiz.activity.ActivityMain) -> z
-    java.util.ArrayList access$41(com.jeffthefate.dmbquiz.activity.ActivityMain) -> A
-    java.util.ArrayList access$42(com.jeffthefate.dmbquiz.activity.ActivityMain) -> B
-    void access$43(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> a
-    com.parse.ParseUser access$44(com.jeffthefate.dmbquiz.activity.ActivityMain) -> C
-    void access$45(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> c
-    void access$46$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> D
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask access$47(com.jeffthefate.dmbquiz.activity.ActivityMain) -> E
-    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask access$48(com.jeffthefate.dmbquiz.activity.ActivityMain) -> F
-    boolean access$49(com.jeffthefate.dmbquiz.activity.ActivityMain) -> G
-    boolean access$50(com.jeffthefate.dmbquiz.activity.ActivityMain) -> H
-    void access$51(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> d
-    void access$52$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> I
-    boolean access$53(com.jeffthefate.dmbquiz.activity.ActivityMain) -> J
-    void access$54$59ba7180(com.jeffthefate.dmbquiz.activity.ActivityMain) -> K
-    java.lang.String access$55(com.jeffthefate.dmbquiz.activity.ActivityMain) -> L
-    java.lang.String access$56(com.jeffthefate.dmbquiz.activity.ActivityMain) -> M
-    void access$57(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> e
-    void access$58(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> f
-    void access$59(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> g
-    void access$60(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> h
-    void access$61(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> i
-    void access$62(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> j
-    void access$63(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> k
-    void access$64(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> l
-    void access$65(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> m
-    void access$66(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> n
-    void access$67(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> o
-    void access$68(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> p
-    void access$69(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> q
-    void access$70(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> r
-    void access$71(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> s
-    void access$72(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String,java.util.ArrayList,boolean) -> a
-    java.lang.String access$73(com.jeffthefate.dmbquiz.activity.ActivityMain) -> N
-    java.lang.String access$74(com.jeffthefate.dmbquiz.activity.ActivityMain) -> O
-    java.lang.String access$75(com.jeffthefate.dmbquiz.activity.ActivityMain) -> P
-    java.lang.String access$76(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Q
-    boolean access$77(com.jeffthefate.dmbquiz.activity.ActivityMain) -> R
-    boolean access$78(com.jeffthefate.dmbquiz.activity.ActivityMain) -> S
-    java.lang.String access$79(com.jeffthefate.dmbquiz.activity.ActivityMain) -> T
-    java.lang.String access$80(com.jeffthefate.dmbquiz.activity.ActivityMain) -> U
-    java.lang.String access$81(com.jeffthefate.dmbquiz.activity.ActivityMain) -> V
-    java.lang.String access$82(com.jeffthefate.dmbquiz.activity.ActivityMain) -> W
-    boolean access$83(com.jeffthefate.dmbquiz.activity.ActivityMain) -> X
-    boolean access$84(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Y
-    java.lang.String access$85(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Z
-    java.lang.String access$86(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aa
-    java.lang.String access$87(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ab
-    java.lang.String access$88(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ac
-    boolean access$89(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ad
-    boolean access$90(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ae
-    void access$91(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> b
-    void access$92(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> c
-    void access$93(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> d
-    void access$94(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> e
-    void access$95(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> f
-    void access$96(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> g
-    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu access$97(com.jeffthefate.dmbquiz.activity.ActivityMain) -> af
-    android.widget.TextView access$98(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ag
-    com.jeffthefate.dmbquiz.ImageViewEx access$99(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ah
-    android.widget.TextView access$100(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ai
-    com.jeffthefate.dmbquiz.ImageViewEx access$101(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aj
-    com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask access$102(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ak
-    void access$103(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask) -> a
-    void access$104(com.jeffthefate.dmbquiz.activity.ActivityMain) -> al
-    android.widget.CheckedTextView access$105(com.jeffthefate.dmbquiz.activity.ActivityMain) -> am
-    void access$106$59ba7180(com.jeffthefate.dmbquiz.activity.ActivityMain) -> an
-    android.widget.CheckedTextView access$107(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ao
-    android.widget.RelativeLayout access$108(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ap
-    android.widget.RelativeLayout access$109(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aq
-    android.content.Intent access$110$2529f6ed() -> R
-    android.content.Intent access$111$2529f6ed() -> S
-    void access$112(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> h
-    void access$113(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> b
-    boolean access$114(com.jeffthefate.dmbquiz.activity.ActivityMain) -> ar
+    com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask access$1(com.jeffthefate.dmbquiz.activity.ActivityMain) -> b
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask access$2(com.jeffthefate.dmbquiz.activity.ActivityMain) -> c
+    void access$3(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean,boolean,java.lang.String,boolean) -> a
+    void access$4(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> a
+    int access$5(com.jeffthefate.dmbquiz.activity.ActivityMain) -> d
+    void access$6(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> a
+    java.util.ArrayList access$7(com.jeffthefate.dmbquiz.activity.ActivityMain) -> e
+    java.util.ArrayList access$8(com.jeffthefate.dmbquiz.activity.ActivityMain) -> f
+    void access$9(com.jeffthefate.dmbquiz.activity.ActivityMain) -> g
+    void access$10(com.jeffthefate.dmbquiz.activity.ActivityMain) -> h
+    java.util.ArrayList access$11(com.jeffthefate.dmbquiz.activity.ActivityMain) -> i
+    void access$12(com.jeffthefate.dmbquiz.activity.ActivityMain,int) -> b
+    int access$13(com.jeffthefate.dmbquiz.activity.ActivityMain) -> j
+    void access$14(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> a
+    java.lang.String access$15(com.jeffthefate.dmbquiz.activity.ActivityMain) -> k
+    java.lang.String access$16(com.jeffthefate.dmbquiz.activity.ActivityMain) -> l
+    void access$17(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> b
+    java.lang.String access$18(com.jeffthefate.dmbquiz.activity.ActivityMain) -> m
+    android.widget.RelativeLayout access$19(com.jeffthefate.dmbquiz.activity.ActivityMain) -> n
+    void access$20(com.jeffthefate.dmbquiz.activity.ActivityMain,android.os.Bundle) -> a
+    android.os.Bundle access$21(com.jeffthefate.dmbquiz.activity.ActivityMain) -> o
+    java.lang.String access$22(com.jeffthefate.dmbquiz.activity.ActivityMain) -> p
+    void access$23(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> a
+    boolean access$24(com.jeffthefate.dmbquiz.activity.ActivityMain) -> q
+    void access$25$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> r
+    boolean access$26(com.jeffthefate.dmbquiz.activity.ActivityMain) -> s
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask access$27(com.jeffthefate.dmbquiz.activity.ActivityMain) -> t
+    void access$28(com.jeffthefate.dmbquiz.activity.ActivityMain) -> u
+    void access$29(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> b
+    void access$30(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> c
+    void access$31(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> d
+    void access$32(com.jeffthefate.dmbquiz.activity.ActivityMain,java.util.ArrayList) -> e
+    java.util.ArrayList access$33(com.jeffthefate.dmbquiz.activity.ActivityMain) -> v
+    java.util.ArrayList access$34(com.jeffthefate.dmbquiz.activity.ActivityMain) -> w
+    java.util.ArrayList access$35(com.jeffthefate.dmbquiz.activity.ActivityMain) -> x
+    java.util.ArrayList access$36(com.jeffthefate.dmbquiz.activity.ActivityMain) -> y
+    void access$37(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> a
+    com.parse.ParseUser access$38(com.jeffthefate.dmbquiz.activity.ActivityMain) -> z
+    void access$39(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> c
+    void access$40$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> A
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask access$41(com.jeffthefate.dmbquiz.activity.ActivityMain) -> B
+    com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask access$42(com.jeffthefate.dmbquiz.activity.ActivityMain) -> C
+    boolean access$43(com.jeffthefate.dmbquiz.activity.ActivityMain) -> D
+    boolean access$44(com.jeffthefate.dmbquiz.activity.ActivityMain) -> E
+    void access$45(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String) -> d
+    void access$46$2e5012c(com.jeffthefate.dmbquiz.activity.ActivityMain) -> F
+    boolean access$47(com.jeffthefate.dmbquiz.activity.ActivityMain) -> G
+    void access$48$59ba7180(com.jeffthefate.dmbquiz.activity.ActivityMain) -> H
+    java.util.ArrayList access$49(com.jeffthefate.dmbquiz.activity.ActivityMain) -> I
+    void access$50(com.jeffthefate.dmbquiz.activity.ActivityMain,java.lang.String,java.util.ArrayList,boolean) -> a
+    java.util.ArrayList access$51(com.jeffthefate.dmbquiz.activity.ActivityMain) -> J
+    java.util.ArrayList access$52(com.jeffthefate.dmbquiz.activity.ActivityMain) -> K
+    java.util.ArrayList access$53(com.jeffthefate.dmbquiz.activity.ActivityMain) -> L
+    java.util.ArrayList access$54(com.jeffthefate.dmbquiz.activity.ActivityMain) -> M
+    java.util.ArrayList access$55(com.jeffthefate.dmbquiz.activity.ActivityMain) -> N
+    void access$56(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask) -> a
+    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu access$57(com.jeffthefate.dmbquiz.activity.ActivityMain) -> O
+    android.widget.TextView access$58(com.jeffthefate.dmbquiz.activity.ActivityMain) -> P
+    com.jeffthefate.dmbquiz.ImageViewEx access$59(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Q
+    android.widget.TextView access$60(com.jeffthefate.dmbquiz.activity.ActivityMain) -> R
+    com.jeffthefate.dmbquiz.ImageViewEx access$61(com.jeffthefate.dmbquiz.activity.ActivityMain) -> S
+    com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask access$62(com.jeffthefate.dmbquiz.activity.ActivityMain) -> T
+    void access$63(com.jeffthefate.dmbquiz.activity.ActivityMain,com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask) -> a
+    void access$64(com.jeffthefate.dmbquiz.activity.ActivityMain) -> U
+    android.widget.CheckedTextView access$65(com.jeffthefate.dmbquiz.activity.ActivityMain) -> V
+    void access$66$59ba7180(com.jeffthefate.dmbquiz.activity.ActivityMain) -> W
+    android.widget.CheckedTextView access$67(com.jeffthefate.dmbquiz.activity.ActivityMain) -> X
+    android.widget.RelativeLayout access$68(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Y
+    android.widget.RelativeLayout access$69(com.jeffthefate.dmbquiz.activity.ActivityMain) -> Z
+    android.content.Intent access$70$2529f6ed() -> K
+    android.content.Intent access$71$2529f6ed() -> L
+    void access$72(com.jeffthefate.dmbquiz.activity.ActivityMain,boolean) -> b
+    void access$73(com.jeffthefate.dmbquiz.activity.ActivityMain,com.parse.ParseUser) -> b
+    boolean access$74(com.jeffthefate.dmbquiz.activity.ActivityMain) -> aa
 com.jeffthefate.dmbquiz.activity.ActivityMain$1 -> com.jeffthefate.dmbquiz.activity.a:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void done(com.parse.ParseObject,com.parse.ParseException) -> done
@@ -13237,142 +13207,149 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$13 -> com.jeffthefate.dmbquiz.acti
 com.jeffthefate.dmbquiz.activity.ActivityMain$14 -> com.jeffthefate.dmbquiz.activity.f:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$15 -> com.jeffthefate.dmbquiz.activity.g:
+    com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$14) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$14$1 -> com.jeffthefate.dmbquiz.activity.g:
+    com.jeffthefate.dmbquiz.activity.ActivityMain$14 this$1 -> a
+    void onClosed() -> onClosed
+com.jeffthefate.dmbquiz.activity.ActivityMain$15 -> com.jeffthefate.dmbquiz.activity.h:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-    com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$15) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$15$1 -> com.jeffthefate.dmbquiz.activity.h:
-    com.jeffthefate.dmbquiz.activity.ActivityMain$15 this$1 -> a
-    void onClosed() -> onClosed
 com.jeffthefate.dmbquiz.activity.ActivityMain$16 -> com.jeffthefate.dmbquiz.activity.i:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$17 -> com.jeffthefate.dmbquiz.activity.j:
+    com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$16) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$16$1 -> com.jeffthefate.dmbquiz.activity.j:
+    com.jeffthefate.dmbquiz.activity.ActivityMain$16 this$1 -> a
+    void onClosed() -> onClosed
+    com.jeffthefate.dmbquiz.activity.ActivityMain$16 access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$16$1) -> a
+com.jeffthefate.dmbquiz.activity.ActivityMain$16$1$1 -> com.jeffthefate.dmbquiz.activity.k:
+    com.jeffthefate.dmbquiz.activity.ActivityMain$16$1 this$2 -> a
+    void run() -> run
+com.jeffthefate.dmbquiz.activity.ActivityMain$17 -> com.jeffthefate.dmbquiz.activity.l:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$17) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$17$1 -> com.jeffthefate.dmbquiz.activity.k:
+com.jeffthefate.dmbquiz.activity.ActivityMain$17$1 -> com.jeffthefate.dmbquiz.activity.m:
     com.jeffthefate.dmbquiz.activity.ActivityMain$17 this$1 -> a
     void onClosed() -> onClosed
-com.jeffthefate.dmbquiz.activity.ActivityMain$18 -> com.jeffthefate.dmbquiz.activity.l:
+com.jeffthefate.dmbquiz.activity.ActivityMain$18 -> com.jeffthefate.dmbquiz.activity.n:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$19 -> com.jeffthefate.dmbquiz.activity.m:
+com.jeffthefate.dmbquiz.activity.ActivityMain$19 -> com.jeffthefate.dmbquiz.activity.o:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$2 -> com.jeffthefate.dmbquiz.activity.n:
+com.jeffthefate.dmbquiz.activity.ActivityMain$2 -> com.jeffthefate.dmbquiz.activity.p:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$2) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$2$1 -> com.jeffthefate.dmbquiz.activity.o:
+com.jeffthefate.dmbquiz.activity.ActivityMain$2$1 -> com.jeffthefate.dmbquiz.activity.q:
     com.jeffthefate.dmbquiz.activity.ActivityMain$2 this$1 -> a
     void onClosed() -> onClosed
     com.jeffthefate.dmbquiz.activity.ActivityMain$2 access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$2$1) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$2$1$1 -> com.jeffthefate.dmbquiz.activity.p:
+com.jeffthefate.dmbquiz.activity.ActivityMain$2$1$1 -> com.jeffthefate.dmbquiz.activity.r:
     com.jeffthefate.dmbquiz.activity.ActivityMain$2$1 this$2 -> a
     void run() -> run
-com.jeffthefate.dmbquiz.activity.ActivityMain$20 -> com.jeffthefate.dmbquiz.activity.q:
+com.jeffthefate.dmbquiz.activity.ActivityMain$20 -> com.jeffthefate.dmbquiz.activity.s:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$21 -> com.jeffthefate.dmbquiz.activity.r:
+com.jeffthefate.dmbquiz.activity.ActivityMain$21 -> com.jeffthefate.dmbquiz.activity.t:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$21) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$21$1 -> com.jeffthefate.dmbquiz.activity.s:
+com.jeffthefate.dmbquiz.activity.ActivityMain$21$1 -> com.jeffthefate.dmbquiz.activity.u:
     com.jeffthefate.dmbquiz.activity.ActivityMain$21 this$1 -> a
     void onClosed() -> onClosed
-com.jeffthefate.dmbquiz.activity.ActivityMain$22 -> com.jeffthefate.dmbquiz.activity.t:
+com.jeffthefate.dmbquiz.activity.ActivityMain$22 -> com.jeffthefate.dmbquiz.activity.v:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClosed() -> onClosed
-com.jeffthefate.dmbquiz.activity.ActivityMain$23 -> com.jeffthefate.dmbquiz.activity.u:
+com.jeffthefate.dmbquiz.activity.ActivityMain$23 -> com.jeffthefate.dmbquiz.activity.w:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void done(com.parse.ParseUser,com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$24 -> com.jeffthefate.dmbquiz.activity.v:
+com.jeffthefate.dmbquiz.activity.ActivityMain$24 -> com.jeffthefate.dmbquiz.activity.x:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     com.parse.ParseUser val$user -> b
     void onCompleted(com.facebook.model.GraphUser,com.facebook.Response) -> onCompleted
-com.jeffthefate.dmbquiz.activity.ActivityMain$25 -> com.jeffthefate.dmbquiz.activity.w:
+com.jeffthefate.dmbquiz.activity.ActivityMain$25 -> com.jeffthefate.dmbquiz.activity.y:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void done(com.parse.ParseUser,com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$26 -> com.jeffthefate.dmbquiz.activity.x:
+com.jeffthefate.dmbquiz.activity.ActivityMain$26 -> com.jeffthefate.dmbquiz.activity.z:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void done(com.parse.ParseUser,com.parse.ParseException) -> done
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$26) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$26$1 -> com.jeffthefate.dmbquiz.activity.y:
+com.jeffthefate.dmbquiz.activity.ActivityMain$26$1 -> com.jeffthefate.dmbquiz.activity.aa:
     com.jeffthefate.dmbquiz.activity.ActivityMain$26 this$1 -> a
     com.parse.ParseUser val$user -> b
     void done(com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$27 -> com.jeffthefate.dmbquiz.activity.z:
+com.jeffthefate.dmbquiz.activity.ActivityMain$27 -> com.jeffthefate.dmbquiz.activity.ab:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     com.parse.ParseUser val$user -> b
     void done(com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$28 -> com.jeffthefate.dmbquiz.activity.aa:
+com.jeffthefate.dmbquiz.activity.ActivityMain$28 -> com.jeffthefate.dmbquiz.activity.ac:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     java.lang.String val$username -> b
     void done(com.parse.ParseUser,com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$29 -> com.jeffthefate.dmbquiz.activity.ab:
+com.jeffthefate.dmbquiz.activity.ActivityMain$29 -> com.jeffthefate.dmbquiz.activity.ad:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void done(com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.activity.ActivityMain$3 -> com.jeffthefate.dmbquiz.activity.ac:
+com.jeffthefate.dmbquiz.activity.ActivityMain$3 -> com.jeffthefate.dmbquiz.activity.ae:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$4 -> com.jeffthefate.dmbquiz.activity.ad:
+com.jeffthefate.dmbquiz.activity.ActivityMain$4 -> com.jeffthefate.dmbquiz.activity.af:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$5 -> com.jeffthefate.dmbquiz.activity.ae:
+com.jeffthefate.dmbquiz.activity.ActivityMain$5 -> com.jeffthefate.dmbquiz.activity.ag:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$6 -> com.jeffthefate.dmbquiz.activity.af:
+com.jeffthefate.dmbquiz.activity.ActivityMain$6 -> com.jeffthefate.dmbquiz.activity.ah:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$7 -> com.jeffthefate.dmbquiz.activity.ag:
+com.jeffthefate.dmbquiz.activity.ActivityMain$7 -> com.jeffthefate.dmbquiz.activity.ai:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$7) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$7$1 -> com.jeffthefate.dmbquiz.activity.ah:
+com.jeffthefate.dmbquiz.activity.ActivityMain$7$1 -> com.jeffthefate.dmbquiz.activity.aj:
     com.jeffthefate.dmbquiz.activity.ActivityMain$7 this$1 -> a
     void onClosed() -> onClosed
     com.jeffthefate.dmbquiz.activity.ActivityMain$7 access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$7$1) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$7$1$1 -> com.jeffthefate.dmbquiz.activity.ai:
+com.jeffthefate.dmbquiz.activity.ActivityMain$7$1$1 -> com.jeffthefate.dmbquiz.activity.ak:
     com.jeffthefate.dmbquiz.activity.ActivityMain$7$1 this$2 -> a
     void run() -> run
-com.jeffthefate.dmbquiz.activity.ActivityMain$8 -> com.jeffthefate.dmbquiz.activity.aj:
+com.jeffthefate.dmbquiz.activity.ActivityMain$8 -> com.jeffthefate.dmbquiz.activity.al:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.activity.ActivityMain$8) -> a
-com.jeffthefate.dmbquiz.activity.ActivityMain$8$1 -> com.jeffthefate.dmbquiz.activity.ak:
+com.jeffthefate.dmbquiz.activity.ActivityMain$8$1 -> com.jeffthefate.dmbquiz.activity.am:
     com.jeffthefate.dmbquiz.activity.ActivityMain$8 this$1 -> a
     void onClosed() -> onClosed
-com.jeffthefate.dmbquiz.activity.ActivityMain$9 -> com.jeffthefate.dmbquiz.activity.al:
+com.jeffthefate.dmbquiz.activity.ActivityMain$9 -> com.jeffthefate.dmbquiz.activity.an:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> com.jeffthefate.dmbquiz.activity.am:
+com.jeffthefate.dmbquiz.activity.ActivityMain$BackgroundTask -> com.jeffthefate.dmbquiz.activity.ao:
     java.lang.String questionId -> b
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver -> com.jeffthefate.dmbquiz.activity.an:
+com.jeffthefate.dmbquiz.activity.ActivityMain$ConnectionReceiver -> com.jeffthefate.dmbquiz.activity.ap:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask -> com.jeffthefate.dmbquiz.activity.ao:
-    int count -> a
-    java.util.List questionList -> b
-    com.parse.ParseException error -> c
-    boolean questionNull -> d
-    java.util.ArrayList stageList -> e
-    boolean force -> f
-    boolean resumed -> g
-    java.util.ArrayList tempQuestions -> i
-    int level -> j
-    com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> h
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetNextQuestionsTask -> com.jeffthefate.dmbquiz.activity.aq:
+    java.util.List questionList -> a
+    com.parse.ParseException error -> b
+    boolean questionNull -> c
+    java.util.ArrayList stageList -> d
+    boolean force -> e
+    boolean resumed -> f
+    java.util.ArrayList tempQuestions -> h
+    int level -> i
+    com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> g
     java.lang.Void doInBackground$10299ca() -> a
-    void updateIds() -> b
+    void updatePersistedLists() -> b
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask -> com.jeffthefate.dmbquiz.activity.ap:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask -> com.jeffthefate.dmbquiz.activity.ar:
     boolean show -> b
     boolean restore -> c
     java.lang.String userId -> d
@@ -13381,6 +13358,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask -> com.jeffthefate.dm
     java.util.List deleteList -> g
     java.lang.Number number -> h
     java.util.ArrayList tempAnswers -> i
+    int tempScore -> j
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onPreExecute() -> onPreExecute
     java.lang.Void doInBackground$10299ca() -> a
@@ -13388,16 +13366,17 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetScoreTask -> com.jeffthefate.dm
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask -> com.jeffthefate.dmbquiz.activity.aq:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStageTask -> com.jeffthefate.dmbquiz.activity.as:
     java.lang.String userId -> c
-    java.util.ArrayList questionIds -> a
+    java.util.ArrayList ids -> a
     boolean resumed -> d
+    boolean progressed -> e
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> b
     java.lang.Void doInBackground$10299ca() -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> com.jeffthefate.dmbquiz.activity.ar:
+com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> com.jeffthefate.dmbquiz.activity.at:
     int currScore -> a
     com.parse.ParseException error -> b
     int hints -> c
@@ -13409,19 +13388,19 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$GetStatsTask -> com.jeffthefate.dm
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$LogOutTask -> com.jeffthefate.dmbquiz.activity.as:
+com.jeffthefate.dmbquiz.activity.ActivityMain$LogOutTask -> com.jeffthefate.dmbquiz.activity.au:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask -> com.jeffthefate.dmbquiz.activity.at:
+com.jeffthefate.dmbquiz.activity.ActivityMain$ScreenshotTask -> com.jeffthefate.dmbquiz.activity.av:
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     java.lang.Void doInBackground$10299ca() -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask -> com.jeffthefate.dmbquiz.activity.au:
+com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask -> com.jeffthefate.dmbquiz.activity.aw:
     java.lang.String name -> b
     boolean showNew -> c
     java.lang.String screen -> d
@@ -13432,7 +13411,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundTask -> com.jeffthefa
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundWaitTask -> com.jeffthefate.dmbquiz.activity.av:
+com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundWaitTask -> com.jeffthefate.dmbquiz.activity.ax:
     java.lang.String name -> b
     boolean showNew -> c
     java.lang.String screen -> d
@@ -13441,7 +13420,7 @@ com.jeffthefate.dmbquiz.activity.ActivityMain$SetBackgroundWaitTask -> com.jefft
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask -> com.jeffthefate.dmbquiz.activity.aw:
+com.jeffthefate.dmbquiz.activity.ActivityMain$UserTask -> com.jeffthefate.dmbquiz.activity.ay:
     boolean newUser -> b
     com.jeffthefate.dmbquiz.activity.ActivityMain this$0 -> a
     void onPreExecute() -> onPreExecute
@@ -13454,12 +13433,18 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase -> com.jeffthefate.dmbquiz.a.a:
     com.jeffthefate.dmbquiz.ImageViewEx background -> b
     android.media.AudioManager$OnAudioFocusChangeListener afChangeListener -> c
     java.lang.reflect.Field[] fields -> d
-    int rawIndex -> e
-    int currentAudio -> f
-    android.media.MediaPlayer mediaPlayer -> g
-    android.media.AudioManager audioManager -> h
+    java.util.ArrayList correctAudio -> e
+    java.util.ArrayList wrongAudio -> f
+    java.util.ArrayList hintAudio -> g
+    java.util.ArrayList skipAudio -> h
+    java.util.HashMap audioMap -> i
+    int rawIndex -> j
+    int currentAudio -> k
+    android.media.MediaPlayer mediaPlayer -> l
+    android.media.AudioManager audioManager -> m
     void onAttach(android.app.Activity) -> onAttach
     void onCreate(android.os.Bundle) -> onCreate
+    void resetAudio(java.lang.String) -> d
     void showNetworkProblem() -> a
     void showNoMoreQuestions(int) -> a
     void playAudio(java.lang.String) -> a
@@ -13486,23 +13471,23 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase$2 -> com.jeffthefate.dmbquiz.a.c:
 com.jeffthefate.dmbquiz.fragment.FragmentBase$3 -> com.jeffthefate.dmbquiz.a.d:
     com.jeffthefate.dmbquiz.fragment.FragmentBase this$0 -> a
     boolean onError(android.media.MediaPlayer,int,int) -> onError
-com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog -> com.jeffthefate.dmbquiz.a.e:
-    android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
-com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog$1 -> com.jeffthefate.dmbquiz.a.f:
-    com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog this$0 -> a
-    void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog$2 -> com.jeffthefate.dmbquiz.a.g:
-    com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog this$0 -> a
-    void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentInfo -> com.jeffthefate.dmbquiz.a.h:
+com.jeffthefate.dmbquiz.fragment.FragmentFaq -> com.jeffthefate.dmbquiz.a.e:
     android.widget.Button doneButton -> d
     void onAttach(android.app.Activity) -> onAttach
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     void setBackground(android.graphics.Bitmap) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentInfo$1 -> com.jeffthefate.dmbquiz.a.i:
+com.jeffthefate.dmbquiz.fragment.FragmentFaq$1 -> com.jeffthefate.dmbquiz.a.f:
+    com.jeffthefate.dmbquiz.fragment.FragmentFaq this$0 -> a
+    void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz.fragment.FragmentInfo -> com.jeffthefate.dmbquiz.a.g:
+    android.widget.Button doneButton -> d
+    void onAttach(android.app.Activity) -> onAttach
+    android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    void setBackground(android.graphics.Bitmap) -> a
+com.jeffthefate.dmbquiz.fragment.FragmentInfo$1 -> com.jeffthefate.dmbquiz.a.h:
     com.jeffthefate.dmbquiz.fragment.FragmentInfo this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> com.jeffthefate.dmbquiz.a.j:
+com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> com.jeffthefate.dmbquiz.a.i:
     android.widget.TextView userText -> d
     android.widget.TextView userAnswerText -> e
     android.widget.TextView userAnswers -> f
@@ -13528,7 +13513,7 @@ com.jeffthefate.dmbquiz.fragment.FragmentLeaders -> com.jeffthefate.dmbquiz.a.j:
     void onResume() -> onResume
     void setDisplayName(java.lang.String) -> c
     void setBackground(android.graphics.Bitmap) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentLoad -> com.jeffthefate.dmbquiz.a.k:
+com.jeffthefate.dmbquiz.fragment.FragmentLoad -> com.jeffthefate.dmbquiz.a.j:
     android.widget.ProgressBar progress -> d
     android.widget.TextView networkText -> e
     android.widget.TextView loadingText -> f
@@ -13540,10 +13525,10 @@ com.jeffthefate.dmbquiz.fragment.FragmentLoad -> com.jeffthefate.dmbquiz.a.k:
     void showLoading(java.lang.String) -> b
     void disableButton$1385ff() -> d
     void enableButton$1385ff() -> e
-com.jeffthefate.dmbquiz.fragment.FragmentLoad$1 -> com.jeffthefate.dmbquiz.a.l:
+com.jeffthefate.dmbquiz.fragment.FragmentLoad$1 -> com.jeffthefate.dmbquiz.a.k:
     com.jeffthefate.dmbquiz.fragment.FragmentLoad this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentLogin -> com.jeffthefate.dmbquiz.a.m:
+com.jeffthefate.dmbquiz.fragment.FragmentLogin -> com.jeffthefate.dmbquiz.a.l:
     android.widget.ProgressBar progress -> d
     android.widget.TextView networkText -> e
     android.widget.TextView loadingText -> f
@@ -13558,25 +13543,25 @@ com.jeffthefate.dmbquiz.fragment.FragmentLogin -> com.jeffthefate.dmbquiz.a.m:
     android.widget.TextView access$0(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> a
     android.widget.Button access$1(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> b
     android.widget.ProgressBar access$2(com.jeffthefate.dmbquiz.fragment.FragmentLogin) -> c
-com.jeffthefate.dmbquiz.fragment.FragmentLogin$1 -> com.jeffthefate.dmbquiz.a.n:
+com.jeffthefate.dmbquiz.fragment.FragmentLogin$1 -> com.jeffthefate.dmbquiz.a.m:
     com.jeffthefate.dmbquiz.fragment.FragmentLogin this$0 -> a
     void onClick(android.view.View) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog -> com.jeffthefate.dmbquiz.a.o:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog -> com.jeffthefate.dmbquiz.a.n:
     com.jeffthefate.dmbquiz.activity.ActivityMain mActivity -> a
     void onAttach(android.app.Activity) -> onAttach
     android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
     com.jeffthefate.dmbquiz.activity.ActivityMain access$0(com.jeffthefate.dmbquiz.fragment.FragmentNameDialog) -> a
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$1 -> com.jeffthefate.dmbquiz.a.p:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$1 -> com.jeffthefate.dmbquiz.a.o:
     com.jeffthefate.dmbquiz.fragment.FragmentNameDialog this$0 -> a
     boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$2 -> com.jeffthefate.dmbquiz.a.q:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$2 -> com.jeffthefate.dmbquiz.a.p:
     com.jeffthefate.dmbquiz.fragment.FragmentNameDialog this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$3 -> com.jeffthefate.dmbquiz.a.r:
+com.jeffthefate.dmbquiz.fragment.FragmentNameDialog$3 -> com.jeffthefate.dmbquiz.a.q:
     com.jeffthefate.dmbquiz.fragment.FragmentNameDialog this$0 -> a
     android.widget.EditText val$newName -> b
     void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentPager -> com.jeffthefate.dmbquiz.a.s:
+com.jeffthefate.dmbquiz.fragment.FragmentPager -> com.jeffthefate.dmbquiz.a.r:
     com.jeffthefate.dmbquiz.activity.ActivityMain activity -> d
     android.support.v4.view.ViewPager viewPager -> e
     com.jeffthefate.dmbquiz.fragment.FragmentBase fragment -> f
@@ -13591,26 +13576,27 @@ com.jeffthefate.dmbquiz.fragment.FragmentPager -> com.jeffthefate.dmbquiz.a.s:
     void removeChildren(android.support.v4.app.FragmentTransaction) -> a
     void resumeQuestion() -> c
     void setBackground(android.graphics.Bitmap) -> a
+    void updateSetText() -> f
     int getPage() -> g
     void setPage(int) -> b
-com.jeffthefate.dmbquiz.fragment.FragmentPager$1 -> com.jeffthefate.dmbquiz.a.t:
+com.jeffthefate.dmbquiz.fragment.FragmentPager$1 -> com.jeffthefate.dmbquiz.a.s:
     com.jeffthefate.dmbquiz.fragment.FragmentPager this$0 -> a
     void onPageScrollStateChanged(int) -> onPageScrollStateChanged
     void onPageScrolled(int,float,int) -> onPageScrolled
     void onPageSelected(int) -> onPageSelected
-com.jeffthefate.dmbquiz.fragment.FragmentPager$FixedSpeedScroller -> com.jeffthefate.dmbquiz.a.u:
+com.jeffthefate.dmbquiz.fragment.FragmentPager$FixedSpeedScroller -> com.jeffthefate.dmbquiz.a.t:
     int mDuration -> b
     com.jeffthefate.dmbquiz.fragment.FragmentPager this$0 -> a
     void setFixedDuration$13462e() -> a
     void startScroll(int,int,int,int,int) -> startScroll
     void startScroll(int,int,int,int) -> startScroll
-com.jeffthefate.dmbquiz.fragment.FragmentPager$PagerAdapter -> com.jeffthefate.dmbquiz.a.v:
+com.jeffthefate.dmbquiz.fragment.FragmentPager$PagerAdapter -> com.jeffthefate.dmbquiz.a.u:
     java.util.ArrayList mFragments -> b
     com.jeffthefate.dmbquiz.fragment.FragmentPager this$0 -> a
     int getCount() -> getCount
     android.support.v4.app.Fragment getItem(int) -> getItem
     java.util.ArrayList getFragmentList() -> a
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> com.jeffthefate.dmbquiz.a.w:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> com.jeffthefate.dmbquiz.a.v:
     android.widget.TextView scoreText -> d
     android.widget.TextView questionText -> e
     android.widget.EditText answerText -> f
@@ -13638,6 +13624,9 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> com.jeffthefate.dmbquiz.a.w:
     boolean isCorrect -> B
     java.lang.String answerTextHint -> C
     android.view.inputmethod.InputMethodManager imm -> D
+    java.util.HashMap stagedMap -> E
+    java.util.HashMap saveMap -> F
+    java.util.HashMap correctMap -> G
     void onAttach(android.app.Activity) -> onAttach
     void onCreate(android.os.Bundle) -> onCreate
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
@@ -13683,15 +13672,21 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> com.jeffthefate.dmbquiz.a.w:
     java.lang.String access$28(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> u
     android.view.inputmethod.InputMethodManager access$29(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> v
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer access$30(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> w
-    android.widget.TextView access$31(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> x
-    com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer access$32(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> y
-    void access$33(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer) -> a
-    void access$34(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,boolean) -> d
-    void access$35(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,java.lang.String,java.lang.String,boolean) -> a
-    void access$36(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> z
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$1 -> com.jeffthefate.dmbquiz.a.x:
+    java.util.HashMap access$31(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> x
+    void access$32(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,java.util.HashMap,java.lang.String) -> a
+    android.widget.TextView access$33(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> y
+    com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer access$34(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> z
+    void access$35(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer) -> a
+    java.util.HashMap access$36(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> A
+    java.util.HashMap access$37(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> B
+    void access$38(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> C
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$1 -> com.jeffthefate.dmbquiz.a.w:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     void onClick(android.view.View) -> onClick
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$10 -> com.jeffthefate.dmbquiz.a.x:
+    com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
+    java.lang.String val$userId -> b
+    void done(java.util.List,com.parse.ParseException) -> done
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz$2 -> com.jeffthefate.dmbquiz.a.y:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     boolean onEditorAction(android.widget.TextView,int,android.view.KeyEvent) -> onEditorAction
@@ -13714,14 +13709,13 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz$7 -> com.jeffthefate.dmbquiz.a.ad:
     void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz$8 -> com.jeffthefate.dmbquiz.a.ae:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
-    boolean val$isSkip -> b
-    void done(com.parse.ParseObject,com.parse.ParseException) -> done
+    java.util.HashMap val$correctMap -> b
+    java.lang.String val$userId -> c
+    void done(java.util.List,com.parse.ParseException) -> done
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz$9 -> com.jeffthefate.dmbquiz.a.af:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
-    java.lang.String val$questionId -> b
-    java.lang.String val$userId -> c
-    boolean val$questionHint -> d
-    void done(com.parse.ParseObject,com.parse.ParseException) -> done
+    java.util.HashMap val$saveMap -> b
+    void done(java.util.List,com.parse.ParseException) -> done
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTask -> com.jeffthefate.dmbquiz.a.ag:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     void onCancelled(java.lang.Object) -> onCancelled
@@ -13748,29 +13742,24 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask -> com.jeffthefate.dmbq
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
     void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
-    java.lang.String access$3(com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask) -> a
-    java.lang.String access$4(com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask) -> b
-    boolean access$5(com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask) -> c
-    com.jeffthefate.dmbquiz.fragment.FragmentQuiz access$7(com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask) -> d
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask$1 -> com.jeffthefate.dmbquiz.a.al:
-    com.jeffthefate.dmbquiz.fragment.FragmentQuiz$VerifyTask this$1 -> a
-    void done(com.parse.ParseObject,com.parse.ParseException) -> done
-com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer -> com.jeffthefate.dmbquiz.a.am:
+com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer -> com.jeffthefate.dmbquiz.a.al:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     void onTick(long) -> onTick
     void onFinish() -> onFinish
-com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog -> com.jeffthefate.dmbquiz.a.an:
+com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog -> com.jeffthefate.dmbquiz.a.am:
     android.app.Dialog onCreateDialog(android.os.Bundle) -> onCreateDialog
-com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog$1 -> com.jeffthefate.dmbquiz.a.ao:
+com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog$1 -> com.jeffthefate.dmbquiz.a.an:
     com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.jeffthefate.dmbquiz.fragment.FragmentSetlist -> com.jeffthefate.dmbquiz.a.ap:
+com.jeffthefate.dmbquiz.fragment.FragmentSetlist -> com.jeffthefate.dmbquiz.a.ao:
     android.widget.TextView setText -> d
     android.widget.TextView stampText -> e
     java.lang.String savedSet -> f
-    com.jeffthefate.dmbquiz.fragment.FragmentSetlist$SetlistReceiver setlistReceiver -> g
-    android.widget.Button retryButton -> h
-    android.widget.TextView networkText -> i
+    java.lang.String savedStamp -> g
+    com.jeffthefate.dmbquiz.fragment.FragmentSetlist$SetlistReceiver setlistReceiver -> h
+    android.widget.Button retryButton -> i
+    android.widget.TextView networkText -> j
+    float currTextSize -> k
     void onAttach(android.app.Activity) -> onAttach
     void onCreate(android.os.Bundle) -> onCreate
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
@@ -13781,7 +13770,13 @@ com.jeffthefate.dmbquiz.fragment.FragmentSetlist -> com.jeffthefate.dmbquiz.a.ap
     void showNetworkProblem() -> a
     void disableButton$1385ff() -> d
     void enableButton$1385ff() -> e
-com.jeffthefate.dmbquiz.fragment.FragmentSetlist$1 -> com.jeffthefate.dmbquiz.a.aq:
+    android.widget.TextView access$0(com.jeffthefate.dmbquiz.fragment.FragmentSetlist) -> a
+    float access$1(com.jeffthefate.dmbquiz.fragment.FragmentSetlist) -> b
+    void access$2(com.jeffthefate.dmbquiz.fragment.FragmentSetlist,float) -> a
+com.jeffthefate.dmbquiz.fragment.FragmentSetlist$1 -> com.jeffthefate.dmbquiz.a.ap:
+    com.jeffthefate.dmbquiz.fragment.FragmentSetlist this$0 -> a
+    void onTextResize$49363f51(float,float) -> a
+com.jeffthefate.dmbquiz.fragment.FragmentSetlist$2 -> com.jeffthefate.dmbquiz.a.aq:
     com.jeffthefate.dmbquiz.fragment.FragmentSetlist this$0 -> a
     void onClick(android.view.View) -> onClick
 com.jeffthefate.dmbquiz.fragment.FragmentSetlist$ReceiveTask -> com.jeffthefate.dmbquiz.a.ar:
@@ -13871,24 +13866,23 @@ com.jeffthefate.dmbquiz.receiver.ExternalStorageReceiver -> com.jeffthefate.dmbq
 com.jeffthefate.dmbquiz.receiver.PushReceiver -> com.jeffthefate.dmbquiz.receiver.PushReceiver:
     android.support.v4.app.NotificationCompat$Builder nBuilder -> a
     android.app.NotificationManager nManager -> b
+    android.os.PowerManager$WakeLock wakeLock -> c
+    android.net.wifi.WifiManager$MulticastLock multicastLock -> d
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
     void access$0(com.jeffthefate.dmbquiz.receiver.PushReceiver,android.app.NotificationManager) -> a
     void access$1(com.jeffthefate.dmbquiz.receiver.PushReceiver,android.support.v4.app.NotificationCompat$Builder) -> a
     android.support.v4.app.NotificationCompat$Builder access$2(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> a
     android.app.NotificationManager access$3(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> b
     java.lang.String access$4(long) -> a
+    android.net.wifi.WifiManager$MulticastLock access$5(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> c
+    android.os.PowerManager$WakeLock access$6(com.jeffthefate.dmbquiz.receiver.PushReceiver) -> d
 com.jeffthefate.dmbquiz.receiver.PushReceiver$ReceiveTask -> com.jeffthefate.dmbquiz.receiver.a:
-    android.content.Context context -> b
-    android.content.Intent intent -> c
-    android.os.PowerManager$WakeLock wakeLock -> d
-    android.net.wifi.WifiManager$MulticastLock multicastLock -> e
+    android.content.Intent intent -> b
     com.jeffthefate.dmbquiz.receiver.PushReceiver this$0 -> a
     java.lang.Void doInBackground$10299ca() -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     void onCancelled(java.lang.Object) -> onCancelled
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.jeffthefate.dmbquiz.receiver.PushReceiver$ReceiveTask$1 -> com.jeffthefate.dmbquiz.receiver.b:
-    com.jeffthefate.dmbquiz.receiver.PushReceiver$ReceiveTask this$1 -> a
 com.jeffthefate.stacktrace.DefaultExceptionHandler -> com.jeffthefate.stacktrace.DefaultExceptionHandler:
     java.lang.Thread$UncaughtExceptionHandler defaultExceptionHandler -> defaultExceptionHandler
     java.lang.String TAG -> TAG
@@ -15010,6 +15004,26 @@ com.parse.BackgroundTask -> com.parse.BackgroundTask:
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.parse.BuildConfig -> com.parse.BuildConfig:
     boolean DEBUG -> DEBUG
+com.parse.Capture -> com.parse.Capture:
+    java.lang.Object value -> value
+    java.lang.Object get() -> get
+    void set(java.lang.Object) -> set
+com.parse.ConnectivityNotifier -> com.parse.ConnectivityNotifier:
+    java.lang.String TAG -> TAG
+    com.parse.ConnectivityNotifier singleton -> singleton
+    java.util.Set listeners -> listeners
+    boolean hasRegisteredReceiver -> hasRegisteredReceiver
+    java.lang.Object lock -> lock
+    com.parse.ConnectivityNotifier getNotifier() -> getNotifier
+    void addListener(com.parse.ConnectivityNotifier$ConnectivityListener,android.content.Context) -> addListener
+    void removeListener(com.parse.ConnectivityNotifier$ConnectivityListener) -> removeListener
+    boolean tryToRegisterForNetworkStatusNotifications() -> tryToRegisterForNetworkStatusNotifications
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    boolean isConnected() -> isConnected
+com.parse.ConnectivityNotifier$ConnectivityListener -> com.parse.ConnectivityNotifier$ConnectivityListener:
+    void networkConnectivityStatusChanged(android.content.Intent) -> networkConnectivityStatusChanged
+com.parse.Continuation -> com.parse.Continuation:
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.CountCallback -> com.parse.CountCallback:
     void done(int,com.parse.ParseException) -> done
     void internalDone(java.lang.Integer,com.parse.ParseException) -> internalDone
@@ -15025,11 +15039,6 @@ com.parse.CountingMultipartEntity$CountingOutputStream -> com.parse.CountingMult
     void write(byte[],int,int) -> write
     void write(int) -> write
     void notifyCallback() -> notifyCallback
-com.parse.CountingMultipartEntity$CountingOutputStream$1 -> com.parse.CountingMultipartEntity$CountingOutputStream$1:
-    com.parse.CountingMultipartEntity$CountingOutputStream this$1 -> this$1
-    int val$progressToReport -> val$progressToReport
-    java.lang.Integer run() -> run
-    java.lang.Object run() -> run
 com.parse.DeleteCallback -> com.parse.DeleteCallback:
     void done(com.parse.ParseException) -> done
     void internalDone(java.lang.Void,com.parse.ParseException) -> internalDone
@@ -15068,6 +15077,40 @@ com.parse.LocalIdManager$MapEntry -> com.parse.LocalIdManager$MapEntry:
     java.lang.String objectId -> objectId
     int retainCount -> retainCount
     com.parse.LocalIdManager this$0 -> this$0
+com.parse.LocationCallback -> com.parse.LocationCallback:
+    void done(com.parse.ParseGeoPoint,com.parse.ParseException) -> done
+    void internalDone(com.parse.ParseGeoPoint,com.parse.ParseException) -> internalDone
+    void internalDone(java.lang.Object,com.parse.ParseException) -> internalDone
+com.parse.LocationNotifier -> com.parse.LocationNotifier:
+    java.lang.String testProviderName -> testProviderName
+    android.location.Location fakeLocation -> fakeLocation
+    com.parse.Task getCurrentLocationAsync(long,android.location.Criteria) -> getCurrentLocationAsync
+    void setFakeLocation(android.location.Location) -> setFakeLocation
+com.parse.LocationNotifier$1 -> com.parse.LocationNotifier$1:
+    com.parse.Capture val$timeoutFuture -> val$timeoutFuture
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    android.location.LocationManager val$manager -> val$manager
+    void onLocationChanged(android.location.Location) -> onLocationChanged
+    void onProviderDisabled(java.lang.String) -> onProviderDisabled
+    void onProviderEnabled(java.lang.String) -> onProviderEnabled
+    void onStatusChanged(java.lang.String,int,android.os.Bundle) -> onStatusChanged
+com.parse.LocationNotifier$2 -> com.parse.LocationNotifier$2:
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    android.location.LocationManager val$manager -> val$manager
+    android.location.LocationListener val$listener -> val$listener
+    void run() -> run
+com.parse.LockSet -> com.parse.LockSet:
+    java.util.WeakHashMap stableIds -> stableIds
+    long nextStableId -> nextStableId
+    java.util.Set locks -> locks
+    java.lang.Long getStableId(java.util.concurrent.locks.Lock) -> getStableId
+    void lock() -> lock
+    void unlock() -> unlock
+    java.lang.Long access$0(java.util.concurrent.locks.Lock) -> access$0
+com.parse.LockSet$1 -> com.parse.LockSet$1:
+    com.parse.LockSet this$0 -> this$0
+    int compare(java.util.concurrent.locks.Lock,java.util.concurrent.locks.Lock) -> compare
+    int compare(java.lang.Object,java.lang.Object) -> compare
 com.parse.LogInCallback -> com.parse.LogInCallback:
     void done(com.parse.ParseUser,com.parse.ParseException) -> done
     void internalDone(com.parse.ParseUser,com.parse.ParseException) -> internalDone
@@ -15088,7 +15131,9 @@ com.parse.Parse -> com.parse.Parse:
     int maxKeyValueCacheBytes -> maxKeyValueCacheBytes
     int maxKeyValueCacheFiles -> maxKeyValueCacheFiles
     com.parse.ParseCommandCache commandCache -> commandCache
+    java.lang.Object lock -> lock
     java.text.DateFormat dateFormat -> dateFormat
+    java.util.concurrent.Executor uiThreadExecutor -> uiThreadExecutor
     void initialize(android.content.Context,java.lang.String,java.lang.String) -> initialize
     void setLogLevel(int) -> setLogLevel
     int getLogLevel() -> getLogLevel
@@ -15137,17 +15182,34 @@ com.parse.Parse -> com.parse.Parse:
     boolean isContainerObject(java.lang.Object) -> isContainerObject
     java.lang.Number addNumbers(java.lang.Number,java.lang.Number) -> addNumbers
     java.lang.String join(java.util.Collection,java.lang.String) -> join
+    java.lang.Object waitForTask(com.parse.Task) -> waitForTask
+    com.parse.Task callbackOnMainThreadAsync(com.parse.Task,com.parse.ParseCallback) -> callbackOnMainThreadAsync
+    com.parse.Task callbackOnMainThreadAsync(com.parse.Task,com.parse.ParseCallback,boolean) -> callbackOnMainThreadAsync
 com.parse.Parse$1 -> com.parse.Parse$1:
-    void run() -> run
+    void execute(java.lang.Runnable) -> execute
 com.parse.Parse$2 -> com.parse.Parse$2:
+    void run() -> run
+com.parse.Parse$3 -> com.parse.Parse$3:
     java.lang.String val$suffix -> val$suffix
     boolean accept(java.io.File,java.lang.String) -> accept
-com.parse.Parse$3 -> com.parse.Parse$3:
+com.parse.Parse$4 -> com.parse.Parse$4:
     int compare(java.io.File,java.io.File) -> compare
     int compare(java.lang.Object,java.lang.Object) -> compare
-com.parse.Parse$4 -> com.parse.Parse$4:
+com.parse.Parse$5 -> com.parse.Parse$5:
     org.json.JSONObject val$finalObject -> val$finalObject
     java.util.Iterator iterator() -> iterator
+com.parse.Parse$6 -> com.parse.Parse$6:
+    boolean val$reportCancellation -> val$reportCancellation
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.ParseCallback val$callback -> val$callback
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Parse$6$1 -> com.parse.Parse$6$1:
+    com.parse.Parse$6 this$1 -> this$1
+    com.parse.Task val$task -> val$task
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.ParseCallback val$callback -> val$callback
+    void run() -> run
 com.parse.ParseACL -> com.parse.ParseACL:
     java.lang.String PUBLIC_KEY -> PUBLIC_KEY
     java.lang.String UNRESOLVED_KEY -> UNRESOLVED_KEY
@@ -15209,6 +15271,10 @@ com.parse.ParseAddUniqueOperation -> com.parse.ParseAddUniqueOperation:
     com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation) -> mergeWithPrevious
     java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String) -> apply
     java.lang.Object encode() -> encode
+com.parse.ParseAnalytics -> com.parse.ParseAnalytics:
+    java.lang.String TAG -> TAG
+    void trackAppOpened(android.content.Intent) -> trackAppOpened
+    void trackAppOpened(java.lang.String) -> trackAppOpened
 com.parse.ParseAnonymousUtils -> com.parse.ParseAnonymousUtils:
     com.parse.auth.AnonymousAuthenticationProvider provider -> provider
     java.lang.String ANONYMOUS_AUTH_TYPE -> ANONYMOUS_AUTH_TYPE
@@ -15221,30 +15287,33 @@ com.parse.ParseBroadcastReceiver -> com.parse.ParseBroadcastReceiver:
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.parse.ParseCallback -> com.parse.ParseCallback:
     void internalDone(java.lang.Object,com.parse.ParseException) -> internalDone
+com.parse.ParseClassName -> com.parse.ParseClassName:
+    java.lang.String value() -> value
 com.parse.ParseCloud -> com.parse.ParseCloud:
     com.parse.ParseCommand constructCallCommand(java.lang.String,java.util.Map) -> constructCallCommand
     java.lang.Object convertCloudResponse(java.lang.Object) -> convertCloudResponse
+    com.parse.Task callFunctionAsync(java.lang.String,java.util.Map) -> callFunctionAsync
     java.lang.Object callFunction(java.lang.String,java.util.Map) -> callFunction
     void callFunctionInBackground(java.lang.String,java.util.Map,com.parse.FunctionCallback) -> callFunctionInBackground
     java.lang.Object access$0(java.lang.Object) -> access$0
 com.parse.ParseCloud$1 -> com.parse.ParseCloud$1:
-    com.parse.ParseCommand val$command -> val$command
-    java.lang.Object run() -> run
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseCommand -> com.parse.ParseCommand:
+    java.util.concurrent.ScheduledExecutorService networkThreadPool -> networkThreadPool
+    org.apache.http.client.HttpClient testClient -> testClient
     java.lang.String op -> op
     org.json.JSONObject params -> params
     java.lang.String localId -> localId
+    java.lang.String sessionToken -> sessionToken
     org.apache.http.client.HttpClient client -> client
     org.apache.http.client.methods.HttpPost post -> post
-    boolean cancelled -> cancelled
     boolean retryEnabled -> retryEnabled
     int attemptsMade -> attemptsMade
     long delay -> delay
-    com.parse.ParseCommand$InternalCallback internalCallback -> internalCallback
+    java.util.concurrent.atomic.AtomicReference currentTask -> currentTask
     int SOCKET_TIMEOUT -> SOCKET_TIMEOUT
     int CONNECTION_TIMEOUT -> CONNECTION_TIMEOUT
     int INITIAL_DELAY -> INITIAL_DELAY
-    boolean callCallbacksOnFailure -> callCallbacksOnFailure
     void put(java.lang.String,java.lang.String) -> put
     void put(java.lang.String,int) -> put
     void put(java.lang.String,long) -> put
@@ -15257,15 +15326,13 @@ com.parse.ParseCommand -> com.parse.ParseCommand:
     java.lang.String getCacheKey() -> getCacheKey
     java.lang.String toDeterministicString(java.lang.Object) -> toDeterministicString
     void addToStringer(org.json.JSONStringer,java.lang.Object) -> addToStringer
-    java.lang.Object perform() -> perform
+    com.parse.Task performAsync() -> performAsync
     com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> connectionFailed
     void preparePost() -> preparePost
-    void setInternalCallback(com.parse.ParseCommand$InternalCallback) -> setInternalCallback
-    java.lang.Object perform(boolean) -> perform
-    void setCallCallbacksOnFailure(boolean) -> setCallCallbacksOnFailure
-    org.json.JSONObject sendRequestWithRetries() -> sendRequestWithRetries
+    com.parse.Task performAsync(boolean) -> performAsync
+    com.parse.Task sendRequestWithRetriesAsync() -> sendRequestWithRetriesAsync
     void maybeSetupHttpProxy() -> maybeSetupHttpProxy
-    org.json.JSONObject sendRequest(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost) -> sendRequest
+    com.parse.Task sendRequestAsync(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost) -> sendRequestAsync
     void calculateNextDelay() -> calculateNextDelay
     void enableRetrying() -> enableRetrying
     void setInitialDelay(double) -> setInitialDelay
@@ -15275,8 +15342,50 @@ com.parse.ParseCommand -> com.parse.ParseCommand:
     void resolveLocalIds() -> resolveLocalIds
     void retainLocalIds() -> retainLocalIds
     void releaseLocalIds() -> releaseLocalIds
-com.parse.ParseCommand$InternalCallback -> com.parse.ParseCommand$InternalCallback:
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    org.apache.http.client.methods.HttpPost access$0(com.parse.ParseCommand) -> access$0
+    com.parse.Task access$1(com.parse.ParseCommand) -> access$1
+    java.util.concurrent.atomic.AtomicReference access$2(com.parse.ParseCommand) -> access$2
+    int access$3(com.parse.ParseCommand) -> access$3
+    void access$4(com.parse.ParseCommand,int) -> access$4
+    boolean access$5(com.parse.ParseCommand) -> access$5
+    long access$6(com.parse.ParseCommand) -> access$6
+    void access$7(com.parse.ParseCommand) -> access$7
+com.parse.ParseCommand$1 -> com.parse.ParseCommand$1:
+    com.parse.ParseCommand this$0 -> this$0
+    java.lang.Void call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseCommand$2 -> com.parse.ParseCommand$2:
+    com.parse.ParseCommand this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseCommand$3 -> com.parse.ParseCommand$3:
+    com.parse.ParseCommand this$0 -> this$0
+    boolean val$saveToCache -> val$saveToCache
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseCommand$4 -> com.parse.ParseCommand$4:
+    com.parse.ParseCommand this$0 -> this$0
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseCommand$5 -> com.parse.ParseCommand$5:
+    com.parse.ParseCommand this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseCommand access$1(com.parse.ParseCommand$5) -> access$1
+com.parse.ParseCommand$5$1 -> com.parse.ParseCommand$5$1:
+    com.parse.ParseCommand$5 this$1 -> this$1
+    com.parse.Task$TaskCompletionSource val$delayTaskSource -> val$delayTaskSource
+    void run() -> run
+com.parse.ParseCommand$5$2 -> com.parse.ParseCommand$5$2:
+    com.parse.ParseCommand$5 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseCommand$6 -> com.parse.ParseCommand$6:
+    com.parse.ParseCommand this$0 -> this$0
+    org.apache.http.client.HttpClient val$client -> val$client
+    org.apache.http.client.methods.HttpPost val$post -> val$post
+    org.json.JSONObject call() -> call
+    java.lang.Object call() -> call
 com.parse.ParseCommandCache -> com.parse.ParseCommandCache:
     java.lang.String TAG -> TAG
     java.io.File cachePath -> cachePath
@@ -15286,13 +15395,13 @@ com.parse.ParseCommandCache -> com.parse.ParseCommandCache:
     int filenameCounter -> filenameCounter
     boolean shouldStop -> shouldStop
     boolean connected -> connected
-    java.util.HashMap commandsInCache -> commandsInCache
-    java.util.HashMap callbacksForCommands -> callbacksForCommands
+    java.util.HashMap pendingTasks -> pendingTasks
     java.lang.Object lock -> lock
     boolean running -> running
     java.lang.Object runningLock -> runningLock
     java.util.logging.Logger log -> log
     com.parse.ParseCommandCache$TestHelper testHelper -> testHelper
+    com.parse.ConnectivityNotifier$ConnectivityListener connectivityListener -> connectivityListener
     void setTimeoutMaxRetries(int) -> setTimeoutMaxRetries
     void setTimeoutRetryWaitSeconds(double) -> setTimeoutRetryWaitSeconds
     void setMaxCacheSizeBytes(int) -> setMaxCacheSizeBytes
@@ -15300,36 +15409,42 @@ com.parse.ParseCommandCache -> com.parse.ParseCommandCache:
     void pause() -> pause
     void removeFile(java.io.File) -> removeFile
     void simulateReboot() -> simulateReboot
-    void runEventually(com.parse.ParseCommand,com.parse.ParseCallback,com.parse.ParseObject) -> runEventually
-    void runEventuallyInternal(com.parse.ParseCommand,com.parse.ParseCallback,boolean,com.parse.ParseObject) -> runEventuallyInternal
+    com.parse.Task runEventuallyAsync(com.parse.ParseCommand,com.parse.ParseObject) -> runEventuallyAsync
+    com.parse.Task runEventuallyInternalAsync(com.parse.ParseCommand,boolean,com.parse.ParseObject) -> runEventuallyInternalAsync
     int pendingCount() -> pendingCount
     void clear() -> clear
     void setConnected(boolean) -> setConnected
+    java.lang.Object waitForTaskWithoutLock(com.parse.Task) -> waitForTaskWithoutLock
     void maybeRunAllCommandsNow(int) -> maybeRunAllCommandsNow
     void runLoop() -> runLoop
     com.parse.ParseCommandCache$TestHelper getTestHelper() -> getTestHelper
     void access$0(com.parse.ParseCommandCache) -> access$0
-    com.parse.ParseCommandCache$TestHelper access$1(com.parse.ParseCommandCache) -> access$1
+    java.lang.Object access$1() -> access$1
 com.parse.ParseCommandCache$1 -> com.parse.ParseCommandCache$1:
     com.parse.ParseCommandCache this$0 -> this$0
-    android.net.ConnectivityManager val$connectivityManager -> val$connectivityManager
-    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    void networkConnectivityStatusChanged(android.content.Intent) -> networkConnectivityStatusChanged
 com.parse.ParseCommandCache$2 -> com.parse.ParseCommandCache$2:
     com.parse.ParseCommandCache this$0 -> this$0
     void run() -> run
 com.parse.ParseCommandCache$3 -> com.parse.ParseCommandCache$3:
     com.parse.ParseCommandCache this$0 -> this$0
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    com.parse.Capture val$finished -> val$finished
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseCommandCache$4 -> com.parse.ParseCommandCache$4:
     com.parse.ParseCommandCache this$0 -> this$0
-    com.parse.ParseCallback val$callback -> val$callback
-    void run() -> run
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.String val$localId -> val$localId
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseCommandCache$TestHelper -> com.parse.ParseCommandCache$TestHelper:
     int MAX_EVENTS -> MAX_EVENTS
     int COMMAND_SUCCESSFUL -> COMMAND_SUCCESSFUL
     int COMMAND_FAILED -> COMMAND_FAILED
     int COMMAND_ENQUEUED -> COMMAND_ENQUEUED
     int COMMAND_NOT_ENQUEUED -> COMMAND_NOT_ENQUEUED
+    int OBJECT_UPDATED -> OBJECT_UPDATED
+    int OBJECT_REMOVED -> OBJECT_REMOVED
     java.util.HashMap events -> events
     com.parse.ParseCommandCache this$0 -> this$0
     void clear() -> clear
@@ -15522,59 +15637,103 @@ com.parse.ParseFieldOperations$8 -> com.parse.ParseFieldOperations$8:
 com.parse.ParseFieldOperations$ParseFieldOperationFactory -> com.parse.ParseFieldOperations$ParseFieldOperationFactory:
     com.parse.ParseFieldOperation decode(org.json.JSONObject) -> decode
 com.parse.ParseFile -> com.parse.ParseFile:
+    boolean dirty -> dirty
     java.lang.String name -> name
     java.lang.String url -> url
     byte[] data -> data
-    com.parse.BackgroundTask currentTask -> currentTask
-    com.parse.ParseCommand currentCommand -> currentCommand
     org.apache.http.client.methods.HttpPost fileUploadPost -> fileUploadPost
-    java.util.ArrayList callbacks -> callbacks
-    com.parse.ParseFile$ParseFileState state -> state
-    com.parse.ParseFile$ParseFileState previousState -> previousState
-    void setState(com.parse.ParseFile$ParseFileState) -> setState
-    void revertState() -> revertState
-    void assertNotRunning() -> assertNotRunning
+    com.parse.TaskQueue taskQueue -> taskQueue
+    java.util.Set currentTasks -> currentTasks
     java.lang.String getName() -> getName
     boolean isDirty() -> isDirty
     boolean isDataAvailable() -> isDataAvailable
     java.lang.String getUrl() -> getUrl
-    com.parse.ParseCommand constructFileUploadCommand() -> constructFileUploadCommand
+    com.parse.ParseCommand constructFileUploadCommand(java.lang.String) -> constructFileUploadCommand
     void prepareFileUploadPost(org.json.JSONObject,com.parse.ProgressCallback) -> prepareFileUploadPost
-    void handleFileUploadResult(org.json.JSONObject,com.parse.ProgressCallback) -> handleFileUploadResult
+    com.parse.Task handleFileUploadResultAsync(org.json.JSONObject,com.parse.ProgressCallback) -> handleFileUploadResultAsync
     void save() -> save
-    void save(boolean,com.parse.ProgressCallback) -> save
+    void save(com.parse.ProgressCallback) -> save
+    com.parse.Task saveAsync(com.parse.ProgressCallback,com.parse.Task) -> saveAsync
+    com.parse.Task saveAsync(com.parse.ProgressCallback) -> saveAsync
     void saveInBackground(com.parse.SaveCallback,com.parse.ProgressCallback) -> saveInBackground
     void saveInBackground(com.parse.SaveCallback) -> saveInBackground
     void saveInBackground() -> saveInBackground
     byte[] getData() -> getData
-    byte[] getData(boolean,com.parse.ProgressCallback) -> getData
+    com.parse.Task getDataAsync(com.parse.ProgressCallback,com.parse.Task) -> getDataAsync
+    com.parse.Task getDataAsync(com.parse.ProgressCallback) -> getDataAsync
     void getDataInBackground(com.parse.GetDataCallback,com.parse.ProgressCallback) -> getDataInBackground
     void getDataInBackground(com.parse.GetDataCallback) -> getDataInBackground
     void cancel() -> cancel
-    void access$0(com.parse.ParseFile,boolean,com.parse.ProgressCallback) -> access$0
-    java.util.ArrayList access$1(com.parse.ParseFile) -> access$1
+    com.parse.ParseCommand access$0(com.parse.ParseFile,java.lang.String) -> access$0
+    com.parse.Task access$1(com.parse.ParseFile,org.json.JSONObject,com.parse.ProgressCallback) -> access$1
+    void access$2(com.parse.ParseFile,boolean) -> access$2
+    java.util.Set access$3(com.parse.ParseFile) -> access$3
+    java.lang.String access$4(com.parse.ParseFile) -> access$4
+    void access$5(com.parse.ParseFile,byte[]) -> access$5
+    com.parse.Task access$6(com.parse.ParseFile,com.parse.ProgressCallback,com.parse.Task) -> access$6
 com.parse.ParseFile$1 -> com.parse.ParseFile$1:
     com.parse.ParseFile this$0 -> this$0
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
     com.parse.ProgressCallback val$progressCallback -> val$progressCallback
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseFile access$1(com.parse.ParseFile$1) -> access$1
+com.parse.ParseFile$1$1 -> com.parse.ParseFile$1$1:
+    com.parse.ParseFile$1 this$1 -> this$1
+    java.lang.String val$sessionToken -> val$sessionToken
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.ParseCommand call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseFile$1$1$1 -> com.parse.ParseFile$1$1$1:
+    com.parse.ParseFile$1$1 this$2 -> this$2
+    com.parse.ParseCommand val$command -> val$command
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$1$2 -> com.parse.ParseFile$1$2:
+    com.parse.ParseFile$1 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$1$3 -> com.parse.ParseFile$1$3:
+    com.parse.ParseFile$1 this$1 -> this$1
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$1$4 -> com.parse.ParseFile$1$4:
+    com.parse.ParseFile$1 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$1$5 -> com.parse.ParseFile$1$5:
+    com.parse.ParseFile$1 this$1 -> this$1
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseFile$2 -> com.parse.ParseFile$2:
     com.parse.ParseFile this$0 -> this$0
-    void done(byte[],com.parse.ParseException) -> done
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseFile$3 -> com.parse.ParseFile$3:
     com.parse.ParseFile this$0 -> this$0
     com.parse.ProgressCallback val$progressCallback -> val$progressCallback
-    byte[] run() -> run
-    java.lang.Object run() -> run
-com.parse.ParseFile$ParseFileState -> com.parse.ParseFile$ParseFileState:
-    com.parse.ParseFile$ParseFileState DIRTY -> DIRTY
-    com.parse.ParseFile$ParseFileState SAVING -> SAVING
-    com.parse.ParseFile$ParseFileState AWAITING_FETCH -> AWAITING_FETCH
-    com.parse.ParseFile$ParseFileState FETCHING -> FETCHING
-    com.parse.ParseFile$ParseFileState DATA_AVAILABLE -> DATA_AVAILABLE
-    com.parse.ParseFile$ParseFileState[] ENUM$VALUES -> ENUM$VALUES
-    com.parse.ParseFile$ParseFileState[] values() -> values
-    com.parse.ParseFile$ParseFileState valueOf(java.lang.String) -> valueOf
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseFile access$1(com.parse.ParseFile$3) -> access$1
+com.parse.ParseFile$3$1 -> com.parse.ParseFile$3$1:
+    com.parse.ParseFile$3 this$1 -> this$1
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$3$2 -> com.parse.ParseFile$3$2:
+    com.parse.ParseFile$3 this$1 -> this$1
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseFile$4 -> com.parse.ParseFile$4:
+    com.parse.ParseFile this$0 -> this$0
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseGeoPoint -> com.parse.ParseGeoPoint:
     double EARTH_MEAN_RADIUS_KM -> EARTH_MEAN_RADIUS_KM
     double EARTH_MEAN_RADIUS_MILE -> EARTH_MEAN_RADIUS_MILE
@@ -15587,6 +15746,8 @@ com.parse.ParseGeoPoint -> com.parse.ParseGeoPoint:
     double distanceInRadiansTo(com.parse.ParseGeoPoint) -> distanceInRadiansTo
     double distanceInKilometersTo(com.parse.ParseGeoPoint) -> distanceInKilometersTo
     double distanceInMilesTo(com.parse.ParseGeoPoint) -> distanceInMilesTo
+    void getCurrentLocationInBackground(long,com.parse.LocationCallback) -> getCurrentLocationInBackground
+    void getCurrentLocationInBackground(long,android.location.Criteria,com.parse.LocationCallback) -> getCurrentLocationInBackground
 com.parse.ParseIncrementOperation -> com.parse.ParseIncrementOperation:
     java.lang.Number amount -> amount
     org.json.JSONObject encode() -> encode
@@ -15595,10 +15756,10 @@ com.parse.ParseIncrementOperation -> com.parse.ParseIncrementOperation:
     java.lang.Object encode() -> encode
 com.parse.ParseInstallation -> com.parse.ParseInstallation:
     java.lang.String TAG -> TAG
-    java.lang.String CLASS_NAME -> CLASS_NAME
     com.parse.ParseInstallation currentInstallation -> currentInstallation
     java.lang.String STORAGE_LOCATION -> STORAGE_LOCATION
     java.util.List readonlyFields -> readonlyFields
+    void setDefaultValues() -> setDefaultValues
     com.parse.ParseInstallation getCurrentInstallation() -> getCurrentInstallation
     com.parse.ParseQuery getQuery() -> getQuery
     java.lang.String getOrCreateCurrentInstallationId() -> getOrCreateCurrentInstallationId
@@ -15606,13 +15767,30 @@ com.parse.ParseInstallation -> com.parse.ParseInstallation:
     void checkKeyIsMutable(java.lang.String) -> checkKeyIsMutable
     void put(java.lang.String,java.lang.Object) -> put
     void remove(java.lang.String) -> remove
-    void save(boolean) -> save
+    com.parse.Task saveAsync(com.parse.Task) -> saveAsync
     void saveEventually(com.parse.SaveCallback) -> saveEventually
-    com.parse.ParseObject fetch() -> fetch
+    com.parse.Task fetchAsync(com.parse.Task) -> fetchAsync
     void updateTimezone() -> updateTimezone
     void updateVersionInfo() -> updateVersionInfo
     void maybeFlushToDisk(com.parse.ParseInstallation) -> maybeFlushToDisk
+    void clearCurrentInstallationFromMemory() -> clearCurrentInstallationFromMemory
     void clearCurrentInstallationFromDisk(android.content.Context) -> clearCurrentInstallationFromDisk
+    boolean needsDefaultACL() -> needsDefaultACL
+    void access$0(com.parse.ParseInstallation) -> access$0
+    com.parse.Task access$1(com.parse.ParseInstallation,com.parse.Task) -> access$1
+com.parse.ParseInstallation$1 -> com.parse.ParseInstallation$1:
+    com.parse.ParseInstallation this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseInstallation$2 -> com.parse.ParseInstallation$2:
+    com.parse.ParseInstallation this$0 -> this$0
+    com.parse.Task val$toAwait -> val$toAwait
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseInstallation$3 -> com.parse.ParseInstallation$3:
+    com.parse.ParseInstallation this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseJSONCacheItem -> com.parse.ParseJSONCacheItem:
     org.json.JSONObject json -> json
     java.lang.String hashValue -> hashValue
@@ -15629,8 +15807,10 @@ com.parse.ParseObject -> com.parse.ParseObject:
     java.lang.String TAG -> TAG
     java.lang.String server -> server
     java.lang.String API_VERSION -> API_VERSION
+    java.lang.String AUTO_CLASS_NAME -> AUTO_CLASS_NAME
     java.lang.String VERSION_NAME -> VERSION_NAME
-    java.util.Map objectFactories -> objectFactories
+    java.util.Map classNames -> classNames
+    java.util.Map objectTypes -> objectTypes
     java.text.DateFormat impreciseDateFormat -> impreciseDateFormat
     boolean dirty -> dirty
     java.lang.String objectId -> objectId
@@ -15641,24 +15821,28 @@ com.parse.ParseObject -> com.parse.ParseObject:
     java.util.LinkedList operationSetQueue -> operationSetQueue
     java.util.Map estimatedData -> estimatedData
     java.util.Map dataAvailability -> dataAvailability
+    java.lang.Object mutex -> mutex
+    com.parse.TaskQueue taskQueue -> taskQueue
     java.util.Map hashedObjects -> hashedObjects
     boolean hasBeenFetched -> hasBeenFetched
     java.util.Date updatedAt -> updatedAt
     java.util.Date createdAt -> createdAt
-    java.lang.Boolean isRunning -> isRunning
+    java.lang.ThreadLocal isCreatingPointer -> isCreatingPointer
     com.parse.ParseObject create(java.lang.String) -> create
+    com.parse.ParseObject create(java.lang.Class) -> create
     com.parse.ParseObject createWithoutData(java.lang.String,java.lang.String) -> createWithoutData
-    void registerFactory(java.lang.String,com.parse.ParseObject$ParseObjectFactory) -> registerFactory
+    com.parse.ParseObject createWithoutData(java.lang.Class,java.lang.String) -> createWithoutData
+    boolean isAccessible(java.lang.reflect.Member) -> isAccessible
+    void registerSubclass(java.lang.Class) -> registerSubclass
+    void unregisterSubclass(java.lang.String) -> unregisterSubclass
     java.lang.String getApplicationId() -> getApplicationId
+    com.parse.Task enqueueForAll(java.util.List,com.parse.Continuation) -> enqueueForAll
     java.util.Date impreciseParseDate(java.lang.String) -> impreciseParseDate
     org.json.JSONObject getDiskObject(android.content.Context,java.lang.String) -> getDiskObject
     org.json.JSONObject getDiskObject(java.io.File) -> getDiskObject
     void saveDiskObject(android.content.Context,java.lang.String,org.json.JSONObject) -> saveDiskObject
     void saveDiskObject(java.io.File,org.json.JSONObject) -> saveDiskObject
     void deleteDiskObject(android.content.Context,java.lang.String) -> deleteDiskObject
-    void checkIfRunning() -> checkIfRunning
-    void checkIfRunning(boolean) -> checkIfRunning
-    void finishedRunning() -> finishedRunning
     void saveToDisk(android.content.Context,java.lang.String) -> saveToDisk
     void addToHashedObjects(java.lang.Object) -> addToHashedObjects
     com.parse.ParseObject getFromDisk(android.content.Context,java.lang.String) -> getFromDisk
@@ -15666,15 +15850,16 @@ com.parse.ParseObject -> com.parse.ParseObject:
     java.util.Set keySet() -> keySet
     java.util.Date getUpdatedAt() -> getUpdatedAt
     java.util.Date getCreatedAt() -> getCreatedAt
-    void clearChanges() -> clearChanges
     void copyChangesFrom(com.parse.ParseObject) -> copyChangesFrom
     void mergeFromObject(com.parse.ParseObject) -> mergeFromObject
-    void mergeAfterFetch(org.json.JSONObject) -> mergeAfterFetch
-    void mergeAfterSave(org.json.JSONObject,boolean) -> mergeAfterSave
-    void mergeFromServer(org.json.JSONObject) -> mergeFromServer
+    void revert() -> revert
+    void mergeAfterFetch(org.json.JSONObject,boolean) -> mergeAfterFetch
+    void mergeAfterSave(org.json.JSONObject,boolean,java.util.Map) -> mergeAfterSave
+    void mergeFromServer(org.json.JSONObject,boolean) -> mergeFromServer
     boolean hasDirtyChildren() -> hasDirtyChildren
     boolean isDirty() -> isDirty
     boolean isDirty(boolean) -> isDirty
+    void checkpointAllMutableContainers() -> checkpointAllMutableContainers
     void checkpointMutableContainer(java.lang.Object) -> checkpointMutableContainer
     void checkForChangesToMutableContainer(java.lang.String,java.lang.Object) -> checkForChangesToMutableContainer
     void checkForChangesToMutableContainers() -> checkForChangesToMutableContainers
@@ -15683,14 +15868,15 @@ com.parse.ParseObject -> com.parse.ParseObject:
     void setObjectId(java.lang.String) -> setObjectId
     void setObjectIdInternal(java.lang.String) -> setObjectIdInternal
     void findUnsavedChildren(java.lang.Object,java.util.List) -> findUnsavedChildren
-    com.parse.ParseCommand constructSaveCommand() -> constructSaveCommand
+    com.parse.ParseCommand constructSaveCommand(java.util.Map,java.lang.String) -> constructSaveCommand
     org.json.JSONObject toJSONObjectForDataFile() -> toJSONObjectForDataFile
-    org.json.JSONObject toJSONObjectForSaving() -> toJSONObjectForSaving
-    void handleSaveResult(java.lang.String,org.json.JSONObject) -> handleSaveResult
-    void startSave() -> startSave
+    org.json.JSONObject toJSONObjectForSaving(java.util.Map) -> toJSONObjectForSaving
+    void handleSaveResult(java.lang.String,org.json.JSONObject,java.util.Map) -> handleSaveResult
+    java.util.Map startSave() -> startSave
     void validateSave() -> validateSave
     void save() -> save
-    void save(boolean) -> save
+    com.parse.Task saveAsync(com.parse.Task) -> saveAsync
+    com.parse.Task saveAsync() -> saveAsync
     void saveInBackground(com.parse.SaveCallback) -> saveInBackground
     void saveInBackground() -> saveInBackground
     void saveEventually() -> saveEventually
@@ -15701,25 +15887,32 @@ com.parse.ParseObject -> com.parse.ParseObject:
     void refresh() -> refresh
     void refreshInBackground(com.parse.RefreshCallback) -> refreshInBackground
     com.parse.ParseObject fetch() -> fetch
-    com.parse.ParseObject fetch(boolean) -> fetch
+    com.parse.Task fetchAsync(com.parse.Task) -> fetchAsync
+    com.parse.Task fetchAsync() -> fetchAsync
     void fetchInBackground(com.parse.GetCallback) -> fetchInBackground
-    com.parse.ParseObject fetchIfNeeded(boolean) -> fetchIfNeeded
+    com.parse.Task fetchIfNeededAsync() -> fetchIfNeededAsync
     com.parse.ParseObject fetchIfNeeded() -> fetchIfNeeded
     void fetchIfNeededInBackground(com.parse.GetCallback) -> fetchIfNeededInBackground
-    com.parse.ParseCommand constructDeleteCommand(boolean) -> constructDeleteCommand
+    com.parse.ParseCommand constructDeleteCommand(boolean,java.lang.String) -> constructDeleteCommand
     void validateDelete() -> validateDelete
+    com.parse.Task deleteAsync(com.parse.Task) -> deleteAsync
+    com.parse.Task deleteAsync() -> deleteAsync
     void delete() -> delete
-    void delete(boolean) -> delete
     void deleteInBackground(com.parse.DeleteCallback) -> deleteInBackground
     void deleteInBackground() -> deleteInBackground
     void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List,java.util.IdentityHashMap,java.util.IdentityHashMap) -> collectDirtyChildren
     void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List) -> collectDirtyChildren
     boolean canBeSerializedAsValue(java.lang.Object) -> canBeSerializedAsValue
     boolean canBeSerialized() -> canBeSerialized
-    void deepSave(java.lang.Object) -> deepSave
+    com.parse.Task deepSaveAsync(java.lang.Object,java.lang.String) -> deepSaveAsync
+    com.parse.Task saveAllAsync(java.util.List) -> saveAllAsync
     void saveAll(java.util.List) -> saveAll
+    com.parse.Task fetchAllIfNeededAsync(java.util.List,com.parse.Task) -> fetchAllIfNeededAsync
+    com.parse.Task fetchAllIfNeededAsync(java.util.List) -> fetchAllIfNeededAsync
     java.util.List fetchAllIfNeeded(java.util.List) -> fetchAllIfNeeded
     void fetchAllIfNeededInBackground(java.util.List,com.parse.FindCallback) -> fetchAllIfNeededInBackground
+    com.parse.Task fetchAllAsync(java.util.List,com.parse.Task) -> fetchAllAsync
+    com.parse.Task fetchAllAsync(java.util.List) -> fetchAllAsync
     java.util.List fetchAll(java.util.List) -> fetchAll
     void fetchAllInBackground(java.util.List,com.parse.FindCallback) -> fetchAllInBackground
     void saveAllInBackground(java.util.List,com.parse.SaveCallback) -> saveAllInBackground
@@ -15753,6 +15946,7 @@ com.parse.ParseObject -> com.parse.ParseObject:
     java.util.Date getDate(java.lang.String) -> getDate
     com.parse.ParseObject getParseObject(java.lang.String) -> getParseObject
     com.parse.ParseUser getParseUser(java.lang.String) -> getParseUser
+    com.parse.ParseFile getParseFile(java.lang.String) -> getParseFile
     com.parse.ParseGeoPoint getParseGeoPoint(java.lang.String) -> getParseGeoPoint
     com.parse.ParseACL getACL() -> getACL
     com.parse.ParseACL getACL(boolean) -> getACL
@@ -15765,75 +15959,190 @@ com.parse.ParseObject -> com.parse.ParseObject:
     boolean hasSameId(com.parse.ParseObject) -> hasSameId
     void registerSaveListener(com.parse.GetCallback) -> registerSaveListener
     void unregisterSaveListener(com.parse.GetCallback) -> unregisterSaveListener
-    com.parse.ParseCommand access$0(com.parse.ParseObject,boolean) -> access$0
-    com.parse.ParseObject access$1(com.parse.ParseObject,boolean) -> access$1
+    java.lang.String getClassName(java.lang.Class) -> getClassName
+    void setDefaultValues() -> setDefaultValues
+    boolean needsDefaultACL() -> needsDefaultACL
+    java.util.Map access$000(com.parse.ParseObject) -> access$000
+    com.parse.Task access$100(java.lang.Object,java.lang.String) -> access$100
+    boolean access$200(com.parse.ParseObject,java.lang.String) -> access$200
+    com.parse.ParseACL access$300(com.parse.ParseObject,boolean) -> access$300
+    java.lang.String access$400(com.parse.ParseObject) -> access$400
+    java.lang.String access$500(com.parse.ParseObject) -> access$500
+    com.parse.ParseCommand access$600(com.parse.ParseObject,boolean,java.lang.String) -> access$600
+    com.parse.Task access$700(com.parse.ParseObject,com.parse.Task) -> access$700
+    boolean access$800(com.parse.ParseObject) -> access$800
+    boolean access$902(com.parse.ParseObject,boolean) -> access$902
+    com.parse.Task access$1000(java.util.List,com.parse.Task) -> access$1000
+    com.parse.Task access$1100(java.util.List,com.parse.Task) -> access$1100
 com.parse.ParseObject$1 -> com.parse.ParseObject$1:
-    com.parse.ParseUser getNew(boolean) -> getNew
-    java.lang.Class getExpectedType() -> getExpectedType
-    com.parse.ParseObject getNew(boolean) -> getNew
+    java.lang.Boolean initialValue() -> initialValue
+    java.lang.Object initialValue() -> initialValue
 com.parse.ParseObject$10 -> com.parse.ParseObject$10:
+    com.parse.ParseCommandCache val$cache -> val$cache
     com.parse.ParseObject this$0 -> this$0
-    com.parse.ParseObject run() -> run
-    java.lang.Object run() -> run
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$11 -> com.parse.ParseObject$11:
     com.parse.ParseObject this$0 -> this$0
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseObject then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$12 -> com.parse.ParseObject$12:
-    java.util.List val$objects -> val$objects
-    java.util.List run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$13 -> com.parse.ParseObject$13:
-    java.util.List val$objects -> val$objects
-    java.util.List run() -> run
-    java.lang.Object run() -> run
+    java.lang.String val$sessionToken -> val$sessionToken
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.ParseCommand call() -> call
+    java.lang.Object call() -> call
 com.parse.ParseObject$14 -> com.parse.ParseObject$14:
-    java.util.List val$finalObjects -> val$finalObjects
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$15 -> com.parse.ParseObject$15:
+    com.parse.ParseObject this$0 -> this$0
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$16 -> com.parse.ParseObject$16:
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$17 -> com.parse.ParseObject$17:
+    java.lang.String val$sessionToken -> val$sessionToken
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.ParseCommand call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseObject$18 -> com.parse.ParseObject$18:
+    com.parse.ParseObject this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19 -> com.parse.ParseObject$19:
+    java.util.List val$objects -> val$objects
+    java.lang.String val$sessionToken -> val$sessionToken
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$1 -> com.parse.ParseObject$19$1:
+    com.parse.Capture val$remaining -> val$remaining
+    com.parse.ParseObject$19 this$0 -> this$0
+    java.lang.Boolean call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseObject$19$2 -> com.parse.ParseObject$19$2:
+    com.parse.Capture val$remaining -> val$remaining
+    com.parse.ParseObject$19 this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$1 -> com.parse.ParseObject$19$2$1:
+    java.util.List val$current -> val$current
+    com.parse.ParseObject$19$2 this$1 -> this$1
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$2 -> com.parse.ParseObject$19$2$2:
+    com.parse.ParseObject$19$2 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$3 -> com.parse.ParseObject$19$2$3:
+    java.util.List val$current -> val$current
+    java.util.List val$operations -> val$operations
+    java.util.List val$ops -> val$ops
+    com.parse.ParseObject$19$2 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$3$1 -> com.parse.ParseObject$19$2$3$1:
+    com.parse.ParseObject$19$2$3 this$2 -> this$2
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$3$1$1 -> com.parse.ParseObject$19$2$3$1$1:
+    com.parse.ParseObject$19$2$3$1 this$3 -> this$3
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$19$2$3$1$1$1 -> com.parse.ParseObject$19$2$3$1$1$1:
+    com.parse.ParseObject$19$2$3$1$1 this$4 -> this$4
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$2 -> com.parse.ParseObject$2:
-    com.parse.ParseRole getNew(boolean) -> getNew
-    java.lang.Class getExpectedType() -> getExpectedType
-    com.parse.ParseObject getNew(boolean) -> getNew
+    java.util.List val$childTasks -> val$childTasks
+    com.parse.Task val$fullTask -> val$fullTask
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$20 -> com.parse.ParseObject$20:
+    java.util.List val$objects -> val$objects
+    java.util.List then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$21 -> com.parse.ParseObject$21:
+    com.parse.ParseQuery val$query -> val$query
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$22 -> com.parse.ParseObject$22:
+    java.util.List val$objects -> val$objects
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$23 -> com.parse.ParseObject$23:
+    java.util.List val$objects -> val$objects
+    java.util.List then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$24 -> com.parse.ParseObject$24:
+    com.parse.ParseQuery val$query -> val$query
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$25 -> com.parse.ParseObject$25:
+    java.util.List val$objects -> val$objects
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$3 -> com.parse.ParseObject$3:
-    com.parse.ParseInstallation getNew(boolean) -> getNew
-    java.lang.Class getExpectedType() -> getExpectedType
-    com.parse.ParseObject getNew(boolean) -> getNew
+    com.parse.Task$TaskCompletionSource val$readyToStart -> val$readyToStart
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$4 -> com.parse.ParseObject$4:
+    com.parse.Capture val$operations -> val$operations
+    java.lang.String val$sessionToken -> val$sessionToken
     com.parse.ParseObject this$0 -> this$0
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$4$1 -> com.parse.ParseObject$4$1:
+    com.parse.ParseCommand val$command -> val$command
+    com.parse.ParseObject$4 this$1 -> this$1
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$5 -> com.parse.ParseObject$5:
+    java.lang.String val$sessionToken -> val$sessionToken
     com.parse.ParseObject this$0 -> this$0
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$6 -> com.parse.ParseObject$6:
+    com.parse.Capture val$operations -> val$operations
     com.parse.ParseObject this$0 -> this$0
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseObject$6$1 -> com.parse.ParseObject$6$1:
+    com.parse.ParseObject$6 this$1 -> this$1
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$7 -> com.parse.ParseObject$7:
     com.parse.ParseObject this$0 -> this$0
-    com.parse.DeleteCallback val$callback -> val$callback
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$8 -> com.parse.ParseObject$8:
+    com.parse.Capture val$succeeded -> val$succeeded
+    com.parse.ParseCommandCache val$cache -> val$cache
     com.parse.ParseObject this$0 -> this$0
-    com.parse.RefreshCallback val$callback -> val$callback
-    void done(com.parse.ParseObject,com.parse.ParseException) -> done
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseObject$9 -> com.parse.ParseObject$9:
+    com.parse.ParseCommand val$command -> val$command
+    java.util.Map val$operations -> val$operations
+    com.parse.Capture val$succeeded -> val$succeeded
     com.parse.ParseObject this$0 -> this$0
-    com.parse.ParseObject run() -> run
-    java.lang.Object run() -> run
-com.parse.ParseObject$ParseObjectFactory -> com.parse.ParseObject$ParseObjectFactory:
-    com.parse.ParseObject getNew(boolean) -> getNew
-    java.lang.Class getExpectedType() -> getExpectedType
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParsePush -> com.parse.ParsePush:
     java.lang.String TAG -> TAG
-    java.util.Set mChannelSet -> mChannelSet
-    com.parse.ParseQuery mQuery -> mQuery
-    java.lang.Long mExpirationTime -> mExpirationTime
-    java.lang.Long mExpirationTimeInterval -> mExpirationTimeInterval
-    java.lang.Boolean mPushToIOS -> mPushToIOS
-    java.lang.Boolean mPushToAndroid -> mPushToAndroid
-    org.json.JSONObject mData -> mData
+    java.util.Set channelSet -> channelSet
+    com.parse.ParseQuery query -> query
+    java.lang.Long expirationTime -> expirationTime
+    java.lang.Long expirationTimeInterval -> expirationTimeInterval
+    java.lang.Boolean pushToIOS -> pushToIOS
+    java.lang.Boolean pushToAndroid -> pushToAndroid
+    org.json.JSONObject data -> data
     void sendMessageInBackground(java.lang.String,com.parse.ParseQuery) -> sendMessageInBackground
     void sendMessageInBackground(java.lang.String,com.parse.ParseQuery,com.parse.SendCallback) -> sendMessageInBackground
     void sendDataInBackground(org.json.JSONObject,com.parse.ParseQuery) -> sendDataInBackground
@@ -15848,14 +16157,15 @@ com.parse.ParsePush -> com.parse.ParsePush:
     void setPushToAndroid(boolean) -> setPushToAndroid
     void setData(org.json.JSONObject) -> setData
     void setMessage(java.lang.String) -> setMessage
+    com.parse.Task sendAsync() -> sendAsync
     void send() -> send
     void sendInBackground(com.parse.SendCallback) -> sendInBackground
     void sendInBackground() -> sendInBackground
-    com.parse.ParseCommand buildCommand() -> buildCommand
+    com.parse.ParseCommand buildCommand(java.lang.String) -> buildCommand
 com.parse.ParsePush$1 -> com.parse.ParsePush$1:
     com.parse.ParsePush this$0 -> this$0
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParsePushRouter -> com.parse.ParsePushRouter:
     java.lang.String TAG -> TAG
     java.util.regex.Pattern CHANNEL_PATTERN -> CHANNEL_PATTERN
@@ -15912,7 +16222,7 @@ com.parse.ParsePushRouter$3 -> com.parse.ParsePushRouter$3:
     java.lang.Boolean run() -> run
     java.lang.Object run() -> run
 com.parse.ParsePushRouter$CallbackFactory -> com.parse.ParsePushRouter$CallbackFactory:
-    java.lang.Class klass -> klass
+    java.lang.Class clazz -> clazz
     org.json.JSONObject contextData -> contextData
     com.parse.PushCallback newCallback() -> newCallback
     org.json.JSONObject toJSON() -> toJSON
@@ -15927,6 +16237,7 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     java.lang.String className -> className
     java.util.HashMap where -> where
     java.util.ArrayList include -> include
+    java.util.ArrayList selectedKeys -> selectedKeys
     int limit -> limit
     boolean trace -> trace
     int skip -> skip
@@ -15935,7 +16246,6 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     long querySent -> querySent
     long queryReceived -> queryReceived
     long objectsParsed -> objectsParsed
-    com.parse.BackgroundTask currentTask -> currentTask
     com.parse.ParseCommand currentCommand -> currentCommand
     java.lang.Boolean isRunning -> isRunning
     java.util.HashMap extraOptions -> extraOptions
@@ -15943,23 +16253,25 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     long maxCacheAge -> maxCacheAge
     int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy -> $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy
     com.parse.ParseQuery or(java.util.List) -> or
+    com.parse.ParseQuery getQuery(java.lang.Class) -> getQuery
+    com.parse.ParseQuery getQuery(java.lang.String) -> getQuery
     com.parse.ParseQuery getUserQuery() -> getUserQuery
     void checkIfRunning() -> checkIfRunning
     void checkIfRunning(boolean) -> checkIfRunning
     void finishedRunning() -> finishedRunning
+    com.parse.Task finishRunning(com.parse.Task) -> finishRunning
     java.lang.Object maybeEncodeSubQueries(java.lang.Object) -> maybeEncodeSubQueries
     org.json.JSONObject getFindParams() -> getFindParams
-    com.parse.ParseCommand makeFindCommand() -> makeFindCommand
+    com.parse.ParseCommand makeFindCommand(java.lang.String) -> makeFindCommand
     java.util.List convertFindResponse(org.json.JSONObject) -> convertFindResponse
-    java.lang.Object runCommandWithPolicy(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy) -> runCommandWithPolicy
-    int countWithCachePolicy(com.parse.ParseQuery$CachePolicy) -> countWithCachePolicy
-    java.util.List findWithCachePolicy(com.parse.ParseQuery$CachePolicy) -> findWithCachePolicy
+    com.parse.Task runCommandWithPolicyAsync(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy) -> runCommandWithPolicyAsync
+    com.parse.Task countWithCachePolicyAsync(com.parse.ParseQuery$CachePolicy) -> countWithCachePolicyAsync
+    com.parse.Task findAsync() -> findAsync
+    com.parse.Task findWithCachePolicyAsync(com.parse.ParseQuery$CachePolicy) -> findWithCachePolicyAsync
     void cancel() -> cancel
     java.util.List find() -> find
-    java.util.List find(boolean) -> find
     com.parse.ParseObject getFirst() -> getFirst
-    com.parse.ParseObject getFirst(boolean) -> getFirst
-    java.util.List findFromNetwork(boolean) -> findFromNetwork
+    com.parse.Task findFromNetworkAsync(boolean) -> findFromNetworkAsync
     void setCachePolicy(com.parse.ParseQuery$CachePolicy) -> setCachePolicy
     com.parse.ParseQuery$CachePolicy getCachePolicy() -> getCachePolicy
     void setMaxCacheAge(long) -> setMaxCacheAge
@@ -15967,14 +16279,15 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     java.util.List findFromCache() -> findFromCache
     java.lang.Integer countFromCache() -> countFromCache
     void findInBackground(com.parse.FindCallback) -> findInBackground
+    com.parse.Task getFirstAsync() -> getFirstAsync
     void getFirstInBackground(com.parse.GetCallback) -> getFirstInBackground
-    com.parse.ParseCommand makeCountCommand() -> makeCountCommand
+    com.parse.ParseCommand makeCountCommand(java.lang.String) -> makeCountCommand
     int count() -> count
     int count(boolean) -> count
-    int countFromNetwork() -> countFromNetwork
+    com.parse.Task countFromNetworkAsync() -> countFromNetworkAsync
     void countInBackground(com.parse.CountCallback) -> countInBackground
+    com.parse.Task getAsync(java.lang.String) -> getAsync
     com.parse.ParseObject get(java.lang.String) -> get
-    com.parse.ParseObject get(java.lang.String,boolean) -> get
     boolean hasCachedResult() -> hasCachedResult
     void clearCachedResult() -> clearCachedResult
     void clearAllCachedResults() -> clearAllCachedResults
@@ -15987,6 +16300,7 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     com.parse.ParseQuery whereLessThanOrEqualTo(java.lang.String,java.lang.Object) -> whereLessThanOrEqualTo
     com.parse.ParseQuery whereGreaterThanOrEqualTo(java.lang.String,java.lang.Object) -> whereGreaterThanOrEqualTo
     com.parse.ParseQuery whereContainedIn(java.lang.String,java.util.Collection) -> whereContainedIn
+    com.parse.ParseQuery whereContainsAll(java.lang.String,java.util.Collection) -> whereContainsAll
     com.parse.ParseQuery whereMatchesQuery(java.lang.String,com.parse.ParseQuery) -> whereMatchesQuery
     com.parse.ParseQuery whereDoesNotMatchQuery(java.lang.String,com.parse.ParseQuery) -> whereDoesNotMatchQuery
     com.parse.ParseQuery whereMatchesKeyInQuery(java.lang.String,java.lang.String,com.parse.ParseQuery) -> whereMatchesKeyInQuery
@@ -16004,6 +16318,7 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     com.parse.ParseQuery whereStartsWith(java.lang.String,java.lang.String) -> whereStartsWith
     com.parse.ParseQuery whereEndsWith(java.lang.String,java.lang.String) -> whereEndsWith
     void include(java.lang.String) -> include
+    void selectKeys(java.util.Collection) -> selectKeys
     com.parse.ParseQuery whereExists(java.lang.String) -> whereExists
     com.parse.ParseQuery whereDoesNotExist(java.lang.String) -> whereDoesNotExist
     com.parse.ParseQuery whereRelatedTo(com.parse.ParseObject,java.lang.String) -> whereRelatedTo
@@ -16018,43 +16333,76 @@ com.parse.ParseQuery -> com.parse.ParseQuery:
     void setSkip(int) -> setSkip
     int getSkip() -> getSkip
     java.lang.String getClassName() -> getClassName
+    void access$0(com.parse.ParseQuery) -> access$0
     int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy() -> $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy
-    int access$1(com.parse.ParseQuery) -> access$1
-    java.lang.Integer access$2(com.parse.ParseQuery) -> access$2
-    java.util.List access$3(com.parse.ParseQuery,boolean) -> access$3
-    java.util.List access$4(com.parse.ParseQuery) -> access$4
-    java.util.List access$5(com.parse.ParseQuery,com.parse.ParseQuery$CachePolicy) -> access$5
-    void access$6(com.parse.ParseQuery,com.parse.ParseCommand) -> access$6
+    com.parse.Task access$2(com.parse.ParseQuery) -> access$2
+    java.lang.Integer access$3(com.parse.ParseQuery) -> access$3
+    com.parse.Task access$4(com.parse.ParseQuery,boolean) -> access$4
+    java.util.List access$5(com.parse.ParseQuery) -> access$5
+    com.parse.ParseCommand access$6(com.parse.ParseQuery) -> access$6
+    com.parse.ParseQuery$CachePolicy access$7(com.parse.ParseQuery) -> access$7
+    void access$8(com.parse.ParseQuery,long) -> access$8
+    void access$9(com.parse.ParseQuery,long) -> access$9
+    java.util.List access$10(com.parse.ParseQuery,org.json.JSONObject) -> access$10
+    com.parse.Task access$11(com.parse.ParseQuery,com.parse.ParseQuery$CachePolicy) -> access$11
 com.parse.ParseQuery$1 -> com.parse.ParseQuery$1:
     com.parse.ParseQuery this$0 -> this$0
-    java.lang.Integer runOnNetwork(boolean) -> runOnNetwork
-    java.lang.Integer runFromCache() -> runFromCache
-    java.lang.Object runOnNetwork(boolean) -> runOnNetwork
-    java.lang.Object runFromCache() -> runFromCache
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseQuery$10 -> com.parse.ParseQuery$10:
+    com.parse.ParseQuery this$0 -> this$0
+    java.lang.Integer then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseQuery$2 -> com.parse.ParseQuery$2:
     com.parse.ParseQuery this$0 -> this$0
-    java.util.List runOnNetwork(boolean) -> runOnNetwork
-    java.util.List runFromCache() -> runFromCache
-    java.lang.Object runOnNetwork(boolean) -> runOnNetwork
-    java.lang.Object runFromCache() -> runFromCache
+    com.parse.ParseQuery$CommandDelegate val$c -> val$c
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseQuery$3 -> com.parse.ParseQuery$3:
     com.parse.ParseQuery this$0 -> this$0
-    com.parse.ParseQuery$CachePolicy val$callbackCachePolicy -> val$callbackCachePolicy
-    java.util.List run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseQuery$CommandDelegate val$c -> val$c
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseQuery$4 -> com.parse.ParseQuery$4:
     com.parse.ParseQuery this$0 -> this$0
-    com.parse.GetCallback val$callback -> val$callback
-    void done(java.util.List,com.parse.ParseException) -> done
+    com.parse.Task runOnNetworkAsync(boolean) -> runOnNetworkAsync
+    com.parse.Task runFromCacheAsync() -> runFromCacheAsync
+    com.parse.ParseQuery access$0(com.parse.ParseQuery$4) -> access$0
+com.parse.ParseQuery$4$1 -> com.parse.ParseQuery$4$1:
+    com.parse.ParseQuery$4 this$1 -> this$1
+    java.lang.Integer call() -> call
+    java.lang.Object call() -> call
 com.parse.ParseQuery$5 -> com.parse.ParseQuery$5:
     com.parse.ParseQuery this$0 -> this$0
-    java.lang.Integer run() -> run
-    java.lang.Object run() -> run
+    com.parse.Task runOnNetworkAsync(boolean) -> runOnNetworkAsync
+    com.parse.Task runFromCacheAsync() -> runFromCacheAsync
+    com.parse.ParseQuery access$0(com.parse.ParseQuery$5) -> access$0
+com.parse.ParseQuery$5$1 -> com.parse.ParseQuery$5$1:
+    com.parse.ParseQuery$5 this$1 -> this$1
+    java.util.List call() -> call
+    java.lang.Object call() -> call
 com.parse.ParseQuery$6 -> com.parse.ParseQuery$6:
     com.parse.ParseQuery this$0 -> this$0
-    java.lang.String val$finalObjectId -> val$finalObjectId
-    com.parse.ParseObject run() -> run
-    java.lang.Object run() -> run
+    boolean val$shouldRetry -> val$shouldRetry
+    java.lang.Void call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseQuery$7 -> com.parse.ParseQuery$7:
+    com.parse.ParseQuery this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseQuery access$1(com.parse.ParseQuery$7) -> access$1
+com.parse.ParseQuery$7$1 -> com.parse.ParseQuery$7$1:
+    com.parse.ParseQuery$7 this$1 -> this$1
+    java.util.List then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseQuery$8 -> com.parse.ParseQuery$8:
+    com.parse.ParseQuery this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseQuery$9 -> com.parse.ParseQuery$9:
+    com.parse.ParseQuery this$0 -> this$0
+    com.parse.ParseObject then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseQuery$CachePolicy -> com.parse.ParseQuery$CachePolicy:
     com.parse.ParseQuery$CachePolicy IGNORE_CACHE -> IGNORE_CACHE
     com.parse.ParseQuery$CachePolicy CACHE_ONLY -> CACHE_ONLY
@@ -16066,8 +16414,8 @@ com.parse.ParseQuery$CachePolicy -> com.parse.ParseQuery$CachePolicy:
     com.parse.ParseQuery$CachePolicy[] values() -> values
     com.parse.ParseQuery$CachePolicy valueOf(java.lang.String) -> valueOf
 com.parse.ParseQuery$CommandDelegate -> com.parse.ParseQuery$CommandDelegate:
-    java.lang.Object runOnNetwork(boolean) -> runOnNetwork
-    java.lang.Object runFromCache() -> runFromCache
+    com.parse.Task runOnNetworkAsync(boolean) -> runOnNetworkAsync
+    com.parse.Task runFromCacheAsync() -> runFromCacheAsync
 com.parse.ParseRelation -> com.parse.ParseRelation:
     com.parse.ParseObject parent -> parent
     java.lang.String key -> key
@@ -16102,16 +16450,38 @@ com.parse.ParseRequestRetryer -> com.parse.ParseRequestRetryer:
     int maxAttempts -> maxAttempts
     int attemptsMade -> attemptsMade
     org.apache.http.client.HttpClient testClient -> testClient
-    byte[] sendOneRequest(com.parse.ProgressCallback) -> sendOneRequest
-    byte[] go(com.parse.ProgressCallback) -> go
+    com.parse.Task sendOneRequestAsync(com.parse.ProgressCallback) -> sendOneRequestAsync
+    com.parse.Task goAsync(com.parse.ProgressCallback) -> goAsync
     com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception) -> connectionFailed
+    org.apache.http.client.HttpClient access$0(com.parse.ParseRequestRetryer) -> access$0
+    org.apache.http.client.methods.HttpUriRequest access$1(com.parse.ParseRequestRetryer) -> access$1
+    int access$2(com.parse.ParseRequestRetryer) -> access$2
+    void access$3(com.parse.ParseRequestRetryer,int) -> access$3
+    int access$4(com.parse.ParseRequestRetryer) -> access$4
+    long access$5(com.parse.ParseRequestRetryer) -> access$5
+    void access$6(com.parse.ParseRequestRetryer,long) -> access$6
 com.parse.ParseRequestRetryer$1 -> com.parse.ParseRequestRetryer$1:
     com.parse.ParseRequestRetryer this$0 -> this$0
-    int val$progressToReport -> val$progressToReport
-    java.lang.Integer run() -> run
-    java.lang.Object run() -> run
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    byte[] call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseRequestRetryer$2 -> com.parse.ParseRequestRetryer$2:
+    com.parse.ParseRequestRetryer this$0 -> this$0
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseRequestRetryer access$1(com.parse.ParseRequestRetryer$2) -> access$1
+com.parse.ParseRequestRetryer$2$1 -> com.parse.ParseRequestRetryer$2$1:
+    com.parse.ParseRequestRetryer$2 this$1 -> this$1
+    com.parse.ProgressCallback val$progressCallback -> val$progressCallback
+    com.parse.Task$TaskCompletionSource val$retryTask -> val$retryTask
+    void run() -> run
+com.parse.ParseRequestRetryer$2$1$1 -> com.parse.ParseRequestRetryer$2$1$1:
+    com.parse.ParseRequestRetryer$2$1 this$2 -> this$2
+    com.parse.Task$TaskCompletionSource val$retryTask -> val$retryTask
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseRole -> com.parse.ParseRole:
-    java.lang.String CLASS_NAME -> CLASS_NAME
     java.util.regex.Pattern NAME_PATTERN -> NAME_PATTERN
     void setName(java.lang.String) -> setName
     java.lang.String getName() -> getName
@@ -16132,7 +16502,7 @@ com.parse.ParseTestUtils -> com.parse.ParseTestUtils:
     com.parse.Synchronizer synchronizer -> synchronizer
     java.lang.String useServer(java.lang.String) -> useServer
     java.lang.String useInvalidServer() -> useInvalidServer
-    java.lang.String useBadServerPort() -> useBadServerPort
+    java.lang.String useBadServerPort(java.lang.String) -> useBadServerPort
     void clearApp() -> clearApp
     void mockV8Client() -> mockV8Client
     void unmockV8Client() -> unmockV8Client
@@ -16168,7 +16538,6 @@ com.parse.ParseTestUtils -> com.parse.ParseTestUtils:
     void tearDownPushTest(android.content.Context) -> tearDownPushTest
     void setUpPushTest(android.content.Context) -> setUpPushTest
     void startServiceIfRequired(android.content.Context) -> startServiceIfRequired
-    java.lang.String toDeterministicString(java.lang.Object) -> toDeterministicString
     java.net.ServerSocket mockPushServer() -> mockPushServer
     int numKeyValueCacheFiles() -> numKeyValueCacheFiles
     void setMaxKeyValueCacheFiles(int) -> setMaxKeyValueCacheFiles
@@ -16199,7 +16568,6 @@ com.parse.ParseTwitterUtils -> com.parse.ParseTwitterUtils:
     void unlinkInBackground(com.parse.ParseUser) -> unlinkInBackground
     void unlinkInBackground(com.parse.ParseUser,com.parse.SaveCallback) -> unlinkInBackground
 com.parse.ParseUser -> com.parse.ParseUser:
-    java.lang.String CLASS_NAME -> CLASS_NAME
     java.lang.String password -> password
     java.lang.String sessionToken -> sessionToken
     org.json.JSONObject authData -> authData
@@ -16210,6 +16578,7 @@ com.parse.ParseUser -> com.parse.ParseUser:
     com.parse.ParseUser currentUser -> currentUser
     java.util.Map authenticationProviders -> authenticationProviders
     boolean autoUserEnabled -> autoUserEnabled
+    java.lang.Object currentUserMutex -> currentUserMutex
     boolean currentUserMatchesDisk -> currentUserMatchesDisk
     java.lang.String CURRENT_USER_FILENAME -> CURRENT_USER_FILENAME
     boolean isCurrentUser -> isCurrentUser
@@ -16217,10 +16586,10 @@ com.parse.ParseUser -> com.parse.ParseUser:
     boolean isLazy() -> isLazy
     boolean isAuthenticated() -> isAuthenticated
     void remove(java.lang.String) -> remove
-    org.json.JSONObject toJSONObjectForSaving() -> toJSONObjectForSaving
+    org.json.JSONObject toJSONObjectForSaving(java.util.Map) -> toJSONObjectForSaving
     org.json.JSONObject toJSONObjectForDataFile() -> toJSONObjectForDataFile
     void mergeFromObject(com.parse.ParseObject) -> mergeFromObject
-    void mergeFromServer(org.json.JSONObject) -> mergeFromServer
+    void mergeFromServer(org.json.JSONObject,boolean) -> mergeFromServer
     boolean isCurrentUser() -> isCurrentUser
     void cleanUpAuthData() -> cleanUpAuthData
     void setUsername(java.lang.String) -> setUsername
@@ -16233,22 +16602,27 @@ com.parse.ParseUser -> com.parse.ParseUser:
     void restoreAnonymity(org.json.JSONObject) -> restoreAnonymity
     java.lang.String getSessionToken() -> getSessionToken
     void validateSave() -> validateSave
-    void save(boolean) -> save
+    com.parse.Task saveAsync(com.parse.Task) -> saveAsync
     void validateDelete() -> validateDelete
     com.parse.ParseUser fetch() -> fetch
-    com.parse.ParseCommand constructSaveCommand() -> constructSaveCommand
-    com.parse.ParseCommand constructSignUpCommand() -> constructSignUpCommand
-    com.parse.ParseCommand constructSignUpOrLoginCommand() -> constructSignUpOrLoginCommand
-    com.parse.ParseCommand constructPasswordResetCommand(java.lang.String) -> constructPasswordResetCommand
+    com.parse.Task fetchAsync(com.parse.Task) -> fetchAsync
+    com.parse.ParseCommand constructSaveCommand(java.util.Map,java.lang.String) -> constructSaveCommand
+    com.parse.ParseCommand constructSignUpCommand(java.util.Map,java.lang.String) -> constructSignUpCommand
+    com.parse.ParseCommand constructSignUpOrLoginCommand(java.util.Map) -> constructSignUpOrLoginCommand
+    com.parse.ParseCommand constructPasswordResetCommand(java.lang.String,java.lang.String) -> constructPasswordResetCommand
+    com.parse.Task signUpAsync() -> signUpAsync
+    com.parse.Task signUpAsync(com.parse.Task) -> signUpAsync
     void signUp() -> signUp
-    void signUp(boolean) -> signUp
     void signUpInBackground(com.parse.SignUpCallback) -> signUpInBackground
     com.parse.ParseCommand constructLogInCommand(java.lang.String,java.lang.String) -> constructLogInCommand
+    com.parse.Task logInAsync(java.lang.String,java.lang.String) -> logInAsync
     com.parse.ParseUser logIn(java.lang.String,java.lang.String) -> logIn
     void logInInBackground(java.lang.String,java.lang.String,com.parse.LogInCallback) -> logInInBackground
     com.parse.ParseUser getCurrentUser() -> getCurrentUser
+    java.lang.String getCurrentSessionToken() -> getCurrentSessionToken
     void saveCurrentUser(com.parse.ParseUser) -> saveCurrentUser
     void logOut() -> logOut
+    com.parse.Task requestPasswordResetAsync(java.lang.String) -> requestPasswordResetAsync
     void requestPasswordReset(java.lang.String) -> requestPasswordReset
     void requestPasswordResetInBackground(java.lang.String,com.parse.RequestPasswordResetCallback) -> requestPasswordResetInBackground
     void checkApplicationContext() -> checkApplicationContext
@@ -16256,17 +16630,17 @@ com.parse.ParseUser -> com.parse.ParseUser:
     java.util.Set getLinkedServiceNames() -> getLinkedServiceNames
     void synchronizeAuthData(java.lang.String) -> synchronizeAuthData
     void synchronizeAllAuthData() -> synchronizeAllAuthData
-    void unlinkFromInBackground(java.lang.String) -> unlinkFromInBackground
-    void unlinkFromInBackground(java.lang.String,com.parse.SaveCallback) -> unlinkFromInBackground
-    boolean unlinkFrom(java.lang.String) -> unlinkFrom
+    com.parse.Task unlinkFromAsync(java.lang.String) -> unlinkFromAsync
     void registerAuthenticationProvider(com.parse.auth.ParseAuthenticationProvider) -> registerAuthenticationProvider
-    void logInWith(java.lang.String,com.parse.LogInCallback) -> logInWith
-    void logInWith(java.lang.String,org.json.JSONObject,com.parse.LogInCallback) -> logInWith
-    void resolveLaziness(boolean) -> resolveLaziness
-    void logInWith(com.parse.auth.ParseAuthenticationProvider,com.parse.LogInCallback) -> logInWith
-    void linkWith(java.lang.String,org.json.JSONObject,com.parse.SaveCallback) -> linkWith
-    void linkWith(java.lang.String,com.parse.SaveCallback) -> linkWith
-    void linkWith(com.parse.auth.ParseAuthenticationProvider,com.parse.SaveCallback) -> linkWith
+    com.parse.Task logInWithAsync(java.lang.String) -> logInWithAsync
+    com.parse.Task logInWithAsync(java.lang.String,org.json.JSONObject) -> logInWithAsync
+    com.parse.Task resolveLazinessAsync(com.parse.Task) -> resolveLazinessAsync
+    com.parse.Task authenticateAsync(com.parse.auth.ParseAuthenticationProvider) -> authenticateAsync
+    com.parse.Task logInWithAsync(com.parse.auth.ParseAuthenticationProvider) -> logInWithAsync
+    com.parse.Task linkWithAsync(java.lang.String,org.json.JSONObject,com.parse.Task) -> linkWithAsync
+    com.parse.Task linkWithAsync(java.lang.String,org.json.JSONObject) -> linkWithAsync
+    com.parse.Task linkWithAsync(java.lang.String) -> linkWithAsync
+    com.parse.Task linkWithAsync(com.parse.auth.ParseAuthenticationProvider) -> linkWithAsync
     void logOutWith(java.lang.String) -> logOutWith
     void logOutWith(com.parse.auth.ParseAuthenticationProvider) -> logOutWith
     boolean isNew() -> isNew
@@ -16275,78 +16649,161 @@ com.parse.ParseUser -> com.parse.ParseUser:
     boolean isAutomaticUserEnabled() -> isAutomaticUserEnabled
     com.parse.ParseQuery getQuery() -> getQuery
     void clearCurrentUserFromMemory() -> clearCurrentUserFromMemory
+    boolean needsDefaultACL() -> needsDefaultACL
     com.parse.ParseObject fetchIfNeeded() -> fetchIfNeeded
     com.parse.ParseObject fetch() -> fetch
-    org.json.JSONObject access$2(com.parse.ParseUser) -> access$2
-    java.util.Set access$3(com.parse.ParseUser) -> access$3
-    java.util.Map access$4() -> access$4
-    com.parse.ParseCommand access$5(com.parse.ParseUser) -> access$5
-    void access$6(com.parse.ParseUser,java.lang.String) -> access$6
-    void access$7(com.parse.ParseUser) -> access$7
-    void access$8(com.parse.ParseUser) -> access$8
-    void access$9(com.parse.ParseUser,org.json.JSONObject) -> access$9
-    void access$10(com.parse.ParseUser,boolean) -> access$10
+    void access$2(com.parse.ParseUser) -> access$2
+    com.parse.Task access$3(com.parse.ParseUser,com.parse.Task) -> access$3
+    com.parse.ParseCommand access$4(com.parse.ParseUser,java.util.Map,java.lang.String) -> access$4
+    void access$5(com.parse.ParseUser,boolean) -> access$5
+    org.json.JSONObject access$6(com.parse.ParseUser) -> access$6
+    java.util.Set access$7(com.parse.ParseUser) -> access$7
+    com.parse.ParseCommand access$8(com.parse.ParseUser,java.util.Map) -> access$8
+    void access$9(com.parse.ParseUser,java.lang.String) -> access$9
+    void access$10(com.parse.ParseUser) -> access$10
+    com.parse.Task access$11(com.parse.ParseUser,com.parse.Task) -> access$11
+    void access$12(com.parse.ParseUser,org.json.JSONObject) -> access$12
+    void access$13(com.parse.ParseUser,boolean) -> access$13
+    com.parse.Task access$14(com.parse.ParseUser,java.lang.String,org.json.JSONObject,com.parse.Task) -> access$14
 com.parse.ParseUser$1 -> com.parse.ParseUser$1:
     com.parse.ParseUser this$0 -> this$0
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$10 -> com.parse.ParseUser$10:
-    com.parse.auth.ParseAuthenticationProvider val$authenticator -> val$authenticator
-    com.parse.LogInCallback val$callback -> val$callback
-    void onSuccess(org.json.JSONObject) -> onSuccess
-    void onCancel() -> onCancel
-    void onError(java.lang.Throwable) -> onError
-com.parse.ParseUser$11 -> com.parse.ParseUser$11:
-    com.parse.ParseUser this$0 -> this$0
+    com.parse.ParseUser val$user -> val$user
     java.lang.String val$authType -> val$authType
     org.json.JSONObject val$authData -> val$authData
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    org.json.JSONObject val$oldAnonymousData -> val$oldAnonymousData
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$10$1 -> com.parse.ParseUser$10$1:
+    com.parse.ParseUser$10 this$1 -> this$1
+    com.parse.ParseUser val$user -> val$user
+    java.lang.String val$authType -> val$authType
+    org.json.JSONObject val$authData -> val$authData
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$10$2 -> com.parse.ParseUser$10$2:
+    com.parse.ParseUser$10 this$1 -> this$1
+    com.parse.ParseUser val$user -> val$user
+    java.lang.String val$authType -> val$authType
+    org.json.JSONObject val$oldAnonymousData -> val$oldAnonymousData
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$11 -> com.parse.ParseUser$11:
+    com.parse.Continuation val$logInWithTask -> val$logInWithTask
+    com.parse.ParseUser val$user -> val$user
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$12 -> com.parse.ParseUser$12:
     com.parse.ParseUser this$0 -> this$0
-    com.parse.auth.ParseAuthenticationProvider val$authenticator -> val$authenticator
-    com.parse.SaveCallback val$callback -> val$callback
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$13 -> com.parse.ParseUser$13:
+    com.parse.ParseUser this$0 -> this$0
+    java.util.Map call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseUser$14 -> com.parse.ParseUser$14:
+    com.parse.ParseUser this$0 -> this$0
+    com.parse.Capture val$operations -> val$operations
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$15 -> com.parse.ParseUser$15:
+    com.parse.ParseUser this$0 -> this$0
+    com.parse.Capture val$operations -> val$operations
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$16 -> com.parse.ParseUser$16:
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
     void onSuccess(org.json.JSONObject) -> onSuccess
     void onCancel() -> onCancel
     void onError(java.lang.Throwable) -> onError
+com.parse.ParseUser$17 -> com.parse.ParseUser$17:
+    com.parse.auth.ParseAuthenticationProvider val$authenticator -> val$authenticator
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$18 -> com.parse.ParseUser$18:
+    com.parse.ParseUser this$0 -> this$0
+    java.lang.String val$authType -> val$authType
+    org.json.JSONObject val$authData -> val$authData
+    java.lang.Void call() -> call
+    java.lang.Object call() -> call
+com.parse.ParseUser$19 -> com.parse.ParseUser$19:
+    com.parse.ParseUser this$0 -> this$0
+    com.parse.Task val$toAwait -> val$toAwait
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$2 -> com.parse.ParseUser$2:
     com.parse.ParseUser this$0 -> this$0
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$20 -> com.parse.ParseUser$20:
+    com.parse.ParseUser this$0 -> this$0
+    org.json.JSONObject val$oldAnonymousData -> val$oldAnonymousData
+    java.lang.String val$authType -> val$authType
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$21 -> com.parse.ParseUser$21:
+    com.parse.ParseUser this$0 -> this$0
+    java.lang.String val$authType -> val$authType
+    org.json.JSONObject val$authData -> val$authData
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$22 -> com.parse.ParseUser$22:
+    com.parse.ParseUser this$0 -> this$0
+    com.parse.auth.ParseAuthenticationProvider val$authenticator -> val$authenticator
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$3 -> com.parse.ParseUser$3:
-    java.lang.String val$username -> val$username
-    java.lang.String val$password -> val$password
-    com.parse.ParseUser run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseUser this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$4 -> com.parse.ParseUser$4:
-    java.lang.String val$email -> val$email
-    java.lang.Void run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseUser this$0 -> this$0
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$5 -> com.parse.ParseUser$5:
     com.parse.ParseUser this$0 -> this$0
-    java.lang.String val$authType -> val$authType
-    com.parse.SaveCallback val$callback -> val$callback
-    void done(com.parse.ParseException) -> done
+    java.util.Map call() -> call
+    java.lang.Object call() -> call
 com.parse.ParseUser$6 -> com.parse.ParseUser$6:
-    java.lang.String val$authType -> val$authType
-    org.json.JSONObject val$authData -> val$authData
-    com.parse.ParseUser run() -> run
-    java.lang.Object run() -> run
+    com.parse.ParseUser this$0 -> this$0
+    java.lang.String val$sessionToken -> val$sessionToken
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+    com.parse.ParseUser access$1(com.parse.ParseUser$6) -> access$1
 com.parse.ParseUser$6$1 -> com.parse.ParseUser$6$1:
     com.parse.ParseUser$6 this$1 -> this$1
-    com.parse.ParseUser val$user -> val$user
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    com.parse.ParseCommand val$command -> val$command
+    java.util.Map val$operations -> val$operations
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ParseUser$7 -> com.parse.ParseUser$7:
+    com.parse.ParseUser then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$8 -> com.parse.ParseUser$8:
+    com.parse.ParseUser this$0 -> this$0
+    java.lang.String val$authType -> val$authType
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$9 -> com.parse.ParseUser$9:
     java.lang.String val$authType -> val$authType
     org.json.JSONObject val$authData -> val$authData
-    com.parse.ParseUser run() -> run
-    java.lang.Object run() -> run
-com.parse.ParseUser$8 -> com.parse.ParseUser$8:
-    com.parse.BackgroundTask val$logInWithTask -> val$logInWithTask
-    com.parse.LogInCallback val$callback -> val$callback
-    void done(com.parse.ParseException) -> done
-com.parse.ParseUser$9 -> com.parse.ParseUser$9:
-    com.parse.ParseUser this$0 -> this$0
-    void perform(com.parse.ParseCommand,java.lang.Object) -> perform
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$9$1 -> com.parse.ParseUser$9$1:
+    com.parse.ParseUser$9 this$1 -> this$1
+    com.parse.ParseUser val$user -> val$user
+    com.parse.ParseCommand val$command -> val$command
+    java.util.Map val$operations -> val$operations
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.ParseUser$9$2 -> com.parse.ParseUser$9$2:
+    com.parse.ParseUser$9 this$1 -> this$1
+    com.parse.ParseUser val$user -> val$user
+    java.lang.String val$authType -> val$authType
+    com.parse.ParseUser then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.ProgressCallback -> com.parse.ProgressCallback:
     java.lang.Integer maxProgressSoFar -> maxProgressSoFar
     void done(java.lang.Integer) -> done
@@ -16361,12 +16818,31 @@ com.parse.PushCallback -> com.parse.PushCallback:
     void setPushData(org.json.JSONObject) -> setPushData
     void setService(android.app.Service) -> setService
     void setChannel(java.lang.String) -> setChannel
+com.parse.PushConnection -> com.parse.PushConnection:
+    java.lang.String TAG -> TAG
+    java.lang.Object socketLock -> socketLock
+    java.net.Socket socket -> socket
+    java.io.BufferedReader reader -> reader
+    java.io.OutputStreamWriter writer -> writer
+    java.lang.Thread readerThread -> readerThread
+    java.lang.String server -> server
+    int port -> port
+    long generalTimeout -> generalTimeout
+    int connectTimeout -> connectTimeout
+    com.parse.ConnectivityNotifier$ConnectivityListener listener -> listener
+    boolean $assertionsDisabled -> $assertionsDisabled
+    void connect(java.lang.String,int,boolean) -> connect
+    void close() -> close
+    java.lang.String readLine() -> readLine
+    boolean trySend(java.lang.String) -> trySend
+com.parse.PushConnection$1 -> com.parse.PushConnection$1:
+    com.parse.PushConnection this$0 -> this$0
+    void networkConnectivityStatusChanged(android.content.Intent) -> networkConnectivityStatusChanged
 com.parse.PushService -> com.parse.PushService:
     java.lang.String TAG -> TAG
     java.lang.String pushServer -> pushServer
     int defaultPushPort -> defaultPushPort
-    int pushPort -> pushPort
-    java.net.Socket socket -> socket
+    com.parse.PushConnection connection -> connection
     com.parse.os.ParseAsyncTask task -> task
     int delaySeconds -> delaySeconds
     com.parse.PushService$ServiceState state -> state
@@ -16390,25 +16866,29 @@ com.parse.PushService -> com.parse.PushService:
     boolean sendMessage(java.lang.String) -> sendMessage
     boolean sendSubscriptionInformation(android.content.Context) -> sendSubscriptionInformation
     void sendKeepAlive() -> sendKeepAlive
-    void readInBackground(java.io.BufferedReader) -> readInBackground
+    void readInBackground(boolean) -> readInBackground
     android.os.IBinder onBind(android.content.Intent) -> onBind
     void onDestroy() -> onDestroy
-    void access$0(com.parse.PushService) -> access$0
-    int access$1() -> access$1
-    com.parse.PushService$ServiceState access$2(com.parse.PushService) -> access$2
+    void access$0(android.content.Context) -> access$0
+    void access$1(com.parse.PushService) -> access$1
+    int access$2() -> access$2
     void access$3(com.parse.PushService) -> access$3
-    java.lang.String access$4() -> access$4
-    int access$5(com.parse.PushService) -> access$5
-    boolean access$6(android.content.Context) -> access$6
-    void access$7(com.parse.PushService,com.parse.PushService$ServiceState) -> access$7
-    void access$8(com.parse.PushService,java.io.BufferedReader) -> access$8
+    com.parse.PushService$ServiceState access$4(com.parse.PushService) -> access$4
+    java.lang.String access$5() -> access$5
+    int access$6() -> access$6
+    boolean access$7(android.content.Context) -> access$7
+    void access$8(com.parse.PushService,com.parse.PushService$ServiceState) -> access$8
+    void access$9(com.parse.PushService,boolean) -> access$9
 com.parse.PushService$1 -> com.parse.PushService$1:
+    android.content.Context val$context -> val$context
+    java.lang.Void run() -> run
+    java.lang.Object run() -> run
+com.parse.PushService$2 -> com.parse.PushService$2:
     com.parse.PushService this$0 -> this$0
     void run() -> run
-com.parse.PushService$2 -> com.parse.PushService$2:
-    java.io.BufferedReader reader -> reader
+com.parse.PushService$3 -> com.parse.PushService$3:
     com.parse.PushService this$0 -> this$0
-    java.io.BufferedReader val$initialReader -> val$initialReader
+    boolean val$forceReconnect -> val$forceReconnect
     com.parse.PushService val$finalService -> val$finalService
     java.lang.String doInBackground(java.lang.Void[]) -> doInBackground
     void onPostExecute(java.lang.String) -> onPostExecute
@@ -16616,6 +17096,150 @@ com.parse.Synchronizer -> com.parse.Synchronizer:
     void start(int) -> start
     void finish() -> finish
     void assertFinishes() -> assertFinishes
+com.parse.Task -> com.parse.Task:
+    java.util.concurrent.ExecutorService defaultExecutor -> defaultExecutor
+    java.util.concurrent.Executor immediateExecutor -> immediateExecutor
+    java.lang.Object lock -> lock
+    boolean complete -> complete
+    boolean cancelled -> cancelled
+    java.lang.Object result -> result
+    java.lang.Exception error -> error
+    java.util.List continuations -> continuations
+    com.parse.Task$TaskCompletionSource create() -> create
+    boolean isCompleted() -> isCompleted
+    boolean isCancelled() -> isCancelled
+    boolean isFaulted() -> isFaulted
+    java.lang.Object getResult() -> getResult
+    java.lang.Exception getError() -> getError
+    void waitForCompletion() -> waitForCompletion
+    com.parse.Task forResult(java.lang.Object) -> forResult
+    com.parse.Task forError(java.lang.Exception) -> forError
+    com.parse.Task cancelled() -> cancelled
+    com.parse.Task cast() -> cast
+    com.parse.Task makeVoid() -> makeVoid
+    com.parse.Task callInBackground(java.util.concurrent.Callable) -> callInBackground
+    com.parse.Task call(java.util.concurrent.Callable,java.util.concurrent.Executor) -> call
+    com.parse.Task call(java.util.concurrent.Callable) -> call
+    com.parse.Task whenAll(java.util.Collection) -> whenAll
+    com.parse.Task continueWhile(java.util.concurrent.Callable,com.parse.Continuation) -> continueWhile
+    com.parse.Task continueWhile(java.util.concurrent.Callable,com.parse.Continuation,java.util.concurrent.Executor) -> continueWhile
+    com.parse.Task continueWith(com.parse.Continuation,java.util.concurrent.Executor) -> continueWith
+    com.parse.Task continueWith(com.parse.Continuation) -> continueWith
+    com.parse.Task continueWithTask(com.parse.Continuation,java.util.concurrent.Executor) -> continueWithTask
+    com.parse.Task continueWithTask(com.parse.Continuation) -> continueWithTask
+    com.parse.Task onSuccess(com.parse.Continuation,java.util.concurrent.Executor) -> onSuccess
+    com.parse.Task onSuccess(com.parse.Continuation) -> onSuccess
+    com.parse.Task onSuccessTask(com.parse.Continuation,java.util.concurrent.Executor) -> onSuccessTask
+    com.parse.Task onSuccessTask(com.parse.Continuation) -> onSuccessTask
+    void completeImmediately(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor) -> completeImmediately
+    void completeAfterTask(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor) -> completeAfterTask
+    void runContinuations() -> runContinuations
+    java.util.concurrent.ExecutorService access$0() -> access$0
+    java.lang.Object access$1(com.parse.Task) -> access$1
+    boolean access$2(com.parse.Task) -> access$2
+    void access$3(com.parse.Task,boolean) -> access$3
+    void access$4(com.parse.Task,boolean) -> access$4
+    void access$5(com.parse.Task) -> access$5
+    void access$6(com.parse.Task,java.lang.Object) -> access$6
+    void access$7(com.parse.Task,java.lang.Exception) -> access$7
+    void access$8(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor) -> access$8
+    void access$9(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor) -> access$9
+com.parse.Task$1 -> com.parse.Task$1:
+    int MAX_DEPTH -> MAX_DEPTH
+    java.lang.ThreadLocal executionDepth -> executionDepth
+    int incrementDepth() -> incrementDepth
+    int decrementDepth() -> decrementDepth
+    void execute(java.lang.Runnable) -> execute
+com.parse.Task$10 -> com.parse.Task$10:
+    com.parse.Continuation val$continuation -> val$continuation
+    com.parse.Task val$task -> val$task
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    void run() -> run
+com.parse.Task$11 -> com.parse.Task$11:
+    com.parse.Continuation val$continuation -> val$continuation
+    com.parse.Task val$task -> val$task
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    void run() -> run
+com.parse.Task$11$1 -> com.parse.Task$11$1:
+    com.parse.Task$11 this$1 -> this$1
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$2 -> com.parse.Task$2:
+    com.parse.Task this$0 -> this$0
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$3 -> com.parse.Task$3:
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.util.concurrent.Callable val$callable -> val$callable
+    void run() -> run
+com.parse.Task$4 -> com.parse.Task$4:
+    java.util.concurrent.atomic.AtomicInteger val$count -> val$count
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$5 -> com.parse.Task$5:
+    com.parse.Task this$0 -> this$0
+    java.util.concurrent.Callable val$predicate -> val$predicate
+    com.parse.Continuation val$continuation -> val$continuation
+    java.util.concurrent.Executor val$executor -> val$executor
+    com.parse.Capture val$predicateContinuation -> val$predicateContinuation
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$6 -> com.parse.Task$6:
+    com.parse.Task this$0 -> this$0
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.Continuation val$continuation -> val$continuation
+    java.util.concurrent.Executor val$executor -> val$executor
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$7 -> com.parse.Task$7:
+    com.parse.Task this$0 -> this$0
+    com.parse.Task$TaskCompletionSource val$tcs -> val$tcs
+    com.parse.Continuation val$continuation -> val$continuation
+    java.util.concurrent.Executor val$executor -> val$executor
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$8 -> com.parse.Task$8:
+    com.parse.Task this$0 -> this$0
+    com.parse.Continuation val$continuation -> val$continuation
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$9 -> com.parse.Task$9:
+    com.parse.Task this$0 -> this$0
+    com.parse.Continuation val$continuation -> val$continuation
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.Task$TaskCompletionSource -> com.parse.Task$TaskCompletionSource:
+    com.parse.Task this$0 -> this$0
+    com.parse.Task getTask() -> getTask
+    boolean trySetCancelled() -> trySetCancelled
+    boolean trySetResult(java.lang.Object) -> trySetResult
+    boolean trySetError(java.lang.Exception) -> trySetError
+    void setCancelled() -> setCancelled
+    void setResult(java.lang.Object) -> setResult
+    void setError(java.lang.Exception) -> setError
+com.parse.TaskQueue -> com.parse.TaskQueue:
+    com.parse.Task tail -> tail
+    java.util.concurrent.locks.Lock lock -> lock
+    com.parse.Task getTaskToAwait() -> getTaskToAwait
+    com.parse.Task enqueue(com.parse.Continuation) -> enqueue
+    com.parse.Continuation waitFor(com.parse.Task) -> waitFor
+    java.util.concurrent.locks.Lock getLock() -> getLock
+    void waitUntilFinished() -> waitUntilFinished
+com.parse.TaskQueue$1 -> com.parse.TaskQueue$1:
+    com.parse.TaskQueue this$0 -> this$0
+    java.lang.Void then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.TaskQueue$2 -> com.parse.TaskQueue$2:
+    com.parse.Task val$toAwait -> val$toAwait
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
+com.parse.TaskQueue$2$1 -> com.parse.TaskQueue$2$1:
+    com.parse.TaskQueue$2 this$1 -> this$1
+    com.parse.Task val$task -> val$task
+    com.parse.Task then(com.parse.Task) -> then
+    java.lang.Object then(com.parse.Task) -> then
 com.parse.auth.AnonymousAuthenticationProvider -> com.parse.auth.AnonymousAuthenticationProvider:
     void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback) -> authenticate
     org.json.JSONObject getAuthData() -> getAuthData

@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,38 +23,29 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
-import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
+import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.AutoResizeTextView;
-import com.jeffthefate.dmbquiz.AutoResizeTextView.OnTextResizeListener;
 import com.jeffthefate.dmbquiz.Constants;
-import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
 public class FragmentSetlist extends FragmentBase {
     
+	private String setlist = "";
     private TextView setText;
+    private String setStamp = "";
     private TextView stampText;
-    private String savedSet;
-    private String savedStamp;
     private SetlistReceiver setlistReceiver;
     
     private Button retryButton;
     private TextView networkText;
     
-    //private RelativeLayout parentLayout;
-    //private RelativeLayout setlistLayout;
     private ScrollView setlistScroll;
     private RelativeLayout setlistLayoutShot;
     private AutoResizeTextView setTextShot;
-    //private TextView stampTextShot;
-    
-    //private boolean textViewResized = false;
-    private float currTextSize = 0.0f;
-	
-    public FragmentSetlist() {
-    }
+
+    public FragmentSetlist() {}
     
     @Override
     public void onAttach(Activity activity) {
@@ -67,23 +57,6 @@ public class FragmentSetlist extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            savedSet = savedInstanceState.getString("set");
-            DatabaseHelperSingleton.instance().setUserValue(savedSet,
-                    DatabaseHelper.COL_SETLIST, mCallback.getUserId());
-            savedStamp = savedInstanceState.getString("stamp");
-            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
-                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
-            
-        }
-        else {
-            if (mCallback.getUserId() != null) {
-                savedSet = DatabaseHelperSingleton.instance().getUserStringValue(
-                        DatabaseHelper.COL_SETLIST, mCallback.getUserId());
-                savedStamp = DatabaseHelperSingleton.instance().getUserStringValue(
-                        DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
-            }
-        }
         setlistReceiver = new SetlistReceiver();
     }
     
@@ -94,37 +67,6 @@ public class FragmentSetlist extends FragmentBase {
             Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.setlist, container, false);
-        /*
-        ViewTreeObserver vto = slidingMenu.getViewTreeObserver(); 
-        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() { 
-            @Override 
-            public void onGlobalLayout() { 
-                slidingMenu.setThreshold(5);
-            } 
-        });
-        parentLayout = (RelativeLayout) v.findViewById(R.id.ParentLayout);
-        if (parentLayout != null) {
-	        ViewTreeObserver parentVto = parentLayout.getViewTreeObserver();
-	        parentVto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-				@Override
-				public void onGlobalLayout() {
-					if (setText != null && !textViewResized) {
-						int parentHeight = parentLayout.getHeight() -
-								setText.getPaddingTop() -
-								setText.getPaddingBottom();
-						int currHeight = setText.getHeight();
-						int newHeight = currHeight <= parentHeight ? currHeight : parentHeight;
-						setText.setHeight(newHeight);
-						if (ApplicationEx.getTextViewHeight() == 0.0f)
-							ApplicationEx.setTextViewHeight(newHeight);
-					}
-				}
-	        });
-        }
-        
-        setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
-        setlistLayout = (RelativeLayout) v.findViewById(R.id.SetlistLayout);
-        */
         setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
         setText = (TextView) v.findViewById(R.id.SetText);
         stampText = (TextView) v.findViewById(R.id.StampText);
@@ -132,30 +74,8 @@ public class FragmentSetlist extends FragmentBase {
         setlistLayoutShot = (RelativeLayout) v.findViewById(
         		R.id.SetlistLayoutShot);
         setTextShot = (AutoResizeTextView) v.findViewById(R.id.SetTextShot);
-        /*
-        stampTextShot = (TextView) v.findViewById(R.id.StampTextShot);
-        if (stampTextShot != null && ApplicationEx.getTextSize() > 0.0f)
-        	stampTextShot.getPaint().setTextSize(ApplicationEx.getTextSize() - 4.0f);
-    	*/
-        if (setTextShot != null) {
+        if (setTextShot != null)
 	        setTextShot.setAddEllipsis(false);
-	        setTextShot.setOnResizeListener(
-	    		new OnTextResizeListener() {
-	    			@Override
-	    			public void onTextResize(TextView textView, float oldSize,
-	    					float newSize) {
-	    				Log.w(Constants.LOG_TAG, "onTextResize: " + oldSize + " : " + newSize);
-	    				/*
-	    				if (stampTextShot != null)
-	    					stampTextShot.getPaint().setTextSize(newSize - 4.0f);
-    					*/
-	    				ApplicationEx.setTextSize(newSize);
-	    				if (currTextSize == 0.0f || newSize <= currTextSize)
-	    					currTextSize = newSize;
-	    			}
-	    		}
-			);
-        }
         /*
         stampText.setOnClickListener(new OnClickListener() {
             @Override
@@ -222,61 +142,28 @@ public class FragmentSetlist extends FragmentBase {
     @Override
     public void onResume() {
         super.onResume();
-        if (!StringUtils.isBlank(ApplicationEx.setlist)) {
-            setText.setText(ApplicationEx.setlist);
-            if (setTextShot != null)
-            	setTextShot.setText(ApplicationEx.setlist);
-            setText.setVisibility(View.VISIBLE);
-            /*
-            if (setText instanceof AutoResizeTextView)
-            	((AutoResizeTextView) setText).resizeText();
-            	*/
-            savedSet = ApplicationEx.setlist;
-            DatabaseHelperSingleton.instance().setUserValue(savedSet,
-                    DatabaseHelper.COL_SETLIST, mCallback.getUserId());
-            stampText.setText(ApplicationEx.setlistStamp);
-            stampText.setVisibility(View.VISIBLE);
-            /*
-            if (stampTextShot != null)
-            	stampTextShot.setText(ApplicationEx.setlistStamp);
-        	*/
-            savedStamp = ApplicationEx.setlistStamp;
-            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
-                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
-        }
-        else {
-        	if (StringUtils.isBlank(savedSet))
-        		ApplicationEx.getSetlist();
-        	else {
-        		ApplicationEx.setlist = savedSet;
-        		ApplicationEx.setlistStamp = savedStamp;
-        		setText.setText(ApplicationEx.setlist);
-                setText.setVisibility(View.VISIBLE);
-                if (setTextShot != null)
-                	setTextShot.setText(ApplicationEx.setlist);
-                DatabaseHelperSingleton.instance().setUserValue(savedSet,
-                        DatabaseHelper.COL_SETLIST, mCallback.getUserId());
-                stampText.setText(ApplicationEx.setlistStamp);
-                stampText.setVisibility(View.VISIBLE);
-                /*
-                if (stampTextShot != null)
-                	stampTextShot.setText(ApplicationEx.setlistStamp);
-            	*/
-                DatabaseHelperSingleton.instance().setUserValue(savedStamp,
-                        DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
-        	}
-        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.ACTION_UPDATE_SETLIST);
         intentFilter.addAction(Constants.ACTION_NEW_SONG);
         ApplicationEx.getApp().registerReceiver(setlistReceiver, intentFilter);
-        /*
-        if (Build.VERSION.SDK_INT <
-                Build.VERSION_CODES.HONEYCOMB)
-        	new UpdateSetTextTask().execute();
-        else
-        	new UpdateSetTextTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    	*/
+        updateSetAndStamp();
+        if (ApplicationEx.getConnection()) {
+	        if (!StringUtils.isBlank(setlist) &&
+	        		!setlist.equals("Error downloading setlist")) {
+	            setText.setText(setlist);
+	            if (setTextShot != null)
+	            	setTextShot.setText(setlist);
+	            setText.setVisibility(View.VISIBLE);
+	            stampText.setText(setStamp);
+	            stampText.setVisibility(View.VISIBLE);
+	        }
+	        else
+	    		ApplicationEx.getSetlist();
+        }
+        else {
+        	ApplicationEx.showLongToast(R.string.NoConnectionToast);
+            showNetworkProblem();
+        }
     }
     
     @Override
@@ -286,53 +173,27 @@ public class FragmentSetlist extends FragmentBase {
     }
     
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString("set", savedSet);
-        super.onSaveInstanceState(outState);
-    }
-    /*
-    @Override
-    public void onDestroyView() {
-        if (background != null) {
-            Drawable drawable = background.getDrawable();
-            if (drawable != null) {
-                if (drawable instanceof BitmapDrawableEx) {
-                    BitmapDrawableEx bitmapDrawable = (BitmapDrawableEx) drawable;
-                    bitmapDrawable.setIsDisplayed(false);
-                }
-            }
-        }
-        super.onDestroyView();
-    }
-    */
-    @Override
     public void updateSetText() {
-    	if (retryButton != null && networkText != null && setText != null/*&&
-    			stampText != null*/) {
+    	updateSetAndStamp();
+    	if (retryButton != null && networkText != null && setText != null) {
     		retryButton.setVisibility(View.GONE);
 	        networkText.setVisibility(View.GONE);
-	        //setText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-	        setText.setText(ApplicationEx.setlist);
+	        setText.setText(setlist);
 	        if (setTextShot != null)
-            	setTextShot.setText(ApplicationEx.setlist);
-	        savedSet = ApplicationEx.setlist;
-            DatabaseHelperSingleton.instance().setUserValue(savedSet,
-                    DatabaseHelper.COL_SETLIST, mCallback.getUserId());
-	        /*
-	        if (setText instanceof AutoResizeTextView)
-            	((AutoResizeTextView) setText).resizeText();
-            	*/
+            	setTextShot.setText(setlist);
 	        setText.setVisibility(View.VISIBLE);
-	        stampText.setText(ApplicationEx.setlistStamp);
-	        savedStamp = ApplicationEx.setlistStamp;
-            DatabaseHelperSingleton.instance().setUserValue(savedStamp,
-                    DatabaseHelper.COL_SET_STAMP, mCallback.getUserId());
+	        stampText.setText(setStamp);
 	        stampText.setVisibility(View.VISIBLE);
-	        /*
-	        if (stampTextShot != null)
-	        	stampTextShot.setText(ApplicationEx.setlistStamp);
-        	*/
     	}
+    }
+    
+    private void updateSetAndStamp() {
+    	setlist = SharedPreferencesSingleton.instance().getString(
+        		ResourcesSingleton.instance().getString(R.string.setlist_key),
+        		"");
+        setStamp = SharedPreferencesSingleton.instance().getString(
+        		ResourcesSingleton.instance().getString(R.string.setstamp_key),
+        		"");
     }
     
     private class SetlistReceiver extends BroadcastReceiver {
@@ -411,58 +272,6 @@ public class FragmentSetlist extends FragmentBase {
         retryButton.setTextColor(Color.BLACK);
         retryButton.setEnabled(true);
     }
-    /*
-    private class UpdateSetTextTask extends AsyncTask<Void, Void, Void> {
-    	@Override
-        protected Void doInBackground(Void... nothing) {
-    		ArrayList<String> setLines = new ArrayList<String>();
-    		setLines.add("Gaucho");
-    		setLines.add("Rooftop");
-    		setLines.add("Crush");
-    		setLines.add("Say Goodbye");
-    		setLines.add("Big Eyed Fish ->");
-    		setLines.add("Bartender");
-    		setLines.add("(Kill The Preacher)");
-    		setLines.add("Why I Am");
-    		setLines.add("Granny");
-    		setLines.add("Recently");
-    		setLines.add("Pantala Naga Pampa");
-    		setLines.add("Rapunzel");
-    		setLines.add("");
-    		setLines.add("Encore:");
-    		setLines.add("Oh*");
-    		setLines.add("So Much To Say ->");
-    		setLines.add("Anyone Seen The Bridge ->");
-    		setLines.add("Too Much (Fake) ->");
-    		setLines.add("Ants Marching");
-    		setLines.add("");
-    		setLines.add("Notes:");
-    		setLines.add("* Dave And Tim");
-    		setLines.add("(song name) indicates a partial song");
-    		setLines.add("-> indicates a segue into next song");
-    		do {
-	        	try {
-	        		Thread.sleep(2000);
-	        	} catch (InterruptedException e) {}
-	        	ApplicationEx.setlist = ApplicationEx.setlist.concat("\n").concat(setLines.remove(0));
-	        	publishProgress();
-    		} while (!setLines.isEmpty());
-            return null;
-        }
-        
-        protected void onProgressUpdate(Void... nothing) {
-        	updateSetText();
-        }
-        
-        @Override
-        protected void onCancelled(Void nothing) {
-        }
-        
-        @Override
-        protected void onPostExecute(Void nothing) {
-        }
-    }
-    */
     
     @Override
 	public void showResizedSetlist() {

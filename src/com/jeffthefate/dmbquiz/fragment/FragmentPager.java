@@ -239,6 +239,20 @@ public class FragmentPager extends FragmentBase {
 		((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
 				.hideResizedSetlist();
 	}
+	
+	@Override
+    public void showNoMoreQuestions(int level) {
+		((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(0)
+				.showNoMoreQuestions(level);
+    }
+	
+	@Override
+    public void showNetworkProblem() {
+		ArrayList<FragmentBase> fragments =
+				((PagerAdapter) viewPager.getAdapter()).getFragmentList();
+		for (FragmentBase fragment : fragments)
+			fragment.showNetworkProblem();
+    }
     
     public class FixedSpeedScroller extends Scroller {
 

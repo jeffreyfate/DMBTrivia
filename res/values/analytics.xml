@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
+
+    <!-- Replace placeholder ID with your tracking ID -->
+    <string name="ga_trackingId">UA-41733963-1</string>
+
+    <!-- Enable automatic activity tracking -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- Enable automatic exception tracking -->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+    
+    <bool name="ga_debug">true</bool>
+    
+    <bool name="ga_autoActivityTracking">true</bool>
+    <string name="com.jeffthefate.dmbquiz.activity.ActivityMain">ActivityMain</string>
+    
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+</resources>

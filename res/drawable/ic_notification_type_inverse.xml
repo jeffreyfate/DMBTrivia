@@ -5,7 +5,7 @@
         android:drawable="@drawable/ic_default_inverse"
         android:maxLevel="0"/>
     <item
-        android:drawable="@drawable/ic_album_inverse"
+        android:drawable="@drawable/ic_album"
         android:maxLevel="1"/>
     <item
         android:drawable="@drawable/ic_song_inverse"

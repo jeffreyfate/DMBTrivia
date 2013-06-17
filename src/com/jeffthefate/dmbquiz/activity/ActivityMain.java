@@ -55,6 +55,7 @@ import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
@@ -233,6 +234,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private MenuItem setlistItem;
     
     private ScreenshotTask screenshotTask;
+    private LogoutWaitTask logoutWaitTask;
     private SetBackgroundTask setBackgroundTask;
     private SetBackgroundWaitTask setBackgroundWaitTask;
     //private SetlistBackgroundWaitTask setlistBackgroundWaitTask;
@@ -599,6 +601,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     @Override
+    public void onStart() {
+    	super.onStart();
+    	EasyTracker.getInstance().activityStart(this);
+    }
+    
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra("setlist", false))
@@ -669,7 +677,19 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (correctAnswers == null) {
                     isLogging = true;
                     showLogin();
-                    getScore(false, true, userId, false);
+                    if (!DatabaseHelperSingleton.instance().isAnonUser(userId))
+                    	getScore(false, true, userId, false);
+                    else {
+                    	if (questionIds.size() >= 1 && questionIds.get(0) != null) {
+                            try {
+                                goToQuiz();
+                            } catch (IllegalStateException exception) {}
+                        }
+                        else
+                            getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
+                            		ResourcesSingleton.instance().getString(R.string.level_key),
+            						Constants.HARD));
+                    }
                 }
                 else
                     showLoggedInFragment();
@@ -919,12 +939,19 @@ public class ActivityMain extends SlidingFragmentActivity implements
             userTask.cancel(true);
         if (getStatsTask != null)
             getStatsTask.cancel(true);
-        if (!isLogging && userId != null)
+        if (!isLogging && userId != null &&
+        		!DatabaseHelperSingleton.instance().isAnonUser(userId))
             getScore(false, false, userId, false);
         ApplicationEx.setInactive();
         DatabaseHelperSingleton.instance().setCheckCount(userId, true);
         Log.d(Constants.LOG_TAG, "Parse queries: " + ApplicationEx.getParseQueries());
         super.onPause();
+    }
+    
+    @Override
+    public void onStop() {
+    	super.onStop();
+    	EasyTracker.getInstance().activityStop(this);
     }
     
     private void getScore(boolean show, boolean restore, String userId,
@@ -1272,6 +1299,36 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
     }
     
+    private class LogoutWaitTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... nothing) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {}
+            DatabaseHelperSingleton.instance().setOffset(0, getUserId());
+            setLoggingOut(true);
+            clearQuestionIds();
+            clearQuestions();
+            clearQuestionAnswers();
+            clearQuestionCategories();
+            clearQuestionScores();
+            clearQuestionHints();
+            clearQuestionSkips();
+            updatePersistedLists();
+            return null;
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+            showLogin();
+            //slidingMenu.showContent();
+        }
+    }
+    
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -1357,18 +1414,40 @@ public class ActivityMain extends SlidingFragmentActivity implements
             int soundSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
+            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationTypeButton);
+            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationTypeImage);
+            notificationAlbumText = (TextView) slidingMenu.findViewById(
+                    R.id.NotificationTypeText);
             switch (soundSetting) {
             case 0:
                 notificationSoundText.setText(R.string.NotificationBothTitle);
+                notificationAlbumButton.setEnabled(true);
+                notificationAlbumImage.setEnabled(true);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                notificationAlbumText.setEnabled(true);
                 break;
             case 1:
                 notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                notificationAlbumButton.setEnabled(true);
+                notificationAlbumImage.setEnabled(true);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                notificationAlbumText.setEnabled(true);
                 break;
             case 2:
                 notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                notificationAlbumButton.setEnabled(false);
+                notificationAlbumImage.setEnabled(false);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                notificationAlbumText.setEnabled(false);
                 break;
             case 3:
                 notificationSoundText.setText(R.string.NotificationSilentTitle);
+                notificationAlbumButton.setEnabled(false);
+                notificationAlbumImage.setEnabled(false);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                notificationAlbumText.setEnabled(false);
                 break;
             }
             notificationSoundButton.setOnClickListener(new OnClickListener() {
@@ -1379,20 +1458,36 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
                         case 0:
-                            notificationSoundText.setText(R.string.NotificationSoundsTitle);
-                            soundSetting = 1;
-                            break;
-                        case 1:
-                            notificationSoundText.setText(R.string.NotificationVibrateTitle);
-                            soundSetting = 2;
-                            break;
-                        case 2:
-                            notificationSoundText.setText(R.string.NotificationBothTitle);
+                        	notificationSoundText.setText(R.string.NotificationSilentTitle);
+                        	notificationAlbumButton.setEnabled(false);
+                            notificationAlbumImage.setEnabled(false);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                            notificationAlbumText.setEnabled(false);
                             soundSetting = 3;
                             break;
-                        case 3:
-                            notificationSoundText.setText(R.string.NotificationSilentTitle);
+                        case 1:
+                        	notificationSoundText.setText(R.string.NotificationBothTitle);
+                        	notificationAlbumButton.setEnabled(true);
+                            notificationAlbumImage.setEnabled(true);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                            notificationAlbumText.setEnabled(true);
                             soundSetting = 0;
+                            break;
+                        case 2:
+                        	notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                        	notificationAlbumButton.setEnabled(true);
+                            notificationAlbumImage.setEnabled(true);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                            notificationAlbumText.setEnabled(true);
+                            soundSetting = 1;
+                            break;
+                        case 3:
+                        	notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                        	notificationAlbumButton.setEnabled(false);
+                            notificationAlbumImage.setEnabled(false);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                            notificationAlbumText.setEnabled(false);
+                            soundSetting = 2;
                             break;
                         }
                         notificationSoundImage.setImageLevel(soundSetting);
@@ -1409,12 +1504,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
-            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
-                    R.id.NotificationTypeButton);
-            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
-                    R.id.NotificationTypeImage);
-            notificationAlbumText = (TextView) slidingMenu.findViewById(
-                    R.id.NotificationTypeText);
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
             notificationAlbumImage.setImageLevel(typeSetting);
@@ -1472,16 +1561,113 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
+            notificationsButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationsButton);
+            notificationsText = (CheckedTextView) slidingMenu.findViewById(
+                    R.id.NotificationsText);
+            notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
+            		ResourcesSingleton.instance().getString(R.string.notification_key), true));
+            if (notificationSoundButton != null &&
+                    notificationAlbumButton != null) {
+                if (!notificationsText.isChecked()) {
+                    notificationSoundButton.setEnabled(false);
+                    notificationSoundImage.setEnabled(false);
+                    notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                    notificationAlbumButton.setEnabled(false);
+                    notificationAlbumImage.setEnabled(false);
+                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                    notificationAlbumText.setEnabled(false);
+                }
+                else {
+                	notificationSoundButton.setEnabled(true);
+                    notificationSoundImage.setEnabled(true);
+                    notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                    switch (SharedPreferencesSingleton.instance().getInt(
+                		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
+                    case 0:
+                    case 1:
+                    	notificationAlbumButton.setEnabled(true);
+                        notificationAlbumImage.setEnabled(true);
+                        notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                        notificationAlbumText.setEnabled(true);
+                    	break;
+                    case 2:
+                    case 3:
+                    	notificationAlbumButton.setEnabled(false);
+                        notificationAlbumImage.setEnabled(false);
+                        notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                        notificationAlbumText.setEnabled(false);
+                    	break;
+                    }
+                }
+            }
+            notificationsButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        notificationsText.toggle();
+                        if (notificationSoundButton != null &&
+                                notificationAlbumButton != null) {
+                            if (!notificationsText.isChecked()) {
+                                notificationSoundButton.setEnabled(false);
+                                notificationSoundImage.setEnabled(false);
+                                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                notificationAlbumButton.setEnabled(false);
+                                notificationAlbumImage.setEnabled(false);
+                                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                notificationAlbumText.setEnabled(false);
+                            }
+                            else {
+                                notificationSoundButton.setEnabled(true);
+                                notificationSoundImage.setEnabled(true);
+                                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                                switch (SharedPreferencesSingleton.instance().getInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
+                                case 0:
+                                case 1:
+                                	notificationAlbumButton.setEnabled(true);
+                                    notificationAlbumImage.setEnabled(true);
+                                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                                    notificationAlbumText.setEnabled(true);
+                                	break;
+                                case 2:
+                                case 3:
+                                	notificationAlbumButton.setEnabled(false);
+                                    notificationAlbumImage.setEnabled(false);
+                                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                    notificationAlbumText.setEnabled(false);
+                                	break;
+                                }
+                            }
+                        }
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
+                            		ResourcesSingleton.instance().getString(R.string.notification_key),
+                                    notificationsText.isChecked())
+                            .commit();
+                        else
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
+                            		ResourcesSingleton.instance().getString(R.string.notification_key),
+                                    notificationsText.isChecked())
+                            .apply();
+                    }
+                }
+            });
         }
         else if (!inStats) {
             setBehindContentView(R.layout.menu_quiz);
             statsButton = (RelativeLayout) slidingMenu.findViewById(R.id.StatsButton);
-            statsButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View arg0) {
-                    openStats();
-                }
-            });
+            if (DatabaseHelperSingleton.instance().isAnonUser(userId))
+            	statsButton.setVisibility(View.GONE);
+            else {
+            	statsButton.setVisibility(View.VISIBLE);
+	            statsButton.setOnClickListener(new OnClickListener() {
+	                @Override
+	                public void onClick(View arg0) {
+	                    openStats();
+	                }
+	            });
+            }
             /*
             switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
             switchButton.setOnClickListener(new OnClickListener() {
@@ -1583,17 +1769,23 @@ public class ActivityMain extends SlidingFragmentActivity implements
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    DatabaseHelperSingleton.instance().setOffset(0, getUserId());
-                    setLoggingOut(true);
-                    clearQuestionIds();
-                    clearQuestions();
-                    clearQuestionAnswers();
-                    clearQuestionCategories();
-                    clearQuestionScores();
-                    clearQuestionHints();
-                    clearQuestionSkips();
-                    showLogin();
-                    slidingMenu.showContent();
+                	if (slidingMenu.isMenuShowing()) {
+                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                            @Override
+                            public void onClosed() {
+                                slidingMenu.setOnClosedListener(null);
+                                if (logoutWaitTask != null)
+                                	logoutWaitTask.cancel(true);
+                                logoutWaitTask = new LogoutWaitTask();
+                                if (Build.VERSION.SDK_INT <
+                                        Build.VERSION_CODES.HONEYCOMB)
+                                	logoutWaitTask.execute();
+                                else
+                                	logoutWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        });
+                        slidingMenu.showContent();
+                    }
                 }
             });
             exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
@@ -1714,18 +1906,40 @@ public class ActivityMain extends SlidingFragmentActivity implements
             int soundSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
+            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationTypeButton);
+            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+                    R.id.NotificationTypeImage);
+            notificationAlbumText = (TextView) slidingMenu.findViewById(
+                    R.id.NotificationTypeText);
             switch (soundSetting) {
             case 0:
                 notificationSoundText.setText(R.string.NotificationBothTitle);
+                notificationAlbumButton.setEnabled(true);
+                notificationAlbumImage.setEnabled(true);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                notificationAlbumText.setEnabled(true);
                 break;
             case 1:
                 notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                notificationAlbumButton.setEnabled(true);
+                notificationAlbumImage.setEnabled(true);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                notificationAlbumText.setEnabled(true);
                 break;
             case 2:
                 notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                notificationAlbumButton.setEnabled(false);
+                notificationAlbumImage.setEnabled(false);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                notificationAlbumText.setEnabled(false);
                 break;
             case 3:
                 notificationSoundText.setText(R.string.NotificationSilentTitle);
+                notificationAlbumButton.setEnabled(false);
+                notificationAlbumImage.setEnabled(false);
+                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                notificationAlbumText.setEnabled(false);
                 break;
             }
             notificationSoundButton.setOnClickListener(new OnClickListener() {
@@ -1736,20 +1950,36 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
                         case 0:
-                            notificationSoundText.setText(R.string.NotificationSoundsTitle);
-                            soundSetting = 1;
-                            break;
-                        case 1:
-                            notificationSoundText.setText(R.string.NotificationVibrateTitle);
-                            soundSetting = 2;
-                            break;
-                        case 2:
-                            notificationSoundText.setText(R.string.NotificationBothTitle);
+                        	notificationSoundText.setText(R.string.NotificationSilentTitle);
+                        	notificationAlbumButton.setEnabled(false);
+                            notificationAlbumImage.setEnabled(false);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                            notificationAlbumText.setEnabled(false);
                             soundSetting = 3;
                             break;
-                        case 3:
-                            notificationSoundText.setText(R.string.NotificationSilentTitle);
+                        case 1:
+                        	notificationSoundText.setText(R.string.NotificationBothTitle);
+                        	notificationAlbumButton.setEnabled(true);
+                            notificationAlbumImage.setEnabled(true);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                            notificationAlbumText.setEnabled(true);
                             soundSetting = 0;
+                            break;
+                        case 2:
+                        	notificationSoundText.setText(R.string.NotificationSoundsTitle);
+                        	notificationAlbumButton.setEnabled(true);
+                            notificationAlbumImage.setEnabled(true);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                            notificationAlbumText.setEnabled(true);
+                            soundSetting = 1;
+                            break;
+                        case 3:
+                        	notificationSoundText.setText(R.string.NotificationVibrateTitle);
+                        	notificationAlbumButton.setEnabled(false);
+                            notificationAlbumImage.setEnabled(false);
+                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                            notificationAlbumText.setEnabled(false);
+                            soundSetting = 2;
                             break;
                         }
                         notificationSoundImage.setImageLevel(soundSetting);
@@ -1766,12 +1996,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
-            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
-                    R.id.NotificationTypeButton);
-            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
-                    R.id.NotificationTypeImage);
-            notificationAlbumText = (TextView) slidingMenu.findViewById(
-                    R.id.NotificationTypeText);
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
             notificationAlbumImage.setImageLevel(typeSetting);
@@ -1825,6 +2049,98 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             SharedPreferencesSingleton.instance().edit().putInt(
                             		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
                             		typeSetting)
+                            .apply();
+                    }
+                }
+            });
+            notificationsButton = (RelativeLayout) slidingMenu.findViewById(
+                    R.id.NotificationsButton);
+            notificationsText = (CheckedTextView) slidingMenu.findViewById(
+                    R.id.NotificationsText);
+            notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
+            		ResourcesSingleton.instance().getString(R.string.notification_key), true));
+            if (notificationSoundButton != null &&
+                    notificationAlbumButton != null) {
+                if (!notificationsText.isChecked()) {
+                    notificationSoundButton.setEnabled(false);
+                    notificationSoundImage.setEnabled(false);
+                    notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                    notificationAlbumButton.setEnabled(false);
+                    notificationAlbumImage.setEnabled(false);
+                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                    notificationAlbumText.setEnabled(false);
+                }
+                else {
+                	notificationSoundButton.setEnabled(true);
+                    notificationSoundImage.setEnabled(true);
+                    notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                    switch (SharedPreferencesSingleton.instance().getInt(
+                		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
+                    case 0:
+                    case 1:
+                    	notificationAlbumButton.setEnabled(true);
+                        notificationAlbumImage.setEnabled(true);
+                        notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                        notificationAlbumText.setEnabled(true);
+                    	break;
+                    case 2:
+                    case 3:
+                    	notificationAlbumButton.setEnabled(false);
+                        notificationAlbumImage.setEnabled(false);
+                        notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                        notificationAlbumText.setEnabled(false);
+                    	break;
+                    }
+                }
+            }
+            notificationsButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (slidingMenu.isMenuShowing()) {
+                        notificationsText.toggle();
+                        if (notificationSoundButton != null &&
+                                notificationAlbumButton != null) {
+                            if (!notificationsText.isChecked()) {
+                                notificationSoundButton.setEnabled(false);
+                                notificationSoundImage.setEnabled(false);
+                                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                notificationAlbumButton.setEnabled(false);
+                                notificationAlbumImage.setEnabled(false);
+                                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                notificationAlbumText.setEnabled(false);
+                            }
+                            else {
+                                notificationSoundButton.setEnabled(true);
+                                notificationSoundImage.setEnabled(true);
+                                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                                switch (SharedPreferencesSingleton.instance().getInt(
+                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
+                                case 0:
+                                case 1:
+                                	notificationAlbumButton.setEnabled(true);
+                                    notificationAlbumImage.setEnabled(true);
+                                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
+                                    notificationAlbumText.setEnabled(true);
+                                	break;
+                                case 2:
+                                case 3:
+                                	notificationAlbumButton.setEnabled(false);
+                                    notificationAlbumImage.setEnabled(false);
+                                    notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
+                                    notificationAlbumText.setEnabled(false);
+                                	break;
+                                }
+                            }
+                        }
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
+                            		ResourcesSingleton.instance().getString(R.string.notification_key),
+                                    notificationsText.isChecked())
+                            .commit();
+                        else
+                            SharedPreferencesSingleton.instance().edit().putBoolean(
+                            		ResourcesSingleton.instance().getString(R.string.notification_key),
+                                    notificationsText.isChecked())
                             .apply();
                     }
                 }
@@ -1928,72 +2244,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             switchButton.setEnabled(true);
             */
         }
-        notificationsButton = (RelativeLayout) slidingMenu.findViewById(
-                R.id.NotificationsButton);
-        notificationsText = (CheckedTextView) slidingMenu.findViewById(
-                R.id.NotificationsText);
-        notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
-        		ResourcesSingleton.instance().getString(R.string.notification_key), true));
-        if (notificationSoundButton != null &&
-                notificationAlbumButton != null) {
-            if (!notificationsText.isChecked()) {
-                notificationSoundButton.setEnabled(false);
-                notificationSoundImage.setEnabled(false);
-                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
-                notificationAlbumButton.setEnabled(false);
-                notificationAlbumImage.setEnabled(false);
-                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
-                notificationAlbumText.setEnabled(false);
-            }
-            else {
-                notificationSoundButton.setEnabled(true);
-                notificationSoundImage.setEnabled(true);
-                notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
-                notificationAlbumButton.setEnabled(true);
-                notificationAlbumImage.setEnabled(true);
-                notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
-                notificationAlbumText.setEnabled(true);
-            }
-        }
-        notificationsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (slidingMenu.isMenuShowing()) {
-                    notificationsText.toggle();
-                    if (notificationSoundButton != null &&
-                            notificationAlbumButton != null) {
-                        if (!notificationsText.isChecked()) {
-                            notificationSoundButton.setEnabled(false);
-                            notificationSoundImage.setEnabled(false);
-                            notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
-                            notificationAlbumButton.setEnabled(false);
-                            notificationAlbumImage.setEnabled(false);
-                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(R.color.dark_gray));
-                            notificationAlbumText.setEnabled(false);
-                        }
-                        else {
-                            notificationSoundButton.setEnabled(true);
-                            notificationSoundImage.setEnabled(true);
-                            notificationSoundText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
-                            notificationAlbumButton.setEnabled(true);
-                            notificationAlbumImage.setEnabled(true);
-                            notificationAlbumText.setTextColor(ResourcesSingleton.instance().getColor(android.R.color.white));
-                            notificationAlbumText.setEnabled(true);
-                        }
-                    }
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                        SharedPreferencesSingleton.instance().edit().putBoolean(
-                        		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                notificationsText.isChecked())
-                        .commit();
-                    else
-                        SharedPreferencesSingleton.instance().edit().putBoolean(
-                        		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                notificationsText.isChecked())
-                        .apply();
-                }
-            }
-        });
         /*
         tipsButton = (RelativeLayout) slidingMenu.findViewById(R.id.QuickTipsButton);
         tipsText = (CheckedTextView) slidingMenu.findViewById(R.id.QuickTipsText);
@@ -2198,6 +2448,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 if (intent.hasExtra("hasConnection")) {
                     if (!intent.getBooleanExtra("hasConnection", false))
                         currFrag.showNetworkProblem();
+                    else
+                    	ApplicationEx.getSetlist();
                 }
             }
         }
@@ -3173,7 +3425,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 logOut();
                 ApplicationEx.showLongToast("Login failed, try again");
             }
-            else
+            else if (!DatabaseHelperSingleton.instance().isAnonUser(userId))
                 getScore(true, false, userId, newUser);
         }
         
@@ -3397,6 +3649,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
 
     @Override
     public String getQuestionId(int index) {
+    	if (questionIds.isEmpty())
+    		return null;
         return questionIds.get(index);
     }
     
@@ -3676,6 +3930,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     error = e;
                 }
             }
+            updatePersistedLists();
             return null;
         }
         
@@ -3735,36 +3990,37 @@ public class ActivityMain extends SlidingFragmentActivity implements
         	questionSkips.remove(0);
         }
         
-        private void updatePersistedLists() {
-        	ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questionids_key),
-            				questionIds);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questions_key),
-            				questions);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questionanswers_key),
-            				questionAnswers);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questioncategories_key),
-            				questionCategories);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questionscores_key),
-            				questionScores);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questionhints_key),
-            				questionHints);
-            ApplicationEx.setStringArrayPref(
-            		ResourcesSingleton.instance().getString(
-            				R.string.questionskips_key),
-            				questionSkips);
-        }
+    }
+    
+    private void updatePersistedLists() {
+    	ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionids_key),
+        				questionIds);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questions_key),
+        				questions);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionanswers_key),
+        				questionAnswers);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questioncategories_key),
+        				questionCategories);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionscores_key),
+        				questionScores);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionhints_key),
+        				questionHints);
+        ApplicationEx.setStringArrayPref(
+        		ResourcesSingleton.instance().getString(
+        				R.string.questionskips_key),
+        				questionSkips);
     }
     
     private void getStage(String userId, ArrayList<String> questionIds,

@@ -375,7 +375,7 @@ public class FragmentQuiz extends FragmentBase {
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {
                         mCallback.setNetworkProblem(false);
-                        if (mCallback.getQuestionId(0) != null)
+                        if (mCallback.questionIdsEmpty() || mCallback.getQuestionId(0) != null)
                             resumeQuestion();
                         else
                             mCallback.getNextQuestions(false,
@@ -674,7 +674,8 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
-        if (mCallback != null && mCallback.getQuestionId(0) != null &&
+        if (mCallback != null && !mCallback.questionIdsEmpty() &&
+        		mCallback.getQuestionId(0) != null &&
         		mCallback.isCorrectAnswer(mCallback.getQuestionId(0)) &&
                 !mCallback.isNewQuestion()) {
             if (Build.VERSION.SDK_INT <
@@ -919,7 +920,7 @@ public class FragmentQuiz extends FragmentBase {
         if (!stagedMap.isEmpty())
         	stageQuestions(mCallback.getUserId());
         if (!saveMap.isEmpty())
-        	saveQuestionScores(saveMap);
+        	saveQuestionScores();
         super.onPause();
     }
     
@@ -963,7 +964,7 @@ public class FragmentQuiz extends FragmentBase {
                     wrongTimer.cancel();
                 correctMap.put(questionId, questionHint);
                 if (!correctMap.isEmpty())
-                	saveAnswers(correctMap, mCallback.getUserId());
+                	saveAnswers(mCallback.getUserId());
             }
             else {
                 isCorrect = false;
@@ -1037,8 +1038,7 @@ public class FragmentQuiz extends FragmentBase {
         }
     }
     
-    private void saveAnswers(final HashMap<String, Boolean> correctMap,
-    		final String userId) {
+    private void saveAnswers(final String userId) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CorrectAnswers");
         query.whereEqualTo("userId", userId);
         query.whereContainedIn("objectId", correctMap.keySet());
@@ -1069,7 +1069,7 @@ public class FragmentQuiz extends FragmentBase {
         });
     }
 
-    private void saveQuestionScores(final HashMap<String, Boolean> saveMap) {
+    private void saveQuestionScores() {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
         query.whereContainedIn("objectId", saveMap.keySet());
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -1105,6 +1105,7 @@ public class FragmentQuiz extends FragmentBase {
                             } catch (RuntimeException err) {}
                         }
                     }
+                    saveMap.clear();
                 }
                 else {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());

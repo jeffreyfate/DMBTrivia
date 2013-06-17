@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_enabled="true"
-        android:drawable="@drawable/ic_notification_silent" />
+        android:drawable="@drawable/ic_notification_music_disabled" />
     <item
         android:state_enabled="false"
-        android:drawable="@drawable/ic_notification_silent_disabled" />
+        android:drawable="@drawable/ic_notification_music_disabled" />
 </selector>

@@ -13480,6 +13480,18 @@ com.google.gson.stream.MalformedJsonException: MalformedJsonException(java.lang.
 com.google.gson.stream.MalformedJsonException: MalformedJsonException(java.lang.Throwable)
 com.jeffthefate.dmbquiz.ApplicationEx
 com.jeffthefate.dmbquiz.ApplicationEx: ApplicationEx()
+com.jeffthefate.dmbquiz.AutoResizeTextView
+com.jeffthefate.dmbquiz.AutoResizeTextView: AutoResizeTextView(android.content.Context)
+com.jeffthefate.dmbquiz.AutoResizeTextView: AutoResizeTextView(android.content.Context,android.util.AttributeSet)
+com.jeffthefate.dmbquiz.AutoResizeTextView: AutoResizeTextView(android.content.Context,android.util.AttributeSet,int)
+com.jeffthefate.dmbquiz.AutoResizeTextView: void setOnResizeListener(com.jeffthefate.dmbquiz.AutoResizeTextView$OnTextResizeListener)
+com.jeffthefate.dmbquiz.AutoResizeTextView: void setTextSize(float)
+com.jeffthefate.dmbquiz.AutoResizeTextView: void setMaxTextSize(float)
+com.jeffthefate.dmbquiz.AutoResizeTextView: float getMaxTextSize()
+com.jeffthefate.dmbquiz.AutoResizeTextView: void setMinTextSize(float)
+com.jeffthefate.dmbquiz.AutoResizeTextView: float getMinTextSize()
+com.jeffthefate.dmbquiz.AutoResizeTextView: void setAddEllipsis(boolean)
+com.jeffthefate.dmbquiz.AutoResizeTextView: boolean getAddEllipsis()
 com.jeffthefate.dmbquiz.ImageViewEx
 com.jeffthefate.dmbquiz.ImageViewEx: ImageViewEx(android.content.Context)
 com.jeffthefate.dmbquiz.ImageViewEx: ImageViewEx(android.content.Context,android.util.AttributeSet)
@@ -13985,6 +13997,8 @@ com.jeffthefate.dmbquiz.R$drawable: int ic_notification_music_inverse
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_music_vibrate
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_music_vibrate_disabled
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_music_vibrate_inverse
+com.jeffthefate.dmbquiz.R$drawable: int ic_notification_silent
+com.jeffthefate.dmbquiz.R$drawable: int ic_notification_silent_disabled
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_sound_inverse
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_type_inverse
 com.jeffthefate.dmbquiz.R$drawable: int ic_notification_vibrate
@@ -13996,6 +14010,7 @@ com.jeffthefate.dmbquiz.R$drawable: int ic_report
 com.jeffthefate.dmbquiz.R$drawable: int ic_report_inverse
 com.jeffthefate.dmbquiz.R$drawable: int ic_setlist
 com.jeffthefate.dmbquiz.R$drawable: int ic_share
+com.jeffthefate.dmbquiz.R$drawable: int ic_silent
 com.jeffthefate.dmbquiz.R$drawable: int ic_song_inverse
 com.jeffthefate.dmbquiz.R$drawable: int ic_sounds
 com.jeffthefate.dmbquiz.R$drawable: int ic_sounds_inverse
@@ -14110,6 +14125,7 @@ com.jeffthefate.dmbquiz.R$id: int Notifications
 com.jeffthefate.dmbquiz.R$id: int NotificationsButton
 com.jeffthefate.dmbquiz.R$id: int NotificationsImage
 com.jeffthefate.dmbquiz.R$id: int NotificationsText
+com.jeffthefate.dmbquiz.R$id: int ParentLayout
 com.jeffthefate.dmbquiz.R$id: int Progress
 com.jeffthefate.dmbquiz.R$id: int QuestionAnswer
 com.jeffthefate.dmbquiz.R$id: int QuestionAnswerLayout
@@ -14304,6 +14320,7 @@ com.jeffthefate.dmbquiz.R$layout: int com_facebook_placepickerfragment
 com.jeffthefate.dmbquiz.R$layout: int com_facebook_placepickerfragment_list_row
 com.jeffthefate.dmbquiz.R$layout: int com_facebook_usersettingsfragment
 com.jeffthefate.dmbquiz.R$layout: int download
+com.jeffthefate.dmbquiz.R$layout: int faq
 com.jeffthefate.dmbquiz.R$layout: int info
 com.jeffthefate.dmbquiz.R$layout: int leaders
 com.jeffthefate.dmbquiz.R$layout: int list
@@ -14532,6 +14549,7 @@ com.jeffthefate.dmbquiz.R$string: int DownloadDialogText
 com.jeffthefate.dmbquiz.R$string: int DownloadDialogTitle
 com.jeffthefate.dmbquiz.R$string: int Error
 com.jeffthefate.dmbquiz.R$string: int ExitTitle
+com.jeffthefate.dmbquiz.R$string: int FaqText
 com.jeffthefate.dmbquiz.R$string: int FollowTitle
 com.jeffthefate.dmbquiz.R$string: int HintsUsed
 com.jeffthefate.dmbquiz.R$string: int InfoText
@@ -14550,6 +14568,7 @@ com.jeffthefate.dmbquiz.R$string: int NameTitle
 com.jeffthefate.dmbquiz.R$string: int NoConnectionToast
 com.jeffthefate.dmbquiz.R$string: int NoService
 com.jeffthefate.dmbquiz.R$string: int NotificationBothTitle
+com.jeffthefate.dmbquiz.R$string: int NotificationSilentTitle
 com.jeffthefate.dmbquiz.R$string: int NotificationSoundsTitle
 com.jeffthefate.dmbquiz.R$string: int NotificationTypeAlbumTitle
 com.jeffthefate.dmbquiz.R$string: int NotificationTypeSongTitle
@@ -14645,6 +14664,13 @@ com.jeffthefate.dmbquiz.R$string: int notificationtype_key
 com.jeffthefate.dmbquiz.R$string: int ok
 com.jeffthefate.dmbquiz.R$string: int passwordHint
 com.jeffthefate.dmbquiz.R$string: int placetext_key
+com.jeffthefate.dmbquiz.R$string: int questionanswers_key
+com.jeffthefate.dmbquiz.R$string: int questioncategories_key
+com.jeffthefate.dmbquiz.R$string: int questionhints_key
+com.jeffthefate.dmbquiz.R$string: int questionids_key
+com.jeffthefate.dmbquiz.R$string: int questions_key
+com.jeffthefate.dmbquiz.R$string: int questionscores_key
+com.jeffthefate.dmbquiz.R$string: int questionskips_key
 com.jeffthefate.dmbquiz.R$string: int questiontext_key
 com.jeffthefate.dmbquiz.R$string: int quicktip_key
 com.jeffthefate.dmbquiz.R$string: int reset
@@ -16210,6 +16236,30 @@ com.parse.BackgroundTask: java.lang.Object doInBackground(java.lang.Object[])
 com.parse.BuildConfig
 com.parse.BuildConfig: boolean DEBUG
 com.parse.BuildConfig: BuildConfig()
+com.parse.Capture
+com.parse.Capture: java.lang.Object value
+com.parse.Capture: Capture()
+com.parse.Capture: Capture(java.lang.Object)
+com.parse.Capture: java.lang.Object get()
+com.parse.Capture: void set(java.lang.Object)
+com.parse.ConnectivityNotifier
+com.parse.ConnectivityNotifier: java.lang.String TAG
+com.parse.ConnectivityNotifier: com.parse.ConnectivityNotifier singleton
+com.parse.ConnectivityNotifier: java.util.Set listeners
+com.parse.ConnectivityNotifier: boolean hasRegisteredReceiver
+com.parse.ConnectivityNotifier: java.lang.Object lock
+com.parse.ConnectivityNotifier: void <clinit>()
+com.parse.ConnectivityNotifier: ConnectivityNotifier()
+com.parse.ConnectivityNotifier: com.parse.ConnectivityNotifier getNotifier()
+com.parse.ConnectivityNotifier: void addListener(com.parse.ConnectivityNotifier$ConnectivityListener,android.content.Context)
+com.parse.ConnectivityNotifier: void removeListener(com.parse.ConnectivityNotifier$ConnectivityListener)
+com.parse.ConnectivityNotifier: boolean tryToRegisterForNetworkStatusNotifications()
+com.parse.ConnectivityNotifier: void onReceive(android.content.Context,android.content.Intent)
+com.parse.ConnectivityNotifier: boolean isConnected()
+com.parse.ConnectivityNotifier$ConnectivityListener
+com.parse.ConnectivityNotifier$ConnectivityListener: void networkConnectivityStatusChanged(android.content.Intent)
+com.parse.Continuation
+com.parse.Continuation: java.lang.Object then(com.parse.Task)
 com.parse.CountCallback
 com.parse.CountCallback: CountCallback()
 com.parse.CountCallback: void done(int,com.parse.ParseException)
@@ -16230,12 +16280,6 @@ com.parse.CountingMultipartEntity$CountingOutputStream: CountingMultipartEntity$
 com.parse.CountingMultipartEntity$CountingOutputStream: void write(byte[],int,int)
 com.parse.CountingMultipartEntity$CountingOutputStream: void write(int)
 com.parse.CountingMultipartEntity$CountingOutputStream: void notifyCallback()
-com.parse.CountingMultipartEntity$CountingOutputStream$1
-com.parse.CountingMultipartEntity$CountingOutputStream$1: com.parse.CountingMultipartEntity$CountingOutputStream this$1
-com.parse.CountingMultipartEntity$CountingOutputStream$1: int val$progressToReport
-com.parse.CountingMultipartEntity$CountingOutputStream$1: CountingMultipartEntity$CountingOutputStream$1(com.parse.CountingMultipartEntity$CountingOutputStream,com.parse.ParseCallback,int)
-com.parse.CountingMultipartEntity$CountingOutputStream$1: java.lang.Integer run()
-com.parse.CountingMultipartEntity$CountingOutputStream$1: java.lang.Object run()
 com.parse.DeleteCallback
 com.parse.DeleteCallback: DeleteCallback()
 com.parse.DeleteCallback: void done(com.parse.ParseException)
@@ -16282,6 +16326,48 @@ com.parse.LocalIdManager$MapEntry: int retainCount
 com.parse.LocalIdManager$MapEntry: com.parse.LocalIdManager this$0
 com.parse.LocalIdManager$MapEntry: LocalIdManager$MapEntry(com.parse.LocalIdManager)
 com.parse.LocalIdManager$MapEntry: LocalIdManager$MapEntry(com.parse.LocalIdManager,com.parse.LocalIdManager$MapEntry)
+com.parse.LocationCallback
+com.parse.LocationCallback: LocationCallback()
+com.parse.LocationCallback: void done(com.parse.ParseGeoPoint,com.parse.ParseException)
+com.parse.LocationCallback: void internalDone(com.parse.ParseGeoPoint,com.parse.ParseException)
+com.parse.LocationCallback: void internalDone(java.lang.Object,com.parse.ParseException)
+com.parse.LocationNotifier
+com.parse.LocationNotifier: java.lang.String testProviderName
+com.parse.LocationNotifier: android.location.Location fakeLocation
+com.parse.LocationNotifier: void <clinit>()
+com.parse.LocationNotifier: LocationNotifier()
+com.parse.LocationNotifier: com.parse.Task getCurrentLocationAsync(long,android.location.Criteria)
+com.parse.LocationNotifier: void setFakeLocation(android.location.Location)
+com.parse.LocationNotifier$1
+com.parse.LocationNotifier$1: com.parse.Capture val$timeoutFuture
+com.parse.LocationNotifier$1: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.LocationNotifier$1: android.location.LocationManager val$manager
+com.parse.LocationNotifier$1: LocationNotifier$1(com.parse.Capture,com.parse.Task$TaskCompletionSource,android.location.LocationManager)
+com.parse.LocationNotifier$1: void onLocationChanged(android.location.Location)
+com.parse.LocationNotifier$1: void onProviderDisabled(java.lang.String)
+com.parse.LocationNotifier$1: void onProviderEnabled(java.lang.String)
+com.parse.LocationNotifier$1: void onStatusChanged(java.lang.String,int,android.os.Bundle)
+com.parse.LocationNotifier$2
+com.parse.LocationNotifier$2: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.LocationNotifier$2: android.location.LocationManager val$manager
+com.parse.LocationNotifier$2: android.location.LocationListener val$listener
+com.parse.LocationNotifier$2: LocationNotifier$2(com.parse.Task$TaskCompletionSource,android.location.LocationManager,android.location.LocationListener)
+com.parse.LocationNotifier$2: void run()
+com.parse.LockSet
+com.parse.LockSet: java.util.WeakHashMap stableIds
+com.parse.LockSet: long nextStableId
+com.parse.LockSet: java.util.Set locks
+com.parse.LockSet: void <clinit>()
+com.parse.LockSet: LockSet(java.util.Collection)
+com.parse.LockSet: java.lang.Long getStableId(java.util.concurrent.locks.Lock)
+com.parse.LockSet: void lock()
+com.parse.LockSet: void unlock()
+com.parse.LockSet: java.lang.Long access$0(java.util.concurrent.locks.Lock)
+com.parse.LockSet$1
+com.parse.LockSet$1: com.parse.LockSet this$0
+com.parse.LockSet$1: LockSet$1(com.parse.LockSet)
+com.parse.LockSet$1: int compare(java.util.concurrent.locks.Lock,java.util.concurrent.locks.Lock)
+com.parse.LockSet$1: int compare(java.lang.Object,java.lang.Object)
 com.parse.LogInCallback
 com.parse.LogInCallback: LogInCallback()
 com.parse.LogInCallback: void done(com.parse.ParseUser,com.parse.ParseException)
@@ -16303,7 +16389,9 @@ com.parse.Parse: int maxParseFileSize
 com.parse.Parse: int maxKeyValueCacheBytes
 com.parse.Parse: int maxKeyValueCacheFiles
 com.parse.Parse: com.parse.ParseCommandCache commandCache
+com.parse.Parse: java.lang.Object lock
 com.parse.Parse: java.text.DateFormat dateFormat
+com.parse.Parse: java.util.concurrent.Executor uiThreadExecutor
 com.parse.Parse: void <clinit>()
 com.parse.Parse: Parse()
 com.parse.Parse: void initialize(android.content.Context,java.lang.String,java.lang.String)
@@ -16354,21 +16442,41 @@ com.parse.Parse: java.lang.Iterable keys(org.json.JSONObject)
 com.parse.Parse: boolean isContainerObject(java.lang.Object)
 com.parse.Parse: java.lang.Number addNumbers(java.lang.Number,java.lang.Number)
 com.parse.Parse: java.lang.String join(java.util.Collection,java.lang.String)
+com.parse.Parse: java.lang.Object waitForTask(com.parse.Task)
+com.parse.Parse: com.parse.Task callbackOnMainThreadAsync(com.parse.Task,com.parse.ParseCallback)
+com.parse.Parse: com.parse.Task callbackOnMainThreadAsync(com.parse.Task,com.parse.ParseCallback,boolean)
 com.parse.Parse$1
-com.parse.Parse$1: Parse$1(java.lang.String)
-com.parse.Parse$1: void run()
+com.parse.Parse$1: Parse$1()
+com.parse.Parse$1: void execute(java.lang.Runnable)
 com.parse.Parse$2
-com.parse.Parse$2: java.lang.String val$suffix
 com.parse.Parse$2: Parse$2(java.lang.String)
-com.parse.Parse$2: boolean accept(java.io.File,java.lang.String)
+com.parse.Parse$2: void run()
 com.parse.Parse$3
-com.parse.Parse$3: Parse$3()
-com.parse.Parse$3: int compare(java.io.File,java.io.File)
-com.parse.Parse$3: int compare(java.lang.Object,java.lang.Object)
+com.parse.Parse$3: java.lang.String val$suffix
+com.parse.Parse$3: Parse$3(java.lang.String)
+com.parse.Parse$3: boolean accept(java.io.File,java.lang.String)
 com.parse.Parse$4
-com.parse.Parse$4: org.json.JSONObject val$finalObject
-com.parse.Parse$4: Parse$4(org.json.JSONObject)
-com.parse.Parse$4: java.util.Iterator iterator()
+com.parse.Parse$4: Parse$4()
+com.parse.Parse$4: int compare(java.io.File,java.io.File)
+com.parse.Parse$4: int compare(java.lang.Object,java.lang.Object)
+com.parse.Parse$5
+com.parse.Parse$5: org.json.JSONObject val$finalObject
+com.parse.Parse$5: Parse$5(org.json.JSONObject)
+com.parse.Parse$5: java.util.Iterator iterator()
+com.parse.Parse$6
+com.parse.Parse$6: boolean val$reportCancellation
+com.parse.Parse$6: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Parse$6: com.parse.ParseCallback val$callback
+com.parse.Parse$6: Parse$6(boolean,com.parse.Task$TaskCompletionSource,com.parse.ParseCallback)
+com.parse.Parse$6: java.lang.Void then(com.parse.Task)
+com.parse.Parse$6: java.lang.Object then(com.parse.Task)
+com.parse.Parse$6$1
+com.parse.Parse$6$1: com.parse.Parse$6 this$1
+com.parse.Parse$6$1: com.parse.Task val$task
+com.parse.Parse$6$1: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Parse$6$1: com.parse.ParseCallback val$callback
+com.parse.Parse$6$1: Parse$6$1(com.parse.Parse$6,com.parse.Task,com.parse.Task$TaskCompletionSource,com.parse.ParseCallback)
+com.parse.Parse$6$1: void run()
 com.parse.ParseACL
 com.parse.ParseACL: java.lang.String PUBLIC_KEY
 com.parse.ParseACL: java.lang.String UNRESOLVED_KEY
@@ -16437,6 +16545,11 @@ com.parse.ParseAddUniqueOperation: org.json.JSONObject encode()
 com.parse.ParseAddUniqueOperation: com.parse.ParseFieldOperation mergeWithPrevious(com.parse.ParseFieldOperation)
 com.parse.ParseAddUniqueOperation: java.lang.Object apply(java.lang.Object,com.parse.ParseObject,java.lang.String)
 com.parse.ParseAddUniqueOperation: java.lang.Object encode()
+com.parse.ParseAnalytics
+com.parse.ParseAnalytics: java.lang.String TAG
+com.parse.ParseAnalytics: ParseAnalytics()
+com.parse.ParseAnalytics: void trackAppOpened(android.content.Intent)
+com.parse.ParseAnalytics: void trackAppOpened(java.lang.String)
 com.parse.ParseAnonymousUtils
 com.parse.ParseAnonymousUtils: com.parse.auth.AnonymousAuthenticationProvider provider
 com.parse.ParseAnonymousUtils: java.lang.String ANONYMOUS_AUTH_TYPE
@@ -16453,35 +16566,37 @@ com.parse.ParseBroadcastReceiver: void onReceive(android.content.Context,android
 com.parse.ParseCallback
 com.parse.ParseCallback: ParseCallback()
 com.parse.ParseCallback: void internalDone(java.lang.Object,com.parse.ParseException)
+com.parse.ParseClassName
+com.parse.ParseClassName: java.lang.String value()
 com.parse.ParseCloud
 com.parse.ParseCloud: ParseCloud()
 com.parse.ParseCloud: com.parse.ParseCommand constructCallCommand(java.lang.String,java.util.Map)
 com.parse.ParseCloud: java.lang.Object convertCloudResponse(java.lang.Object)
+com.parse.ParseCloud: com.parse.Task callFunctionAsync(java.lang.String,java.util.Map)
 com.parse.ParseCloud: java.lang.Object callFunction(java.lang.String,java.util.Map)
 com.parse.ParseCloud: void callFunctionInBackground(java.lang.String,java.util.Map,com.parse.FunctionCallback)
 com.parse.ParseCloud: java.lang.Object access$0(java.lang.Object)
 com.parse.ParseCloud$1
-com.parse.ParseCloud$1: com.parse.ParseCommand val$command
-com.parse.ParseCloud$1: ParseCloud$1(com.parse.ParseCallback,com.parse.ParseCommand)
-com.parse.ParseCloud$1: java.lang.Object run()
+com.parse.ParseCloud$1: ParseCloud$1()
+com.parse.ParseCloud$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseCommand
+com.parse.ParseCommand: java.util.concurrent.ScheduledExecutorService networkThreadPool
+com.parse.ParseCommand: org.apache.http.client.HttpClient testClient
 com.parse.ParseCommand: java.lang.String op
 com.parse.ParseCommand: org.json.JSONObject params
 com.parse.ParseCommand: java.lang.String localId
+com.parse.ParseCommand: java.lang.String sessionToken
 com.parse.ParseCommand: org.apache.http.client.HttpClient client
 com.parse.ParseCommand: org.apache.http.client.methods.HttpPost post
-com.parse.ParseCommand: boolean cancelled
 com.parse.ParseCommand: boolean retryEnabled
 com.parse.ParseCommand: int attemptsMade
 com.parse.ParseCommand: long delay
-com.parse.ParseCommand: com.parse.ParseCommand$InternalCallback internalCallback
+com.parse.ParseCommand: java.util.concurrent.atomic.AtomicReference currentTask
 com.parse.ParseCommand: int SOCKET_TIMEOUT
 com.parse.ParseCommand: int CONNECTION_TIMEOUT
 com.parse.ParseCommand: int INITIAL_DELAY
-com.parse.ParseCommand: boolean callCallbacksOnFailure
 com.parse.ParseCommand: void <clinit>()
-com.parse.ParseCommand: ParseCommand(java.lang.String,org.apache.http.client.HttpClient)
-com.parse.ParseCommand: ParseCommand(java.lang.String)
+com.parse.ParseCommand: ParseCommand(java.lang.String,java.lang.String)
 com.parse.ParseCommand: ParseCommand(org.json.JSONObject)
 com.parse.ParseCommand: void put(java.lang.String,java.lang.String)
 com.parse.ParseCommand: void put(java.lang.String,int)
@@ -16495,15 +16610,13 @@ com.parse.ParseCommand: org.json.JSONObject toJSONObject()
 com.parse.ParseCommand: java.lang.String getCacheKey()
 com.parse.ParseCommand: java.lang.String toDeterministicString(java.lang.Object)
 com.parse.ParseCommand: void addToStringer(org.json.JSONStringer,java.lang.Object)
-com.parse.ParseCommand: java.lang.Object perform()
+com.parse.ParseCommand: com.parse.Task performAsync()
 com.parse.ParseCommand: com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception)
 com.parse.ParseCommand: void preparePost()
-com.parse.ParseCommand: void setInternalCallback(com.parse.ParseCommand$InternalCallback)
-com.parse.ParseCommand: java.lang.Object perform(boolean)
-com.parse.ParseCommand: void setCallCallbacksOnFailure(boolean)
-com.parse.ParseCommand: org.json.JSONObject sendRequestWithRetries()
+com.parse.ParseCommand: com.parse.Task performAsync(boolean)
+com.parse.ParseCommand: com.parse.Task sendRequestWithRetriesAsync()
 com.parse.ParseCommand: void maybeSetupHttpProxy()
-com.parse.ParseCommand: org.json.JSONObject sendRequest(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost)
+com.parse.ParseCommand: com.parse.Task sendRequestAsync(org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost)
 com.parse.ParseCommand: void calculateNextDelay()
 com.parse.ParseCommand: void enableRetrying()
 com.parse.ParseCommand: void setInitialDelay(double)
@@ -16513,8 +16626,58 @@ com.parse.ParseCommand: void maybeChangeServerOperation()
 com.parse.ParseCommand: void resolveLocalIds()
 com.parse.ParseCommand: void retainLocalIds()
 com.parse.ParseCommand: void releaseLocalIds()
-com.parse.ParseCommand$InternalCallback
-com.parse.ParseCommand$InternalCallback: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseCommand: org.apache.http.client.methods.HttpPost access$0(com.parse.ParseCommand)
+com.parse.ParseCommand: com.parse.Task access$1(com.parse.ParseCommand)
+com.parse.ParseCommand: java.util.concurrent.atomic.AtomicReference access$2(com.parse.ParseCommand)
+com.parse.ParseCommand: int access$3(com.parse.ParseCommand)
+com.parse.ParseCommand: void access$4(com.parse.ParseCommand,int)
+com.parse.ParseCommand: boolean access$5(com.parse.ParseCommand)
+com.parse.ParseCommand: long access$6(com.parse.ParseCommand)
+com.parse.ParseCommand: void access$7(com.parse.ParseCommand)
+com.parse.ParseCommand$1
+com.parse.ParseCommand$1: com.parse.ParseCommand this$0
+com.parse.ParseCommand$1: ParseCommand$1(com.parse.ParseCommand)
+com.parse.ParseCommand$1: java.lang.Void call()
+com.parse.ParseCommand$1: java.lang.Object call()
+com.parse.ParseCommand$2
+com.parse.ParseCommand$2: com.parse.ParseCommand this$0
+com.parse.ParseCommand$2: ParseCommand$2(com.parse.ParseCommand)
+com.parse.ParseCommand$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseCommand$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseCommand$3
+com.parse.ParseCommand$3: com.parse.ParseCommand this$0
+com.parse.ParseCommand$3: boolean val$saveToCache
+com.parse.ParseCommand$3: ParseCommand$3(com.parse.ParseCommand,boolean)
+com.parse.ParseCommand$3: java.lang.Object then(com.parse.Task)
+com.parse.ParseCommand$4
+com.parse.ParseCommand$4: com.parse.ParseCommand this$0
+com.parse.ParseCommand$4: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseCommand$4: ParseCommand$4(com.parse.ParseCommand,com.parse.Task$TaskCompletionSource)
+com.parse.ParseCommand$4: com.parse.Task then(com.parse.Task)
+com.parse.ParseCommand$4: java.lang.Object then(com.parse.Task)
+com.parse.ParseCommand$5
+com.parse.ParseCommand$5: com.parse.ParseCommand this$0
+com.parse.ParseCommand$5: ParseCommand$5(com.parse.ParseCommand)
+com.parse.ParseCommand$5: com.parse.Task then(com.parse.Task)
+com.parse.ParseCommand$5: java.lang.Object then(com.parse.Task)
+com.parse.ParseCommand$5: com.parse.ParseCommand access$1(com.parse.ParseCommand$5)
+com.parse.ParseCommand$5$1
+com.parse.ParseCommand$5$1: com.parse.ParseCommand$5 this$1
+com.parse.ParseCommand$5$1: com.parse.Task$TaskCompletionSource val$delayTaskSource
+com.parse.ParseCommand$5$1: ParseCommand$5$1(com.parse.ParseCommand$5,com.parse.Task$TaskCompletionSource)
+com.parse.ParseCommand$5$1: void run()
+com.parse.ParseCommand$5$2
+com.parse.ParseCommand$5$2: com.parse.ParseCommand$5 this$1
+com.parse.ParseCommand$5$2: ParseCommand$5$2(com.parse.ParseCommand$5)
+com.parse.ParseCommand$5$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseCommand$5$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseCommand$6
+com.parse.ParseCommand$6: com.parse.ParseCommand this$0
+com.parse.ParseCommand$6: org.apache.http.client.HttpClient val$client
+com.parse.ParseCommand$6: org.apache.http.client.methods.HttpPost val$post
+com.parse.ParseCommand$6: ParseCommand$6(com.parse.ParseCommand,org.apache.http.client.HttpClient,org.apache.http.client.methods.HttpPost)
+com.parse.ParseCommand$6: org.json.JSONObject call()
+com.parse.ParseCommand$6: java.lang.Object call()
 com.parse.ParseCommandCache
 com.parse.ParseCommandCache: java.lang.String TAG
 com.parse.ParseCommandCache: java.io.File cachePath
@@ -16524,13 +16687,13 @@ com.parse.ParseCommandCache: int maxCacheSizeBytes
 com.parse.ParseCommandCache: int filenameCounter
 com.parse.ParseCommandCache: boolean shouldStop
 com.parse.ParseCommandCache: boolean connected
-com.parse.ParseCommandCache: java.util.HashMap commandsInCache
-com.parse.ParseCommandCache: java.util.HashMap callbacksForCommands
+com.parse.ParseCommandCache: java.util.HashMap pendingTasks
 com.parse.ParseCommandCache: java.lang.Object lock
 com.parse.ParseCommandCache: boolean running
 com.parse.ParseCommandCache: java.lang.Object runningLock
 com.parse.ParseCommandCache: java.util.logging.Logger log
 com.parse.ParseCommandCache: com.parse.ParseCommandCache$TestHelper testHelper
+com.parse.ParseCommandCache: com.parse.ConnectivityNotifier$ConnectivityListener connectivityListener
 com.parse.ParseCommandCache: void <clinit>()
 com.parse.ParseCommandCache: ParseCommandCache(android.content.Context)
 com.parse.ParseCommandCache: void setTimeoutMaxRetries(int)
@@ -16540,40 +16703,46 @@ com.parse.ParseCommandCache: void resume()
 com.parse.ParseCommandCache: void pause()
 com.parse.ParseCommandCache: void removeFile(java.io.File)
 com.parse.ParseCommandCache: void simulateReboot()
-com.parse.ParseCommandCache: void runEventually(com.parse.ParseCommand,com.parse.ParseCallback,com.parse.ParseObject)
-com.parse.ParseCommandCache: void runEventuallyInternal(com.parse.ParseCommand,com.parse.ParseCallback,boolean,com.parse.ParseObject)
+com.parse.ParseCommandCache: com.parse.Task runEventuallyAsync(com.parse.ParseCommand,com.parse.ParseObject)
+com.parse.ParseCommandCache: com.parse.Task runEventuallyInternalAsync(com.parse.ParseCommand,boolean,com.parse.ParseObject)
 com.parse.ParseCommandCache: int pendingCount()
 com.parse.ParseCommandCache: void clear()
 com.parse.ParseCommandCache: void setConnected(boolean)
+com.parse.ParseCommandCache: java.lang.Object waitForTaskWithoutLock(com.parse.Task)
 com.parse.ParseCommandCache: void maybeRunAllCommandsNow(int)
 com.parse.ParseCommandCache: void runLoop()
 com.parse.ParseCommandCache: com.parse.ParseCommandCache$TestHelper getTestHelper()
 com.parse.ParseCommandCache: void access$0(com.parse.ParseCommandCache)
-com.parse.ParseCommandCache: com.parse.ParseCommandCache$TestHelper access$1(com.parse.ParseCommandCache)
+com.parse.ParseCommandCache: java.lang.Object access$1()
 com.parse.ParseCommandCache$1
 com.parse.ParseCommandCache$1: com.parse.ParseCommandCache this$0
-com.parse.ParseCommandCache$1: android.net.ConnectivityManager val$connectivityManager
-com.parse.ParseCommandCache$1: ParseCommandCache$1(com.parse.ParseCommandCache,android.net.ConnectivityManager)
-com.parse.ParseCommandCache$1: void onReceive(android.content.Context,android.content.Intent)
+com.parse.ParseCommandCache$1: ParseCommandCache$1(com.parse.ParseCommandCache)
+com.parse.ParseCommandCache$1: void networkConnectivityStatusChanged(android.content.Intent)
 com.parse.ParseCommandCache$2
 com.parse.ParseCommandCache$2: com.parse.ParseCommandCache this$0
 com.parse.ParseCommandCache$2: ParseCommandCache$2(com.parse.ParseCommandCache,java.lang.String)
 com.parse.ParseCommandCache$2: void run()
 com.parse.ParseCommandCache$3
 com.parse.ParseCommandCache$3: com.parse.ParseCommandCache this$0
-com.parse.ParseCommandCache$3: ParseCommandCache$3(com.parse.ParseCommandCache)
-com.parse.ParseCommandCache$3: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseCommandCache$3: com.parse.Capture val$finished
+com.parse.ParseCommandCache$3: ParseCommandCache$3(com.parse.ParseCommandCache,com.parse.Capture)
+com.parse.ParseCommandCache$3: java.lang.Void then(com.parse.Task)
+com.parse.ParseCommandCache$3: java.lang.Object then(com.parse.Task)
 com.parse.ParseCommandCache$4
 com.parse.ParseCommandCache$4: com.parse.ParseCommandCache this$0
-com.parse.ParseCommandCache$4: com.parse.ParseCallback val$callback
-com.parse.ParseCommandCache$4: ParseCommandCache$4(com.parse.ParseCommandCache,com.parse.ParseCallback)
-com.parse.ParseCommandCache$4: void run()
+com.parse.ParseCommandCache$4: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseCommandCache$4: java.lang.String val$localId
+com.parse.ParseCommandCache$4: ParseCommandCache$4(com.parse.ParseCommandCache,com.parse.Task$TaskCompletionSource,java.lang.String)
+com.parse.ParseCommandCache$4: java.lang.Void then(com.parse.Task)
+com.parse.ParseCommandCache$4: java.lang.Object then(com.parse.Task)
 com.parse.ParseCommandCache$TestHelper
 com.parse.ParseCommandCache$TestHelper: int MAX_EVENTS
 com.parse.ParseCommandCache$TestHelper: int COMMAND_SUCCESSFUL
 com.parse.ParseCommandCache$TestHelper: int COMMAND_FAILED
 com.parse.ParseCommandCache$TestHelper: int COMMAND_ENQUEUED
 com.parse.ParseCommandCache$TestHelper: int COMMAND_NOT_ENQUEUED
+com.parse.ParseCommandCache$TestHelper: int OBJECT_UPDATED
+com.parse.ParseCommandCache$TestHelper: int OBJECT_REMOVED
 com.parse.ParseCommandCache$TestHelper: java.util.HashMap events
 com.parse.ParseCommandCache$TestHelper: com.parse.ParseCommandCache this$0
 com.parse.ParseCommandCache$TestHelper: ParseCommandCache$TestHelper(com.parse.ParseCommandCache)
@@ -16790,67 +16959,118 @@ com.parse.ParseFieldOperations$8: com.parse.ParseFieldOperation decode(org.json.
 com.parse.ParseFieldOperations$ParseFieldOperationFactory
 com.parse.ParseFieldOperations$ParseFieldOperationFactory: com.parse.ParseFieldOperation decode(org.json.JSONObject)
 com.parse.ParseFile
+com.parse.ParseFile: boolean dirty
 com.parse.ParseFile: java.lang.String name
 com.parse.ParseFile: java.lang.String url
 com.parse.ParseFile: byte[] data
-com.parse.ParseFile: com.parse.BackgroundTask currentTask
-com.parse.ParseFile: com.parse.ParseCommand currentCommand
 com.parse.ParseFile: org.apache.http.client.methods.HttpPost fileUploadPost
-com.parse.ParseFile: java.util.ArrayList callbacks
-com.parse.ParseFile: com.parse.ParseFile$ParseFileState state
-com.parse.ParseFile: com.parse.ParseFile$ParseFileState previousState
+com.parse.ParseFile: com.parse.TaskQueue taskQueue
+com.parse.ParseFile: java.util.Set currentTasks
 com.parse.ParseFile: ParseFile(byte[])
 com.parse.ParseFile: ParseFile(java.lang.String,byte[])
 com.parse.ParseFile: ParseFile(java.lang.String,java.lang.String)
-com.parse.ParseFile: void setState(com.parse.ParseFile$ParseFileState)
-com.parse.ParseFile: void revertState()
-com.parse.ParseFile: void assertNotRunning()
 com.parse.ParseFile: java.lang.String getName()
 com.parse.ParseFile: boolean isDirty()
 com.parse.ParseFile: boolean isDataAvailable()
 com.parse.ParseFile: java.lang.String getUrl()
-com.parse.ParseFile: com.parse.ParseCommand constructFileUploadCommand()
+com.parse.ParseFile: com.parse.ParseCommand constructFileUploadCommand(java.lang.String)
 com.parse.ParseFile: void prepareFileUploadPost(org.json.JSONObject,com.parse.ProgressCallback)
-com.parse.ParseFile: void handleFileUploadResult(org.json.JSONObject,com.parse.ProgressCallback)
+com.parse.ParseFile: com.parse.Task handleFileUploadResultAsync(org.json.JSONObject,com.parse.ProgressCallback)
 com.parse.ParseFile: void save()
-com.parse.ParseFile: void save(boolean,com.parse.ProgressCallback)
+com.parse.ParseFile: void save(com.parse.ProgressCallback)
+com.parse.ParseFile: com.parse.Task saveAsync(com.parse.ProgressCallback,com.parse.Task)
+com.parse.ParseFile: com.parse.Task saveAsync(com.parse.ProgressCallback)
 com.parse.ParseFile: void saveInBackground(com.parse.SaveCallback,com.parse.ProgressCallback)
 com.parse.ParseFile: void saveInBackground(com.parse.SaveCallback)
 com.parse.ParseFile: void saveInBackground()
 com.parse.ParseFile: byte[] getData()
-com.parse.ParseFile: byte[] getData(boolean,com.parse.ProgressCallback)
+com.parse.ParseFile: com.parse.Task getDataAsync(com.parse.ProgressCallback,com.parse.Task)
+com.parse.ParseFile: com.parse.Task getDataAsync(com.parse.ProgressCallback)
 com.parse.ParseFile: void getDataInBackground(com.parse.GetDataCallback,com.parse.ProgressCallback)
 com.parse.ParseFile: void getDataInBackground(com.parse.GetDataCallback)
 com.parse.ParseFile: void cancel()
-com.parse.ParseFile: void access$0(com.parse.ParseFile,boolean,com.parse.ProgressCallback)
-com.parse.ParseFile: java.util.ArrayList access$1(com.parse.ParseFile)
+com.parse.ParseFile: com.parse.ParseCommand access$0(com.parse.ParseFile,java.lang.String)
+com.parse.ParseFile: com.parse.Task access$1(com.parse.ParseFile,org.json.JSONObject,com.parse.ProgressCallback)
+com.parse.ParseFile: void access$2(com.parse.ParseFile,boolean)
+com.parse.ParseFile: java.util.Set access$3(com.parse.ParseFile)
+com.parse.ParseFile: java.lang.String access$4(com.parse.ParseFile)
+com.parse.ParseFile: void access$5(com.parse.ParseFile,byte[])
+com.parse.ParseFile: com.parse.Task access$6(com.parse.ParseFile,com.parse.ProgressCallback,com.parse.Task)
 com.parse.ParseFile$1
 com.parse.ParseFile$1: com.parse.ParseFile this$0
+com.parse.ParseFile$1: com.parse.Task$TaskCompletionSource val$tcs
 com.parse.ParseFile$1: com.parse.ProgressCallback val$progressCallback
-com.parse.ParseFile$1: ParseFile$1(com.parse.ParseFile,com.parse.ParseCallback,com.parse.ProgressCallback)
-com.parse.ParseFile$1: java.lang.Void run()
-com.parse.ParseFile$1: java.lang.Object run()
+com.parse.ParseFile$1: ParseFile$1(com.parse.ParseFile,com.parse.Task$TaskCompletionSource,com.parse.ProgressCallback)
+com.parse.ParseFile$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseFile$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$1: com.parse.ParseFile access$1(com.parse.ParseFile$1)
+com.parse.ParseFile$1$1
+com.parse.ParseFile$1$1: com.parse.ParseFile$1 this$1
+com.parse.ParseFile$1$1: java.lang.String val$sessionToken
+com.parse.ParseFile$1$1: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseFile$1$1: ParseFile$1$1(com.parse.ParseFile$1,java.lang.String,com.parse.Task$TaskCompletionSource)
+com.parse.ParseFile$1$1: com.parse.ParseCommand call()
+com.parse.ParseFile$1$1: java.lang.Object call()
+com.parse.ParseFile$1$1$1
+com.parse.ParseFile$1$1$1: com.parse.ParseFile$1$1 this$2
+com.parse.ParseFile$1$1$1: com.parse.ParseCommand val$command
+com.parse.ParseFile$1$1$1: ParseFile$1$1$1(com.parse.ParseFile$1$1,com.parse.ParseCommand)
+com.parse.ParseFile$1$1$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseFile$1$1$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$1$2
+com.parse.ParseFile$1$2: com.parse.ParseFile$1 this$1
+com.parse.ParseFile$1$2: ParseFile$1$2(com.parse.ParseFile$1)
+com.parse.ParseFile$1$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$1$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$1$3
+com.parse.ParseFile$1$3: com.parse.ParseFile$1 this$1
+com.parse.ParseFile$1$3: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseFile$1$3: ParseFile$1$3(com.parse.ParseFile$1,com.parse.ProgressCallback)
+com.parse.ParseFile$1$3: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$1$3: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$1$4
+com.parse.ParseFile$1$4: com.parse.ParseFile$1 this$1
+com.parse.ParseFile$1$4: ParseFile$1$4(com.parse.ParseFile$1)
+com.parse.ParseFile$1$4: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$1$4: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$1$5
+com.parse.ParseFile$1$5: com.parse.ParseFile$1 this$1
+com.parse.ParseFile$1$5: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseFile$1$5: ParseFile$1$5(com.parse.ParseFile$1,com.parse.Task$TaskCompletionSource)
+com.parse.ParseFile$1$5: java.lang.Void then(com.parse.Task)
+com.parse.ParseFile$1$5: java.lang.Object then(com.parse.Task)
 com.parse.ParseFile$2
 com.parse.ParseFile$2: com.parse.ParseFile this$0
-com.parse.ParseFile$2: ParseFile$2(com.parse.ParseFile)
-com.parse.ParseFile$2: void done(byte[],com.parse.ParseException)
+com.parse.ParseFile$2: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseFile$2: ParseFile$2(com.parse.ParseFile,com.parse.ProgressCallback)
+com.parse.ParseFile$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$2: java.lang.Object then(com.parse.Task)
 com.parse.ParseFile$3
 com.parse.ParseFile$3: com.parse.ParseFile this$0
 com.parse.ParseFile$3: com.parse.ProgressCallback val$progressCallback
-com.parse.ParseFile$3: ParseFile$3(com.parse.ParseFile,com.parse.ParseCallback,com.parse.ProgressCallback)
-com.parse.ParseFile$3: byte[] run()
-com.parse.ParseFile$3: java.lang.Object run()
-com.parse.ParseFile$ParseFileState
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState DIRTY
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState SAVING
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState AWAITING_FETCH
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState FETCHING
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState DATA_AVAILABLE
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState[] ENUM$VALUES
-com.parse.ParseFile$ParseFileState: void <clinit>()
-com.parse.ParseFile$ParseFileState: ParseFile$ParseFileState(java.lang.String,int)
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState[] values()
-com.parse.ParseFile$ParseFileState: com.parse.ParseFile$ParseFileState valueOf(java.lang.String)
+com.parse.ParseFile$3: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseFile$3: ParseFile$3(com.parse.ParseFile,com.parse.ProgressCallback,com.parse.Task$TaskCompletionSource)
+com.parse.ParseFile$3: java.lang.Void then(com.parse.Task)
+com.parse.ParseFile$3: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$3: com.parse.ParseFile access$1(com.parse.ParseFile$3)
+com.parse.ParseFile$3$1
+com.parse.ParseFile$3$1: com.parse.ParseFile$3 this$1
+com.parse.ParseFile$3$1: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseFile$3$1: ParseFile$3$1(com.parse.ParseFile$3,com.parse.Task$TaskCompletionSource)
+com.parse.ParseFile$3$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$3$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$3$2
+com.parse.ParseFile$3$2: com.parse.ParseFile$3 this$1
+com.parse.ParseFile$3$2: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseFile$3$2: ParseFile$3$2(com.parse.ParseFile$3,com.parse.Task$TaskCompletionSource)
+com.parse.ParseFile$3$2: java.lang.Void then(com.parse.Task)
+com.parse.ParseFile$3$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseFile$4
+com.parse.ParseFile$4: com.parse.ParseFile this$0
+com.parse.ParseFile$4: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseFile$4: ParseFile$4(com.parse.ParseFile,com.parse.ProgressCallback)
+com.parse.ParseFile$4: com.parse.Task then(com.parse.Task)
+com.parse.ParseFile$4: java.lang.Object then(com.parse.Task)
 com.parse.ParseGeoPoint
 com.parse.ParseGeoPoint: double EARTH_MEAN_RADIUS_KM
 com.parse.ParseGeoPoint: double EARTH_MEAN_RADIUS_MILE
@@ -16866,6 +17086,8 @@ com.parse.ParseGeoPoint: double getLongitude()
 com.parse.ParseGeoPoint: double distanceInRadiansTo(com.parse.ParseGeoPoint)
 com.parse.ParseGeoPoint: double distanceInKilometersTo(com.parse.ParseGeoPoint)
 com.parse.ParseGeoPoint: double distanceInMilesTo(com.parse.ParseGeoPoint)
+com.parse.ParseGeoPoint: void getCurrentLocationInBackground(long,com.parse.LocationCallback)
+com.parse.ParseGeoPoint: void getCurrentLocationInBackground(long,android.location.Criteria,com.parse.LocationCallback)
 com.parse.ParseIncrementOperation
 com.parse.ParseIncrementOperation: java.lang.Number amount
 com.parse.ParseIncrementOperation: ParseIncrementOperation(java.lang.Number)
@@ -16875,13 +17097,12 @@ com.parse.ParseIncrementOperation: java.lang.Object apply(java.lang.Object,com.p
 com.parse.ParseIncrementOperation: java.lang.Object encode()
 com.parse.ParseInstallation
 com.parse.ParseInstallation: java.lang.String TAG
-com.parse.ParseInstallation: java.lang.String CLASS_NAME
 com.parse.ParseInstallation: com.parse.ParseInstallation currentInstallation
 com.parse.ParseInstallation: java.lang.String STORAGE_LOCATION
 com.parse.ParseInstallation: java.util.List readonlyFields
 com.parse.ParseInstallation: void <clinit>()
-com.parse.ParseInstallation: ParseInstallation(boolean)
 com.parse.ParseInstallation: ParseInstallation()
+com.parse.ParseInstallation: void setDefaultValues()
 com.parse.ParseInstallation: com.parse.ParseInstallation getCurrentInstallation()
 com.parse.ParseInstallation: com.parse.ParseQuery getQuery()
 com.parse.ParseInstallation: java.lang.String getOrCreateCurrentInstallationId()
@@ -16889,13 +17110,33 @@ com.parse.ParseInstallation: java.lang.String getInstallationId()
 com.parse.ParseInstallation: void checkKeyIsMutable(java.lang.String)
 com.parse.ParseInstallation: void put(java.lang.String,java.lang.Object)
 com.parse.ParseInstallation: void remove(java.lang.String)
-com.parse.ParseInstallation: void save(boolean)
+com.parse.ParseInstallation: com.parse.Task saveAsync(com.parse.Task)
 com.parse.ParseInstallation: void saveEventually(com.parse.SaveCallback)
-com.parse.ParseInstallation: com.parse.ParseObject fetch()
+com.parse.ParseInstallation: com.parse.Task fetchAsync(com.parse.Task)
 com.parse.ParseInstallation: void updateTimezone()
 com.parse.ParseInstallation: void updateVersionInfo()
 com.parse.ParseInstallation: void maybeFlushToDisk(com.parse.ParseInstallation)
+com.parse.ParseInstallation: void clearCurrentInstallationFromMemory()
 com.parse.ParseInstallation: void clearCurrentInstallationFromDisk(android.content.Context)
+com.parse.ParseInstallation: boolean needsDefaultACL()
+com.parse.ParseInstallation: void access$0(com.parse.ParseInstallation)
+com.parse.ParseInstallation: com.parse.Task access$1(com.parse.ParseInstallation,com.parse.Task)
+com.parse.ParseInstallation$1
+com.parse.ParseInstallation$1: com.parse.ParseInstallation this$0
+com.parse.ParseInstallation$1: ParseInstallation$1(com.parse.ParseInstallation)
+com.parse.ParseInstallation$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseInstallation$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseInstallation$2
+com.parse.ParseInstallation$2: com.parse.ParseInstallation this$0
+com.parse.ParseInstallation$2: com.parse.Task val$toAwait
+com.parse.ParseInstallation$2: ParseInstallation$2(com.parse.ParseInstallation,com.parse.Task)
+com.parse.ParseInstallation$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseInstallation$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseInstallation$3
+com.parse.ParseInstallation$3: com.parse.ParseInstallation this$0
+com.parse.ParseInstallation$3: ParseInstallation$3(com.parse.ParseInstallation)
+com.parse.ParseInstallation$3: com.parse.Task then(com.parse.Task)
+com.parse.ParseInstallation$3: java.lang.Object then(com.parse.Task)
 com.parse.ParseJSONCacheItem
 com.parse.ParseJSONCacheItem: org.json.JSONObject json
 com.parse.ParseJSONCacheItem: java.lang.String hashValue
@@ -16914,8 +17155,10 @@ com.parse.ParseObject
 com.parse.ParseObject: java.lang.String TAG
 com.parse.ParseObject: java.lang.String server
 com.parse.ParseObject: java.lang.String API_VERSION
+com.parse.ParseObject: java.lang.String AUTO_CLASS_NAME
 com.parse.ParseObject: java.lang.String VERSION_NAME
-com.parse.ParseObject: java.util.Map objectFactories
+com.parse.ParseObject: java.util.Map classNames
+com.parse.ParseObject: java.util.Map objectTypes
 com.parse.ParseObject: java.text.DateFormat impreciseDateFormat
 com.parse.ParseObject: boolean dirty
 com.parse.ParseObject: java.lang.String objectId
@@ -16926,27 +17169,30 @@ com.parse.ParseObject: java.util.Map serverData
 com.parse.ParseObject: java.util.LinkedList operationSetQueue
 com.parse.ParseObject: java.util.Map estimatedData
 com.parse.ParseObject: java.util.Map dataAvailability
+com.parse.ParseObject: java.lang.Object mutex
+com.parse.ParseObject: com.parse.TaskQueue taskQueue
 com.parse.ParseObject: java.util.Map hashedObjects
 com.parse.ParseObject: boolean hasBeenFetched
 com.parse.ParseObject: java.util.Date updatedAt
 com.parse.ParseObject: java.util.Date createdAt
-com.parse.ParseObject: java.lang.Boolean isRunning
-com.parse.ParseObject: void <clinit>()
-com.parse.ParseObject: ParseObject(java.lang.String,boolean)
+com.parse.ParseObject: java.lang.ThreadLocal isCreatingPointer
+com.parse.ParseObject: ParseObject()
 com.parse.ParseObject: ParseObject(java.lang.String)
 com.parse.ParseObject: com.parse.ParseObject create(java.lang.String)
+com.parse.ParseObject: com.parse.ParseObject create(java.lang.Class)
 com.parse.ParseObject: com.parse.ParseObject createWithoutData(java.lang.String,java.lang.String)
-com.parse.ParseObject: void registerFactory(java.lang.String,com.parse.ParseObject$ParseObjectFactory)
+com.parse.ParseObject: com.parse.ParseObject createWithoutData(java.lang.Class,java.lang.String)
+com.parse.ParseObject: boolean isAccessible(java.lang.reflect.Member)
+com.parse.ParseObject: void registerSubclass(java.lang.Class)
+com.parse.ParseObject: void unregisterSubclass(java.lang.String)
 com.parse.ParseObject: java.lang.String getApplicationId()
+com.parse.ParseObject: com.parse.Task enqueueForAll(java.util.List,com.parse.Continuation)
 com.parse.ParseObject: java.util.Date impreciseParseDate(java.lang.String)
 com.parse.ParseObject: org.json.JSONObject getDiskObject(android.content.Context,java.lang.String)
 com.parse.ParseObject: org.json.JSONObject getDiskObject(java.io.File)
 com.parse.ParseObject: void saveDiskObject(android.content.Context,java.lang.String,org.json.JSONObject)
 com.parse.ParseObject: void saveDiskObject(java.io.File,org.json.JSONObject)
 com.parse.ParseObject: void deleteDiskObject(android.content.Context,java.lang.String)
-com.parse.ParseObject: void checkIfRunning()
-com.parse.ParseObject: void checkIfRunning(boolean)
-com.parse.ParseObject: void finishedRunning()
 com.parse.ParseObject: void saveToDisk(android.content.Context,java.lang.String)
 com.parse.ParseObject: void addToHashedObjects(java.lang.Object)
 com.parse.ParseObject: com.parse.ParseObject getFromDisk(android.content.Context,java.lang.String)
@@ -16954,15 +17200,16 @@ com.parse.ParseObject: java.lang.String getClassName()
 com.parse.ParseObject: java.util.Set keySet()
 com.parse.ParseObject: java.util.Date getUpdatedAt()
 com.parse.ParseObject: java.util.Date getCreatedAt()
-com.parse.ParseObject: void clearChanges()
 com.parse.ParseObject: void copyChangesFrom(com.parse.ParseObject)
 com.parse.ParseObject: void mergeFromObject(com.parse.ParseObject)
-com.parse.ParseObject: void mergeAfterFetch(org.json.JSONObject)
-com.parse.ParseObject: void mergeAfterSave(org.json.JSONObject,boolean)
-com.parse.ParseObject: void mergeFromServer(org.json.JSONObject)
+com.parse.ParseObject: void revert()
+com.parse.ParseObject: void mergeAfterFetch(org.json.JSONObject,boolean)
+com.parse.ParseObject: void mergeAfterSave(org.json.JSONObject,boolean,java.util.Map)
+com.parse.ParseObject: void mergeFromServer(org.json.JSONObject,boolean)
 com.parse.ParseObject: boolean hasDirtyChildren()
 com.parse.ParseObject: boolean isDirty()
 com.parse.ParseObject: boolean isDirty(boolean)
+com.parse.ParseObject: void checkpointAllMutableContainers()
 com.parse.ParseObject: void checkpointMutableContainer(java.lang.Object)
 com.parse.ParseObject: void checkForChangesToMutableContainer(java.lang.String,java.lang.Object)
 com.parse.ParseObject: void checkForChangesToMutableContainers()
@@ -16971,14 +17218,15 @@ com.parse.ParseObject: java.lang.String getOrCreateLocalId()
 com.parse.ParseObject: void setObjectId(java.lang.String)
 com.parse.ParseObject: void setObjectIdInternal(java.lang.String)
 com.parse.ParseObject: void findUnsavedChildren(java.lang.Object,java.util.List)
-com.parse.ParseObject: com.parse.ParseCommand constructSaveCommand()
+com.parse.ParseObject: com.parse.ParseCommand constructSaveCommand(java.util.Map,java.lang.String)
 com.parse.ParseObject: org.json.JSONObject toJSONObjectForDataFile()
-com.parse.ParseObject: org.json.JSONObject toJSONObjectForSaving()
-com.parse.ParseObject: void handleSaveResult(java.lang.String,org.json.JSONObject)
-com.parse.ParseObject: void startSave()
+com.parse.ParseObject: org.json.JSONObject toJSONObjectForSaving(java.util.Map)
+com.parse.ParseObject: void handleSaveResult(java.lang.String,org.json.JSONObject,java.util.Map)
+com.parse.ParseObject: java.util.Map startSave()
 com.parse.ParseObject: void validateSave()
 com.parse.ParseObject: void save()
-com.parse.ParseObject: void save(boolean)
+com.parse.ParseObject: com.parse.Task saveAsync(com.parse.Task)
+com.parse.ParseObject: com.parse.Task saveAsync()
 com.parse.ParseObject: void saveInBackground(com.parse.SaveCallback)
 com.parse.ParseObject: void saveInBackground()
 com.parse.ParseObject: void saveEventually()
@@ -16989,25 +17237,32 @@ com.parse.ParseObject: void handleFetchResult(org.json.JSONObject)
 com.parse.ParseObject: void refresh()
 com.parse.ParseObject: void refreshInBackground(com.parse.RefreshCallback)
 com.parse.ParseObject: com.parse.ParseObject fetch()
-com.parse.ParseObject: com.parse.ParseObject fetch(boolean)
+com.parse.ParseObject: com.parse.Task fetchAsync(com.parse.Task)
+com.parse.ParseObject: com.parse.Task fetchAsync()
 com.parse.ParseObject: void fetchInBackground(com.parse.GetCallback)
-com.parse.ParseObject: com.parse.ParseObject fetchIfNeeded(boolean)
+com.parse.ParseObject: com.parse.Task fetchIfNeededAsync()
 com.parse.ParseObject: com.parse.ParseObject fetchIfNeeded()
 com.parse.ParseObject: void fetchIfNeededInBackground(com.parse.GetCallback)
-com.parse.ParseObject: com.parse.ParseCommand constructDeleteCommand(boolean)
+com.parse.ParseObject: com.parse.ParseCommand constructDeleteCommand(boolean,java.lang.String)
 com.parse.ParseObject: void validateDelete()
+com.parse.ParseObject: com.parse.Task deleteAsync(com.parse.Task)
+com.parse.ParseObject: com.parse.Task deleteAsync()
 com.parse.ParseObject: void delete()
-com.parse.ParseObject: void delete(boolean)
 com.parse.ParseObject: void deleteInBackground(com.parse.DeleteCallback)
 com.parse.ParseObject: void deleteInBackground()
 com.parse.ParseObject: void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List,java.util.IdentityHashMap,java.util.IdentityHashMap)
 com.parse.ParseObject: void collectDirtyChildren(java.lang.Object,java.util.List,java.util.List)
 com.parse.ParseObject: boolean canBeSerializedAsValue(java.lang.Object)
 com.parse.ParseObject: boolean canBeSerialized()
-com.parse.ParseObject: void deepSave(java.lang.Object)
+com.parse.ParseObject: com.parse.Task deepSaveAsync(java.lang.Object,java.lang.String)
+com.parse.ParseObject: com.parse.Task saveAllAsync(java.util.List)
 com.parse.ParseObject: void saveAll(java.util.List)
+com.parse.ParseObject: com.parse.Task fetchAllIfNeededAsync(java.util.List,com.parse.Task)
+com.parse.ParseObject: com.parse.Task fetchAllIfNeededAsync(java.util.List)
 com.parse.ParseObject: java.util.List fetchAllIfNeeded(java.util.List)
 com.parse.ParseObject: void fetchAllIfNeededInBackground(java.util.List,com.parse.FindCallback)
+com.parse.ParseObject: com.parse.Task fetchAllAsync(java.util.List,com.parse.Task)
+com.parse.ParseObject: com.parse.Task fetchAllAsync(java.util.List)
 com.parse.ParseObject: java.util.List fetchAll(java.util.List)
 com.parse.ParseObject: void fetchAllInBackground(java.util.List,com.parse.FindCallback)
 com.parse.ParseObject: void saveAllInBackground(java.util.List,com.parse.SaveCallback)
@@ -17041,6 +17296,7 @@ com.parse.ParseObject: boolean getBoolean(java.lang.String)
 com.parse.ParseObject: java.util.Date getDate(java.lang.String)
 com.parse.ParseObject: com.parse.ParseObject getParseObject(java.lang.String)
 com.parse.ParseObject: com.parse.ParseUser getParseUser(java.lang.String)
+com.parse.ParseObject: com.parse.ParseFile getParseFile(java.lang.String)
 com.parse.ParseObject: com.parse.ParseGeoPoint getParseGeoPoint(java.lang.String)
 com.parse.ParseObject: com.parse.ParseACL getACL()
 com.parse.ParseObject: com.parse.ParseACL getACL(boolean)
@@ -17053,89 +17309,226 @@ com.parse.ParseObject: void checkGetAccess(java.lang.String)
 com.parse.ParseObject: boolean hasSameId(com.parse.ParseObject)
 com.parse.ParseObject: void registerSaveListener(com.parse.GetCallback)
 com.parse.ParseObject: void unregisterSaveListener(com.parse.GetCallback)
-com.parse.ParseObject: com.parse.ParseCommand access$0(com.parse.ParseObject,boolean)
-com.parse.ParseObject: com.parse.ParseObject access$1(com.parse.ParseObject,boolean)
+com.parse.ParseObject: java.lang.String getClassName(java.lang.Class)
+com.parse.ParseObject: void setDefaultValues()
+com.parse.ParseObject: boolean needsDefaultACL()
+com.parse.ParseObject: java.util.Map access$000(com.parse.ParseObject)
+com.parse.ParseObject: com.parse.Task access$100(java.lang.Object,java.lang.String)
+com.parse.ParseObject: boolean access$200(com.parse.ParseObject,java.lang.String)
+com.parse.ParseObject: com.parse.ParseACL access$300(com.parse.ParseObject,boolean)
+com.parse.ParseObject: java.lang.String access$400(com.parse.ParseObject)
+com.parse.ParseObject: java.lang.String access$500(com.parse.ParseObject)
+com.parse.ParseObject: com.parse.ParseCommand access$600(com.parse.ParseObject,boolean,java.lang.String)
+com.parse.ParseObject: com.parse.Task access$700(com.parse.ParseObject,com.parse.Task)
+com.parse.ParseObject: boolean access$800(com.parse.ParseObject)
+com.parse.ParseObject: boolean access$902(com.parse.ParseObject,boolean)
+com.parse.ParseObject: com.parse.Task access$1000(java.util.List,com.parse.Task)
+com.parse.ParseObject: com.parse.Task access$1100(java.util.List,com.parse.Task)
+com.parse.ParseObject: void <clinit>()
 com.parse.ParseObject$1
 com.parse.ParseObject$1: ParseObject$1()
-com.parse.ParseObject$1: com.parse.ParseUser getNew(boolean)
-com.parse.ParseObject$1: java.lang.Class getExpectedType()
-com.parse.ParseObject$1: com.parse.ParseObject getNew(boolean)
+com.parse.ParseObject$1: java.lang.Boolean initialValue()
+com.parse.ParseObject$1: java.lang.Object initialValue()
 com.parse.ParseObject$10
+com.parse.ParseObject$10: com.parse.ParseCommandCache val$cache
 com.parse.ParseObject$10: com.parse.ParseObject this$0
-com.parse.ParseObject$10: ParseObject$10(com.parse.ParseObject,com.parse.ParseCallback)
-com.parse.ParseObject$10: com.parse.ParseObject run()
-com.parse.ParseObject$10: java.lang.Object run()
+com.parse.ParseObject$10: ParseObject$10(com.parse.ParseObject,com.parse.ParseCommandCache)
+com.parse.ParseObject$10: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$10: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$11
 com.parse.ParseObject$11: com.parse.ParseObject this$0
-com.parse.ParseObject$11: ParseObject$11(com.parse.ParseObject,com.parse.ParseCallback)
-com.parse.ParseObject$11: java.lang.Void run()
-com.parse.ParseObject$11: java.lang.Object run()
+com.parse.ParseObject$11: ParseObject$11(com.parse.ParseObject)
+com.parse.ParseObject$11: com.parse.ParseObject then(com.parse.Task)
+com.parse.ParseObject$11: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$12
-com.parse.ParseObject$12: java.util.List val$objects
-com.parse.ParseObject$12: ParseObject$12(com.parse.ParseCallback,java.util.List)
-com.parse.ParseObject$12: java.util.List run()
-com.parse.ParseObject$12: java.lang.Object run()
+com.parse.ParseObject$12: com.parse.ParseObject this$0
+com.parse.ParseObject$12: ParseObject$12(com.parse.ParseObject)
+com.parse.ParseObject$12: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$12: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$13
-com.parse.ParseObject$13: java.util.List val$objects
-com.parse.ParseObject$13: ParseObject$13(com.parse.ParseCallback,java.util.List)
-com.parse.ParseObject$13: java.util.List run()
-com.parse.ParseObject$13: java.lang.Object run()
+com.parse.ParseObject$13: java.lang.String val$sessionToken
+com.parse.ParseObject$13: com.parse.ParseObject this$0
+com.parse.ParseObject$13: ParseObject$13(com.parse.ParseObject,java.lang.String)
+com.parse.ParseObject$13: com.parse.ParseCommand call()
+com.parse.ParseObject$13: java.lang.Object call()
 com.parse.ParseObject$14
-com.parse.ParseObject$14: java.util.List val$finalObjects
-com.parse.ParseObject$14: ParseObject$14(com.parse.ParseCallback,java.util.List)
-com.parse.ParseObject$14: java.lang.Void run()
-com.parse.ParseObject$14: java.lang.Object run()
+com.parse.ParseObject$14: com.parse.ParseObject this$0
+com.parse.ParseObject$14: ParseObject$14(com.parse.ParseObject)
+com.parse.ParseObject$14: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$14: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$15
+com.parse.ParseObject$15: com.parse.ParseObject this$0
+com.parse.ParseObject$15: ParseObject$15(com.parse.ParseObject)
+com.parse.ParseObject$15: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$15: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$16
+com.parse.ParseObject$16: com.parse.ParseObject this$0
+com.parse.ParseObject$16: ParseObject$16(com.parse.ParseObject)
+com.parse.ParseObject$16: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$16: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$17
+com.parse.ParseObject$17: java.lang.String val$sessionToken
+com.parse.ParseObject$17: com.parse.ParseObject this$0
+com.parse.ParseObject$17: ParseObject$17(com.parse.ParseObject,java.lang.String)
+com.parse.ParseObject$17: com.parse.ParseCommand call()
+com.parse.ParseObject$17: java.lang.Object call()
+com.parse.ParseObject$18
+com.parse.ParseObject$18: com.parse.ParseObject this$0
+com.parse.ParseObject$18: ParseObject$18(com.parse.ParseObject)
+com.parse.ParseObject$18: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$18: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19
+com.parse.ParseObject$19: java.util.List val$objects
+com.parse.ParseObject$19: java.lang.String val$sessionToken
+com.parse.ParseObject$19: ParseObject$19(java.util.List,java.lang.String)
+com.parse.ParseObject$19: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$1
+com.parse.ParseObject$19$1: com.parse.Capture val$remaining
+com.parse.ParseObject$19$1: com.parse.ParseObject$19 this$0
+com.parse.ParseObject$19$1: ParseObject$19$1(com.parse.ParseObject$19,com.parse.Capture)
+com.parse.ParseObject$19$1: java.lang.Boolean call()
+com.parse.ParseObject$19$1: java.lang.Object call()
+com.parse.ParseObject$19$2
+com.parse.ParseObject$19$2: com.parse.Capture val$remaining
+com.parse.ParseObject$19$2: com.parse.ParseObject$19 this$0
+com.parse.ParseObject$19$2: ParseObject$19$2(com.parse.ParseObject$19,com.parse.Capture)
+com.parse.ParseObject$19$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$1
+com.parse.ParseObject$19$2$1: java.util.List val$current
+com.parse.ParseObject$19$2$1: com.parse.ParseObject$19$2 this$1
+com.parse.ParseObject$19$2$1: ParseObject$19$2$1(com.parse.ParseObject$19$2,java.util.List)
+com.parse.ParseObject$19$2$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$19$2$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$2
+com.parse.ParseObject$19$2$2: com.parse.ParseObject$19$2 this$1
+com.parse.ParseObject$19$2$2: ParseObject$19$2$2(com.parse.ParseObject$19$2)
+com.parse.ParseObject$19$2$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19$2$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$3
+com.parse.ParseObject$19$2$3: java.util.List val$current
+com.parse.ParseObject$19$2$3: java.util.List val$operations
+com.parse.ParseObject$19$2$3: java.util.List val$ops
+com.parse.ParseObject$19$2$3: com.parse.ParseObject$19$2 this$1
+com.parse.ParseObject$19$2$3: ParseObject$19$2$3(com.parse.ParseObject$19$2,java.util.List,java.util.List,java.util.List)
+com.parse.ParseObject$19$2$3: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19$2$3: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1
+com.parse.ParseObject$19$2$3$1: com.parse.ParseObject$19$2$3 this$2
+com.parse.ParseObject$19$2$3$1: ParseObject$19$2$3$1(com.parse.ParseObject$19$2$3)
+com.parse.ParseObject$19$2$3$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1$1
+com.parse.ParseObject$19$2$3$1$1: com.parse.ParseObject$19$2$3$1 this$3
+com.parse.ParseObject$19$2$3$1$1: ParseObject$19$2$3$1$1(com.parse.ParseObject$19$2$3$1)
+com.parse.ParseObject$19$2$3$1$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1$1$1
+com.parse.ParseObject$19$2$3$1$1$1: com.parse.ParseObject$19$2$3$1$1 this$4
+com.parse.ParseObject$19$2$3$1$1$1: ParseObject$19$2$3$1$1$1(com.parse.ParseObject$19$2$3$1$1)
+com.parse.ParseObject$19$2$3$1$1$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$19$2$3$1$1$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$2
-com.parse.ParseObject$2: ParseObject$2()
-com.parse.ParseObject$2: com.parse.ParseRole getNew(boolean)
-com.parse.ParseObject$2: java.lang.Class getExpectedType()
-com.parse.ParseObject$2: com.parse.ParseObject getNew(boolean)
+com.parse.ParseObject$2: java.util.List val$childTasks
+com.parse.ParseObject$2: com.parse.Task val$fullTask
+com.parse.ParseObject$2: ParseObject$2(java.util.List,com.parse.Task)
+com.parse.ParseObject$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$20
+com.parse.ParseObject$20: java.util.List val$objects
+com.parse.ParseObject$20: ParseObject$20(java.util.List)
+com.parse.ParseObject$20: java.util.List then(com.parse.Task)
+com.parse.ParseObject$20: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$21
+com.parse.ParseObject$21: com.parse.ParseQuery val$query
+com.parse.ParseObject$21: ParseObject$21(com.parse.ParseQuery)
+com.parse.ParseObject$21: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$21: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$22
+com.parse.ParseObject$22: java.util.List val$objects
+com.parse.ParseObject$22: ParseObject$22(java.util.List)
+com.parse.ParseObject$22: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$22: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$23
+com.parse.ParseObject$23: java.util.List val$objects
+com.parse.ParseObject$23: ParseObject$23(java.util.List)
+com.parse.ParseObject$23: java.util.List then(com.parse.Task)
+com.parse.ParseObject$23: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$24
+com.parse.ParseObject$24: com.parse.ParseQuery val$query
+com.parse.ParseObject$24: ParseObject$24(com.parse.ParseQuery)
+com.parse.ParseObject$24: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$24: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$25
+com.parse.ParseObject$25: java.util.List val$objects
+com.parse.ParseObject$25: ParseObject$25(java.util.List)
+com.parse.ParseObject$25: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$25: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$3
-com.parse.ParseObject$3: ParseObject$3()
-com.parse.ParseObject$3: com.parse.ParseInstallation getNew(boolean)
-com.parse.ParseObject$3: java.lang.Class getExpectedType()
-com.parse.ParseObject$3: com.parse.ParseObject getNew(boolean)
+com.parse.ParseObject$3: com.parse.Task$TaskCompletionSource val$readyToStart
+com.parse.ParseObject$3: ParseObject$3(com.parse.Task$TaskCompletionSource)
+com.parse.ParseObject$3: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$3: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$4
+com.parse.ParseObject$4: com.parse.Capture val$operations
+com.parse.ParseObject$4: java.lang.String val$sessionToken
 com.parse.ParseObject$4: com.parse.ParseObject this$0
-com.parse.ParseObject$4: ParseObject$4(com.parse.ParseObject)
-com.parse.ParseObject$4: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseObject$4: ParseObject$4(com.parse.ParseObject,com.parse.Capture,java.lang.String)
+com.parse.ParseObject$4: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$4: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$4$1
+com.parse.ParseObject$4$1: com.parse.ParseCommand val$command
+com.parse.ParseObject$4$1: com.parse.ParseObject$4 this$1
+com.parse.ParseObject$4$1: ParseObject$4$1(com.parse.ParseObject$4,com.parse.ParseCommand)
+com.parse.ParseObject$4$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$4$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$5
+com.parse.ParseObject$5: java.lang.String val$sessionToken
 com.parse.ParseObject$5: com.parse.ParseObject this$0
-com.parse.ParseObject$5: ParseObject$5(com.parse.ParseObject,com.parse.ParseCallback)
-com.parse.ParseObject$5: java.lang.Void run()
-com.parse.ParseObject$5: java.lang.Object run()
+com.parse.ParseObject$5: ParseObject$5(com.parse.ParseObject,java.lang.String)
+com.parse.ParseObject$5: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$5: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$6
+com.parse.ParseObject$6: com.parse.Capture val$operations
 com.parse.ParseObject$6: com.parse.ParseObject this$0
-com.parse.ParseObject$6: ParseObject$6(com.parse.ParseObject)
-com.parse.ParseObject$6: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseObject$6: ParseObject$6(com.parse.ParseObject,com.parse.Capture)
+com.parse.ParseObject$6: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$6: java.lang.Object then(com.parse.Task)
+com.parse.ParseObject$6$1
+com.parse.ParseObject$6$1: com.parse.ParseObject$6 this$1
+com.parse.ParseObject$6$1: ParseObject$6$1(com.parse.ParseObject$6)
+com.parse.ParseObject$6$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$6$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$7
 com.parse.ParseObject$7: com.parse.ParseObject this$0
-com.parse.ParseObject$7: com.parse.DeleteCallback val$callback
-com.parse.ParseObject$7: ParseObject$7(com.parse.ParseObject,com.parse.ParseCallback,com.parse.DeleteCallback)
-com.parse.ParseObject$7: java.lang.Void run()
-com.parse.ParseObject$7: java.lang.Object run()
+com.parse.ParseObject$7: ParseObject$7(com.parse.ParseObject)
+com.parse.ParseObject$7: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$7: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$8
+com.parse.ParseObject$8: com.parse.Capture val$succeeded
+com.parse.ParseObject$8: com.parse.ParseCommandCache val$cache
 com.parse.ParseObject$8: com.parse.ParseObject this$0
-com.parse.ParseObject$8: com.parse.RefreshCallback val$callback
-com.parse.ParseObject$8: ParseObject$8(com.parse.ParseObject,com.parse.RefreshCallback)
-com.parse.ParseObject$8: void done(com.parse.ParseObject,com.parse.ParseException)
+com.parse.ParseObject$8: ParseObject$8(com.parse.ParseObject,com.parse.Capture,com.parse.ParseCommandCache)
+com.parse.ParseObject$8: com.parse.Task then(com.parse.Task)
+com.parse.ParseObject$8: java.lang.Object then(com.parse.Task)
 com.parse.ParseObject$9
+com.parse.ParseObject$9: com.parse.ParseCommand val$command
+com.parse.ParseObject$9: java.util.Map val$operations
+com.parse.ParseObject$9: com.parse.Capture val$succeeded
 com.parse.ParseObject$9: com.parse.ParseObject this$0
-com.parse.ParseObject$9: ParseObject$9(com.parse.ParseObject,com.parse.ParseCallback)
-com.parse.ParseObject$9: com.parse.ParseObject run()
-com.parse.ParseObject$9: java.lang.Object run()
-com.parse.ParseObject$ParseObjectFactory
-com.parse.ParseObject$ParseObjectFactory: com.parse.ParseObject getNew(boolean)
-com.parse.ParseObject$ParseObjectFactory: java.lang.Class getExpectedType()
+com.parse.ParseObject$9: ParseObject$9(com.parse.ParseObject,com.parse.ParseCommand,java.util.Map,com.parse.Capture)
+com.parse.ParseObject$9: java.lang.Void then(com.parse.Task)
+com.parse.ParseObject$9: java.lang.Object then(com.parse.Task)
 com.parse.ParsePush
 com.parse.ParsePush: java.lang.String TAG
-com.parse.ParsePush: java.util.Set mChannelSet
-com.parse.ParsePush: com.parse.ParseQuery mQuery
-com.parse.ParsePush: java.lang.Long mExpirationTime
-com.parse.ParsePush: java.lang.Long mExpirationTimeInterval
-com.parse.ParsePush: java.lang.Boolean mPushToIOS
-com.parse.ParsePush: java.lang.Boolean mPushToAndroid
-com.parse.ParsePush: org.json.JSONObject mData
+com.parse.ParsePush: java.util.Set channelSet
+com.parse.ParsePush: com.parse.ParseQuery query
+com.parse.ParsePush: java.lang.Long expirationTime
+com.parse.ParsePush: java.lang.Long expirationTimeInterval
+com.parse.ParsePush: java.lang.Boolean pushToIOS
+com.parse.ParsePush: java.lang.Boolean pushToAndroid
+com.parse.ParsePush: org.json.JSONObject data
 com.parse.ParsePush: ParsePush()
 com.parse.ParsePush: void sendMessageInBackground(java.lang.String,com.parse.ParseQuery)
 com.parse.ParsePush: void sendMessageInBackground(java.lang.String,com.parse.ParseQuery,com.parse.SendCallback)
@@ -17151,15 +17544,16 @@ com.parse.ParsePush: void setPushToIOS(boolean)
 com.parse.ParsePush: void setPushToAndroid(boolean)
 com.parse.ParsePush: void setData(org.json.JSONObject)
 com.parse.ParsePush: void setMessage(java.lang.String)
+com.parse.ParsePush: com.parse.Task sendAsync()
 com.parse.ParsePush: void send()
 com.parse.ParsePush: void sendInBackground(com.parse.SendCallback)
 com.parse.ParsePush: void sendInBackground()
-com.parse.ParsePush: com.parse.ParseCommand buildCommand()
+com.parse.ParsePush: com.parse.ParseCommand buildCommand(java.lang.String)
 com.parse.ParsePush$1
 com.parse.ParsePush$1: com.parse.ParsePush this$0
-com.parse.ParsePush$1: ParsePush$1(com.parse.ParsePush,com.parse.ParseCallback)
-com.parse.ParsePush$1: java.lang.Void run()
-com.parse.ParsePush$1: java.lang.Object run()
+com.parse.ParsePush$1: ParsePush$1(com.parse.ParsePush)
+com.parse.ParsePush$1: java.lang.Void then(com.parse.Task)
+com.parse.ParsePush$1: java.lang.Object then(com.parse.Task)
 com.parse.ParsePushRouter
 com.parse.ParsePushRouter: java.lang.String TAG
 com.parse.ParsePushRouter: java.util.regex.Pattern CHANNEL_PATTERN
@@ -17222,7 +17616,7 @@ com.parse.ParsePushRouter$3: ParsePushRouter$3(com.parse.ParseCallback,java.lang
 com.parse.ParsePushRouter$3: java.lang.Boolean run()
 com.parse.ParsePushRouter$3: java.lang.Object run()
 com.parse.ParsePushRouter$CallbackFactory
-com.parse.ParsePushRouter$CallbackFactory: java.lang.Class klass
+com.parse.ParsePushRouter$CallbackFactory: java.lang.Class clazz
 com.parse.ParsePushRouter$CallbackFactory: org.json.JSONObject contextData
 com.parse.ParsePushRouter$CallbackFactory: ParsePushRouter$CallbackFactory(org.json.JSONObject)
 com.parse.ParsePushRouter$CallbackFactory: ParsePushRouter$CallbackFactory(java.lang.Class,org.json.JSONObject)
@@ -17241,6 +17635,7 @@ com.parse.ParseQuery: java.lang.String TAG
 com.parse.ParseQuery: java.lang.String className
 com.parse.ParseQuery: java.util.HashMap where
 com.parse.ParseQuery: java.util.ArrayList include
+com.parse.ParseQuery: java.util.ArrayList selectedKeys
 com.parse.ParseQuery: int limit
 com.parse.ParseQuery: boolean trace
 com.parse.ParseQuery: int skip
@@ -17249,7 +17644,6 @@ com.parse.ParseQuery: long queryStart
 com.parse.ParseQuery: long querySent
 com.parse.ParseQuery: long queryReceived
 com.parse.ParseQuery: long objectsParsed
-com.parse.ParseQuery: com.parse.BackgroundTask currentTask
 com.parse.ParseQuery: com.parse.ParseCommand currentCommand
 com.parse.ParseQuery: java.lang.Boolean isRunning
 com.parse.ParseQuery: java.util.HashMap extraOptions
@@ -17257,24 +17651,27 @@ com.parse.ParseQuery: com.parse.ParseQuery$CachePolicy cachePolicy
 com.parse.ParseQuery: long maxCacheAge
 com.parse.ParseQuery: int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy
 com.parse.ParseQuery: com.parse.ParseQuery or(java.util.List)
+com.parse.ParseQuery: ParseQuery(java.lang.Class)
 com.parse.ParseQuery: ParseQuery(java.lang.String)
+com.parse.ParseQuery: com.parse.ParseQuery getQuery(java.lang.Class)
+com.parse.ParseQuery: com.parse.ParseQuery getQuery(java.lang.String)
 com.parse.ParseQuery: com.parse.ParseQuery getUserQuery()
 com.parse.ParseQuery: void checkIfRunning()
 com.parse.ParseQuery: void checkIfRunning(boolean)
 com.parse.ParseQuery: void finishedRunning()
+com.parse.ParseQuery: com.parse.Task finishRunning(com.parse.Task)
 com.parse.ParseQuery: java.lang.Object maybeEncodeSubQueries(java.lang.Object)
 com.parse.ParseQuery: org.json.JSONObject getFindParams()
-com.parse.ParseQuery: com.parse.ParseCommand makeFindCommand()
+com.parse.ParseQuery: com.parse.ParseCommand makeFindCommand(java.lang.String)
 com.parse.ParseQuery: java.util.List convertFindResponse(org.json.JSONObject)
-com.parse.ParseQuery: java.lang.Object runCommandWithPolicy(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy)
-com.parse.ParseQuery: int countWithCachePolicy(com.parse.ParseQuery$CachePolicy)
-com.parse.ParseQuery: java.util.List findWithCachePolicy(com.parse.ParseQuery$CachePolicy)
+com.parse.ParseQuery: com.parse.Task runCommandWithPolicyAsync(com.parse.ParseQuery$CommandDelegate,com.parse.ParseQuery$CachePolicy)
+com.parse.ParseQuery: com.parse.Task countWithCachePolicyAsync(com.parse.ParseQuery$CachePolicy)
+com.parse.ParseQuery: com.parse.Task findAsync()
+com.parse.ParseQuery: com.parse.Task findWithCachePolicyAsync(com.parse.ParseQuery$CachePolicy)
 com.parse.ParseQuery: void cancel()
 com.parse.ParseQuery: java.util.List find()
-com.parse.ParseQuery: java.util.List find(boolean)
 com.parse.ParseQuery: com.parse.ParseObject getFirst()
-com.parse.ParseQuery: com.parse.ParseObject getFirst(boolean)
-com.parse.ParseQuery: java.util.List findFromNetwork(boolean)
+com.parse.ParseQuery: com.parse.Task findFromNetworkAsync(boolean)
 com.parse.ParseQuery: void setCachePolicy(com.parse.ParseQuery$CachePolicy)
 com.parse.ParseQuery: com.parse.ParseQuery$CachePolicy getCachePolicy()
 com.parse.ParseQuery: void setMaxCacheAge(long)
@@ -17282,14 +17679,15 @@ com.parse.ParseQuery: long getMaxCacheAge()
 com.parse.ParseQuery: java.util.List findFromCache()
 com.parse.ParseQuery: java.lang.Integer countFromCache()
 com.parse.ParseQuery: void findInBackground(com.parse.FindCallback)
+com.parse.ParseQuery: com.parse.Task getFirstAsync()
 com.parse.ParseQuery: void getFirstInBackground(com.parse.GetCallback)
-com.parse.ParseQuery: com.parse.ParseCommand makeCountCommand()
+com.parse.ParseQuery: com.parse.ParseCommand makeCountCommand(java.lang.String)
 com.parse.ParseQuery: int count()
 com.parse.ParseQuery: int count(boolean)
-com.parse.ParseQuery: int countFromNetwork()
+com.parse.ParseQuery: com.parse.Task countFromNetworkAsync()
 com.parse.ParseQuery: void countInBackground(com.parse.CountCallback)
+com.parse.ParseQuery: com.parse.Task getAsync(java.lang.String)
 com.parse.ParseQuery: com.parse.ParseObject get(java.lang.String)
-com.parse.ParseQuery: com.parse.ParseObject get(java.lang.String,boolean)
 com.parse.ParseQuery: boolean hasCachedResult()
 com.parse.ParseQuery: void clearCachedResult()
 com.parse.ParseQuery: void clearAllCachedResults()
@@ -17302,6 +17700,7 @@ com.parse.ParseQuery: com.parse.ParseQuery whereGreaterThan(java.lang.String,jav
 com.parse.ParseQuery: com.parse.ParseQuery whereLessThanOrEqualTo(java.lang.String,java.lang.Object)
 com.parse.ParseQuery: com.parse.ParseQuery whereGreaterThanOrEqualTo(java.lang.String,java.lang.Object)
 com.parse.ParseQuery: com.parse.ParseQuery whereContainedIn(java.lang.String,java.util.Collection)
+com.parse.ParseQuery: com.parse.ParseQuery whereContainsAll(java.lang.String,java.util.Collection)
 com.parse.ParseQuery: com.parse.ParseQuery whereMatchesQuery(java.lang.String,com.parse.ParseQuery)
 com.parse.ParseQuery: com.parse.ParseQuery whereDoesNotMatchQuery(java.lang.String,com.parse.ParseQuery)
 com.parse.ParseQuery: com.parse.ParseQuery whereMatchesKeyInQuery(java.lang.String,java.lang.String,com.parse.ParseQuery)
@@ -17319,6 +17718,7 @@ com.parse.ParseQuery: com.parse.ParseQuery whereContains(java.lang.String,java.l
 com.parse.ParseQuery: com.parse.ParseQuery whereStartsWith(java.lang.String,java.lang.String)
 com.parse.ParseQuery: com.parse.ParseQuery whereEndsWith(java.lang.String,java.lang.String)
 com.parse.ParseQuery: void include(java.lang.String)
+com.parse.ParseQuery: void selectKeys(java.util.Collection)
 com.parse.ParseQuery: com.parse.ParseQuery whereExists(java.lang.String)
 com.parse.ParseQuery: com.parse.ParseQuery whereDoesNotExist(java.lang.String)
 com.parse.ParseQuery: com.parse.ParseQuery whereRelatedTo(com.parse.ParseObject,java.lang.String)
@@ -17333,49 +17733,89 @@ com.parse.ParseQuery: int getLimit()
 com.parse.ParseQuery: void setSkip(int)
 com.parse.ParseQuery: int getSkip()
 com.parse.ParseQuery: java.lang.String getClassName()
+com.parse.ParseQuery: void access$0(com.parse.ParseQuery)
 com.parse.ParseQuery: int[] $SWITCH_TABLE$com$parse$ParseQuery$CachePolicy()
-com.parse.ParseQuery: int access$1(com.parse.ParseQuery)
-com.parse.ParseQuery: java.lang.Integer access$2(com.parse.ParseQuery)
-com.parse.ParseQuery: java.util.List access$3(com.parse.ParseQuery,boolean)
-com.parse.ParseQuery: java.util.List access$4(com.parse.ParseQuery)
-com.parse.ParseQuery: java.util.List access$5(com.parse.ParseQuery,com.parse.ParseQuery$CachePolicy)
-com.parse.ParseQuery: void access$6(com.parse.ParseQuery,com.parse.ParseCommand)
+com.parse.ParseQuery: com.parse.Task access$2(com.parse.ParseQuery)
+com.parse.ParseQuery: java.lang.Integer access$3(com.parse.ParseQuery)
+com.parse.ParseQuery: com.parse.Task access$4(com.parse.ParseQuery,boolean)
+com.parse.ParseQuery: java.util.List access$5(com.parse.ParseQuery)
+com.parse.ParseQuery: com.parse.ParseCommand access$6(com.parse.ParseQuery)
+com.parse.ParseQuery: com.parse.ParseQuery$CachePolicy access$7(com.parse.ParseQuery)
+com.parse.ParseQuery: void access$8(com.parse.ParseQuery,long)
+com.parse.ParseQuery: void access$9(com.parse.ParseQuery,long)
+com.parse.ParseQuery: java.util.List access$10(com.parse.ParseQuery,org.json.JSONObject)
+com.parse.ParseQuery: com.parse.Task access$11(com.parse.ParseQuery,com.parse.ParseQuery$CachePolicy)
 com.parse.ParseQuery$1
 com.parse.ParseQuery$1: com.parse.ParseQuery this$0
 com.parse.ParseQuery$1: ParseQuery$1(com.parse.ParseQuery)
-com.parse.ParseQuery$1: java.lang.Integer runOnNetwork(boolean)
-com.parse.ParseQuery$1: java.lang.Integer runFromCache()
-com.parse.ParseQuery$1: java.lang.Object runOnNetwork(boolean)
-com.parse.ParseQuery$1: java.lang.Object runFromCache()
+com.parse.ParseQuery$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseQuery$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseQuery$10
+com.parse.ParseQuery$10: com.parse.ParseQuery this$0
+com.parse.ParseQuery$10: ParseQuery$10(com.parse.ParseQuery)
+com.parse.ParseQuery$10: java.lang.Integer then(com.parse.Task)
+com.parse.ParseQuery$10: java.lang.Object then(com.parse.Task)
 com.parse.ParseQuery$2
 com.parse.ParseQuery$2: com.parse.ParseQuery this$0
-com.parse.ParseQuery$2: ParseQuery$2(com.parse.ParseQuery)
-com.parse.ParseQuery$2: java.util.List runOnNetwork(boolean)
-com.parse.ParseQuery$2: java.util.List runFromCache()
-com.parse.ParseQuery$2: java.lang.Object runOnNetwork(boolean)
-com.parse.ParseQuery$2: java.lang.Object runFromCache()
+com.parse.ParseQuery$2: com.parse.ParseQuery$CommandDelegate val$c
+com.parse.ParseQuery$2: ParseQuery$2(com.parse.ParseQuery,com.parse.ParseQuery$CommandDelegate)
+com.parse.ParseQuery$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseQuery$2: java.lang.Object then(com.parse.Task)
 com.parse.ParseQuery$3
 com.parse.ParseQuery$3: com.parse.ParseQuery this$0
-com.parse.ParseQuery$3: com.parse.ParseQuery$CachePolicy val$callbackCachePolicy
-com.parse.ParseQuery$3: ParseQuery$3(com.parse.ParseQuery,com.parse.ParseCallback,com.parse.ParseQuery$CachePolicy)
-com.parse.ParseQuery$3: java.util.List run()
-com.parse.ParseQuery$3: java.lang.Object run()
+com.parse.ParseQuery$3: com.parse.ParseQuery$CommandDelegate val$c
+com.parse.ParseQuery$3: ParseQuery$3(com.parse.ParseQuery,com.parse.ParseQuery$CommandDelegate)
+com.parse.ParseQuery$3: com.parse.Task then(com.parse.Task)
+com.parse.ParseQuery$3: java.lang.Object then(com.parse.Task)
 com.parse.ParseQuery$4
 com.parse.ParseQuery$4: com.parse.ParseQuery this$0
-com.parse.ParseQuery$4: com.parse.GetCallback val$callback
-com.parse.ParseQuery$4: ParseQuery$4(com.parse.ParseQuery,com.parse.GetCallback)
-com.parse.ParseQuery$4: void done(java.util.List,com.parse.ParseException)
+com.parse.ParseQuery$4: ParseQuery$4(com.parse.ParseQuery)
+com.parse.ParseQuery$4: com.parse.Task runOnNetworkAsync(boolean)
+com.parse.ParseQuery$4: com.parse.Task runFromCacheAsync()
+com.parse.ParseQuery$4: com.parse.ParseQuery access$0(com.parse.ParseQuery$4)
+com.parse.ParseQuery$4$1
+com.parse.ParseQuery$4$1: com.parse.ParseQuery$4 this$1
+com.parse.ParseQuery$4$1: ParseQuery$4$1(com.parse.ParseQuery$4)
+com.parse.ParseQuery$4$1: java.lang.Integer call()
+com.parse.ParseQuery$4$1: java.lang.Object call()
 com.parse.ParseQuery$5
 com.parse.ParseQuery$5: com.parse.ParseQuery this$0
-com.parse.ParseQuery$5: ParseQuery$5(com.parse.ParseQuery,com.parse.ParseCallback)
-com.parse.ParseQuery$5: java.lang.Integer run()
-com.parse.ParseQuery$5: java.lang.Object run()
+com.parse.ParseQuery$5: ParseQuery$5(com.parse.ParseQuery)
+com.parse.ParseQuery$5: com.parse.Task runOnNetworkAsync(boolean)
+com.parse.ParseQuery$5: com.parse.Task runFromCacheAsync()
+com.parse.ParseQuery$5: com.parse.ParseQuery access$0(com.parse.ParseQuery$5)
+com.parse.ParseQuery$5$1
+com.parse.ParseQuery$5$1: com.parse.ParseQuery$5 this$1
+com.parse.ParseQuery$5$1: ParseQuery$5$1(com.parse.ParseQuery$5)
+com.parse.ParseQuery$5$1: java.util.List call()
+com.parse.ParseQuery$5$1: java.lang.Object call()
 com.parse.ParseQuery$6
 com.parse.ParseQuery$6: com.parse.ParseQuery this$0
-com.parse.ParseQuery$6: java.lang.String val$finalObjectId
-com.parse.ParseQuery$6: ParseQuery$6(com.parse.ParseQuery,com.parse.ParseCallback,java.lang.String)
-com.parse.ParseQuery$6: com.parse.ParseObject run()
-com.parse.ParseQuery$6: java.lang.Object run()
+com.parse.ParseQuery$6: boolean val$shouldRetry
+com.parse.ParseQuery$6: ParseQuery$6(com.parse.ParseQuery,boolean)
+com.parse.ParseQuery$6: java.lang.Void call()
+com.parse.ParseQuery$6: java.lang.Object call()
+com.parse.ParseQuery$7
+com.parse.ParseQuery$7: com.parse.ParseQuery this$0
+com.parse.ParseQuery$7: ParseQuery$7(com.parse.ParseQuery)
+com.parse.ParseQuery$7: com.parse.Task then(com.parse.Task)
+com.parse.ParseQuery$7: java.lang.Object then(com.parse.Task)
+com.parse.ParseQuery$7: com.parse.ParseQuery access$1(com.parse.ParseQuery$7)
+com.parse.ParseQuery$7$1
+com.parse.ParseQuery$7$1: com.parse.ParseQuery$7 this$1
+com.parse.ParseQuery$7$1: ParseQuery$7$1(com.parse.ParseQuery$7)
+com.parse.ParseQuery$7$1: java.util.List then(com.parse.Task)
+com.parse.ParseQuery$7$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseQuery$8
+com.parse.ParseQuery$8: com.parse.ParseQuery this$0
+com.parse.ParseQuery$8: ParseQuery$8(com.parse.ParseQuery)
+com.parse.ParseQuery$8: com.parse.Task then(com.parse.Task)
+com.parse.ParseQuery$8: java.lang.Object then(com.parse.Task)
+com.parse.ParseQuery$9
+com.parse.ParseQuery$9: com.parse.ParseQuery this$0
+com.parse.ParseQuery$9: ParseQuery$9(com.parse.ParseQuery)
+com.parse.ParseQuery$9: com.parse.ParseObject then(com.parse.Task)
+com.parse.ParseQuery$9: java.lang.Object then(com.parse.Task)
 com.parse.ParseQuery$CachePolicy
 com.parse.ParseQuery$CachePolicy: com.parse.ParseQuery$CachePolicy IGNORE_CACHE
 com.parse.ParseQuery$CachePolicy: com.parse.ParseQuery$CachePolicy CACHE_ONLY
@@ -17389,8 +17829,8 @@ com.parse.ParseQuery$CachePolicy: ParseQuery$CachePolicy(java.lang.String,int)
 com.parse.ParseQuery$CachePolicy: com.parse.ParseQuery$CachePolicy[] values()
 com.parse.ParseQuery$CachePolicy: com.parse.ParseQuery$CachePolicy valueOf(java.lang.String)
 com.parse.ParseQuery$CommandDelegate
-com.parse.ParseQuery$CommandDelegate: java.lang.Object runOnNetwork(boolean)
-com.parse.ParseQuery$CommandDelegate: java.lang.Object runFromCache()
+com.parse.ParseQuery$CommandDelegate: com.parse.Task runOnNetworkAsync(boolean)
+com.parse.ParseQuery$CommandDelegate: com.parse.Task runFromCacheAsync()
 com.parse.ParseRelation
 com.parse.ParseRelation: com.parse.ParseObject parent
 com.parse.ParseRelation: java.lang.String key
@@ -17433,20 +17873,45 @@ com.parse.ParseRequestRetryer: int attemptsMade
 com.parse.ParseRequestRetryer: org.apache.http.client.HttpClient testClient
 com.parse.ParseRequestRetryer: void <clinit>()
 com.parse.ParseRequestRetryer: ParseRequestRetryer(org.apache.http.client.methods.HttpUriRequest,long,int)
-com.parse.ParseRequestRetryer: byte[] sendOneRequest(com.parse.ProgressCallback)
-com.parse.ParseRequestRetryer: byte[] go(com.parse.ProgressCallback)
+com.parse.ParseRequestRetryer: com.parse.Task sendOneRequestAsync(com.parse.ProgressCallback)
+com.parse.ParseRequestRetryer: com.parse.Task goAsync(com.parse.ProgressCallback)
 com.parse.ParseRequestRetryer: com.parse.ParseException connectionFailed(java.lang.String,java.lang.Exception)
+com.parse.ParseRequestRetryer: org.apache.http.client.HttpClient access$0(com.parse.ParseRequestRetryer)
+com.parse.ParseRequestRetryer: org.apache.http.client.methods.HttpUriRequest access$1(com.parse.ParseRequestRetryer)
+com.parse.ParseRequestRetryer: int access$2(com.parse.ParseRequestRetryer)
+com.parse.ParseRequestRetryer: void access$3(com.parse.ParseRequestRetryer,int)
+com.parse.ParseRequestRetryer: int access$4(com.parse.ParseRequestRetryer)
+com.parse.ParseRequestRetryer: long access$5(com.parse.ParseRequestRetryer)
+com.parse.ParseRequestRetryer: void access$6(com.parse.ParseRequestRetryer,long)
 com.parse.ParseRequestRetryer$1
 com.parse.ParseRequestRetryer$1: com.parse.ParseRequestRetryer this$0
-com.parse.ParseRequestRetryer$1: int val$progressToReport
-com.parse.ParseRequestRetryer$1: ParseRequestRetryer$1(com.parse.ParseRequestRetryer,com.parse.ParseCallback,int)
-com.parse.ParseRequestRetryer$1: java.lang.Integer run()
-com.parse.ParseRequestRetryer$1: java.lang.Object run()
+com.parse.ParseRequestRetryer$1: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseRequestRetryer$1: ParseRequestRetryer$1(com.parse.ParseRequestRetryer,com.parse.ProgressCallback)
+com.parse.ParseRequestRetryer$1: byte[] call()
+com.parse.ParseRequestRetryer$1: java.lang.Object call()
+com.parse.ParseRequestRetryer$2
+com.parse.ParseRequestRetryer$2: com.parse.ParseRequestRetryer this$0
+com.parse.ParseRequestRetryer$2: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseRequestRetryer$2: ParseRequestRetryer$2(com.parse.ParseRequestRetryer,com.parse.ProgressCallback)
+com.parse.ParseRequestRetryer$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseRequestRetryer$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseRequestRetryer$2: com.parse.ParseRequestRetryer access$1(com.parse.ParseRequestRetryer$2)
+com.parse.ParseRequestRetryer$2$1
+com.parse.ParseRequestRetryer$2$1: com.parse.ParseRequestRetryer$2 this$1
+com.parse.ParseRequestRetryer$2$1: com.parse.ProgressCallback val$progressCallback
+com.parse.ParseRequestRetryer$2$1: com.parse.Task$TaskCompletionSource val$retryTask
+com.parse.ParseRequestRetryer$2$1: ParseRequestRetryer$2$1(com.parse.ParseRequestRetryer$2,com.parse.ProgressCallback,com.parse.Task$TaskCompletionSource)
+com.parse.ParseRequestRetryer$2$1: void run()
+com.parse.ParseRequestRetryer$2$1$1
+com.parse.ParseRequestRetryer$2$1$1: com.parse.ParseRequestRetryer$2$1 this$2
+com.parse.ParseRequestRetryer$2$1$1: com.parse.Task$TaskCompletionSource val$retryTask
+com.parse.ParseRequestRetryer$2$1$1: ParseRequestRetryer$2$1$1(com.parse.ParseRequestRetryer$2$1,com.parse.Task$TaskCompletionSource)
+com.parse.ParseRequestRetryer$2$1$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseRequestRetryer$2$1$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseRole
-com.parse.ParseRole: java.lang.String CLASS_NAME
 com.parse.ParseRole: java.util.regex.Pattern NAME_PATTERN
 com.parse.ParseRole: void <clinit>()
-com.parse.ParseRole: ParseRole(boolean)
+com.parse.ParseRole: ParseRole()
 com.parse.ParseRole: ParseRole(java.lang.String)
 com.parse.ParseRole: ParseRole(java.lang.String,com.parse.ParseACL)
 com.parse.ParseRole: void setName(java.lang.String)
@@ -17471,7 +17936,7 @@ com.parse.ParseTestUtils: void <clinit>()
 com.parse.ParseTestUtils: ParseTestUtils()
 com.parse.ParseTestUtils: java.lang.String useServer(java.lang.String)
 com.parse.ParseTestUtils: java.lang.String useInvalidServer()
-com.parse.ParseTestUtils: java.lang.String useBadServerPort()
+com.parse.ParseTestUtils: java.lang.String useBadServerPort(java.lang.String)
 com.parse.ParseTestUtils: void clearApp()
 com.parse.ParseTestUtils: void mockV8Client()
 com.parse.ParseTestUtils: void unmockV8Client()
@@ -17507,7 +17972,6 @@ com.parse.ParseTestUtils: org.json.JSONObject getPushRequestJSON(android.content
 com.parse.ParseTestUtils: void tearDownPushTest(android.content.Context)
 com.parse.ParseTestUtils: void setUpPushTest(android.content.Context)
 com.parse.ParseTestUtils: void startServiceIfRequired(android.content.Context)
-com.parse.ParseTestUtils: java.lang.String toDeterministicString(java.lang.Object)
 com.parse.ParseTestUtils: java.net.ServerSocket mockPushServer()
 com.parse.ParseTestUtils: int numKeyValueCacheFiles()
 com.parse.ParseTestUtils: void setMaxKeyValueCacheFiles(int)
@@ -17539,7 +18003,6 @@ com.parse.ParseTwitterUtils: void unlinkInBackground(com.parse.ParseUser)
 com.parse.ParseTwitterUtils: void unlinkInBackground(com.parse.ParseUser,com.parse.SaveCallback)
 com.parse.ParseTwitterUtils: ParseTwitterUtils()
 com.parse.ParseUser
-com.parse.ParseUser: java.lang.String CLASS_NAME
 com.parse.ParseUser: java.lang.String password
 com.parse.ParseUser: java.lang.String sessionToken
 com.parse.ParseUser: org.json.JSONObject authData
@@ -17550,20 +18013,20 @@ com.parse.ParseUser: boolean isLazy
 com.parse.ParseUser: com.parse.ParseUser currentUser
 com.parse.ParseUser: java.util.Map authenticationProviders
 com.parse.ParseUser: boolean autoUserEnabled
+com.parse.ParseUser: java.lang.Object currentUserMutex
 com.parse.ParseUser: boolean currentUserMatchesDisk
 com.parse.ParseUser: java.lang.String CURRENT_USER_FILENAME
 com.parse.ParseUser: boolean isCurrentUser
 com.parse.ParseUser: void <clinit>()
-com.parse.ParseUser: ParseUser(boolean)
 com.parse.ParseUser: ParseUser()
 com.parse.ParseUser: com.parse.ParseUser logInLazyUser(java.lang.String,org.json.JSONObject)
 com.parse.ParseUser: boolean isLazy()
 com.parse.ParseUser: boolean isAuthenticated()
 com.parse.ParseUser: void remove(java.lang.String)
-com.parse.ParseUser: org.json.JSONObject toJSONObjectForSaving()
+com.parse.ParseUser: org.json.JSONObject toJSONObjectForSaving(java.util.Map)
 com.parse.ParseUser: org.json.JSONObject toJSONObjectForDataFile()
 com.parse.ParseUser: void mergeFromObject(com.parse.ParseObject)
-com.parse.ParseUser: void mergeFromServer(org.json.JSONObject)
+com.parse.ParseUser: void mergeFromServer(org.json.JSONObject,boolean)
 com.parse.ParseUser: boolean isCurrentUser()
 com.parse.ParseUser: void cleanUpAuthData()
 com.parse.ParseUser: void setUsername(java.lang.String)
@@ -17576,22 +18039,27 @@ com.parse.ParseUser: void stripAnonymity()
 com.parse.ParseUser: void restoreAnonymity(org.json.JSONObject)
 com.parse.ParseUser: java.lang.String getSessionToken()
 com.parse.ParseUser: void validateSave()
-com.parse.ParseUser: void save(boolean)
+com.parse.ParseUser: com.parse.Task saveAsync(com.parse.Task)
 com.parse.ParseUser: void validateDelete()
 com.parse.ParseUser: com.parse.ParseUser fetch()
-com.parse.ParseUser: com.parse.ParseCommand constructSaveCommand()
-com.parse.ParseUser: com.parse.ParseCommand constructSignUpCommand()
-com.parse.ParseUser: com.parse.ParseCommand constructSignUpOrLoginCommand()
-com.parse.ParseUser: com.parse.ParseCommand constructPasswordResetCommand(java.lang.String)
+com.parse.ParseUser: com.parse.Task fetchAsync(com.parse.Task)
+com.parse.ParseUser: com.parse.ParseCommand constructSaveCommand(java.util.Map,java.lang.String)
+com.parse.ParseUser: com.parse.ParseCommand constructSignUpCommand(java.util.Map,java.lang.String)
+com.parse.ParseUser: com.parse.ParseCommand constructSignUpOrLoginCommand(java.util.Map)
+com.parse.ParseUser: com.parse.ParseCommand constructPasswordResetCommand(java.lang.String,java.lang.String)
+com.parse.ParseUser: com.parse.Task signUpAsync()
+com.parse.ParseUser: com.parse.Task signUpAsync(com.parse.Task)
 com.parse.ParseUser: void signUp()
-com.parse.ParseUser: void signUp(boolean)
 com.parse.ParseUser: void signUpInBackground(com.parse.SignUpCallback)
 com.parse.ParseUser: com.parse.ParseCommand constructLogInCommand(java.lang.String,java.lang.String)
+com.parse.ParseUser: com.parse.Task logInAsync(java.lang.String,java.lang.String)
 com.parse.ParseUser: com.parse.ParseUser logIn(java.lang.String,java.lang.String)
 com.parse.ParseUser: void logInInBackground(java.lang.String,java.lang.String,com.parse.LogInCallback)
 com.parse.ParseUser: com.parse.ParseUser getCurrentUser()
+com.parse.ParseUser: java.lang.String getCurrentSessionToken()
 com.parse.ParseUser: void saveCurrentUser(com.parse.ParseUser)
 com.parse.ParseUser: void logOut()
+com.parse.ParseUser: com.parse.Task requestPasswordResetAsync(java.lang.String)
 com.parse.ParseUser: void requestPasswordReset(java.lang.String)
 com.parse.ParseUser: void requestPasswordResetInBackground(java.lang.String,com.parse.RequestPasswordResetCallback)
 com.parse.ParseUser: void checkApplicationContext()
@@ -17599,17 +18067,17 @@ com.parse.ParseUser: com.parse.ParseUser fetchIfNeeded()
 com.parse.ParseUser: java.util.Set getLinkedServiceNames()
 com.parse.ParseUser: void synchronizeAuthData(java.lang.String)
 com.parse.ParseUser: void synchronizeAllAuthData()
-com.parse.ParseUser: void unlinkFromInBackground(java.lang.String)
-com.parse.ParseUser: void unlinkFromInBackground(java.lang.String,com.parse.SaveCallback)
-com.parse.ParseUser: boolean unlinkFrom(java.lang.String)
+com.parse.ParseUser: com.parse.Task unlinkFromAsync(java.lang.String)
 com.parse.ParseUser: void registerAuthenticationProvider(com.parse.auth.ParseAuthenticationProvider)
-com.parse.ParseUser: void logInWith(java.lang.String,com.parse.LogInCallback)
-com.parse.ParseUser: void logInWith(java.lang.String,org.json.JSONObject,com.parse.LogInCallback)
-com.parse.ParseUser: void resolveLaziness(boolean)
-com.parse.ParseUser: void logInWith(com.parse.auth.ParseAuthenticationProvider,com.parse.LogInCallback)
-com.parse.ParseUser: void linkWith(java.lang.String,org.json.JSONObject,com.parse.SaveCallback)
-com.parse.ParseUser: void linkWith(java.lang.String,com.parse.SaveCallback)
-com.parse.ParseUser: void linkWith(com.parse.auth.ParseAuthenticationProvider,com.parse.SaveCallback)
+com.parse.ParseUser: com.parse.Task logInWithAsync(java.lang.String)
+com.parse.ParseUser: com.parse.Task logInWithAsync(java.lang.String,org.json.JSONObject)
+com.parse.ParseUser: com.parse.Task resolveLazinessAsync(com.parse.Task)
+com.parse.ParseUser: com.parse.Task authenticateAsync(com.parse.auth.ParseAuthenticationProvider)
+com.parse.ParseUser: com.parse.Task logInWithAsync(com.parse.auth.ParseAuthenticationProvider)
+com.parse.ParseUser: com.parse.Task linkWithAsync(java.lang.String,org.json.JSONObject,com.parse.Task)
+com.parse.ParseUser: com.parse.Task linkWithAsync(java.lang.String,org.json.JSONObject)
+com.parse.ParseUser: com.parse.Task linkWithAsync(java.lang.String)
+com.parse.ParseUser: com.parse.Task linkWithAsync(com.parse.auth.ParseAuthenticationProvider)
 com.parse.ParseUser: void logOutWith(java.lang.String)
 com.parse.ParseUser: void logOutWith(com.parse.auth.ParseAuthenticationProvider)
 com.parse.ParseUser: boolean isNew()
@@ -17618,91 +18086,188 @@ com.parse.ParseUser: void enableAutomaticUser()
 com.parse.ParseUser: boolean isAutomaticUserEnabled()
 com.parse.ParseUser: com.parse.ParseQuery getQuery()
 com.parse.ParseUser: void clearCurrentUserFromMemory()
+com.parse.ParseUser: boolean needsDefaultACL()
 com.parse.ParseUser: com.parse.ParseObject fetchIfNeeded()
 com.parse.ParseUser: com.parse.ParseObject fetch()
-com.parse.ParseUser: org.json.JSONObject access$2(com.parse.ParseUser)
-com.parse.ParseUser: java.util.Set access$3(com.parse.ParseUser)
-com.parse.ParseUser: java.util.Map access$4()
-com.parse.ParseUser: com.parse.ParseCommand access$5(com.parse.ParseUser)
-com.parse.ParseUser: void access$6(com.parse.ParseUser,java.lang.String)
-com.parse.ParseUser: void access$7(com.parse.ParseUser)
-com.parse.ParseUser: void access$8(com.parse.ParseUser)
-com.parse.ParseUser: void access$9(com.parse.ParseUser,org.json.JSONObject)
-com.parse.ParseUser: void access$10(com.parse.ParseUser,boolean)
+com.parse.ParseUser: void access$2(com.parse.ParseUser)
+com.parse.ParseUser: com.parse.Task access$3(com.parse.ParseUser,com.parse.Task)
+com.parse.ParseUser: com.parse.ParseCommand access$4(com.parse.ParseUser,java.util.Map,java.lang.String)
+com.parse.ParseUser: void access$5(com.parse.ParseUser,boolean)
+com.parse.ParseUser: org.json.JSONObject access$6(com.parse.ParseUser)
+com.parse.ParseUser: java.util.Set access$7(com.parse.ParseUser)
+com.parse.ParseUser: com.parse.ParseCommand access$8(com.parse.ParseUser,java.util.Map)
+com.parse.ParseUser: void access$9(com.parse.ParseUser,java.lang.String)
+com.parse.ParseUser: void access$10(com.parse.ParseUser)
+com.parse.ParseUser: com.parse.Task access$11(com.parse.ParseUser,com.parse.Task)
+com.parse.ParseUser: void access$12(com.parse.ParseUser,org.json.JSONObject)
+com.parse.ParseUser: void access$13(com.parse.ParseUser,boolean)
+com.parse.ParseUser: com.parse.Task access$14(com.parse.ParseUser,java.lang.String,org.json.JSONObject,com.parse.Task)
 com.parse.ParseUser$1
 com.parse.ParseUser$1: com.parse.ParseUser this$0
 com.parse.ParseUser$1: ParseUser$1(com.parse.ParseUser)
-com.parse.ParseUser$1: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseUser$1: java.lang.Void then(com.parse.Task)
+com.parse.ParseUser$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$10
-com.parse.ParseUser$10: com.parse.auth.ParseAuthenticationProvider val$authenticator
-com.parse.ParseUser$10: com.parse.LogInCallback val$callback
-com.parse.ParseUser$10: ParseUser$10(com.parse.auth.ParseAuthenticationProvider,com.parse.LogInCallback)
-com.parse.ParseUser$10: void onSuccess(org.json.JSONObject)
-com.parse.ParseUser$10: void onCancel()
-com.parse.ParseUser$10: void onError(java.lang.Throwable)
+com.parse.ParseUser$10: com.parse.ParseUser val$user
+com.parse.ParseUser$10: java.lang.String val$authType
+com.parse.ParseUser$10: org.json.JSONObject val$authData
+com.parse.ParseUser$10: org.json.JSONObject val$oldAnonymousData
+com.parse.ParseUser$10: ParseUser$10(com.parse.ParseUser,java.lang.String,org.json.JSONObject,org.json.JSONObject)
+com.parse.ParseUser$10: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$10: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$10$1
+com.parse.ParseUser$10$1: com.parse.ParseUser$10 this$1
+com.parse.ParseUser$10$1: com.parse.ParseUser val$user
+com.parse.ParseUser$10$1: java.lang.String val$authType
+com.parse.ParseUser$10$1: org.json.JSONObject val$authData
+com.parse.ParseUser$10$1: ParseUser$10$1(com.parse.ParseUser$10,com.parse.ParseUser,java.lang.String,org.json.JSONObject)
+com.parse.ParseUser$10$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$10$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$10$2
+com.parse.ParseUser$10$2: com.parse.ParseUser$10 this$1
+com.parse.ParseUser$10$2: com.parse.ParseUser val$user
+com.parse.ParseUser$10$2: java.lang.String val$authType
+com.parse.ParseUser$10$2: org.json.JSONObject val$oldAnonymousData
+com.parse.ParseUser$10$2: ParseUser$10$2(com.parse.ParseUser$10,com.parse.ParseUser,java.lang.String,org.json.JSONObject)
+com.parse.ParseUser$10$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$10$2: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$11
-com.parse.ParseUser$11: com.parse.ParseUser this$0
-com.parse.ParseUser$11: java.lang.String val$authType
-com.parse.ParseUser$11: org.json.JSONObject val$authData
-com.parse.ParseUser$11: ParseUser$11(com.parse.ParseUser,com.parse.ParseCallback,java.lang.String,org.json.JSONObject)
-com.parse.ParseUser$11: java.lang.Void run()
-com.parse.ParseUser$11: java.lang.Object run()
+com.parse.ParseUser$11: com.parse.Continuation val$logInWithTask
+com.parse.ParseUser$11: com.parse.ParseUser val$user
+com.parse.ParseUser$11: ParseUser$11(com.parse.Continuation,com.parse.ParseUser)
+com.parse.ParseUser$11: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$11: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$12
 com.parse.ParseUser$12: com.parse.ParseUser this$0
-com.parse.ParseUser$12: com.parse.auth.ParseAuthenticationProvider val$authenticator
-com.parse.ParseUser$12: com.parse.SaveCallback val$callback
-com.parse.ParseUser$12: ParseUser$12(com.parse.ParseUser,com.parse.auth.ParseAuthenticationProvider,com.parse.SaveCallback)
-com.parse.ParseUser$12: void onSuccess(org.json.JSONObject)
-com.parse.ParseUser$12: void onCancel()
-com.parse.ParseUser$12: void onError(java.lang.Throwable)
+com.parse.ParseUser$12: ParseUser$12(com.parse.ParseUser)
+com.parse.ParseUser$12: java.lang.Void then(com.parse.Task)
+com.parse.ParseUser$12: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$13
+com.parse.ParseUser$13: com.parse.ParseUser this$0
+com.parse.ParseUser$13: ParseUser$13(com.parse.ParseUser)
+com.parse.ParseUser$13: java.util.Map call()
+com.parse.ParseUser$13: java.lang.Object call()
+com.parse.ParseUser$14
+com.parse.ParseUser$14: com.parse.ParseUser this$0
+com.parse.ParseUser$14: com.parse.Capture val$operations
+com.parse.ParseUser$14: ParseUser$14(com.parse.ParseUser,com.parse.Capture)
+com.parse.ParseUser$14: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$14: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$15
+com.parse.ParseUser$15: com.parse.ParseUser this$0
+com.parse.ParseUser$15: com.parse.Capture val$operations
+com.parse.ParseUser$15: ParseUser$15(com.parse.ParseUser,com.parse.Capture)
+com.parse.ParseUser$15: java.lang.Void then(com.parse.Task)
+com.parse.ParseUser$15: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$16
+com.parse.ParseUser$16: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.ParseUser$16: ParseUser$16(com.parse.Task$TaskCompletionSource)
+com.parse.ParseUser$16: void onSuccess(org.json.JSONObject)
+com.parse.ParseUser$16: void onCancel()
+com.parse.ParseUser$16: void onError(java.lang.Throwable)
+com.parse.ParseUser$17
+com.parse.ParseUser$17: com.parse.auth.ParseAuthenticationProvider val$authenticator
+com.parse.ParseUser$17: ParseUser$17(com.parse.auth.ParseAuthenticationProvider)
+com.parse.ParseUser$17: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$17: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$18
+com.parse.ParseUser$18: com.parse.ParseUser this$0
+com.parse.ParseUser$18: java.lang.String val$authType
+com.parse.ParseUser$18: org.json.JSONObject val$authData
+com.parse.ParseUser$18: ParseUser$18(com.parse.ParseUser,java.lang.String,org.json.JSONObject)
+com.parse.ParseUser$18: java.lang.Void call()
+com.parse.ParseUser$18: java.lang.Object call()
+com.parse.ParseUser$19
+com.parse.ParseUser$19: com.parse.ParseUser this$0
+com.parse.ParseUser$19: com.parse.Task val$toAwait
+com.parse.ParseUser$19: ParseUser$19(com.parse.ParseUser,com.parse.Task)
+com.parse.ParseUser$19: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$19: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$2
 com.parse.ParseUser$2: com.parse.ParseUser this$0
-com.parse.ParseUser$2: ParseUser$2(com.parse.ParseUser,com.parse.ParseCallback)
-com.parse.ParseUser$2: java.lang.Void run()
-com.parse.ParseUser$2: java.lang.Object run()
+com.parse.ParseUser$2: ParseUser$2(com.parse.ParseUser)
+com.parse.ParseUser$2: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$2: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$20
+com.parse.ParseUser$20: com.parse.ParseUser this$0
+com.parse.ParseUser$20: org.json.JSONObject val$oldAnonymousData
+com.parse.ParseUser$20: java.lang.String val$authType
+com.parse.ParseUser$20: ParseUser$20(com.parse.ParseUser,org.json.JSONObject,java.lang.String)
+com.parse.ParseUser$20: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$20: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$21
+com.parse.ParseUser$21: com.parse.ParseUser this$0
+com.parse.ParseUser$21: java.lang.String val$authType
+com.parse.ParseUser$21: org.json.JSONObject val$authData
+com.parse.ParseUser$21: ParseUser$21(com.parse.ParseUser,java.lang.String,org.json.JSONObject)
+com.parse.ParseUser$21: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$21: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$22
+com.parse.ParseUser$22: com.parse.ParseUser this$0
+com.parse.ParseUser$22: com.parse.auth.ParseAuthenticationProvider val$authenticator
+com.parse.ParseUser$22: ParseUser$22(com.parse.ParseUser,com.parse.auth.ParseAuthenticationProvider)
+com.parse.ParseUser$22: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$22: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$3
-com.parse.ParseUser$3: java.lang.String val$username
-com.parse.ParseUser$3: java.lang.String val$password
-com.parse.ParseUser$3: ParseUser$3(com.parse.ParseCallback,java.lang.String,java.lang.String)
-com.parse.ParseUser$3: com.parse.ParseUser run()
-com.parse.ParseUser$3: java.lang.Object run()
+com.parse.ParseUser$3: com.parse.ParseUser this$0
+com.parse.ParseUser$3: ParseUser$3(com.parse.ParseUser)
+com.parse.ParseUser$3: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$3: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$4
-com.parse.ParseUser$4: java.lang.String val$email
-com.parse.ParseUser$4: ParseUser$4(com.parse.ParseCallback,java.lang.String)
-com.parse.ParseUser$4: java.lang.Void run()
-com.parse.ParseUser$4: java.lang.Object run()
+com.parse.ParseUser$4: com.parse.ParseUser this$0
+com.parse.ParseUser$4: ParseUser$4(com.parse.ParseUser)
+com.parse.ParseUser$4: java.lang.Void then(com.parse.Task)
+com.parse.ParseUser$4: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$5
 com.parse.ParseUser$5: com.parse.ParseUser this$0
-com.parse.ParseUser$5: java.lang.String val$authType
-com.parse.ParseUser$5: com.parse.SaveCallback val$callback
-com.parse.ParseUser$5: ParseUser$5(com.parse.ParseUser,java.lang.String,com.parse.SaveCallback)
-com.parse.ParseUser$5: void done(com.parse.ParseException)
+com.parse.ParseUser$5: ParseUser$5(com.parse.ParseUser)
+com.parse.ParseUser$5: java.util.Map call()
+com.parse.ParseUser$5: java.lang.Object call()
 com.parse.ParseUser$6
-com.parse.ParseUser$6: java.lang.String val$authType
-com.parse.ParseUser$6: org.json.JSONObject val$authData
-com.parse.ParseUser$6: ParseUser$6(com.parse.ParseCallback,java.lang.String,org.json.JSONObject)
-com.parse.ParseUser$6: com.parse.ParseUser run()
-com.parse.ParseUser$6: java.lang.Object run()
+com.parse.ParseUser$6: com.parse.ParseUser this$0
+com.parse.ParseUser$6: java.lang.String val$sessionToken
+com.parse.ParseUser$6: ParseUser$6(com.parse.ParseUser,java.lang.String)
+com.parse.ParseUser$6: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$6: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$6: com.parse.ParseUser access$1(com.parse.ParseUser$6)
 com.parse.ParseUser$6$1
 com.parse.ParseUser$6$1: com.parse.ParseUser$6 this$1
-com.parse.ParseUser$6$1: com.parse.ParseUser val$user
-com.parse.ParseUser$6$1: ParseUser$6$1(com.parse.ParseUser$6,com.parse.ParseUser)
-com.parse.ParseUser$6$1: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseUser$6$1: com.parse.ParseCommand val$command
+com.parse.ParseUser$6$1: java.util.Map val$operations
+com.parse.ParseUser$6$1: ParseUser$6$1(com.parse.ParseUser$6,com.parse.ParseCommand,java.util.Map)
+com.parse.ParseUser$6$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$6$1: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$7
-com.parse.ParseUser$7: java.lang.String val$authType
-com.parse.ParseUser$7: org.json.JSONObject val$authData
-com.parse.ParseUser$7: ParseUser$7(com.parse.ParseCallback,java.lang.String,org.json.JSONObject)
-com.parse.ParseUser$7: com.parse.ParseUser run()
-com.parse.ParseUser$7: java.lang.Object run()
+com.parse.ParseUser$7: ParseUser$7()
+com.parse.ParseUser$7: com.parse.ParseUser then(com.parse.Task)
+com.parse.ParseUser$7: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$8
-com.parse.ParseUser$8: com.parse.BackgroundTask val$logInWithTask
-com.parse.ParseUser$8: com.parse.LogInCallback val$callback
-com.parse.ParseUser$8: ParseUser$8(com.parse.BackgroundTask,com.parse.LogInCallback)
-com.parse.ParseUser$8: void done(com.parse.ParseException)
+com.parse.ParseUser$8: com.parse.ParseUser this$0
+com.parse.ParseUser$8: java.lang.String val$authType
+com.parse.ParseUser$8: ParseUser$8(com.parse.ParseUser,java.lang.String)
+com.parse.ParseUser$8: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$8: java.lang.Object then(com.parse.Task)
 com.parse.ParseUser$9
-com.parse.ParseUser$9: com.parse.ParseUser this$0
-com.parse.ParseUser$9: ParseUser$9(com.parse.ParseUser)
-com.parse.ParseUser$9: void perform(com.parse.ParseCommand,java.lang.Object)
+com.parse.ParseUser$9: java.lang.String val$authType
+com.parse.ParseUser$9: org.json.JSONObject val$authData
+com.parse.ParseUser$9: ParseUser$9(java.lang.String,org.json.JSONObject)
+com.parse.ParseUser$9: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$9: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$9$1
+com.parse.ParseUser$9$1: com.parse.ParseUser$9 this$1
+com.parse.ParseUser$9$1: com.parse.ParseUser val$user
+com.parse.ParseUser$9$1: com.parse.ParseCommand val$command
+com.parse.ParseUser$9$1: java.util.Map val$operations
+com.parse.ParseUser$9$1: ParseUser$9$1(com.parse.ParseUser$9,com.parse.ParseUser,com.parse.ParseCommand,java.util.Map)
+com.parse.ParseUser$9$1: com.parse.Task then(com.parse.Task)
+com.parse.ParseUser$9$1: java.lang.Object then(com.parse.Task)
+com.parse.ParseUser$9$2
+com.parse.ParseUser$9$2: com.parse.ParseUser$9 this$1
+com.parse.ParseUser$9$2: com.parse.ParseUser val$user
+com.parse.ParseUser$9$2: java.lang.String val$authType
+com.parse.ParseUser$9$2: ParseUser$9$2(com.parse.ParseUser$9,com.parse.ParseUser,java.lang.String)
+com.parse.ParseUser$9$2: com.parse.ParseUser then(com.parse.Task)
+com.parse.ParseUser$9$2: java.lang.Object then(com.parse.Task)
 com.parse.ProgressCallback
 com.parse.ProgressCallback: java.lang.Integer maxProgressSoFar
 com.parse.ProgressCallback: ProgressCallback()
@@ -17719,12 +18284,34 @@ com.parse.PushCallback: void setLocalData(org.json.JSONObject)
 com.parse.PushCallback: void setPushData(org.json.JSONObject)
 com.parse.PushCallback: void setService(android.app.Service)
 com.parse.PushCallback: void setChannel(java.lang.String)
+com.parse.PushConnection
+com.parse.PushConnection: java.lang.String TAG
+com.parse.PushConnection: java.lang.Object socketLock
+com.parse.PushConnection: java.net.Socket socket
+com.parse.PushConnection: java.io.BufferedReader reader
+com.parse.PushConnection: java.io.OutputStreamWriter writer
+com.parse.PushConnection: java.lang.Thread readerThread
+com.parse.PushConnection: java.lang.String server
+com.parse.PushConnection: int port
+com.parse.PushConnection: long generalTimeout
+com.parse.PushConnection: int connectTimeout
+com.parse.PushConnection: com.parse.ConnectivityNotifier$ConnectivityListener listener
+com.parse.PushConnection: boolean $assertionsDisabled
+com.parse.PushConnection: void <clinit>()
+com.parse.PushConnection: PushConnection(android.content.Context)
+com.parse.PushConnection: void connect(java.lang.String,int,boolean)
+com.parse.PushConnection: void close()
+com.parse.PushConnection: java.lang.String readLine()
+com.parse.PushConnection: boolean trySend(java.lang.String)
+com.parse.PushConnection$1
+com.parse.PushConnection$1: com.parse.PushConnection this$0
+com.parse.PushConnection$1: PushConnection$1(com.parse.PushConnection)
+com.parse.PushConnection$1: void networkConnectivityStatusChanged(android.content.Intent)
 com.parse.PushService
 com.parse.PushService: java.lang.String TAG
 com.parse.PushService: java.lang.String pushServer
 com.parse.PushService: int defaultPushPort
-com.parse.PushService: int pushPort
-com.parse.PushService: java.net.Socket socket
+com.parse.PushService: com.parse.PushConnection connection
 com.parse.PushService: com.parse.os.ParseAsyncTask task
 com.parse.PushService: int delaySeconds
 com.parse.PushService: com.parse.PushService$ServiceState state
@@ -17750,32 +18337,37 @@ com.parse.PushService: void onCreate()
 com.parse.PushService: boolean sendMessage(java.lang.String)
 com.parse.PushService: boolean sendSubscriptionInformation(android.content.Context)
 com.parse.PushService: void sendKeepAlive()
-com.parse.PushService: void readInBackground(java.io.BufferedReader)
+com.parse.PushService: void readInBackground(boolean)
 com.parse.PushService: android.os.IBinder onBind(android.content.Intent)
 com.parse.PushService: void onDestroy()
-com.parse.PushService: void access$0(com.parse.PushService)
-com.parse.PushService: int access$1()
-com.parse.PushService: com.parse.PushService$ServiceState access$2(com.parse.PushService)
+com.parse.PushService: void access$0(android.content.Context)
+com.parse.PushService: void access$1(com.parse.PushService)
+com.parse.PushService: int access$2()
 com.parse.PushService: void access$3(com.parse.PushService)
-com.parse.PushService: java.lang.String access$4()
-com.parse.PushService: int access$5(com.parse.PushService)
-com.parse.PushService: boolean access$6(android.content.Context)
-com.parse.PushService: void access$7(com.parse.PushService,com.parse.PushService$ServiceState)
-com.parse.PushService: void access$8(com.parse.PushService,java.io.BufferedReader)
+com.parse.PushService: com.parse.PushService$ServiceState access$4(com.parse.PushService)
+com.parse.PushService: java.lang.String access$5()
+com.parse.PushService: int access$6()
+com.parse.PushService: boolean access$7(android.content.Context)
+com.parse.PushService: void access$8(com.parse.PushService,com.parse.PushService$ServiceState)
+com.parse.PushService: void access$9(com.parse.PushService,boolean)
 com.parse.PushService$1
-com.parse.PushService$1: com.parse.PushService this$0
-com.parse.PushService$1: PushService$1(com.parse.PushService)
-com.parse.PushService$1: void run()
+com.parse.PushService$1: android.content.Context val$context
+com.parse.PushService$1: PushService$1(com.parse.ParseCallback,android.content.Context)
+com.parse.PushService$1: java.lang.Void run()
+com.parse.PushService$1: java.lang.Object run()
 com.parse.PushService$2
-com.parse.PushService$2: java.io.BufferedReader reader
 com.parse.PushService$2: com.parse.PushService this$0
-com.parse.PushService$2: java.io.BufferedReader val$initialReader
-com.parse.PushService$2: com.parse.PushService val$finalService
-com.parse.PushService$2: PushService$2(com.parse.PushService,java.io.BufferedReader,com.parse.PushService)
-com.parse.PushService$2: java.lang.String doInBackground(java.lang.Void[])
-com.parse.PushService$2: void onPostExecute(java.lang.String)
-com.parse.PushService$2: void onPostExecute(java.lang.Object)
-com.parse.PushService$2: java.lang.Object doInBackground(java.lang.Object[])
+com.parse.PushService$2: PushService$2(com.parse.PushService)
+com.parse.PushService$2: void run()
+com.parse.PushService$3
+com.parse.PushService$3: com.parse.PushService this$0
+com.parse.PushService$3: boolean val$forceReconnect
+com.parse.PushService$3: com.parse.PushService val$finalService
+com.parse.PushService$3: PushService$3(com.parse.PushService,boolean,com.parse.PushService)
+com.parse.PushService$3: java.lang.String doInBackground(java.lang.Void[])
+com.parse.PushService$3: void onPostExecute(java.lang.String)
+com.parse.PushService$3: void onPostExecute(java.lang.Object)
+com.parse.PushService$3: java.lang.Object doInBackground(java.lang.Object[])
 com.parse.PushService$ServiceState
 com.parse.PushService$ServiceState: com.parse.PushService$ServiceState STOPPED
 com.parse.PushService$ServiceState: com.parse.PushService$ServiceState ABORTING
@@ -17807,16 +18399,16 @@ com.parse.R$attr: int show_search_box
 com.parse.R$attr: int show_title_bar
 com.parse.R$attr: int title_bar_background
 com.parse.R$attr: int title_text
-com.parse.R$attr: void <clinit>()
 com.parse.R$attr: R$attr()
+com.parse.R$attr: void <clinit>()
 com.parse.R$color
 com.parse.R$color: int com_facebook_blue
 com.parse.R$color: int com_facebook_loginview_text_color
 com.parse.R$color: int com_facebook_usersettingsfragment_connected_shadow_color
 com.parse.R$color: int com_facebook_usersettingsfragment_connected_text_color
 com.parse.R$color: int com_facebook_usersettingsfragment_not_connected_text_color
-com.parse.R$color: void <clinit>()
 com.parse.R$color: R$color()
+com.parse.R$color: void <clinit>()
 com.parse.R$dimen
 com.parse.R$dimen: int com_facebook_loginview_height
 com.parse.R$dimen: int com_facebook_loginview_padding_bottom
@@ -17830,8 +18422,8 @@ com.parse.R$dimen: int com_facebook_profilepictureview_preset_size_normal
 com.parse.R$dimen: int com_facebook_profilepictureview_preset_size_small
 com.parse.R$dimen: int com_facebook_usersettingsfragment_profile_picture_height
 com.parse.R$dimen: int com_facebook_usersettingsfragment_profile_picture_width
-com.parse.R$dimen: void <clinit>()
 com.parse.R$dimen: R$dimen()
+com.parse.R$dimen: void <clinit>()
 com.parse.R$drawable
 com.parse.R$drawable: int com_facebook_button_check
 com.parse.R$drawable: int com_facebook_button_check_off
@@ -17864,8 +18456,8 @@ com.parse.R$drawable: int com_facebook_profile_picture_blank_square
 com.parse.R$drawable: int com_facebook_top_background
 com.parse.R$drawable: int com_facebook_top_button
 com.parse.R$drawable: int com_facebook_usersettingsfragment_background_gradient
-com.parse.R$drawable: void <clinit>()
 com.parse.R$drawable: R$drawable()
+com.parse.R$drawable: void <clinit>()
 com.parse.R$id
 com.parse.R$id: int com_facebook_login_activity_progress_bar
 com.parse.R$id: int com_facebook_picker_activity_circle
@@ -17891,8 +18483,8 @@ com.parse.R$id: int normal
 com.parse.R$id: int picker_subtitle
 com.parse.R$id: int search_box
 com.parse.R$id: int small
-com.parse.R$id: void <clinit>()
 com.parse.R$id: R$id()
+com.parse.R$id: void <clinit>()
 com.parse.R$layout
 com.parse.R$layout: int com_facebook_friendpickerfragment
 com.parse.R$layout: int com_facebook_login_activity_layout
@@ -17907,8 +18499,8 @@ com.parse.R$layout: int com_facebook_picker_title_bar_stub
 com.parse.R$layout: int com_facebook_placepickerfragment
 com.parse.R$layout: int com_facebook_placepickerfragment_list_row
 com.parse.R$layout: int com_facebook_usersettingsfragment
-com.parse.R$layout: void <clinit>()
 com.parse.R$layout: R$layout()
+com.parse.R$layout: void <clinit>()
 com.parse.R$string
 com.parse.R$string: int com_facebook_choose_friends
 com.parse.R$string: int com_facebook_dialogloginactivity_ok_button
@@ -17935,13 +18527,13 @@ com.parse.R$string: int com_facebook_requesterror_web_login
 com.parse.R$string: int com_facebook_usersettingsfragment_log_in_button
 com.parse.R$string: int com_facebook_usersettingsfragment_logged_in
 com.parse.R$string: int com_facebook_usersettingsfragment_not_logged_in
-com.parse.R$string: void <clinit>()
 com.parse.R$string: R$string()
+com.parse.R$string: void <clinit>()
 com.parse.R$style
 com.parse.R$style: int com_facebook_loginview_default_style
 com.parse.R$style: int com_facebook_loginview_silver_style
-com.parse.R$style: void <clinit>()
 com.parse.R$style: R$style()
+com.parse.R$style: void <clinit>()
 com.parse.R$styleable
 com.parse.R$styleable: int[] com_facebook_friend_picker_fragment
 com.parse.R$styleable: int com_facebook_friend_picker_fragment_multi_select
@@ -17966,8 +18558,8 @@ com.parse.R$styleable: int com_facebook_place_picker_fragment_show_search_box
 com.parse.R$styleable: int[] com_facebook_profile_picture_view
 com.parse.R$styleable: int com_facebook_profile_picture_view_is_cropped
 com.parse.R$styleable: int com_facebook_profile_picture_view_preset_size
-com.parse.R$styleable: void <clinit>()
 com.parse.R$styleable: R$styleable()
+com.parse.R$styleable: void <clinit>()
 com.parse.RefreshCallback
 com.parse.RefreshCallback: RefreshCallback()
 com.parse.RefreshCallback: void done(com.parse.ParseObject,com.parse.ParseException)
@@ -18007,6 +18599,170 @@ com.parse.Synchronizer: Synchronizer()
 com.parse.Synchronizer: void start(int)
 com.parse.Synchronizer: void finish()
 com.parse.Synchronizer: void assertFinishes()
+com.parse.Task
+com.parse.Task: java.util.concurrent.ExecutorService defaultExecutor
+com.parse.Task: java.util.concurrent.Executor immediateExecutor
+com.parse.Task: java.lang.Object lock
+com.parse.Task: boolean complete
+com.parse.Task: boolean cancelled
+com.parse.Task: java.lang.Object result
+com.parse.Task: java.lang.Exception error
+com.parse.Task: java.util.List continuations
+com.parse.Task: void <clinit>()
+com.parse.Task: Task()
+com.parse.Task: com.parse.Task$TaskCompletionSource create()
+com.parse.Task: boolean isCompleted()
+com.parse.Task: boolean isCancelled()
+com.parse.Task: boolean isFaulted()
+com.parse.Task: java.lang.Object getResult()
+com.parse.Task: java.lang.Exception getError()
+com.parse.Task: void waitForCompletion()
+com.parse.Task: com.parse.Task forResult(java.lang.Object)
+com.parse.Task: com.parse.Task forError(java.lang.Exception)
+com.parse.Task: com.parse.Task cancelled()
+com.parse.Task: com.parse.Task cast()
+com.parse.Task: com.parse.Task makeVoid()
+com.parse.Task: com.parse.Task callInBackground(java.util.concurrent.Callable)
+com.parse.Task: com.parse.Task call(java.util.concurrent.Callable,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task call(java.util.concurrent.Callable)
+com.parse.Task: com.parse.Task whenAll(java.util.Collection)
+com.parse.Task: com.parse.Task continueWhile(java.util.concurrent.Callable,com.parse.Continuation)
+com.parse.Task: com.parse.Task continueWhile(java.util.concurrent.Callable,com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task continueWith(com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task continueWith(com.parse.Continuation)
+com.parse.Task: com.parse.Task continueWithTask(com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task continueWithTask(com.parse.Continuation)
+com.parse.Task: com.parse.Task onSuccess(com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task onSuccess(com.parse.Continuation)
+com.parse.Task: com.parse.Task onSuccessTask(com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task: com.parse.Task onSuccessTask(com.parse.Continuation)
+com.parse.Task: void completeImmediately(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor)
+com.parse.Task: void completeAfterTask(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor)
+com.parse.Task: void runContinuations()
+com.parse.Task: java.util.concurrent.ExecutorService access$0()
+com.parse.Task: java.lang.Object access$1(com.parse.Task)
+com.parse.Task: boolean access$2(com.parse.Task)
+com.parse.Task: void access$3(com.parse.Task,boolean)
+com.parse.Task: void access$4(com.parse.Task,boolean)
+com.parse.Task: void access$5(com.parse.Task)
+com.parse.Task: void access$6(com.parse.Task,java.lang.Object)
+com.parse.Task: void access$7(com.parse.Task,java.lang.Exception)
+com.parse.Task: void access$8(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor)
+com.parse.Task: void access$9(com.parse.Task$TaskCompletionSource,com.parse.Continuation,com.parse.Task,java.util.concurrent.Executor)
+com.parse.Task$1
+com.parse.Task$1: int MAX_DEPTH
+com.parse.Task$1: java.lang.ThreadLocal executionDepth
+com.parse.Task$1: Task$1()
+com.parse.Task$1: int incrementDepth()
+com.parse.Task$1: int decrementDepth()
+com.parse.Task$1: void execute(java.lang.Runnable)
+com.parse.Task$10
+com.parse.Task$10: com.parse.Continuation val$continuation
+com.parse.Task$10: com.parse.Task val$task
+com.parse.Task$10: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$10: Task$10(com.parse.Continuation,com.parse.Task,com.parse.Task$TaskCompletionSource)
+com.parse.Task$10: void run()
+com.parse.Task$11
+com.parse.Task$11: com.parse.Continuation val$continuation
+com.parse.Task$11: com.parse.Task val$task
+com.parse.Task$11: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$11: Task$11(com.parse.Continuation,com.parse.Task,com.parse.Task$TaskCompletionSource)
+com.parse.Task$11: void run()
+com.parse.Task$11$1
+com.parse.Task$11$1: com.parse.Task$11 this$1
+com.parse.Task$11$1: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$11$1: Task$11$1(com.parse.Task$11,com.parse.Task$TaskCompletionSource)
+com.parse.Task$11$1: java.lang.Void then(com.parse.Task)
+com.parse.Task$11$1: java.lang.Object then(com.parse.Task)
+com.parse.Task$2
+com.parse.Task$2: com.parse.Task this$0
+com.parse.Task$2: Task$2(com.parse.Task)
+com.parse.Task$2: com.parse.Task then(com.parse.Task)
+com.parse.Task$2: java.lang.Object then(com.parse.Task)
+com.parse.Task$3
+com.parse.Task$3: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$3: java.util.concurrent.Callable val$callable
+com.parse.Task$3: Task$3(com.parse.Task$TaskCompletionSource,java.util.concurrent.Callable)
+com.parse.Task$3: void run()
+com.parse.Task$4
+com.parse.Task$4: java.util.concurrent.atomic.AtomicInteger val$count
+com.parse.Task$4: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$4: Task$4(java.util.concurrent.atomic.AtomicInteger,com.parse.Task$TaskCompletionSource)
+com.parse.Task$4: java.lang.Void then(com.parse.Task)
+com.parse.Task$4: java.lang.Object then(com.parse.Task)
+com.parse.Task$5
+com.parse.Task$5: com.parse.Task this$0
+com.parse.Task$5: java.util.concurrent.Callable val$predicate
+com.parse.Task$5: com.parse.Continuation val$continuation
+com.parse.Task$5: java.util.concurrent.Executor val$executor
+com.parse.Task$5: com.parse.Capture val$predicateContinuation
+com.parse.Task$5: Task$5(com.parse.Task,java.util.concurrent.Callable,com.parse.Continuation,java.util.concurrent.Executor,com.parse.Capture)
+com.parse.Task$5: com.parse.Task then(com.parse.Task)
+com.parse.Task$5: java.lang.Object then(com.parse.Task)
+com.parse.Task$6
+com.parse.Task$6: com.parse.Task this$0
+com.parse.Task$6: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$6: com.parse.Continuation val$continuation
+com.parse.Task$6: java.util.concurrent.Executor val$executor
+com.parse.Task$6: Task$6(com.parse.Task,com.parse.Task$TaskCompletionSource,com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task$6: java.lang.Void then(com.parse.Task)
+com.parse.Task$6: java.lang.Object then(com.parse.Task)
+com.parse.Task$7
+com.parse.Task$7: com.parse.Task this$0
+com.parse.Task$7: com.parse.Task$TaskCompletionSource val$tcs
+com.parse.Task$7: com.parse.Continuation val$continuation
+com.parse.Task$7: java.util.concurrent.Executor val$executor
+com.parse.Task$7: Task$7(com.parse.Task,com.parse.Task$TaskCompletionSource,com.parse.Continuation,java.util.concurrent.Executor)
+com.parse.Task$7: java.lang.Void then(com.parse.Task)
+com.parse.Task$7: java.lang.Object then(com.parse.Task)
+com.parse.Task$8
+com.parse.Task$8: com.parse.Task this$0
+com.parse.Task$8: com.parse.Continuation val$continuation
+com.parse.Task$8: Task$8(com.parse.Task,com.parse.Continuation)
+com.parse.Task$8: com.parse.Task then(com.parse.Task)
+com.parse.Task$8: java.lang.Object then(com.parse.Task)
+com.parse.Task$9
+com.parse.Task$9: com.parse.Task this$0
+com.parse.Task$9: com.parse.Continuation val$continuation
+com.parse.Task$9: Task$9(com.parse.Task,com.parse.Continuation)
+com.parse.Task$9: com.parse.Task then(com.parse.Task)
+com.parse.Task$9: java.lang.Object then(com.parse.Task)
+com.parse.Task$TaskCompletionSource
+com.parse.Task$TaskCompletionSource: com.parse.Task this$0
+com.parse.Task$TaskCompletionSource: Task$TaskCompletionSource(com.parse.Task)
+com.parse.Task$TaskCompletionSource: com.parse.Task getTask()
+com.parse.Task$TaskCompletionSource: boolean trySetCancelled()
+com.parse.Task$TaskCompletionSource: boolean trySetResult(java.lang.Object)
+com.parse.Task$TaskCompletionSource: boolean trySetError(java.lang.Exception)
+com.parse.Task$TaskCompletionSource: void setCancelled()
+com.parse.Task$TaskCompletionSource: void setResult(java.lang.Object)
+com.parse.Task$TaskCompletionSource: void setError(java.lang.Exception)
+com.parse.Task$TaskCompletionSource: Task$TaskCompletionSource(com.parse.Task,com.parse.Task$TaskCompletionSource)
+com.parse.TaskQueue
+com.parse.TaskQueue: com.parse.Task tail
+com.parse.TaskQueue: java.util.concurrent.locks.Lock lock
+com.parse.TaskQueue: TaskQueue()
+com.parse.TaskQueue: com.parse.Task getTaskToAwait()
+com.parse.TaskQueue: com.parse.Task enqueue(com.parse.Continuation)
+com.parse.TaskQueue: com.parse.Continuation waitFor(com.parse.Task)
+com.parse.TaskQueue: java.util.concurrent.locks.Lock getLock()
+com.parse.TaskQueue: void waitUntilFinished()
+com.parse.TaskQueue$1
+com.parse.TaskQueue$1: com.parse.TaskQueue this$0
+com.parse.TaskQueue$1: TaskQueue$1(com.parse.TaskQueue)
+com.parse.TaskQueue$1: java.lang.Void then(com.parse.Task)
+com.parse.TaskQueue$1: java.lang.Object then(com.parse.Task)
+com.parse.TaskQueue$2
+com.parse.TaskQueue$2: com.parse.Task val$toAwait
+com.parse.TaskQueue$2: TaskQueue$2(com.parse.Task)
+com.parse.TaskQueue$2: com.parse.Task then(com.parse.Task)
+com.parse.TaskQueue$2: java.lang.Object then(com.parse.Task)
+com.parse.TaskQueue$2$1
+com.parse.TaskQueue$2$1: com.parse.TaskQueue$2 this$1
+com.parse.TaskQueue$2$1: com.parse.Task val$task
+com.parse.TaskQueue$2$1: TaskQueue$2$1(com.parse.TaskQueue$2,com.parse.Task)
+com.parse.TaskQueue$2$1: com.parse.Task then(com.parse.Task)
+com.parse.TaskQueue$2$1: java.lang.Object then(com.parse.Task)
 com.parse.auth.AnonymousAuthenticationProvider
 com.parse.auth.AnonymousAuthenticationProvider: AnonymousAuthenticationProvider()
 com.parse.auth.AnonymousAuthenticationProvider: void authenticate(com.parse.auth.ParseAuthenticationProvider$ParseAuthenticationCallback)

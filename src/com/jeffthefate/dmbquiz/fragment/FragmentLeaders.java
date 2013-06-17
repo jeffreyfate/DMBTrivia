@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
@@ -212,6 +214,22 @@ public class FragmentLeaders extends FragmentBase {
         DatabaseHelperSingleton.instance().setUserValue(createdDate.getText().toString(),
                 DatabaseHelper.COL_CREATED_DATE, mCallback.getUserId());
         super.onPause();
+    }
+    
+    private GoogleAnalytics googleAnalytics;
+    private Tracker leadersTracker;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+    	googleAnalytics = GoogleAnalytics.getInstance(getActivity());
+    	leadersTracker = googleAnalytics.getTracker("UA-41733963-1");
+    }
+    
+    @Override
+    public void onStart() {
+    	super.onStart();
+    	leadersTracker.sendView("/FragmentLeaders");
     }
     
     @Override
