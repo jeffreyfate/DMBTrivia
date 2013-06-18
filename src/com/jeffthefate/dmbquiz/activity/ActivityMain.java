@@ -1370,6 +1370,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                	tracker.sendView("ActivityMain/SplashMenuInfoClicked");
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1414,6 +1415,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/SplashMenuExitClicked");
                     if (slidingMenu.isMenuShowing())
                         moveTaskToBack(true);
                 }
@@ -1466,6 +1468,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/SplashMenuNotificationSoundClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
@@ -1536,6 +1539,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/SplashMenuNotificationTypeClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
@@ -1617,6 +1621,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/SplashMenuNotificationToggleClicked");
                     if (slidingMenu.isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
@@ -1677,6 +1682,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	            statsButton.setOnClickListener(new OnClickListener() {
 	                @Override
 	                public void onClick(View arg0) {
+	                	tracker.sendView("ActivityMain/QuizMenuStatsClicked");
 	                    openStats();
 	                }
 	            });
@@ -1705,6 +1711,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             reportButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuReportClicked");
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1730,6 +1737,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuShareClicked");
                     if (slidingMenu.isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
@@ -1782,6 +1790,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuLogoutClicked");
                 	if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1805,6 +1814,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuExitClicked");
                     if (slidingMenu.isMenuShowing())
                         moveTaskToBack(true);
                 }
@@ -1893,6 +1903,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             soundsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuSoundsClicked");
                     if (slidingMenu.isMenuShowing()) {
                         soundsText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
@@ -1958,6 +1969,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuNotificationSoundClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
@@ -2028,6 +2040,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuNotificationTypeClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
@@ -2109,6 +2122,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/QuizMenuNotificationToggleClicked");
                     if (slidingMenu.isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
@@ -2165,6 +2179,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/StatsMenuShareClicked");
                     if (slidingMenu.isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
@@ -2189,6 +2204,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/StatsMenuNameClicked");
                     if (slidingMenu.isMenuShowing())
                         showNameDialog();
                 }
@@ -2197,6 +2213,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                	tracker.sendView("ActivityMain/StatsMenuInfoClicked");
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -2221,6 +2238,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
+                	tracker.sendView("ActivityMain/StatsMenuExitClicked");
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -2287,6 +2305,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
         followButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	if (!loggedIn)
+            		tracker.sendView("ActivityMain/SplashMenuFollowClicked");
+            	else if (!inStats)
+            		tracker.sendView("ActivityMain/QuizMenuFollowClicked");
+            	else if (inStats)
+            		tracker.sendView("ActivityMain/StatsMenuFollowClicked");
                 if (slidingMenu.isMenuShowing())
                     startActivity(getOpenTwitterIntent());
             }
@@ -2295,6 +2319,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
         likeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	if (!loggedIn)
+            		tracker.sendView("ActivityMain/SplashMenuLikeClicked");
+            	else if (!inStats)
+            		tracker.sendView("ActivityMain/QuizMenuLikeClicked");
+            	else if (inStats)
+            		tracker.sendView("ActivityMain/StatsMenuLikeClicked");
                 if (slidingMenu.isMenuShowing())
                     startActivity(getOpenFacebookIntent());
             }
@@ -2314,6 +2344,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
         switchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	if (!loggedIn)
+            		tracker.sendView("ActivityMain/SplashMenuSwitchClicked");
+            	else if (!inStats)
+            		tracker.sendView("ActivityMain/QuizMenuSwitchClicked");
+            	else if (inStats)
+            		tracker.sendView("ActivityMain/StatsMenuSwitchClicked");
                 switchButton.setEnabled(false);
                 if (slidingMenu.isMenuShowing()) {
                     slidingMenu.setOnClosedListener(new OnClosedListener() {
