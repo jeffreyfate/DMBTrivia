@@ -36,7 +36,7 @@ public class PushReceiver extends BroadcastReceiver {
     private NotificationManager nManager;
     private WakeLock wakeLock;
 	private MulticastLock multicastLock;
-    
+	
     @Override
     public void onReceive(Context context, Intent intent) {
     	Log.i(Constants.LOG_TAG, "PUSH RECEIVED!");
@@ -45,14 +45,16 @@ public class PushReceiver extends BroadcastReceiver {
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 Constants.PUSH_WAKE_LOCK);
         wakeLock.acquire();
-        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) context.getSystemService(
+        		Context.WIFI_SERVICE);
         multicastLock = wm.createMulticastLock(Constants.PUSH_WIFI_LOCK);
         multicastLock.acquire();
         if (Build.VERSION.SDK_INT <
                 Build.VERSION_CODES.HONEYCOMB)
         	new ReceiveTask(intent).execute();
         else
-        	new ReceiveTask(intent).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        	new ReceiveTask(intent).executeOnExecutor(
+        			AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
     private static String getUpdatedDateString(long millis) {
@@ -78,9 +80,11 @@ public class PushReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             if (action.equals(Constants.ACTION_NEW_QUESTIONS)) {
             	Log.i(Constants.LOG_TAG, "NEW QUESTIONS!");
-                if (!ApplicationEx.isActive() && SharedPreferencesSingleton.instance().getBoolean(
-                        ApplicationEx.getApp().getString(R.string.notification_key),
-                        true)) {
+                if (!ApplicationEx.isActive() &&
+                		SharedPreferencesSingleton.instance().getBoolean(
+                				ApplicationEx.getApp().getString(
+                						R.string.notification_key),
+        						true)) {
                     // Show notification that starts app
                     Intent notificationIntent = new Intent(
                             ApplicationEx.getApp(), ActivityMain.class);
@@ -92,7 +96,8 @@ public class PushReceiver extends BroadcastReceiver {
                                 Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());
-                    nBuilder.setLargeIcon(BitmapFactory.decodeResource(ResourcesSingleton.instance(),
+                    nBuilder.setLargeIcon(BitmapFactory.decodeResource(
+                    		ResourcesSingleton.instance(),
                                 R.drawable.notification_large)).
                         setSmallIcon(R.drawable.notification_large).
                         setWhen(System.currentTimeMillis()).
@@ -136,7 +141,8 @@ public class PushReceiver extends BroadcastReceiver {
                     sb.append(getUpdatedDateString(System.currentTimeMillis()));
                     ApplicationEx.setlistStamp = sb.toString();
                     */
-                    Intent setIntent = new Intent(Constants.ACTION_UPDATE_SETLIST);
+                    Intent setIntent = new Intent(
+                    		Constants.ACTION_UPDATE_SETLIST);
                     setIntent.putExtra("success", true);
                     ApplicationEx.getApp().sendBroadcast(setIntent);
                     /*
@@ -176,7 +182,8 @@ public class PushReceiver extends BroadcastReceiver {
                 	ApplicationEx.findMatchingAudio(latestSong);
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());
-                    Bitmap largeIcon = ApplicationEx.resizeImage(ResourcesSingleton.instance(),
+                    Bitmap largeIcon = ApplicationEx.resizeImage(
+                    		ResourcesSingleton.instance(),
                             ApplicationEx.findMatchingImage(latestSong));
                     nBuilder.setLargeIcon(largeIcon).
                         setSmallIcon(R.drawable.notification_large).
@@ -185,7 +192,8 @@ public class PushReceiver extends BroadcastReceiver {
                         setContentTitle(latestSong).
                         setLights(0xffff0000, 2000, 10000);
                     switch (SharedPreferencesSingleton.instance().getInt(
-                    		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0)) {
+                    		ResourcesSingleton.instance().getString(
+                    				R.string.notificationsound_key), 0)) {
                     case 0:
                         nBuilder.setVibrate(new long[]{0, 500, 100, 500});
                         nBuilder.setSound(ApplicationEx.notificationSound);

@@ -56,6 +56,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
@@ -241,6 +243,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     //private int count = -1;
     //private boolean checkCount = true;
+    
+    private GoogleAnalytics googleAnalytics;
+    private Tracker tracker;
     
     /**
      * Activity lifecycle methods
@@ -441,6 +446,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         refreshSlidingMenu();
         getWindow().setBackgroundDrawable(null);
+        googleAnalytics = GoogleAnalytics.getInstance(this);
+    	tracker = googleAnalytics.getTracker("UA-41733963-1");
     }
     
     private void getPersistedData(String userId) {
@@ -613,8 +620,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra("setlist", false))
+        if (intent.getBooleanExtra("setlist", false)) {
+        	tracker.sendView("ActivityMain/SetlistNotificationClicked");
             goToSetlist = true;
+        }
         else
             goToSetlist = false;
     }
