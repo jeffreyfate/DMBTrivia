@@ -716,6 +716,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "#");
         songTitle = StringUtils.remove(songTitle, "-");
         songTitle = StringUtils.remove(songTitle, ">");
+        songTitle = StringUtils.replace(songTitle, "’", "'");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         songTitle = StringUtils.remove(songTitle, " ");
@@ -736,6 +737,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "~");
         songTitle = StringUtils.remove(songTitle, "�");
         songTitle = StringUtils.remove(songTitle, "(");
+        songTitle = StringUtils.replace(songTitle, "’", "'");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
         Entry<String, SongInfo> entry = songMap.select(songTitle);

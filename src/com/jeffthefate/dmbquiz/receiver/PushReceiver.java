@@ -171,6 +171,7 @@ public class PushReceiver extends BroadcastReceiver {
                         !latestSong.equals("") && SharedPreferencesSingleton
                         .instance().getBoolean(ApplicationEx.getApp().getString(
                                 R.string.notification_key), true)) {
+                	nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
                 	Log.i(Constants.LOG_TAG, "LATEST SONG: " + latestSong);
                 	ApplicationEx.findMatchingAudio(latestSong);
                     nBuilder = new NotificationCompat.Builder(
@@ -213,7 +214,6 @@ public class PushReceiver extends BroadcastReceiver {
                         sb.append(ApplicationEx.setlistList.get(3));
                         nBuilder.setContentText(sb.toString());
                     }
-                    nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
                     nManager.notify(null, Constants.NOTIFICATION_NEW_SONG,
                     		nBuilder.build());
                 }
