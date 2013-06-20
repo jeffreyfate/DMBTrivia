@@ -94,8 +94,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     
     private static float textViewHeight = 0.0f;
     
-    private static int parseQueries = 0;
-    
     /**
      * Holds an image and audio clip that are associated with each other
      * @author Jeff Fate
@@ -238,7 +236,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         // TODO Remove if memory issues resolved
         try {
         	installation.saveEventually();
-        	ApplicationEx.addParseQuery();
         } catch (RuntimeException e) {}
         String notificationType = ResourcesSingleton.instance().getString(
         		R.string.notificationtype_key);
@@ -283,7 +280,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         object.put("stacktrace", stacktrace);
         try {
             object.saveInBackground();
-            ApplicationEx.addParseQuery();
         } catch (ExceptionInInitializerError e) {};
     }
     
@@ -308,7 +304,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 @Override
                 public void done(ParseException arg0) {
                 	showLongToast("Report sent, thank you");
-                	ApplicationEx.addParseQuery();
                 }
             });
         }
@@ -506,7 +501,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                     intent.putExtra("success", true);
                 }
                 app.sendBroadcast(intent);
-                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -745,13 +739,9 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 ResourcesSingleton.instance().getString(
                 		R.string.notificationtype_key), 0)) {
         case 0:
-        	Log.i(Constants.LOG_TAG, "GENERAL AUDIO");
         	ApplicationEx.createNotificationUri(R.raw.general);
         	break;
         case 1:
-        	Log.i(Constants.LOG_TAG, "ALBUM AUDIO");
-        	Log.i(Constants.LOG_TAG, "SONG TITLE: " + songTitle);
-        	Log.i(Constants.LOG_TAG, "ENTRY: " + entry.getKey());
         	if (songTitle.startsWith(entry.getKey()))
         		ApplicationEx.createNotificationUri(entry.getValue().getAudio());
         	else
@@ -964,19 +954,6 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	
 	public static void setTextViewHeight(float textViewHeight) {
 		ApplicationEx.textViewHeight = textViewHeight;
-	}
-	
-	public static int getParseQueries() {
-		return parseQueries;
-	}
-	
-	public static void setParseQueries(int newParseQueries) {
-		parseQueries = newParseQueries;
-	}
-	
-	public static void addParseQuery() {
-		parseQueries++;
-		Log.v(Constants.LOG_TAG, "ADDING API CALL: " + parseQueries);
 	}
 
 }

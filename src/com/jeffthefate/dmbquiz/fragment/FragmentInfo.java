@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
+import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
@@ -42,6 +43,8 @@ public class FragmentInfo extends FragmentBase {
         doneButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "infoDone", 1l);
                 getActivity().onBackPressed();
             } 
         });

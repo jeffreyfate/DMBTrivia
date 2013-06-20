@@ -39,7 +39,6 @@ public class PushReceiver extends BroadcastReceiver {
 	
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.i(Constants.LOG_TAG, "PUSH RECEIVED!");
     	PowerManager pm = 
                 (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -74,12 +73,10 @@ public class PushReceiver extends BroadcastReceiver {
         @Override
         protected Void doInBackground(Void... nothing) {
         	// {"action":"com.jeffthefate.dmb.ACTION_NEW_QUESTIONS"}
-        	Log.i(Constants.LOG_TAG, "TASK STARTED!");
             nManager = (NotificationManager) ApplicationEx.getApp()
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             String action = intent.getAction();
             if (action.equals(Constants.ACTION_NEW_QUESTIONS)) {
-            	Log.i(Constants.LOG_TAG, "NEW QUESTIONS!");
                 if (!ApplicationEx.isActive() &&
                 		SharedPreferencesSingleton.instance().getBoolean(
                 				ApplicationEx.getApp().getString(
@@ -110,7 +107,6 @@ public class PushReceiver extends BroadcastReceiver {
                 }
             }
             else if (action.equals(Constants.ACTION_NEW_SONG)) {
-            	Log.i(Constants.LOG_TAG, "NEW SONG!");
                 JSONObject json = null;
                 String latestSong = "";
                 try {
@@ -178,7 +174,6 @@ public class PushReceiver extends BroadcastReceiver {
                         .instance().getBoolean(ApplicationEx.getApp().getString(
                                 R.string.notification_key), true)) {
                 	nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
-                	Log.i(Constants.LOG_TAG, "LATEST SONG: " + latestSong);
                 	ApplicationEx.findMatchingAudio(latestSong);
                     nBuilder = new NotificationCompat.Builder(
                             ApplicationEx.getApp());

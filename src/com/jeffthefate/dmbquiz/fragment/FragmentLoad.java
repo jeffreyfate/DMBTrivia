@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
+import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 
@@ -49,6 +50,8 @@ public class FragmentLoad extends FragmentBase {
         retryButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "loadRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {

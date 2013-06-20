@@ -122,6 +122,8 @@ public class FragmentSetlist extends FragmentBase {
 		retryButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "setlistRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {

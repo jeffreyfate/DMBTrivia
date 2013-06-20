@@ -22,6 +22,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
+import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.R;
 import com.parse.FindCallback;
@@ -125,6 +126,8 @@ public class FragmentSplash extends FragmentBase {
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashEmailLogin", 1l);
                 InputMethodManager imm = 
                     (InputMethodManager) getActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
@@ -136,6 +139,8 @@ public class FragmentSplash extends FragmentBase {
         signupButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashEmailSignup", 1l);
                 InputMethodManager imm = 
                     (InputMethodManager) getActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
@@ -147,6 +152,9 @@ public class FragmentSplash extends FragmentBase {
         resetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashResetPassword",
+            			1l);
                 InputMethodManager imm = 
                     (InputMethodManager) getActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
@@ -160,6 +168,8 @@ public class FragmentSplash extends FragmentBase {
         facebookLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashFacebook", 1l);
                 if (mCallback != null)
                     mCallback.onLoginPressed(FragmentBase.LOGIN_FACEBOOK, null,
                             null);
@@ -169,6 +179,8 @@ public class FragmentSplash extends FragmentBase {
         twitterLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashTwitter", 1l);
                 if (mCallback != null)
                     mCallback.onLoginPressed(FragmentBase.LOGIN_TWITTER, null,
                             null);
@@ -178,6 +190,8 @@ public class FragmentSplash extends FragmentBase {
         playButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashJustPlay", 1l);
                 if (mCallback != null) {
                     /*
                 	if (!SharedPreferencesSingleton.instance().contains(
@@ -207,6 +221,8 @@ public class FragmentSplash extends FragmentBase {
         emailButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "splashEmail", 1l);
                 playButton.clearAnimation();
                 playButton.setVisibility(View.INVISIBLE);
                 emailButton.clearAnimation();
@@ -285,7 +301,6 @@ public class FragmentSplash extends FragmentBase {
                         isSignedUp = true;
                     }
                 }
-                ApplicationEx.addParseQuery();
             } 
         });
     }

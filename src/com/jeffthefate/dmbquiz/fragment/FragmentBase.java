@@ -99,11 +99,9 @@ public class FragmentBase extends Fragment implements UiCallback {
         	audioMap.put("hint", hintAudio);
         	audioMap.put("skip", skipAudio);
         } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(Constants.LOG_TAG, "Unable to get audio reference!", e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(Constants.LOG_TAG, "Unable to get audio reference!", e);
 		}
     }
     
@@ -117,11 +115,9 @@ public class FragmentBase extends Fragment implements UiCallback {
         			audioMap.get(type).add(fields[i].getInt(null));
         	}
         } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	Log.e(Constants.LOG_TAG, "Unable to get audio reference!", e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(Constants.LOG_TAG, "Unable to get audio reference!", e);
 		}
     }
     
@@ -243,14 +239,10 @@ public class FragmentBase extends Fragment implements UiCallback {
      */
     protected void playAudio(String type) {
     	ArrayList<Integer> tempList = audioMap.get(type);
-    	Log.v(Constants.LOG_TAG, type + " : " + tempList.size());
     	if (tempList.isEmpty())
     		resetAudio(type);
     	int random = (int) (Math.random()*tempList.size());
-    	Log.d(Constants.LOG_TAG, "random : " + random);
     	currentAudio = tempList.remove(random);
-    	Log.w(Constants.LOG_TAG, "current : " + currentAudio);
-    	Log.i(Constants.LOG_TAG, type + " : " + tempList.size());
     	/*
         do {
             rawIndex = (int) (Math.random()*fields.length);
@@ -296,7 +288,6 @@ public class FragmentBase extends Fragment implements UiCallback {
     protected void setBackgroundBitmap(String name, String screen) {
         Bitmap backgroundBitmap = ApplicationEx.getBackgroundBitmap();
         if (backgroundBitmap == null) {
-            Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
         	if (name == null)
         	    mCallback.setBackground("splash4", false, screen);
         	else

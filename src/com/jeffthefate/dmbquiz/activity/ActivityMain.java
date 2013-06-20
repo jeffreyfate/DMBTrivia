@@ -299,11 +299,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
         */
         Parse.initialize(this, "ImI8mt1EM3NhZNRqYZOyQpNSwlfsswW73mHsZV3R",
                 "hpTbnpuJ34zAFLnpOAXjH583rZGiYQVBWWvuXsTo");
-        // TODO Remove this when we move to using a channel
-        PushService.subscribe(this, "", ActivityMain.class);
+        //PushService.subscribe(this, "", ActivityMain.class);
         // TODO Add these to update to the setlist channel and remove old
         //PushService.unsubscribe(app, "");
-        //PushService.subscribe(app, "setlist", ActivityMain.class);
+        PushService.subscribe(ApplicationEx.getApp(), "setlist",
+        		ActivityMain.class);
         PushService.setDefaultPushCallback(this, ActivityMain.class);
         fMan = getSupportFragmentManager();
         if (savedInstanceState != null) {
@@ -740,6 +740,21 @@ public class ActivityMain extends SlidingFragmentActivity implements
         */
     }
     
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
+    	switch (newConfig.orientation) {
+    	case Configuration.ORIENTATION_LANDSCAPE:
+    		tracker.sendEvent(Constants.CATEGORY_HARDWARE,
+        			Constants.ACTION_ROTATE, "landscape", 1l);
+    		break;
+    	case Configuration.ORIENTATION_PORTRAIT:
+    		tracker.sendEvent(Constants.CATEGORY_HARDWARE,
+        			Constants.ACTION_ROTATE, "portrait", 1l);
+    		break;
+    	}
+    }
+    
     private void showLogin(/*boolean loggingIn*/) {
         try {
             FragmentLogin fLogin = new FragmentLogin();
@@ -801,7 +816,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             public void done(ParseObject user, ParseException e) {
                 if (user != null)
                     displayName = user.getString("displayName");
-                ApplicationEx.addParseQuery();
                 if (getStatsTask != null)
                     getStatsTask.cancel(true);
                 getStatsTask = new GetStatsTask(
@@ -957,7 +971,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             getScore(false, false, userId, false);
         ApplicationEx.setInactive();
         DatabaseHelperSingleton.instance().setCheckCount(userId, true);
-        Log.d(Constants.LOG_TAG, "Parse queries: " + ApplicationEx.getParseQueries());
         super.onPause();
     }
     
@@ -1033,7 +1046,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         correctQuery);
                 try {
                     scoreList = query.find();
-                    ApplicationEx.addParseQuery();
                     if (scoreList.size() == 0)
                         break;
                     for (ParseObject score : scoreList) {
@@ -1047,11 +1059,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             deleteQuery.whereEqualTo("questionId",
                                     score.getObjectId());
                             deleteList = deleteQuery.find();
-                            ApplicationEx.addParseQuery();
                             for (int i = 1; i < deleteList.size(); i++) {
                                 try {
                                     deleteList.get(i).deleteEventually();
-                                    ApplicationEx.addParseQuery();
                                 } catch (RuntimeException exception) {}
                             }
                         }
@@ -1090,7 +1100,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         correctQuery);
                 try {
                     scoreList = query.find();
-                    ApplicationEx.addParseQuery();
                     if (scoreList.size() == 0)
                         break;
                     for (ParseObject score : scoreList) {
@@ -1101,11 +1110,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             deleteQuery.whereEqualTo("questionId",
                                     score.getObjectId());
                             deleteList = deleteQuery.find();
-                            ApplicationEx.addParseQuery();
                             for (int i = 1; i < deleteList.size(); i++) {
                                 try {
                                     deleteList.get(i).deleteEventually();
-                                    ApplicationEx.addParseQuery();
                                 } catch (RuntimeException exception) {}
                             }
                         }
@@ -1256,6 +1263,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {    
         switch (item.getItemId()) {        
         case android.R.id.home:
+        	tracker.sendEvent(Constants.CATEGORY_ACTION_BAR,
+        			Constants.ACTION_BUTTON_PRESS, "home", 1l);
+        	if (slidingMenu.isMenuShowing())
+	    		tracker.sendEvent(Constants.CATEGORY_MENU,
+            			Constants.ACTION_MENU_CLOSE, "hardwareMenu", 1l);
+	    	else
+	    		tracker.sendEvent(Constants.CATEGORY_MENU,
+            			Constants.ACTION_MENU_OPEN, "hardwareMenu", 1l);
             if (currFrag != null) {
                 if (currFrag instanceof FragmentPager) {
                     if (currFrag.getPage() == 1)
@@ -1268,6 +1283,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             return true;
         case R.id.ShareMenu:
+        	tracker.sendEvent(Constants.CATEGORY_ACTION_BAR,
+        			Constants.ACTION_BUTTON_PRESS, "share", 1l);
             ApplicationEx.showShortToast("Capturing screen");
             if (screenshotTask != null)
                 screenshotTask.cancel(true);
@@ -1279,6 +1296,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             return true;
         case R.id.SetlistMenu:
+        	tracker.sendEvent(Constants.CATEGORY_ACTION_BAR,
+        			Constants.ACTION_BUTTON_PRESS, "setlist", 1l);
             if (currFrag instanceof FragmentPager)
                 ((FragmentPager)currFrag).setPage(1);
             return true;
@@ -1345,6 +1364,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_MENU) {
+	    	tracker.sendEvent(Constants.CATEGORY_HARDWARE,
+        			Constants.ACTION_BUTTON_PRESS, "menu", 1l);
+	    	if (slidingMenu.isMenuShowing())
+	    		tracker.sendEvent(Constants.CATEGORY_MENU,
+            			Constants.ACTION_MENU_CLOSE, "hardwareMenu", 1l);
+	    	else
+	    		tracker.sendEvent(Constants.CATEGORY_MENU,
+            			Constants.ACTION_MENU_OPEN, "hardwareMenu", 1l);
 	        if (currFrag != null) {
 	            if (currFrag instanceof FragmentPager) {
                     if (currFrag.getPage() == 1)
@@ -1370,7 +1397,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                	tracker.sendView("ActivityMain/SplashMenuInfoClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "splashInfo", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1415,7 +1443,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/SplashMenuExitClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "splashExit", 1l);
                     if (slidingMenu.isMenuShowing())
                         moveTaskToBack(true);
                 }
@@ -1468,7 +1497,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/SplashMenuNotificationSoundClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
@@ -1517,6 +1545,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
                                     soundSetting)
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"splashNotificationSound", (long) soundSetting);
                     }
                 }
             });
@@ -1539,7 +1570,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/SplashMenuNotificationTypeClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
@@ -1575,6 +1605,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
                             		typeSetting)
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"splashNotificationType", (long) typeSetting);
                     }
                 }
             });
@@ -1621,7 +1654,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/SplashMenuNotificationToggleClicked");
                     if (slidingMenu.isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
@@ -1668,6 +1700,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notification_key),
                                     notificationsText.isChecked())
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"splashNotificationToggle",
+                    			notificationsText.isChecked() ? 1l : 0l);
                     }
                 }
             });
@@ -1682,7 +1718,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	            statsButton.setOnClickListener(new OnClickListener() {
 	                @Override
 	                public void onClick(View arg0) {
-	                	tracker.sendView("ActivityMain/QuizMenuStatsClicked");
+	                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS, "quizStats", 1l);
 	                    openStats();
 	                }
 	            });
@@ -1711,7 +1748,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             reportButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuReportClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizReport", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1737,7 +1775,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuShareClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizShare", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
@@ -1790,7 +1829,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuLogoutClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizLogout", 1l);
                 	if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -1814,7 +1854,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuExitClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizExit", 1l);
                     if (slidingMenu.isMenuShowing())
                         moveTaskToBack(true);
                 }
@@ -1903,7 +1944,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             soundsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuSoundsClicked");
                     if (slidingMenu.isMenuShowing()) {
                         soundsText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
@@ -1918,6 +1958,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     !SharedPreferencesSingleton.instance().getBoolean(
                                     		ResourcesSingleton.instance().getString(R.string.sound_key), true))
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS, "quizSounds",
+                    			soundsText.isChecked() ? 1l : 0l);
                     }
                 }
             });
@@ -1969,7 +2012,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuNotificationSoundClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
@@ -2018,6 +2060,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
                                     soundSetting)
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"quizNotificationSound", (long) soundSetting);
                     }
                 }
             });
@@ -2040,7 +2085,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuNotificationTypeClicked");
                     if (slidingMenu.isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
@@ -2076,6 +2120,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
                             		typeSetting)
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"quizNotificationType", (long) typeSetting);
                     }
                 }
             });
@@ -2122,7 +2169,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/QuizMenuNotificationToggleClicked");
                     if (slidingMenu.isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
@@ -2169,6 +2215,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             		ResourcesSingleton.instance().getString(R.string.notification_key),
                                     notificationsText.isChecked())
                             .apply();
+                        tracker.sendEvent(Constants.CATEGORY_MENU,
+                    			Constants.ACTION_BUTTON_PRESS,
+                    			"quizNotificationToggle",
+                    			notificationsText.isChecked() ? 1l : 0l);
                     }
                 }
             });
@@ -2179,7 +2229,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/StatsMenuShareClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsShare", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
@@ -2204,7 +2255,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/StatsMenuNameClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsName", 1l);
                     if (slidingMenu.isMenuShowing())
                         showNameDialog();
                 }
@@ -2213,7 +2265,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                	tracker.sendView("ActivityMain/StatsMenuInfoClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsInfo", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -2238,7 +2291,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                	tracker.sendView("ActivityMain/StatsMenuExitClicked");
+                	tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsExit", 1l);
                     if (slidingMenu.isMenuShowing()) {
                         slidingMenu.setOnClosedListener(new OnClosedListener() {
                             @Override
@@ -2306,11 +2360,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
             @Override
             public void onClick(View arg0) {
             	if (!loggedIn)
-            		tracker.sendView("ActivityMain/SplashMenuFollowClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "splashFollow", 1l);
             	else if (!inStats)
-            		tracker.sendView("ActivityMain/QuizMenuFollowClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizFollow", 1l);
             	else if (inStats)
-            		tracker.sendView("ActivityMain/StatsMenuFollowClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsFollow", 1l);
                 if (slidingMenu.isMenuShowing())
                     startActivity(getOpenTwitterIntent());
             }
@@ -2320,11 +2377,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
             @Override
             public void onClick(View arg0) {
             	if (!loggedIn)
-            		tracker.sendView("ActivityMain/SplashMenuLikeClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "splashLike", 1l);
             	else if (!inStats)
-            		tracker.sendView("ActivityMain/QuizMenuLikeClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizLike", 1l);
             	else if (inStats)
-            		tracker.sendView("ActivityMain/StatsMenuLikeClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsLike", 1l);
                 if (slidingMenu.isMenuShowing())
                     startActivity(getOpenFacebookIntent());
             }
@@ -2345,11 +2405,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
             @Override
             public void onClick(View arg0) {
             	if (!loggedIn)
-            		tracker.sendView("ActivityMain/SplashMenuSwitchClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "splashSwitch", 1l);
             	else if (!inStats)
-            		tracker.sendView("ActivityMain/QuizMenuSwitchClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "quizSwitch", 1l);
             	else if (inStats)
-            		tracker.sendView("ActivityMain/StatsMenuSwitchClicked");
+            		tracker.sendEvent(Constants.CATEGORY_MENU,
+                			Constants.ACTION_BUTTON_PRESS, "statsSwitch", 1l);
                 switchButton.setEnabled(false);
                 if (slidingMenu.isMenuShowing()) {
                     slidingMenu.setOnClosedListener(new OnClosedListener() {
@@ -2972,10 +3035,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
 											" " + graphUser.getLastName()
 													.substring(0, 1) + ".";
 									// TODO Deal with object has outstanding network connection
+									// This is likely a bug in the Parse code
 					                try {
 					                	user.put("displayName", displayName);
 					                    user.saveEventually();
-					                    ApplicationEx.addParseQuery();
 					                }
 					                catch (RuntimeException e) {}
 					                DatabaseHelperSingleton.instance().setUserValue(
@@ -3019,7 +3082,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 ParseTwitterUtils.getTwitter().getScreenName());
                         try {
                             user.saveEventually();
-                            ApplicationEx.addParseQuery();
                         }
                         catch (RuntimeException e) {}
                     }
@@ -3063,7 +3125,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     if (isLogging)
                                         setupUser(newUser);
                                 }
-                                ApplicationEx.addParseQuery();
                             }
                         });
                     }
@@ -3134,7 +3195,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                          username.indexOf("@")+1));
                         try {
                             user.saveEventually();
-                            ApplicationEx.addParseQuery();
                         }
                         catch (RuntimeException e) {}
                     }
@@ -3263,7 +3323,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                       .whereEqualTo("hint", true);
             try {
                 hints = hintsQuery.count();
-                ApplicationEx.addParseQuery();
                 leadersBundle.putString("userHints", Integer.toString(
                         hints));
             } catch (ParseException e) {
@@ -3281,7 +3340,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             questionQuery.orderByDescending("createdAt");
             try {
                 ParseObject question = questionQuery.getFirst();
-                ApplicationEx.addParseQuery();
                 Date questionDate = question.getCreatedAt();
                 Calendar cal = new GregorianCalendar(
                         TimeZone.getTimeZone("GMT"));
@@ -3307,7 +3365,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	rankQuery.whereNotContainedIn("objectId", ranks);
 	            try {
 	            	List<ParseObject> rankList = rankQuery.find();
-	            	ApplicationEx.addParseQuery();
 	            	if (rankList.size() == 0)
 	            		break;
 	            	for (int i = 0; i < rankList.size(); i++) {
@@ -3925,7 +3982,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         query.setSkip(skip);
                         */
                         questionList = query.find();
-                        ApplicationEx.addParseQuery();
                         if (!questionList.isEmpty() && !isCancelled()) {
                             Number score;
                             String questionId;
@@ -4106,7 +4162,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             query.setLimit(ids.size());
             try {
                 List<ParseObject> questionList = query.find();
-                ApplicationEx.addParseQuery();
                 int index = -1;
                 if (!questionList.isEmpty()) {
                     for (int i = 0; i < questionList.size(); i++) {
@@ -4186,7 +4241,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
             user.put("displayName", displayName);
             try {
                 user.saveEventually();
-                ApplicationEx.addParseQuery();
             }
             catch (RuntimeException e) {}
         }
@@ -4216,7 +4270,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
         try {
             user.put("score", currTemp);
             user.saveEventually();
-            ApplicationEx.addParseQuery();
         }
         catch (RuntimeException e) {}
         DatabaseHelperSingleton.instance().setScore(currTemp, userId);

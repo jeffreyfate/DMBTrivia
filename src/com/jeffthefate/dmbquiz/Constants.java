@@ -46,4 +46,15 @@ public class Constants {
     public static final int CACHED_QUESTIONS = 10;
     public static final int CACHED_LIMIT = 2;
     
+    // Analytics
+    public static final String CATEGORY_MENU = "categoryMenu";
+    public static final String CATEGORY_ACTION_BAR = "categoryActionBar";
+    public static final String CATEGORY_FRAGMENT_UI = "categoryFragmentUi";
+    public static final String CATEGORY_HARDWARE = "categoryHardware";
+    
+    public static final String ACTION_BUTTON_PRESS = "actionButtonPress";
+    public static final String ACTION_MENU_OPEN = "actionMenuOpen";
+    public static final String ACTION_MENU_CLOSE = "actionMenuClose";
+    public static final String ACTION_ROTATE = "actionRotate";
+    
 }

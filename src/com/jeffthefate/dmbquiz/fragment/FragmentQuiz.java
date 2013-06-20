@@ -202,6 +202,8 @@ public class FragmentQuiz extends FragmentBase {
         scoreText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "quizScore", 1l);
                 if (mCallback != null)
                     mCallback.onStatsPressed();
             }
@@ -269,6 +271,8 @@ public class FragmentQuiz extends FragmentBase {
         answerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "quizAnswer", 1l);
                 answerButton.setBackgroundResource(R.drawable.button_disabled);
                 answerButton.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 answerButton.setEnabled(false);
@@ -305,6 +309,8 @@ public class FragmentQuiz extends FragmentBase {
         skipButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "quizSkip", 1l);
                 mCallback.setIsNewQuestion(true);
                 stagedMap.put(mCallback.getQuestionId(0),
                 		mCallback.getQuestionHint(0));
@@ -350,6 +356,8 @@ public class FragmentQuiz extends FragmentBase {
         hintButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "quizHint", 1l);
                 hintButton.setEnabled(false);
                 hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
                 hintText.setBackgroundResource(R.drawable.button_disabled);
@@ -371,6 +379,8 @@ public class FragmentQuiz extends FragmentBase {
         retryButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	tracker.sendEvent(Constants.CATEGORY_FRAGMENT_UI,
+            			Constants.ACTION_BUTTON_PRESS, "quizRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
                     if (ApplicationEx.getConnection()) {
@@ -1055,7 +1065,6 @@ public class FragmentQuiz extends FragmentBase {
                         correctAnswer.put("hint", answer.getValue());
                         try {
                             correctAnswer.saveEventually();
-                            ApplicationEx.addParseQuery();
                             correctMap.remove(answer.getKey());
                         } catch (RuntimeException exception) {}
                     }
@@ -1064,7 +1073,6 @@ public class FragmentQuiz extends FragmentBase {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     showNetworkProblem();
                 }
-                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -1101,7 +1109,6 @@ public class FragmentQuiz extends FragmentBase {
                             question.put("score", Integer.parseInt(currScore));
                             try {
                                 question.saveEventually();
-                                ApplicationEx.addParseQuery();
                             } catch (RuntimeException err) {}
                         }
                     }
@@ -1111,7 +1118,6 @@ public class FragmentQuiz extends FragmentBase {
                     Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
                     showNetworkProblem();
                 }
-                ApplicationEx.addParseQuery();
             }
         });
     }
@@ -1233,7 +1239,6 @@ public class FragmentQuiz extends FragmentBase {
                 		parseAnswer.put("skip", true);
                         try {
                         	parseAnswer.saveEventually();
-                        	ApplicationEx.addParseQuery();
                         } catch (RuntimeException exception) {}
                         map.remove(currQuestionId);
                 	}
@@ -1246,12 +1251,10 @@ public class FragmentQuiz extends FragmentBase {
 	                        stageAnswer.put("skip", true);
 	                        try {
 	                            stageAnswer.saveEventually();
-	                            ApplicationEx.addParseQuery();
 	                        } catch (RuntimeException exception) {}
                     	}
                     }
                 }
-                ApplicationEx.addParseQuery();
             }
         });
     }
