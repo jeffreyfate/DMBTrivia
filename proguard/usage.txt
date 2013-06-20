@@ -1,24 +1,23 @@
 com.jeffthefate.dmbquiz.ApplicationEx:
-    350:359:public void clearApplicationData()
-    367:375:public static boolean deleteDir(java.io.File)
-    542:547:public static void createNotificationUri(java.lang.String)
-    885:892:public static void downloadSongClips(java.util.List)
-    955:955:public static boolean isDownloading()
-    959:959:public static float getTextViewHeight()
-    963:964:public static void setTextViewHeight(float)
-    979:980:public static void setParseQueries(int)
-    104:104:static synthetic void access$1(boolean)
+    334:343:public void clearApplicationData()
+    351:359:public static boolean deleteDir(java.io.File)
+    534:539:public static void createNotificationUri(java.lang.String)
+    878:885:public static void downloadSongClips(java.util.List)
+    948:948:public static boolean isDownloading()
+    952:952:public static float getTextViewHeight()
+    956:957:public static void setTextViewHeight(float)
+    93:93:static synthetic void access$1(boolean)
 com.jeffthefate.dmbquiz.ApplicationEx$DatabaseHelperSingleton:
-    159:159:private ApplicationEx$DatabaseHelperSingleton()
+    145:145:private ApplicationEx$DatabaseHelperSingleton()
 com.jeffthefate.dmbquiz.ApplicationEx$ResourcesSingleton:
-    180:180:private ApplicationEx$ResourcesSingleton()
+    166:166:private ApplicationEx$ResourcesSingleton()
 com.jeffthefate.dmbquiz.ApplicationEx$SharedPreferencesSingleton:
-    138:138:private ApplicationEx$SharedPreferencesSingleton()
+    124:124:private ApplicationEx$SharedPreferencesSingleton()
 com.jeffthefate.dmbquiz.ApplicationEx$SongDownloadTask
 com.jeffthefate.dmbquiz.AutoResizeTextView:
     public static final float MIN_TEXT_SIZE
     private static final java.lang.String mEllipsis
-    236:239:public void resizeText()
+    235:238:public void resizeText()
 com.jeffthefate.dmbquiz.BitmapDrawableEx
 com.jeffthefate.dmbquiz.BuildConfig
 com.jeffthefate.dmbquiz.CheatSheet
@@ -47,6 +46,14 @@ com.jeffthefate.dmbquiz.Constants:
     public static final java.lang.String PUSH_WIFI_LOCK
     public static final int CACHED_QUESTIONS
     public static final int CACHED_LIMIT
+    public static final java.lang.String CATEGORY_MENU
+    public static final java.lang.String CATEGORY_ACTION_BAR
+    public static final java.lang.String CATEGORY_FRAGMENT_UI
+    public static final java.lang.String CATEGORY_HARDWARE
+    public static final java.lang.String ACTION_BUTTON_PRESS
+    public static final java.lang.String ACTION_MENU_OPEN
+    public static final java.lang.String ACTION_MENU_CLOSE
+    public static final java.lang.String ACTION_ROTATE
     6:6:public Constants()
 com.jeffthefate.dmbquiz.DatabaseHelper:
     private static final java.lang.String DB_NAME
@@ -171,7 +178,7 @@ com.jeffthefate.dmbquiz.OnButtonListener:
     public abstract void clearQuestionSkips()
     public abstract void setDisplayName(java.lang.String)
     public abstract void saveUserScore(int)
-    public abstract void shareScreenshot()
+    public abstract void shareScreenshot(boolean)
     public abstract void refreshMenu()
     public abstract android.graphics.Bitmap getBitmap(int)
 com.jeffthefate.dmbquiz.R:
@@ -192,8 +199,8 @@ com.jeffthefate.dmbquiz.VersionedInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$GingerbreadInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$HoneycombInvalidateOptions
 com.jeffthefate.dmbquiz.activity.ActivityMain:
-    3453:3453:public java.lang.String getQuestionCategory(int)
-    3493:3493:public boolean getQuestionSkip(int)
+    3820:3820:public java.lang.String getQuestionCategory(int)
+    3860:3860:public boolean getQuestionSkip(int)
 com.jeffthefate.dmbquiz.activity.ActivityMain$UiCallback
 com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_FACEBOOK
@@ -201,25 +208,25 @@ com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_ANON
     public static final int SIGNUP_EMAIL
     public static final int LOGIN_EMAIL
-    335:347:public void toggleSounds()
-    351:363:public void toggleNotifications()
-    367:379:public void toggleTips()
-    382:385:public void report()
-    388:390:public void changeName()
-    393:405:public void logOut()
-    408:409:public void exit()
-    421:421:public void resetHint()
-    453:456:public android.graphics.drawable.Drawable getBackground()
-    463:463:public void showRetry()
+    333:345:public void toggleSounds()
+    349:361:public void toggleNotifications()
+    365:377:public void toggleTips()
+    380:383:public void report()
+    386:388:public void changeName()
+    391:403:public void logOut()
+    406:407:public void exit()
+    419:419:public void resetHint()
+    451:454:public android.graphics.drawable.Drawable getBackground()
+    461:461:public void showRetry()
 com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog
 com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog$1
 com.jeffthefate.dmbquiz.fragment.FragmentDownloadDialog$2
 com.jeffthefate.dmbquiz.fragment.FragmentPager:
-    196:196:public android.graphics.drawable.Drawable getBackground()
-    201:201:public com.jeffthefate.dmbquiz.fragment.FragmentBase getPage(int)
+    203:203:public android.graphics.drawable.Drawable getBackground()
+    208:208:public com.jeffthefate.dmbquiz.fragment.FragmentBase getPage(int)
 com.jeffthefate.dmbquiz.fragment.FragmentPager$FixedSpeedScroller:
-    235:237:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context)
-    244:246:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context,android.view.animation.Interpolator,boolean)
+    268:270:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context)
+    277:279:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context,android.view.animation.Interpolator,boolean)
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz:
-    670:673:public void resetHint()
-    1260:1267:public void showRetry()
+    680:683:public void resetHint()
+    1264:1271:public void showRetry()
