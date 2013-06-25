@@ -3667,12 +3667,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
     */
     @Override
     public void next() {
-        if (Build.VERSION.SDK_INT <
-                Build.VERSION_CODES.HONEYCOMB)
-            new BackgroundTask(questionIds.get(0)).execute();
-        else
-            new BackgroundTask(questionIds.get(0)).executeOnExecutor(
-                    AsyncTask.THREAD_POOL_EXECUTOR);
+    	if (!questionIds.isEmpty()) {
+	        if (Build.VERSION.SDK_INT <
+	                Build.VERSION_CODES.HONEYCOMB)
+	            new BackgroundTask(questionIds.get(0)).execute();
+	        else
+	            new BackgroundTask(questionIds.get(0)).executeOnExecutor(
+	                    AsyncTask.THREAD_POOL_EXECUTOR);
+    	}
         newQuestion = false;
         DatabaseHelperSingleton.instance().setUserValue(newQuestion ? 1 : 0,
                 DatabaseHelper.COL_NEW_QUESTION, userId);
@@ -3692,7 +3694,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             if (isCancelled())
                 return null;
             if (questionId != null && correctAnswers.contains(questionId)) {
-                if (correctAnswers.size() % 20 == 0) {
+                if (correctAnswers != null && correctAnswers.size() % 20 == 0) {
                     if (getBackground() == null) {
                         if (userId != null) {
                             if (isCancelled())

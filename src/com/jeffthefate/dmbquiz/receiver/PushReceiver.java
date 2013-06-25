@@ -109,18 +109,21 @@ public class PushReceiver extends BroadcastReceiver {
             else if (action.equals(Constants.ACTION_NEW_SONG)) {
                 JSONObject json = null;
                 String latestSong = "";
+                String latestSet = "";
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
                 		throw new JSONException("No data sent!");
                     json = new JSONObject(intent.getExtras().getString(
                             "com.parse.Data"));
                     latestSong = json.getString("song");
+                    latestSet = json.getString("setlist");
+                    ApplicationEx.parseSetlist(latestSet);
                     Editor editor = SharedPreferencesSingleton.instance()
                     		.edit();
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.lastsong_key), latestSong);
                     editor.putString(ResourcesSingleton.instance().getString(
-                    		R.string.setlist_key), json.getString("setlist"));
+                    		R.string.setlist_key), latestSet);
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");
                     sb.append(getUpdatedDateString(

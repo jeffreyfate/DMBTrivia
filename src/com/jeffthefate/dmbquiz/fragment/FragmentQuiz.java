@@ -717,7 +717,7 @@ public class FragmentQuiz extends FragmentBase {
             if (!hintPressed)
                 savedHint = "";
         }
-        if (savedHint.equals("")) {
+        if (savedHint == null || savedHint.equals("")) {
             ArrayList<String> answerStrings = new ArrayList<String>();
             int lastSpace = -1;
             String answer = (mCallback.getQuestionAnswer(0)
@@ -808,7 +808,9 @@ public class FragmentQuiz extends FragmentBase {
         }
         if (skipTimer != null)
             skipTimer.cancel();
-        skipButton.setEnabled(false);
+        // TODO Add Jason's serial
+        if (!Build.SERIAL.equals(""))
+        	skipButton.setEnabled(false);
         skipButton.setVisibility(View.VISIBLE);
         if (skipPressed) {
             skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
@@ -931,6 +933,8 @@ public class FragmentQuiz extends FragmentBase {
         	stageQuestions(mCallback.getUserId());
         if (!saveMap.isEmpty())
         	saveQuestionScores();
+        if (!correctMap.isEmpty())
+        	saveAnswers(mCallback.getUserId());
         super.onPause();
     }
     
@@ -973,8 +977,6 @@ public class FragmentQuiz extends FragmentBase {
                 if (wrongTimer != null)
                     wrongTimer.cancel();
                 correctMap.put(questionId, questionHint);
-                if (!correctMap.isEmpty())
-                	saveAnswers(mCallback.getUserId());
             }
             else {
                 isCorrect = false;
@@ -1009,7 +1011,9 @@ public class FragmentQuiz extends FragmentBase {
                 skipText.setVisibility(View.VISIBLE);
                 skipTime.setVisibility(View.INVISIBLE);
                 hintButton.setEnabled(false);
-                skipButton.setEnabled(false);
+                // TODO Add Jason's serial
+                if (!Build.SERIAL.equals(""))
+                	skipButton.setEnabled(false);
                 answerImage.setImageResource(R.drawable.correct);
                 answerImage.setVisibility(View.VISIBLE);
                 questionText.setTextColor(Color.GREEN);
@@ -1055,8 +1059,15 @@ public class FragmentQuiz extends FragmentBase {
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List<ParseObject> answers, ParseException e) {
-                if (answers.isEmpty()) {
-                    ParseObject correctAnswer;
+                if (e != null && e.getCode() != 101) {
+                    Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
+                    showNetworkProblem();
+                }
+                else {
+                	ParseObject correctAnswer;
+                	for (ParseObject answer : answers) {
+                		correctMap.remove(answer.getString("questionId"));
+                	}
                     for (Entry<String, Boolean> answer :
                     		correctMap.entrySet()) {
                     	correctAnswer = new ParseObject("CorrectAnswers");
@@ -1065,13 +1076,9 @@ public class FragmentQuiz extends FragmentBase {
                         correctAnswer.put("hint", answer.getValue());
                         try {
                             correctAnswer.saveEventually();
-                            correctMap.remove(answer.getKey());
                         } catch (RuntimeException exception) {}
                     }
-                }
-                if (e != null && e.getCode() != 101) {
-                    Log.e(Constants.LOG_TAG, "Error: " + e.getMessage());
-                    showNetworkProblem();
+                    correctMap.clear();
                 }
             }
         });

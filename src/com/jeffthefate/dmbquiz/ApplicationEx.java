@@ -260,6 +260,9 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	        downloadSongClips(DatabaseHelperSingleton.instance()
 	        		.getNotificatationsToDownload());
 	    */
+        Log.v(Constants.LOG_TAG, "SERIAL: " + Build.SERIAL);
+        // TODO Remove this when deploying
+        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
     }
     /**
      * Used by other classes to get the application's global context.
