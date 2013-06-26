@@ -60,8 +60,6 @@ public class FragmentSetlist extends FragmentBase {
         setlistReceiver = new SetlistReceiver();
     }
     
-    //private int notifyIndex = 0;
-    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -166,8 +164,45 @@ public class FragmentSetlist extends FragmentBase {
         	ApplicationEx.showLongToast(R.string.NoConnectionToast);
             showNetworkProblem();
         }
+        /*
+        setlist = "Jun 21 2013\nDave Matthews Band\nKlipsch Music Center\nNoblesville, IN\n\nBig Eyed Fish\nGranny\nThe Idea Of You\nBelly Belly Nice\nJoy Ride\n#41\nRooftop\nCaptain\nThe Riff\nSo Much To Say ->\nAnyone Seen The Bridge ->\nToo Much\nRecently\nCrash Into Me";
+        setList = new ArrayList<String>();
+        Collections.addAll(setList, setlist.split("\n"));
+        setlist = "";
+        new UpdateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        */
     }
+    /*
+    private ArrayList<String> setList;
     
+    private class UpdateTask extends AsyncTask<Void, Void, Void> {
+    	@Override
+        protected Void doInBackground(Void... nothing) {
+    		do {
+            	if (!StringUtils.isEmpty(setlist))
+            		setlist = setlist.concat("\n");
+            	setlist = setlist.concat(setList.remove(0));
+            	publishProgress();
+            	try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {}
+            } while (!setList.isEmpty());
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+        	updateSetText();
+        }
+        
+        @Override
+        protected void onCancelled(Void nothing) {
+        }
+        
+        @Override
+        protected void onPostExecute(Void nothing) {
+        }
+    }
+    */
     @Override
     public void onPause() {
         ApplicationEx.getApp().unregisterReceiver(setlistReceiver);

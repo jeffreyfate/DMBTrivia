@@ -693,6 +693,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (!DatabaseHelperSingleton.instance().isAnonUser(userId))
                     	getScore(false, true, userId, false);
                     else {
+                    	correctAnswers = new ArrayList<String>();
                     	if (questionIds.size() >= 1 && questionIds.get(0) != null) {
                             try {
                                 goToQuiz();
@@ -3693,7 +3694,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         protected Void doInBackground(Void... nothing) {
             if (isCancelled())
                 return null;
-            if (questionId != null && correctAnswers.contains(questionId)) {
+            if (questionId != null && correctAnswers != null &&
+            		correctAnswers.contains(questionId)) {
                 if (correctAnswers != null && correctAnswers.size() % 20 == 0) {
                     if (getBackground() == null) {
                         if (userId != null) {

@@ -315,7 +315,9 @@ public class FragmentQuiz extends FragmentBase {
                 stagedMap.put(mCallback.getQuestionId(0),
                 		mCallback.getQuestionHint(0));
                 saveMap.put(mCallback.getQuestionId(0), true);
-                skipButton.setEnabled(false);
+                if (!Build.SERIAL.equals("HT1BNS215989") &&
+                		!Build.SERIAL.equals("0146914813011017"))
+                	skipButton.setEnabled(false);
                 playAudio("skip");
                 savedHint = mCallback.getQuestionAnswer(0);
                 DatabaseHelperSingleton.instance().setUserValue(savedHint,
@@ -684,163 +686,168 @@ public class FragmentQuiz extends FragmentBase {
     
     @Override
     public void resumeQuestion() {
-        if (mCallback != null && !mCallback.questionIdsEmpty() &&
-        		mCallback.getQuestionId(0) != null &&
-        		mCallback.isCorrectAnswer(mCallback.getQuestionId(0)) &&
-                !mCallback.isNewQuestion()) {
-            if (Build.VERSION.SDK_INT <
-                    Build.VERSION_CODES.HONEYCOMB)
-                new NextTask().execute();
-            else
-                new NextTask().executeOnExecutor(
-                        AsyncTask.THREAD_POOL_EXECUTOR);
-            return;
-        }
-        if (mCallback.getQuestionAnswer(0) != null)
-        	Log.d(Constants.LOG_TAG, mCallback.getQuestionAnswer(0));
-        answerText.setVisibility(View.VISIBLE);
-        if (mCallback.getQuestion(0) != null) {
-            questionText.setText(mCallback.getQuestion(0));
-            questionText.setVisibility(View.VISIBLE);
-        }
-        /*
-        if (savedAnswer != null)
-            answerText.setText(savedAnswer);
-        */
-        if (mCallback.getQuestionScore(0) != null) {
-            calculateCurrentScore();
-            answerTextHint = Integer.toString(currScore) + " points";
-        }
-        else
-            answerTextHint = "";
-        if (!isCorrect) {
-            if (!hintPressed)
-                savedHint = "";
-        }
-        if (savedHint == null || savedHint.equals("")) {
-            ArrayList<String> answerStrings = new ArrayList<String>();
-            int lastSpace = -1;
-            String answer = (mCallback.getQuestionAnswer(0)
-                    .replaceAll("\\s+", " ")).replaceAll("[0-9a-zA-Z#&]", "*");
-            if (answer.length() > 36 && answer.lastIndexOf(" ") > -1) {
-                lastSpace = answer.lastIndexOf(" ");
-                if (lastSpace > 36)
-                    lastSpace = answer.substring(0, lastSpace-1)
-                            .lastIndexOf(" ");
-                answerStrings.add(answer.substring(0, lastSpace-1));
-                answerStrings.add(answer.substring(lastSpace+2,
-                        answer.length()));
-                answer = answerStrings.get(0) + "\n" + answerStrings.get(1);
-            }
-            savedHint = answer;
-        }
-        DatabaseHelperSingleton.instance().setUserValue(savedHint,
-                DatabaseHelper.COL_HINT, mCallback.getUserId());
-        answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
-        answerPlace.setVisibility(View.VISIBLE);
-        answerText.setHint(answerTextHint);
-        imm.restartInput(answerText);
-        answerButton.setVisibility(View.VISIBLE);
-        answerButton.setBackgroundResource(R.drawable.button);
-        answerButton.setTextColor(Color.BLACK);
-        retryText.setVisibility(View.INVISIBLE);
-        retryButton.setVisibility(View.INVISIBLE);
-        if (mCallback.isNewQuestion()) {
-            answerButton.setText("NEXT");
-            answerButton.setEnabled(true);
-            if (mCallback.isCorrectAnswer(mCallback.getQuestionId(0))) {
-                answerImage.setImageResource(R.drawable.correct);
-                questionText.setTextColor(Color.GREEN);
-                answerImage.setVisibility(View.VISIBLE);
-            }
-            else {
-                questionText.setTextColor(Color.WHITE);
-                answerImage.setVisibility(View.INVISIBLE);
-            }
-            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
-            hintText.setBackgroundResource(R.drawable.button_disabled);
-            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
-            skipText.setBackgroundResource(R.drawable.button_disabled);
-            hintTick = 0;
-            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
-                    DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
-            skipTick = 0;
-            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
-                    DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
-            skipPressed = true;
-            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
-                    DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
-            hintPressed = true;
-            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
-                    DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
-        }
-        else {
-            answerButton.setText("ENTER");
-            answerButton.setEnabled(true);
-            questionText.setTextColor(Color.WHITE);
-            answerImage.setVisibility(View.INVISIBLE);
-            skipPressed = false;
-            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
-                    DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
-        }
-        hintButton.setEnabled(false);
-        hintButton.setVisibility(View.VISIBLE);
-        if (hintTimer != null)
-            hintTimer.cancel();
-        if (hintPressed) {
-            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
-            hintText.setBackgroundResource(R.drawable.button_disabled);
-            hintText.setVisibility(View.VISIBLE);
-            hintTime.setVisibility(View.INVISIBLE);
-        }
-        else {
-            if (hintTick > 0) {
-                hintTimer = new HintTimer(hintTick, 500);
-                hintTimer.start();
-            }
-            else {
-                hintText.setBackgroundResource(R.drawable.button);
-                hintText.setTextColor(Color.BLACK);
-                hintText.setVisibility(View.VISIBLE);
-                hintTime.setVisibility(View.INVISIBLE);
-                hintButton.setEnabled(true);
-            }
-        }
-        if (skipTimer != null)
-            skipTimer.cancel();
-        // TODO Add Jason's serial
-        if (!Build.SERIAL.equals(""))
-        	skipButton.setEnabled(false);
-        skipButton.setVisibility(View.VISIBLE);
-        if (skipPressed) {
-            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
-            skipText.setBackgroundResource(R.drawable.button_disabled);
-            skipText.setVisibility(View.VISIBLE);
-            skipTime.setVisibility(View.INVISIBLE);
-        }
-        else {
-            if (skipTick > 0) {
-                if (hintTick == 0) {
-                    skipTimer = new SkipTimer(skipTick, 500);
-                    skipTimer.start();
-                }
-            }
-            else {
-                skipText.setBackgroundResource(R.drawable.button);
-                skipText.setTextColor(Color.BLACK);
-                skipText.setVisibility(View.VISIBLE);
-                skipTime.setVisibility(View.INVISIBLE);
-                skipButton.setEnabled(true);
-            }
-        }
-        //cameraButton.setVisibility(View.VISIBLE);
-        updateScoreText();
-        /*
-        background.resetColoredViews();
-        background.addColoredView(questionText,
-        		ResourcesSingleton.instance().getColor(R.color.background_dark));
-    	background.invalidate();
-    	*/
+    	if (mCallback != null) {
+	        if (!mCallback.questionIdsEmpty() &&
+	        		mCallback.getQuestionId(0) != null &&
+	        		mCallback.isCorrectAnswer(mCallback.getQuestionId(0)) &&
+	                !mCallback.isNewQuestion()) {
+	            if (Build.VERSION.SDK_INT <
+	                    Build.VERSION_CODES.HONEYCOMB)
+	                new NextTask().execute();
+	            else
+	                new NextTask().executeOnExecutor(
+	                        AsyncTask.THREAD_POOL_EXECUTOR);
+	            return;
+	        }
+	        if (mCallback.getQuestionAnswer(0) != null)
+	        	Log.d(Constants.LOG_TAG, mCallback.getQuestionAnswer(0));
+	        answerText.setVisibility(View.VISIBLE);
+	        if (mCallback.getQuestion(0) != null) {
+	            questionText.setText(mCallback.getQuestion(0));
+	            questionText.setVisibility(View.VISIBLE);
+	        }
+	        /*
+	        if (savedAnswer != null)
+	            answerText.setText(savedAnswer);
+	        */
+	        if (mCallback.getQuestionScore(0) != null) {
+	            calculateCurrentScore();
+	            answerTextHint = Integer.toString(currScore) + " points";
+	        }
+	        else
+	            answerTextHint = "";
+	        if (!isCorrect) {
+	            if (!hintPressed)
+	                savedHint = "";
+	        }
+	        if (savedHint == null || savedHint.equals("")) {
+	            ArrayList<String> answerStrings = new ArrayList<String>();
+	            int lastSpace = -1;
+	            String answer = (mCallback.getQuestionAnswer(0)
+	                    .replaceAll("\\s+", " ")).replaceAll("[0-9a-zA-Z#&]", "*");
+	            if (answer.length() > 36 && answer.lastIndexOf(" ") > -1) {
+	                lastSpace = answer.lastIndexOf(" ");
+	                if (lastSpace > 36)
+	                    lastSpace = answer.substring(0, lastSpace-1)
+	                            .lastIndexOf(" ");
+	                answerStrings.add(answer.substring(0, lastSpace-1));
+	                answerStrings.add(answer.substring(lastSpace+2,
+	                        answer.length()));
+	                answer = answerStrings.get(0) + "\n" + answerStrings.get(1);
+	            }
+	            savedHint = answer;
+	        }
+	        DatabaseHelperSingleton.instance().setUserValue(savedHint,
+	                DatabaseHelper.COL_HINT, mCallback.getUserId());
+	        answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
+	        answerPlace.setVisibility(View.VISIBLE);
+	        answerText.setHint(answerTextHint);
+	        imm.restartInput(answerText);
+	        answerButton.setVisibility(View.VISIBLE);
+	        answerButton.setBackgroundResource(R.drawable.button);
+	        answerButton.setTextColor(Color.BLACK);
+	        retryText.setVisibility(View.INVISIBLE);
+	        retryButton.setVisibility(View.INVISIBLE);
+	        if (mCallback.isNewQuestion()) {
+	            answerButton.setText("NEXT");
+	            answerButton.setEnabled(true);
+	            if (mCallback.isCorrectAnswer(mCallback.getQuestionId(0))) {
+	                answerImage.setImageResource(R.drawable.correct);
+	                questionText.setTextColor(Color.GREEN);
+	                answerImage.setVisibility(View.VISIBLE);
+	            }
+	            else {
+	                questionText.setTextColor(Color.WHITE);
+	                answerImage.setVisibility(View.INVISIBLE);
+	            }
+	            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
+	            hintText.setBackgroundResource(R.drawable.button_disabled);
+	            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
+	            skipText.setBackgroundResource(R.drawable.button_disabled);
+	            hintTick = 0;
+	            DatabaseHelperSingleton.instance().setUserValue((int) hintTick,
+	                    DatabaseHelper.COL_HINT_TICK, mCallback.getUserId());
+	            skipTick = 0;
+	            DatabaseHelperSingleton.instance().setUserValue((int) skipTick,
+	                    DatabaseHelper.COL_SKIP_TICK, mCallback.getUserId());
+	            skipPressed = true;
+	            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
+	                    DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
+	            hintPressed = true;
+	            DatabaseHelperSingleton.instance().setUserValue(hintPressed ? 1 : 0,
+	                    DatabaseHelper.COL_HINT_PRESSED, mCallback.getUserId());
+	        }
+	        else {
+	            answerButton.setText("ENTER");
+	            answerButton.setEnabled(true);
+	            questionText.setTextColor(Color.WHITE);
+	            answerImage.setVisibility(View.INVISIBLE);
+	            skipPressed = false;
+	            DatabaseHelperSingleton.instance().setUserValue(skipPressed ? 1 : 0,
+	                    DatabaseHelper.COL_SKIP_PRESSED, mCallback.getUserId());
+	        }
+	        hintButton.setEnabled(false);
+	        hintButton.setVisibility(View.VISIBLE);
+	        if (hintTimer != null)
+	            hintTimer.cancel();
+	        if (hintPressed) {
+	            hintText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
+	            hintText.setBackgroundResource(R.drawable.button_disabled);
+	            hintText.setVisibility(View.VISIBLE);
+	            hintTime.setVisibility(View.INVISIBLE);
+	        }
+	        else {
+	            if (hintTick > 0) {
+	                hintTimer = new HintTimer(hintTick, 500);
+	                hintTimer.start();
+	            }
+	            else {
+	                hintText.setBackgroundResource(R.drawable.button);
+	                hintText.setTextColor(Color.BLACK);
+	                hintText.setVisibility(View.VISIBLE);
+	                hintTime.setVisibility(View.INVISIBLE);
+	                hintButton.setEnabled(true);
+	            }
+	        }
+	        if (skipTimer != null)
+	            skipTimer.cancel();
+	        // TODO Add Jason's serial
+	        if (!Build.SERIAL.equals("HT1BNS215989") &&
+	        		!Build.SERIAL.equals("0146914813011017"))
+	        	skipButton.setEnabled(false);
+	        skipButton.setVisibility(View.VISIBLE);
+	        if (skipPressed) {
+	            skipText.setTextColor(ResourcesSingleton.instance().getColor(R.color.light_gray));
+	            skipText.setBackgroundResource(R.drawable.button_disabled);
+	            skipText.setVisibility(View.VISIBLE);
+	            skipTime.setVisibility(View.INVISIBLE);
+	        }
+	        else {
+	            if (skipTick > 0) {
+	                if (hintTick == 0) {
+	                    skipTimer = new SkipTimer(skipTick, 500);
+	                    skipTimer.start();
+	                }
+	            }
+	            else {
+	                skipText.setBackgroundResource(R.drawable.button);
+	                skipText.setTextColor(Color.BLACK);
+	                skipText.setVisibility(View.VISIBLE);
+	                skipTime.setVisibility(View.INVISIBLE);
+	                skipButton.setEnabled(true);
+	            }
+	        }
+	        //cameraButton.setVisibility(View.VISIBLE);
+	        updateScoreText();
+	        /*
+	        background.resetColoredViews();
+	        background.addColoredView(questionText,
+	        		ResourcesSingleton.instance().getColor(R.color.background_dark));
+	    	background.invalidate();
+	    	*/
+    	}
+    	else
+    		showNetworkProblem();
     }
     
     @Override
@@ -1012,7 +1019,8 @@ public class FragmentQuiz extends FragmentBase {
                 skipTime.setVisibility(View.INVISIBLE);
                 hintButton.setEnabled(false);
                 // TODO Add Jason's serial
-                if (!Build.SERIAL.equals(""))
+                if (!Build.SERIAL.equals("HT1BNS215989") &&
+                		!Build.SERIAL.equals("0146914813011017"))
                 	skipButton.setEnabled(false);
                 answerImage.setImageResource(R.drawable.correct);
                 answerImage.setVisibility(View.VISIBLE);
