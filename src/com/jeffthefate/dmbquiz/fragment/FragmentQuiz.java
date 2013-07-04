@@ -701,8 +701,9 @@ public class FragmentQuiz extends FragmentBase {
 	        }
 	        if (mCallback.getQuestionAnswer(0) != null)
 	        	Log.d(Constants.LOG_TAG, mCallback.getQuestionAnswer(0));
-	        answerText.setVisibility(View.VISIBLE);
-	        if (mCallback.getQuestion(0) != null) {
+	        if (answerText != null)
+	        	answerText.setVisibility(View.VISIBLE);
+	        if (mCallback.getQuestion(0) != null && questionText != null) {
 	            questionText.setText(mCallback.getQuestion(0));
 	            questionText.setVisibility(View.VISIBLE);
 	        }
@@ -739,15 +740,22 @@ public class FragmentQuiz extends FragmentBase {
 	        }
 	        DatabaseHelperSingleton.instance().setUserValue(savedHint,
 	                DatabaseHelper.COL_HINT, mCallback.getUserId());
-	        answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
-	        answerPlace.setVisibility(View.VISIBLE);
-	        answerText.setHint(answerTextHint);
+	        if (answerPlace != null) {
+		        answerPlace.setText(savedHint, TextView.BufferType.NORMAL);
+		        answerPlace.setVisibility(View.VISIBLE);
+	        }
+	        if (answerText != null)
+	        	answerText.setHint(answerTextHint);
 	        imm.restartInput(answerText);
-	        answerButton.setVisibility(View.VISIBLE);
-	        answerButton.setBackgroundResource(R.drawable.button);
-	        answerButton.setTextColor(Color.BLACK);
-	        retryText.setVisibility(View.INVISIBLE);
-	        retryButton.setVisibility(View.INVISIBLE);
+	        if (answerButton != null) {
+		        answerButton.setVisibility(View.VISIBLE);
+		        answerButton.setBackgroundResource(R.drawable.button);
+		        answerButton.setTextColor(Color.BLACK);
+	        }
+	        if (retryText != null)
+	        	retryText.setVisibility(View.INVISIBLE);
+	        if (retryButton != null)
+	        	retryButton.setVisibility(View.INVISIBLE);
 	        if (mCallback.isNewQuestion()) {
 	            answerButton.setText("NEXT");
 	            answerButton.setEnabled(true);
