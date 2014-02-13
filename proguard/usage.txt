@@ -1,11 +1,11 @@
 com.jeffthefate.dmbquiz.ApplicationEx:
-    334:343:public void clearApplicationData()
-    351:359:public static boolean deleteDir(java.io.File)
-    534:539:public static void createNotificationUri(java.lang.String)
-    878:885:public static void downloadSongClips(java.util.List)
-    948:948:public static boolean isDownloading()
-    952:952:public static float getTextViewHeight()
-    956:957:public static void setTextViewHeight(float)
+    337:346:public void clearApplicationData()
+    354:362:public static boolean deleteDir(java.io.File)
+    537:542:public static void createNotificationUri(java.lang.String)
+    881:888:public static void downloadSongClips(java.util.List)
+    951:951:public static boolean isDownloading()
+    955:955:public static float getTextViewHeight()
+    959:960:public static void setTextViewHeight(float)
     93:93:static synthetic void access$1(boolean)
 com.jeffthefate.dmbquiz.ApplicationEx$DatabaseHelperSingleton:
     145:145:private ApplicationEx$DatabaseHelperSingleton()
@@ -199,8 +199,8 @@ com.jeffthefate.dmbquiz.VersionedInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$GingerbreadInvalidateOptions
 com.jeffthefate.dmbquiz.VersionedInvalidateOptions$HoneycombInvalidateOptions
 com.jeffthefate.dmbquiz.activity.ActivityMain:
-    3820:3820:public java.lang.String getQuestionCategory(int)
-    3860:3860:public boolean getQuestionSkip(int)
+    3824:3824:public java.lang.String getQuestionCategory(int)
+    3864:3864:public boolean getQuestionSkip(int)
 com.jeffthefate.dmbquiz.activity.ActivityMain$UiCallback
 com.jeffthefate.dmbquiz.fragment.FragmentBase:
     public static final int LOGIN_FACEBOOK
@@ -228,5 +228,5 @@ com.jeffthefate.dmbquiz.fragment.FragmentPager$FixedSpeedScroller:
     268:270:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context)
     277:279:public FragmentPager$FixedSpeedScroller(com.jeffthefate.dmbquiz.fragment.FragmentPager,android.content.Context,android.view.animation.Interpolator,boolean)
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz:
-    680:683:public void resetHint()
-    1264:1271:public void showRetry()
+    682:685:public void resetHint()
+    1287:1294:public void showRetry()

@@ -14652,13 +14652,12 @@ com.jeffthefate.dmbquiz.fragment.FragmentQuiz -> com.jeffthefate.dmbquiz.a.v:
     android.view.inputmethod.InputMethodManager access$29(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> v
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer access$30(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> w
     java.util.HashMap access$31(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> x
-    void access$32(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,java.lang.String) -> c
-    android.widget.TextView access$33(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> y
-    com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer access$34(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> z
-    void access$35(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer) -> a
-    java.util.HashMap access$36(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> A
-    java.util.HashMap access$37(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> B
-    void access$38(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> C
+    android.widget.TextView access$32(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> y
+    com.jeffthefate.dmbquiz.fragment.FragmentQuiz$HintTimer access$33(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> z
+    void access$34(com.jeffthefate.dmbquiz.fragment.FragmentQuiz,com.jeffthefate.dmbquiz.fragment.FragmentQuiz$WrongTimer) -> a
+    java.util.HashMap access$35(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> A
+    java.util.HashMap access$36(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> B
+    void access$37(com.jeffthefate.dmbquiz.fragment.FragmentQuiz) -> C
 com.jeffthefate.dmbquiz.fragment.FragmentQuiz$1 -> com.jeffthefate.dmbquiz.a.w:
     com.jeffthefate.dmbquiz.fragment.FragmentQuiz this$0 -> a
     void onClick(android.view.View) -> onClick
