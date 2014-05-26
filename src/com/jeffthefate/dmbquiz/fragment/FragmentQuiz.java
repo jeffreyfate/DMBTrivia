@@ -315,8 +315,7 @@ public class FragmentQuiz extends FragmentBase {
                 stagedMap.put(mCallback.getQuestionId(0),
                 		mCallback.getQuestionHint(0));
                 saveMap.put(mCallback.getQuestionId(0), true);
-                if (!Build.SERIAL.equals("HT1BNS215989") &&
-                		!Build.SERIAL.equals("0146914813011017"))
+                if (!ApplicationEx.getSerialsList().contains(Build.SERIAL))
                 	skipButton.setEnabled(false);
                 playAudio("skip");
                 savedHint = mCallback.getQuestionAnswer(0);
@@ -820,8 +819,7 @@ public class FragmentQuiz extends FragmentBase {
 	        if (skipTimer != null)
 	            skipTimer.cancel();
 	        // TODO Add Jason's serial
-	        if (!Build.SERIAL.equals("HT1BNS215989") &&
-	        		!Build.SERIAL.equals("0146914813011017"))
+	        if (!ApplicationEx.getSerialsList().contains(Build.SERIAL))
 	        	skipButton.setEnabled(false);
 	        skipButton.setVisibility(View.VISIBLE);
 	        if (skipPressed) {
@@ -1027,8 +1025,7 @@ public class FragmentQuiz extends FragmentBase {
                 skipTime.setVisibility(View.INVISIBLE);
                 hintButton.setEnabled(false);
                 // TODO Add Jason's serial
-                if (!Build.SERIAL.equals("HT1BNS215989") &&
-                		!Build.SERIAL.equals("0146914813011017"))
+                if (!ApplicationEx.getSerialsList().contains(Build.SERIAL))
                 	skipButton.setEnabled(false);
                 answerImage.setImageResource(R.drawable.correct);
                 answerImage.setVisibility(View.VISIBLE);

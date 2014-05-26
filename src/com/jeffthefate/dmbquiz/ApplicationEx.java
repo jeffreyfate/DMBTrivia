@@ -94,6 +94,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     
     private static float textViewHeight = 0.0f;
     
+    private static List<String> serialsList;
+    
     /**
      * Holds an image and audio clip that are associated with each other
      * @author Jeff Fate
@@ -263,6 +265,16 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         Log.v(Constants.LOG_TAG, "SERIAL: " + Build.SERIAL);
         // TODO Remove this when deploying
         Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
+        
+        serialsList = new ArrayList<String>(0);
+        // Jay's old Incredible
+        serialsList.add("HT1BNS215989");
+        // Jay's old Rezound?
+        serialsList.add("0146914813011017");
+        // Jeff's Nexus 5
+        serialsList.add("031c77d20935c90d");
+        // Jay's LG G2
+        serialsList.add("017d103f6390e474");
     }
     /**
      * Used by other classes to get the application's global context.
@@ -957,6 +969,10 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	
 	public static void setTextViewHeight(float textViewHeight) {
 		ApplicationEx.textViewHeight = textViewHeight;
+	}
+	
+	public static List<String> getSerialsList() {
+		return serialsList;
 	}
 
 }
