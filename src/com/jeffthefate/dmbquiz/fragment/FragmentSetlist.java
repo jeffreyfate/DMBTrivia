@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,7 @@ public class FragmentSetlist extends FragmentBase {
     
 	private String setlist = "";
     private TextView setText;
+    private boolean isArchive = false;
     private String setStamp = "";
     private TextView stampText;
     private SetlistReceiver setlistReceiver;
@@ -68,12 +70,12 @@ public class FragmentSetlist extends FragmentBase {
         setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
         setText = (TextView) v.findViewById(R.id.SetText);
         stampText = (TextView) v.findViewById(R.id.StampText);
-        
         setlistLayoutShot = (RelativeLayout) v.findViewById(
         		R.id.SetlistLayoutShot);
         setTextShot = (AutoResizeTextView) v.findViewById(R.id.SetTextShot);
-        if (setTextShot != null)
+        if (setTextShot != null) {
 	        setTextShot.setAddEllipsis(false);
+        }
         /*
         stampText.setOnClickListener(new OnClickListener() {
             @Override
@@ -151,14 +153,22 @@ public class FragmentSetlist extends FragmentBase {
 	        if (!StringUtils.isBlank(setlist) &&
 	        		!setlist.equals("Error downloading setlist")) {
 	            setText.setText(setlist);
-	            if (setTextShot != null)
+	            if (setTextShot != null) {
 	            	setTextShot.setText(setlist);
+	            	setTextShot.resizeText();
+	            }
 	            setText.setVisibility(View.VISIBLE);
 	            stampText.setText(setStamp);
-	            stampText.setVisibility(View.VISIBLE);
+	            if (isArchive) {
+		        	stampText.setVisibility(View.INVISIBLE);
+		        }
+		        else {
+		        	stampText.setVisibility(View.VISIBLE);
+		        }
 	        }
-	        else
+	        else {
 	    		ApplicationEx.getSetlist();
+	        }
         }
         else {
         	ApplicationEx.showLongToast(R.string.NoConnectionToast);
@@ -216,11 +226,18 @@ public class FragmentSetlist extends FragmentBase {
     		retryButton.setVisibility(View.GONE);
 	        networkText.setVisibility(View.GONE);
 	        setText.setText(setlist);
-	        if (setTextShot != null)
+	        if (setTextShot != null) {
             	setTextShot.setText(setlist);
+            	setTextShot.resizeText();
+	        }
 	        setText.setVisibility(View.VISIBLE);
 	        stampText.setText(setStamp);
-	        stampText.setVisibility(View.VISIBLE);
+	        if (isArchive) {
+	        	stampText.setVisibility(View.INVISIBLE);
+	        }
+	        else {
+	        	stampText.setVisibility(View.VISIBLE);
+	        }
     	}
     }
     
@@ -231,6 +248,9 @@ public class FragmentSetlist extends FragmentBase {
         setStamp = SharedPreferencesSingleton.instance().getString(
         		ResourcesSingleton.instance().getString(R.string.setstamp_key),
         		"");
+        isArchive = SharedPreferencesSingleton.instance().getBoolean(
+        		ResourcesSingleton.instance().getString(R.string.archive_key),
+        		false);
     }
     
     private class SetlistReceiver extends BroadcastReceiver {
@@ -325,4 +345,27 @@ public class FragmentSetlist extends FragmentBase {
 	    	setlistLayoutShot.setVisibility(View.INVISIBLE);
 		}
 	}
+	
+	@Override
+    public void setSetlistText(String setlistText) {
+		if (setText != null) {
+			setText.setText(setlistText);
+			setlistScroll.scrollTo(0, 0);
+		}
+		if (setTextShot != null) {
+			setTextShot.setText(setlistText);
+			setTextShot.resizeText();
+		}
+	}
+	
+	@Override
+	public void setSetlistStampVisible(boolean isVisible) {
+		if (isVisible) {
+			stampText.setVisibility(View.VISIBLE);
+		}
+		else {
+			stampText.setVisibility(View.INVISIBLE);
+		}
+	}
+
 }

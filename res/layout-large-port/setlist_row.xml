@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RowLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <ScrollView
+        android:id="@+id/SetlistScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+        <RelativeLayout
+            android:id="@+id/SetlistLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:layout_marginBottom="8dip"
+            android:paddingBottom="8dip" >
+            <TextView
+                android:id="@+id/SetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="24sp" />
+            <TextView
+                android:id="@+id/StampText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SetText"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:layout_marginBottom="8dip"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/light_gray"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+        </RelativeLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:id="@+id/SetlistLayoutShot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dip"
+        android:layout_marginTop="8dip" >
+        <com.jeffthefate.dmbquiz.AutoResizeTextView
+            android:id="@+id/SetTextShot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:paddingTop="5dip"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="24sp" />
+        <!-- 
+        <TextView
+            android:id="@+id/StampText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/light_gray"
+            android:textStyle="bold"
+            android:textSize="1sp" />
+         -->
+    </RelativeLayout>
+</RelativeLayout>

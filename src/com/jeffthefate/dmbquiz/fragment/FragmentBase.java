@@ -74,9 +74,11 @@ public class FragmentBase extends Fragment implements UiCallback {
                 "6pJz1oVHAwZ7tfOuvHfQCRz6AVKZzg1itFVfzx2q",
                 "2ocGkdBygVyNStd8gFQQgrDyxxZJCXt3K1GbRpMD");
         */
+        /*
         Parse.initialize(getActivity(),
                         "ImI8mt1EM3NhZNRqYZOyQpNSwlfsswW73mHsZV3R",
                         "hpTbnpuJ34zAFLnpOAXjH583rZGiYQVBWWvuXsTo");
+        */
         setHasOptionsMenu(false);
         audioManager = (AudioManager) getActivity().getSystemService(
                 Context.AUDIO_SERVICE);
@@ -473,5 +475,11 @@ public class FragmentBase extends Fragment implements UiCallback {
 
 	@Override
 	public void hideResizedSetlist() {}
+	
+	@Override
+    public void setSetlistText(String setlistText) {}
+	
+	@Override
+	public void setSetlistStampVisible(boolean isVisible) {}
 
 }

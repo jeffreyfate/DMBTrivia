@@ -49,11 +49,13 @@ public class PushReceiver extends BroadcastReceiver {
         multicastLock = wm.createMulticastLock(Constants.PUSH_WIFI_LOCK);
         multicastLock.acquire();
         if (Build.VERSION.SDK_INT <
-                Build.VERSION_CODES.HONEYCOMB)
+                Build.VERSION_CODES.HONEYCOMB) {
         	new ReceiveTask(intent).execute();
-        else
+        }
+        else {
         	new ReceiveTask(intent).executeOnExecutor(
         			AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
     
     private static String getUpdatedDateString(long millis) {
@@ -110,6 +112,7 @@ public class PushReceiver extends BroadcastReceiver {
                 JSONObject json = null;
                 String latestSong = "";
                 String latestSet = "";
+                String latestSetDate = "";
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
                 		throw new JSONException("No data sent!");
@@ -117,6 +120,7 @@ public class PushReceiver extends BroadcastReceiver {
                             "com.parse.Data"));
                     latestSong = json.getString("song");
                     latestSet = json.getString("setlist");
+                    latestSetDate = json.getString("shortDate");
                     ApplicationEx.parseSetlist(latestSet);
                     Editor editor = SharedPreferencesSingleton.instance()
                     		.edit();
@@ -124,16 +128,23 @@ public class PushReceiver extends BroadcastReceiver {
                     		R.string.lastsong_key), latestSong);
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.setlist_key), latestSet);
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.set_date_key), latestSetDate);
+                    editor.putBoolean(ResourcesSingleton.instance().getString(
+                    		R.string.archive_key), false);
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");
                     sb.append(getUpdatedDateString(
                     		Long.parseLong(json.getString("timestamp"))));
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.setstamp_key), sb.toString());
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+                    if (Build.VERSION.SDK_INT <
+                    		Build.VERSION_CODES.GINGERBREAD) {
                     	editor.commit();
-                    else
+                    }
+                    else {
                     	editor.apply();
+                    }
                     /*
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");

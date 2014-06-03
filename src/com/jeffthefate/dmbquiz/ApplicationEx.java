@@ -406,19 +406,24 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     public static void setStringArrayPref(String key,
             ArrayList<String> answers) {
         SharedPreferences.Editor editor = SharedPreferencesSingleton.instance().edit();
-        if (answers == null)
+        if (answers == null) {
             editor.remove(key);
+        }
         else {
             JSONArray array = new JSONArray(answers);
-            if (!answers.isEmpty())
+            if (!answers.isEmpty()) {
                 editor.putString(key, array.toString());
-            else
+            }
+            else {
                 editor.putString(key, null);
+            }
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
         	editor.commit();
-        else
+        }
+        else {
         	editor.apply();
+        }
     }
     
     /**
@@ -483,11 +488,11 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * setlist to show.
      */
     public static void getSetlist() {
-        ParseQuery setlistQuery = new ParseQuery("Setlist");
+        ParseQuery<ParseObject> setlistQuery = new ParseQuery<ParseObject>("Setlist");
         setlistQuery.addDescendingOrder("setDate");
         setlistQuery.setLimit(1);
         //setlistQuery.setSkip(5);
-        setlistQuery.findInBackground(new FindCallback() {
+        setlistQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> setlists, ParseException e) {
             	String setlist = "Error downloading setlist";
@@ -508,6 +513,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                     		R.string.setlist_key), setlist);
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.setstamp_key), sb.toString());
+                    Log.w(Constants.LOG_TAG, "updating setlist_key");
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
                     	editor.commit();
                     else

@@ -88,9 +88,15 @@
     <string name="justplay_key">justplay</string>
     <string name="level_key">level</string>
     
+    <string name="archive_key">archive</string>
     <string name="setlist_key">setlist</string>
+    <string name="set_date_key">setdate</string>
     <string name="lastsong_key">lastsong</string>
     <string name="setstamp_key">setstamp</string>
+    <string name="setlist_list_key">setlistlist</string>
+    <string name="selected_group_key">selectedgroup</string>
+    <string name="selected_child_key">selectedchild</string>
+    <string name="first_visible_key">firstvisible</string>
     
     <string name="hard_key">hard</string>
     <string name="medium_key">medium</string>

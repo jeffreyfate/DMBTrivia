@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
@@ -44,6 +46,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckedTextView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,6 +74,7 @@ import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.SetlistAdapter;
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
 import com.jeffthefate.dmbquiz.fragment.FragmentFaq;
 import com.jeffthefate.dmbquiz.fragment.FragmentInfo;
@@ -81,7 +89,6 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -137,6 +144,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private GetScoreTask getScoreTask;
     private GetNextQuestionsTask getNextQuestionsTask;
     private GetStageTask getStageTask;
+    private ParseTask parseTask;
     
     private Bundle leadersBundle;
     private ArrayList<String> rankList = new ArrayList<String>();
@@ -154,6 +162,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private boolean networkProblem = false;
     private boolean facebookLogin = false;
     private boolean newUser = false;
+    
+    private TreeMap<String, TreeMap<String, String>> setlistMap =
+    		new TreeMap<String, TreeMap<String, String>>(
+    		String.CASE_INSENSITIVE_ORDER);
+    private int firstVisiblePosition = 0;
+    private ArrayList<Integer> expandedGroups = new ArrayList<Integer>(0);
     
     public interface UiCallback {
         public void showNetworkProblem();
@@ -174,6 +188,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         public void setBackground(Bitmap newBackground);
         public void showResizedSetlist();
         public void hideResizedSetlist();
+        public void setSetlistText(String setlistText);
+        public void setSetlistStampVisible(boolean isVisible);
     }
     
     private NotificationManager nManager;
@@ -190,8 +206,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private int lowest = 0;
     private int highest = 0;
     
-    private SlidingMenu slidingMenu;
-    
     private RelativeLayout statsButton;
     private RelativeLayout switchButton;
     private RelativeLayout infoButton;
@@ -200,6 +214,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private RelativeLayout nameButton;
     private RelativeLayout exitButton;
     private RelativeLayout logoutButton;
+    private ExpandableListView setlistListView;
+    private ProgressBar setlistProgress;
     //private TextView logoutText;
     // TODO Re-add levels
     //protected RelativeLayout levelButton;
@@ -297,8 +313,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
         Parse.initialize(this, "6pJz1oVHAwZ7tfOuvHfQCRz6AVKZzg1itFVfzx2q",
                 "2ocGkdBygVyNStd8gFQQgrDyxxZJCXt3K1GbRpMD");
         */
+        /*
         Parse.initialize(this, "ImI8mt1EM3NhZNRqYZOyQpNSwlfsswW73mHsZV3R",
                 "hpTbnpuJ34zAFLnpOAXjH583rZGiYQVBWWvuXsTo");
+        */
         //PushService.subscribe(this, "", ActivityMain.class);
         // TODO Add these to update to the setlist channel and remove old
         //PushService.unsubscribe(app, "");
@@ -360,6 +378,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     DatabaseHelper.COL_NETWORK_PROBLEM, userId);
             //count = savedInstanceState.getInt("count");
             //checkCount = savedInstanceState.getBoolean("checkCount");
+            setlistMap = (TreeMap<String, TreeMap<String, String>>)
+            		savedInstanceState.getSerializable("setlists");
+            firstVisiblePosition = savedInstanceState.getInt("firstVisible");
+            expandedGroups = savedInstanceState.getIntegerArrayList(
+            		"expandedGroups");
         }
         else {
             userId = DatabaseHelperSingleton.instance().getCurrUser();
@@ -393,19 +416,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
         nManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         connReceiver = new ConnectionReceiver();
-        slidingMenu = getSlidingMenu();
-        slidingMenu.setShadowWidthRes(R.dimen.shadow_width);
-        slidingMenu.setBehindOffsetRes(R.dimen.menu_width_port);
-        slidingMenu.setFadeDegree(0.35f);
-        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        switch(ResourcesSingleton.instance().getConfiguration().orientation) {
-        case Configuration.ORIENTATION_LANDSCAPE:
-        	slidingMenu.setBehindOffsetRes(R.dimen.menu_width_land);
-            break;
-        default:
-        	slidingMenu.setBehindOffsetRes(R.dimen.menu_width_port);
-            break;
-        }
+        getSlidingMenu().setShadowWidthRes(R.dimen.shadow_width);
+        getSlidingMenu().setFadeDegree(0.35f);
+        getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notification_key))) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
@@ -444,6 +457,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 SharedPreferencesSingleton.instance().edit().putBoolean(
                 		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true).apply();
         }
+        Log.d(Constants.LOG_TAG, "ActivityMain onCreate");
         refreshSlidingMenu();
         getWindow().setBackgroundDrawable(null);
         googleAnalytics = GoogleAnalytics.getInstance(this);
@@ -662,36 +676,51 @@ public class ActivityMain extends SlidingFragmentActivity implements
         outState.putBoolean("networkProblem", networkProblem);
         //outState.putInt("count", count);
         //outState.putBoolean("checkCount", true);
+        outState.putSerializable("setlists", setlistMap);
+        outState.putInt("firstVisible",
+        		setlistListView.getFirstVisiblePosition());
+        outState.putIntegerArrayList("expandedGroups", expandedGroups);
         super.onSaveInstanceState(outState);
     }
     
     @Override
     public void onResume() {
         super.onResume();
-        if (getScoreTask != null)
+        if (parseTask != null) {
+        	parseTask.cancel(true);
+        }
+        if (getScoreTask != null) {
             getScoreTask.cancel(true);
-        if (user == null)
+        }
+        if (user == null) {
             user = ParseUser.getCurrentUser();
+        }
         if (userId == null && user != null) {
             userId = user.getObjectId();
-            if (userId != null)
+            if (userId != null) {
                 getUserData(userId);
+            }
         }
-        if (user != null)
+        if (user != null) {
         	getFacebookDisplayName(user);
+        }
         if (!isLogging) {
             if (userId == null) {
-                if (!loggedIn)
+                if (!loggedIn) {
                     logOut();
-                else
+                }
+                else {
                     checkUser();
+                }
             }
             else {
                 if (correctAnswers == null) {
                     isLogging = true;
                     showLogin();
-                    if (!DatabaseHelperSingleton.instance().isAnonUser(userId))
+                    if (!DatabaseHelperSingleton.instance().isAnonUser(
+                    		userId)) {
                     	getScore(false, true, userId, false);
+                    }
                     else {
                     	correctAnswers = new ArrayList<String>();
                     	if (questionIds.size() >= 1 && questionIds.get(0) != null) {
@@ -699,26 +728,32 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 goToQuiz();
                             } catch (IllegalStateException exception) {}
                         }
-                        else
+                        else {
                             getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
                             		ResourcesSingleton.instance().getString(R.string.level_key),
             						Constants.HARD));
+                        }
                     }
                 }
-                else
+                else {
                     showLoggedInFragment();
+                }
             }
         }
         else {
-            if (userId != null)
+            if (userId != null) {
                 setupUser(newUser);
-            else if (!facebookLogin)
+            }
+            else if (!facebookLogin) {
                 checkUser();
+            }
         }
-        if (inInfo)
+        if (inInfo) {
             onInfoPressed();
-        if (inFaq)
+        }
+        if (inFaq) {
         	onFaqPressed();
+        }
         /*
         if (inSetlist)
             showSetlist(false);
@@ -748,10 +783,22 @@ public class ActivityMain extends SlidingFragmentActivity implements
     	case Configuration.ORIENTATION_LANDSCAPE:
     		tracker.sendEvent(Constants.CATEGORY_HARDWARE,
         			Constants.ACTION_ROTATE, "landscape", 1l);
+    		if (inSetlist) {
+    			getSlidingMenu().setBehindOffsetRes(R.dimen.menu_setlist_width_land);
+    		}
+    		else {
+    			getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
+    		}
     		break;
     	case Configuration.ORIENTATION_PORTRAIT:
     		tracker.sendEvent(Constants.CATEGORY_HARDWARE,
         			Constants.ACTION_ROTATE, "portrait", 1l);
+    		if (inSetlist) {
+    			getSlidingMenu().setBehindOffsetRes(R.dimen.menu_setlist_width_port);
+    		}
+    		else {
+    			getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_port);
+    		}
     		break;
     	}
     }
@@ -775,7 +822,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ft.replace(android.R.id.content, fLogin, "fLogin")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -810,11 +857,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void fetchDisplayName() {
         if (userId == null)
             return;
-        ParseQuery query = ParseUser.getQuery();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", userId);
-        query.getInBackground("displayName", new GetCallback() {
+        query.getInBackground("displayName", new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseObject user, ParseException e) {
+            public void done(ParseUser user, ParseException e) {
                 if (user != null)
                     displayName = user.getString("displayName");
                 if (getStatsTask != null)
@@ -838,7 +885,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             fMan.beginTransaction().replace(android.R.id.content, fLeaders,
                     "fLeaders").commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
             refreshSlidingMenu();
         } catch (IllegalStateException e) {}
     }
@@ -926,8 +973,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	                    .commitAllowingStateLoss();
 	            fMan.executePendingTransactions();
         	}
-        	else
+        	else {
         		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
+        	}
+        	Log.d(Constants.LOG_TAG, "ActivityMain showQuiz");
         	refreshSlidingMenu();
         	currFrag.updateSetText();
         } catch (IllegalStateException e) {}
@@ -949,6 +998,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ft.replace(android.R.id.content, fSplash, "fSplash")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
+            Log.d(Constants.LOG_TAG, "ActivityMain showSplash");
             refreshSlidingMenu();
             currFrag.updateSetText();
         } catch (IllegalStateException e) {}
@@ -1027,14 +1077,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
         protected Void doInBackground(Void... nothing) {
             int questionScore = -1;
             // Find correct answers for current user
-            ParseQuery correctQuery = new ParseQuery("CorrectAnswers");
+            ParseQuery<ParseObject> correctQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             correctQuery.whereEqualTo("userId", userId);
             correctQuery.setLimit(1000);
             // Find the questions of the correct answers
-            ParseQuery query = new ParseQuery("Question");
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Question");
             query.setLimit(1000);
             // Delete dupes
-            ParseQuery deleteQuery = new ParseQuery("CorrectAnswers");
+            ParseQuery<ParseObject> deleteQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             deleteQuery.whereEqualTo("userId", userId);
             deleteQuery.setLimit(1000);
             do {
@@ -1266,12 +1316,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
         case android.R.id.home:
         	tracker.sendEvent(Constants.CATEGORY_ACTION_BAR,
         			Constants.ACTION_BUTTON_PRESS, "home", 1l);
-        	if (slidingMenu.isMenuShowing())
+        	if (getSlidingMenu().isMenuShowing()) {
 	    		tracker.sendEvent(Constants.CATEGORY_MENU,
             			Constants.ACTION_MENU_CLOSE, "hardwareMenu", 1l);
-	    	else
+        	}
+	    	else {
 	    		tracker.sendEvent(Constants.CATEGORY_MENU,
             			Constants.ACTION_MENU_OPEN, "hardwareMenu", 1l);
+	    	}
             if (currFrag != null) {
                 if (currFrag instanceof FragmentPager) {
                     if (currFrag.getPage() == 1)
@@ -1358,7 +1410,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected void onPostExecute(Void nothing) {
             showLogin();
-            //slidingMenu.showContent();
+            //getSlidingMenu().showContent();
         }
     }
     
@@ -1367,12 +1419,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	    if (keyCode == KeyEvent.KEYCODE_MENU) {
 	    	tracker.sendEvent(Constants.CATEGORY_HARDWARE,
         			Constants.ACTION_BUTTON_PRESS, "menu", 1l);
-	    	if (slidingMenu.isMenuShowing())
+	    	if (getSlidingMenu().isMenuShowing()) {
 	    		tracker.sendEvent(Constants.CATEGORY_MENU,
             			Constants.ACTION_MENU_CLOSE, "hardwareMenu", 1l);
-	    	else
+	    	}
+	    	else {
 	    		tracker.sendEvent(Constants.CATEGORY_MENU,
             			Constants.ACTION_MENU_OPEN, "hardwareMenu", 1l);
+	    	}
 	        if (currFrag != null) {
 	            if (currFrag instanceof FragmentPager) {
                     if (currFrag.getPage() == 1)
@@ -1394,17 +1448,26 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void refreshSlidingMenu() {
         if (!loggedIn) {
             setBehindContentView(R.layout.menu_splash);
-            infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
+            getSlidingMenu().setMode(SlidingMenu.LEFT);
+        	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
+	        case Configuration.ORIENTATION_LANDSCAPE:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
+	            break;
+	        default:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_port);
+	            break;
+	        }
+            infoButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.InfoButton);
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "splashInfo", 1l);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                    	getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                            	getSlidingMenu().setOnClosedListener(null);
                                 Thread infoThread = new Thread() {
                                     public void run() {
                                         try {
@@ -1416,54 +1479,54 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 infoThread.start();
                             }
                         });
-                        slidingMenu.showContent();
+                    	getSlidingMenu().showContent();
                     }
                 }
             });
             /*
-            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SwitchButton);
             switchButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                     switchButton.setEnabled(false);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 setBackground(getSplashBackground(), true, "splash");
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
             switchButton.setEnabled(true);
             */
-            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ExitButton);
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "splashExit", 1l);
-                    if (slidingMenu.isMenuShowing())
+                    if (getSlidingMenu().isMenuShowing())
                         moveTaskToBack(true);
                 }
             });
-            notificationSoundButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationSoundButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsButton);
-            notificationSoundImage = (ImageViewEx) slidingMenu.findViewById(
+            notificationSoundImage = (ImageViewEx) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsImage);
-            notificationSoundText = (TextView) slidingMenu.findViewById(
+            notificationSoundText = (TextView) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsText);
             int soundSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
-            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationAlbumButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationTypeButton);
-            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+            notificationAlbumImage = (ImageViewEx) getSlidingMenu().findViewById(
                     R.id.NotificationTypeImage);
-            notificationAlbumText = (TextView) slidingMenu.findViewById(
+            notificationAlbumText = (TextView) getSlidingMenu().findViewById(
                     R.id.NotificationTypeText);
             switch (soundSetting) {
             case 0:
@@ -1498,7 +1561,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
@@ -1571,7 +1634,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
                         switch (typeSetting) {
@@ -1612,9 +1675,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
-            notificationsButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationsButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationsButton);
-            notificationsText = (CheckedTextView) slidingMenu.findViewById(
+            notificationsText = (CheckedTextView) getSlidingMenu().findViewById(
                     R.id.NotificationsText);
             notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
             		ResourcesSingleton.instance().getString(R.string.notification_key), true));
@@ -1655,7 +1718,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
                                 notificationAlbumButton != null) {
@@ -1711,7 +1774,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         else if (!inStats) {
             setBehindContentView(R.layout.menu_quiz);
-            statsButton = (RelativeLayout) slidingMenu.findViewById(R.id.StatsButton);
+            getSlidingMenu().setMode(SlidingMenu.LEFT);
+        	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
+	        case Configuration.ORIENTATION_LANDSCAPE:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
+	            break;
+	        default:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_port);
+	            break;
+	        }
+            statsButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.StatsButton);
             if (DatabaseHelperSingleton.instance().isAnonUser(userId))
             	statsButton.setVisibility(View.GONE);
             else {
@@ -1726,36 +1798,36 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	            });
             }
             /*
-            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SwitchButton);
             switchButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                     switchButton.setEnabled(false);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 setBackground(getQuizBackground(), true, "quiz");
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
             switchButton.setEnabled(true);
             */
-            reportButton = (RelativeLayout) slidingMenu.findViewById(R.id.ReportButton);
+            reportButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ReportButton);
             reportButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "quizReport", 1l);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 Thread shareThread = new Thread() {
                                     public void run() {
                                         try {
@@ -1768,22 +1840,22 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 shareThread.start();
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
-            shareButton = (RelativeLayout) slidingMenu.findViewById(R.id.ShareButton);
+            shareButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ShareButton);
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "quizShare", 1l);
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 if (screenshotTask != null)
                                     screenshotTask.cancel(true);
                                 screenshotTask = new ScreenshotTask(false);
@@ -1794,18 +1866,18 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
-            logoutButton = (RelativeLayout) slidingMenu.findViewById(R.id.LogoutButton);
+            logoutButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.LogoutButton);
             //logoutText = (TextView) findViewById(R.id.LogoutText);
             /*
-            nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
+            nameButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.NameButton);
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing())
+                    if (getSlidingMenu().isMenuShowing())
                         showNameDialog();
                 }
             });
@@ -1832,11 +1904,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "quizLogout", 1l);
-                	if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                	if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 if (logoutWaitTask != null)
                                 	logoutWaitTask.cancel(true);
                                 logoutWaitTask = new LogoutWaitTask();
@@ -1847,24 +1919,24 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 	logoutWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
-            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ExitButton);
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "quizExit", 1l);
-                    if (slidingMenu.isMenuShowing())
+                    if (getSlidingMenu().isMenuShowing())
                         moveTaskToBack(true);
                 }
             });
             /*
-            levelButton = (RelativeLayout) slidingMenu.findViewById(R.id.LevelButton);
-            levelImage = (ImageViewEx) slidingMenu.findViewById(R.id.LevelImage);
-            levelText = (TextView) slidingMenu.findViewById(R.id.LevelText);
+            levelButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.LevelButton);
+            levelImage = (ImageViewEx) getSlidingMenu().findViewById(R.id.LevelImage);
+            levelText = (TextView) getSlidingMenu().findViewById(R.id.LevelText);
             switch (SharedPreferencesSingleton.instance().getInt(
                     res.getString(R.string.level_key),Constants.HARD)) {
             case Constants.EASY:
@@ -1883,7 +1955,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             levelButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         switch (SharedPreferencesSingleton.instance().getInt(
                             res.getString(R.string.level_key), Constants.HARD)) {
                         case Constants.EASY:
@@ -1938,14 +2010,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             */
-            soundsButton = (RelativeLayout) slidingMenu.findViewById(R.id.SoundsButton);
-            soundsText = (CheckedTextView) slidingMenu.findViewById(R.id.SoundsText);
+            soundsButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SoundsButton);
+            soundsText = (CheckedTextView) getSlidingMenu().findViewById(R.id.SoundsText);
             soundsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
             		ResourcesSingleton.instance().getString(R.string.sound_key), true));
             soundsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         soundsText.toggle();
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
                             SharedPreferencesSingleton.instance().edit().putBoolean(
@@ -1965,20 +2037,20 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
-            notificationSoundButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationSoundButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsButton);
-            notificationSoundImage = (ImageViewEx) slidingMenu.findViewById(
+            notificationSoundImage = (ImageViewEx) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsImage);
-            notificationSoundText = (TextView) slidingMenu.findViewById(
+            notificationSoundText = (TextView) getSlidingMenu().findViewById(
                     R.id.NotificationSoundsText);
             int soundSetting = SharedPreferencesSingleton.instance().getInt(
             		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
             notificationSoundImage.setImageLevel(soundSetting);
-            notificationAlbumButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationAlbumButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationTypeButton);
-            notificationAlbumImage = (ImageViewEx) slidingMenu.findViewById(
+            notificationAlbumImage = (ImageViewEx) getSlidingMenu().findViewById(
                     R.id.NotificationTypeImage);
-            notificationAlbumText = (TextView) slidingMenu.findViewById(
+            notificationAlbumText = (TextView) getSlidingMenu().findViewById(
                     R.id.NotificationTypeText);
             switch (soundSetting) {
             case 0:
@@ -2013,7 +2085,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationSoundButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
                         switch (soundSetting) {
@@ -2086,7 +2158,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationAlbumButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
                         switch (typeSetting) {
@@ -2127,9 +2199,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     }
                 }
             });
-            notificationsButton = (RelativeLayout) slidingMenu.findViewById(
+            notificationsButton = (RelativeLayout) getSlidingMenu().findViewById(
                     R.id.NotificationsButton);
-            notificationsText = (CheckedTextView) slidingMenu.findViewById(
+            notificationsText = (CheckedTextView) getSlidingMenu().findViewById(
                     R.id.NotificationsText);
             notificationsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
             		ResourcesSingleton.instance().getString(R.string.notification_key), true));
@@ -2170,7 +2242,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             notificationsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         notificationsText.toggle();
                         if (notificationSoundButton != null &&
                                 notificationAlbumButton != null) {
@@ -2226,18 +2298,27 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         else if (inStats) {
             setBehindContentView(R.layout.menu_leaders);
-            shareButton = (RelativeLayout) slidingMenu.findViewById(R.id.ShareButton);
+            getSlidingMenu().setMode(SlidingMenu.LEFT);
+        	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
+	        case Configuration.ORIENTATION_LANDSCAPE:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
+	            break;
+	        default:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_port);
+	            break;
+	        }
+            shareButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ShareButton);
             shareButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsShare", 1l);
-                    if (slidingMenu.isMenuShowing()) {
+                    if (getSlidingMenu().isMenuShowing()) {
                         ApplicationEx.showShortToast("Capturing screen");
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 if (screenshotTask != null)
                                     screenshotTask.cancel(true);
                                 screenshotTask = new ScreenshotTask(false);
@@ -2248,31 +2329,31 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                     screenshotTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
-            nameButton = (RelativeLayout) slidingMenu.findViewById(R.id.NameButton);
+            nameButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.NameButton);
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsName", 1l);
-                    if (slidingMenu.isMenuShowing())
+                    if (getSlidingMenu().isMenuShowing())
                         showNameDialog();
                 }
             });
-            infoButton = (RelativeLayout) slidingMenu.findViewById(R.id.InfoButton);
+            infoButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.InfoButton);
             infoButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsInfo", 1l);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 Thread infoThread = new Thread() {
                                     public void run() {
                                         try {
@@ -2284,46 +2365,46 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 infoThread.start();
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
-            exitButton = (RelativeLayout) slidingMenu.findViewById(R.id.ExitButton);
+            exitButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.ExitButton);
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsExit", 1l);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 inStats = false;
                                 DatabaseHelperSingleton.instance().setUserValue(inStats ? 1 : 0,
                                         DatabaseHelper.COL_IN_STATS, userId);
                                 showQuiz(true, false);
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
             /*
-            switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+            switchButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SwitchButton);
             switchButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                     switchButton.setEnabled(false);
-                    if (slidingMenu.isMenuShowing()) {
-                        slidingMenu.setOnClosedListener(new OnClosedListener() {
+                    if (getSlidingMenu().isMenuShowing()) {
+                        getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                             @Override
                             public void onClosed() {
-                                slidingMenu.setOnClosedListener(null);
+                                getSlidingMenu().setOnClosedListener(null);
                                 setBackground(getLeadersBackground(), true, "leaders");
                             }
                         });
-                        slidingMenu.showContent();
+                        getSlidingMenu().showContent();
                     }
                 }
             });
@@ -2331,14 +2412,14 @@ public class ActivityMain extends SlidingFragmentActivity implements
             */
         }
         /*
-        tipsButton = (RelativeLayout) slidingMenu.findViewById(R.id.QuickTipsButton);
-        tipsText = (CheckedTextView) slidingMenu.findViewById(R.id.QuickTipsText);
+        tipsButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.QuickTipsButton);
+        tipsText = (CheckedTextView) getSlidingMenu().findViewById(R.id.QuickTipsText);
         tipsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
                 res.getString(R.string.quicktip_key), false));
         tipsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (slidingMenu.isMenuShowing()) {
+                if (getSlidingMenu().isMenuShowing()) {
                     tipsText.toggle();
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
                         SharedPreferencesSingleton.instance().edit().putBoolean(
@@ -2356,7 +2437,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
         });
         */
-        followButton = (RelativeLayout) slidingMenu.findViewById(R.id.FollowButton);
+        followButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.FollowButton);
         followButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -2369,11 +2450,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	else if (inStats)
             		tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsFollow", 1l);
-                if (slidingMenu.isMenuShowing())
+                if (getSlidingMenu().isMenuShowing())
                     startActivity(getOpenTwitterIntent());
             }
         });
-        likeButton = (RelativeLayout) slidingMenu.findViewById(R.id.LikeButton);
+        likeButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.LikeButton);
         likeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -2386,7 +2467,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	else if (inStats)
             		tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsLike", 1l);
-                if (slidingMenu.isMenuShowing())
+                if (getSlidingMenu().isMenuShowing())
                     startActivity(getOpenFacebookIntent());
             }
         });
@@ -2401,7 +2482,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 R.layout.quicktip_left,
                 (ViewGroup) findViewById(R.id.ToolTipLayout));
         */
-        switchButton = (RelativeLayout) slidingMenu.findViewById(R.id.SwitchButton);
+        switchButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SwitchButton);
         switchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -2415,32 +2496,267 @@ public class ActivityMain extends SlidingFragmentActivity implements
             		tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "statsSwitch", 1l);
                 switchButton.setEnabled(false);
-                if (slidingMenu.isMenuShowing()) {
-                    slidingMenu.setOnClosedListener(new OnClosedListener() {
+                if (getSlidingMenu().isMenuShowing()) {
+                    getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                         @Override
                         public void onClosed() {
-                            slidingMenu.setOnClosedListener(null);
+                            getSlidingMenu().setOnClosedListener(null);
                             setBackground(getBackground(), true, "load");
                         }
                     });
-                    slidingMenu.showContent();
+                    getSlidingMenu().showContent();
                 }
             }
         });
         switchButton.setEnabled(true);
+        if (inSetlist) {
+        	setBehindContentView(R.layout.menu_setlist);
+        	getSlidingMenu().setMode(SlidingMenu.RIGHT);
+        	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
+	        case Configuration.ORIENTATION_LANDSCAPE:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_setlist_width_land);
+	            break;
+	        default:
+	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_setlist_width_port);
+	            break;
+	        }
+            setlistListView = (ExpandableListView) getSlidingMenu().findViewById(R.id.SetlistList);
+            setlistListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+				@Override
+				public void onGroupExpand(int groupPosition) {
+					if (!expandedGroups.contains(groupPosition)) {
+						expandedGroups.add(groupPosition);
+					}
+				}
+            });
+            setlistListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+				@Override
+				public void onGroupCollapse(int groupPosition) {
+					expandedGroups.remove((Integer) groupPosition);
+				}
+            });
+            setlistListView.setOnChildClickListener(
+            		new OnChildClickListener() {
+    			@Override
+    			public boolean onChildClick(ExpandableListView parent, View view,
+    					int groupPos, int childPos, long id) {
+    				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+    		            SharedPreferencesSingleton.instance().edit().putInt(
+    		            		ResourcesSingleton.instance().getString(
+    		            				R.string.selected_group_key),
+    		                    groupPos)
+    		            .commit();
+    		            SharedPreferencesSingleton.instance().edit().putInt(
+    		            		ResourcesSingleton.instance().getString(
+    		            				R.string.selected_child_key),
+    		                    childPos)
+    		            .commit();
+    		    	}
+    		        else {
+    		        	SharedPreferencesSingleton.instance().edit().putInt(
+    		            		ResourcesSingleton.instance().getString(
+    		            				R.string.selected_group_key),
+    		                    groupPos)
+    		            .apply();
+    		        	SharedPreferencesSingleton.instance().edit().putInt(
+    		            		ResourcesSingleton.instance().getString(
+    		            				R.string.selected_child_key),
+    		                    childPos)
+    		            .apply();
+    		        }
+    				SetlistAdapter setlistAdapter = 
+    						(SetlistAdapter) setlistListView.getExpandableListAdapter();
+    				setlistAdapter.notifyDataSetChanged();
+    				String setlist = setlistAdapter.getSetlist(groupPos,
+    						childPos);
+    				currFrag.setSetlistText(setlist);
+    				if (setlistAdapter.getGroupCount()-1 == groupPos &&
+						setlistAdapter.getChildrenCount(groupPos)-1 == childPos) {
+    					//currFrag.updateSetText();
+    					currFrag.setSetlistStampVisible(true);
+    					saveSet(setlist, false);
+    				}
+    				else {
+    					currFrag.setSetlistStampVisible(false);
+    					saveSet(setlist, true);
+    				}
+    				getSlidingMenu().showContent();
+    				return true;
+    			}
+            });
+            setlistProgress = (ProgressBar) getSlidingMenu().findViewById(R.id.SetlistProgress);
+            if (setlistMap.isEmpty()) {
+	            parseTask = new ParseTask();
+	            if (Build.VERSION.SDK_INT <
+	                    Build.VERSION_CODES.HONEYCOMB) {
+	            	parseTask.execute();
+	    		}
+	            else {
+	            	parseTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	            }
+            }
+            else {
+            	String setlistDate = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.set_date_key), "");
+            	String setlist = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.setlist_key), "");
+            	if (!setlistDate.isEmpty()) {
+            		TreeMap<String, String> tempMap = setlistMap.get(
+            				setlistDate.substring(0, 4));
+            		tempMap.put(setlistDate, setlist);
+            	}
+            	SetlistAdapter setlistAdapter = new SetlistAdapter(
+            			ApplicationEx.getApp(), setlistListView, setlistMap);
+            	setlistListView.setAdapter(setlistAdapter);
+            	for (Integer expandedGroup : expandedGroups) {
+                	setlistListView.expandGroup(expandedGroup);
+                }
+            	setlistListView.setSelection(firstVisiblePosition);
+            	setlistListView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+    
+    private void saveSet(String set, boolean archive) {
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+            SharedPreferencesSingleton.instance().edit().putString(
+            		ResourcesSingleton.instance().getString(
+            				R.string.setlist_key),
+                    set)
+            .commit();
+            SharedPreferencesSingleton.instance().edit().putBoolean(
+            		ResourcesSingleton.instance().getString(
+            				R.string.archive_key),
+                    archive)
+            .commit();
+    	}
+        else {
+            SharedPreferencesSingleton.instance().edit().putString(
+            		ResourcesSingleton.instance().getString(
+            				R.string.setlist_key),
+                    set)
+            .apply();
+            SharedPreferencesSingleton.instance().edit().putBoolean(
+            		ResourcesSingleton.instance().getString(
+            				R.string.archive_key),
+                    archive)
+            .apply();
+        }
+    }
+    
+    private class ParseTask extends AsyncTask<Void, Void,
+    		TreeMap<String, TreeMap<String, String>>> {
+    	@Override
+    	protected void onPreExecute() {
+    		setlistListView.setVisibility(View.INVISIBLE);
+    		setlistProgress.setVisibility(View.VISIBLE);
+    	}
+    	
+        @Override
+        protected TreeMap<String, TreeMap<String, String>> doInBackground(Void... nothing) {
+        	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Setlist");
+        	query.setLimit(1000);
+        	query.addAscendingOrder("setDate");
+        	List<ParseObject> setlistList = new ArrayList<ParseObject>(0);
+        	List<ParseObject> tempList = new ArrayList<ParseObject>(0);
+        	do {
+	        	try {
+	        		tempList = query.find();
+	        		setlistList.addAll(tempList);
+	        	} catch (ParseException e) {
+	        		
+	        	}
+	        	query.setSkip(setlistList.size());
+        	} while (!tempList.isEmpty());
+        	dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        	String setDate;
+        	String year;
+        	String setlist;
+        	TreeMap<String, String> tempMap;
+        	for (ParseObject set : setlistList) {
+        		setDate = (String) DateFormat.format(
+        				dateFormat.toLocalizedPattern(), convertToUtc(
+        						set.getDate("setDate")));
+        		year = setDate.substring(0, 4);
+        		setlist = set.getString("set");
+        		if (setlistMap.containsKey(year)) {
+        			tempMap = setlistMap.get(year);
+        			if (!tempMap.containsKey(setDate)) {
+        				tempMap.put(setDate, setlist);
+        			}
+        		}
+        		else {
+        			tempMap = new TreeMap<String, String>(
+        					String.CASE_INSENSITIVE_ORDER);
+        			tempMap.put(setDate, setlist);
+        			setlistMap.put(year, tempMap);
+        		}
+        	}
+            return setlistMap;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {}
+        
+        @Override
+        protected void onCancelled(TreeMap<String, TreeMap<String, String>> setlistMap) {}
+        
+        @Override
+        protected void onPostExecute(TreeMap<String, TreeMap<String, String>> setlistMap) {
+        	setlistProgress.setVisibility(View.INVISIBLE);
+        	if (setlistListView != null) {
+        		String setlistDate = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.set_date_key), "");
+            	String setlist = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.setlist_key), "");
+            	if (!setlistDate.isEmpty()) {
+            		TreeMap<String, String> tempMap = setlistMap.get(
+            				setlistDate.substring(0, 4));
+            		tempMap.put(setlistDate, setlist);
+            	}
+        		SetlistAdapter setlistAdapter = new SetlistAdapter(
+            			ApplicationEx.getApp(), setlistListView, setlistMap);
+        		setlistListView.setAdapter(setlistAdapter);
+            	for (Integer expandedGroup : expandedGroups) {
+                	setlistListView.expandGroup(expandedGroup);
+                }
+            	setlistListView.setSelection(firstVisiblePosition);
+        		setlistListView.setVisibility(View.VISIBLE);
+        	}
+        }
+    }
+    
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
+    		Locale.getDefault());
+    
+    private Date convertToUtc(Date date) {
+    	Calendar mbCal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        mbCal.setTimeInMillis(date.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, mbCal.get(Calendar.YEAR));
+        cal.set(Calendar.MONTH, mbCal.get(Calendar.MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, mbCal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, mbCal.get(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, mbCal.get(Calendar.MINUTE));
+        cal.set(Calendar.SECOND, mbCal.get(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, mbCal.get(Calendar.MILLISECOND));
+        return cal.getTime();
     }
     
     @SuppressLint("NewApi")
     protected void openStats() {
-        if (slidingMenu.isMenuShowing()) {
-            slidingMenu.setOnClosedListener(new OnClosedListener() {
+        if (getSlidingMenu().isMenuShowing()) {
+            getSlidingMenu().setOnClosedListener(new OnClosedListener() {
                 @Override
                 public void onClosed() {
-                    slidingMenu.setOnClosedListener(null);
+                    getSlidingMenu().setOnClosedListener(null);
                     onStatsPressed();
                 }
             });
-            slidingMenu.showContent();
+            getSlidingMenu().showContent();
             if (!SharedPreferencesSingleton.instance().contains(
             		ResourcesSingleton.instance().getString(R.string.stats_key)) ||
                 SharedPreferencesSingleton.instance().getBoolean(
@@ -3227,7 +3543,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ft.replace(android.R.id.content, fInfo, "fInfo")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3255,7 +3571,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ft.replace(android.R.id.content, fLoad, "fLoad")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3276,7 +3592,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             ft.replace(android.R.id.content, fFaq, "fFaq")
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
-            slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3319,7 +3635,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             devList.add("9LvKnpSEqu");
             if (isCancelled())
                 return null;
-            ParseQuery hintsQuery = new ParseQuery("CorrectAnswers");
+            ParseQuery<ParseObject> hintsQuery = new ParseQuery<ParseObject>("CorrectAnswers");
             hintsQuery.whereEqualTo("userId", userId)
                       .whereEqualTo("hint", true);
             try {
@@ -3337,7 +3653,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
             if (isCancelled())
                 return null;
-            ParseQuery questionQuery = new ParseQuery("Question");
+            ParseQuery<ParseObject> questionQuery = new ParseQuery<ParseObject>("Question");
             questionQuery.orderByDescending("createdAt");
             try {
                 ParseObject question = questionQuery.getFirst();
@@ -3355,8 +3671,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 publishProgress();
             }
             ArrayList<String> ranks = new ArrayList<String>(devList);
-            ArrayList<ParseObject> rankObjects = new ArrayList<ParseObject>();
-            ParseQuery rankQuery = ParseUser.getQuery();
+            ArrayList<ParseUser> rankObjects = new ArrayList<ParseUser>();
+            ParseQuery<ParseUser> rankQuery = ParseUser.getQuery();
             rankQuery.whereExists("displayName");
             rankQuery.whereExists("score");
             rankQuery.setLimit(1000);
@@ -3365,7 +3681,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             do {
             	rankQuery.whereNotContainedIn("objectId", ranks);
 	            try {
-	            	List<ParseObject> rankList = rankQuery.find();
+	            	List<ParseUser> rankList = rankQuery.find();
 	            	if (rankList.size() == 0)
 	            		break;
 	            	for (int i = 0; i < rankList.size(); i++) {
@@ -3417,7 +3733,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             showLeaders();
         }
         
-        private void getLeaders(List<ParseObject> leaders) {
+        private void getLeaders(List<ParseUser> leaders) {
             rankList = new ArrayList<String>();
             userList = new ArrayList<String>();
             scoreList = new ArrayList<String>();
@@ -3918,7 +4234,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 	return null;
                 }
                 try {
-                	ParseQuery query = null;
+                	ParseQuery<ParseObject> query = null;
 	                if (tempQuestions == null)
 	                	tempQuestions = new ArrayList<String>();
 	                else
@@ -3926,25 +4242,25 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	                if (correctAnswers != null)
 	                    tempQuestions.addAll(correctAnswers);
 	                tempQuestions.addAll(questionIds);
-	                ParseQuery queryFirst = null;
-	                ParseQuery querySecond = null;
+	                ParseQuery<ParseObject> queryFirst = null;
+	                ParseQuery<ParseObject> querySecond = null;
 	                if (level == Constants.HARD) {
-	                	queryFirst = new ParseQuery("Question");
+	                	queryFirst = new ParseQuery<ParseObject>("Question");
 	                    queryFirst.whereNotContainedIn("objectId",
 	                    		tempQuestions);
 	                    queryFirst.whereLessThanOrEqualTo("score", 1000);
-	                    querySecond = new ParseQuery("Question");
+	                    querySecond = new ParseQuery<ParseObject>("Question");
 	                    querySecond.whereNotContainedIn("objectId",
 	                    		tempQuestions);
 	                	querySecond.whereDoesNotExist("score");
-	                	ArrayList<ParseQuery> queries =
-	                			new ArrayList<ParseQuery>();
+	                	ArrayList<ParseQuery<ParseObject>> queries =
+	                			new ArrayList<ParseQuery<ParseObject>>();
 	                	queries.add(queryFirst);
 	                	queries.add(querySecond);
 	                	query = ParseQuery.or(queries);
 	                }
 	                else {
-	                	query = new ParseQuery("Question");
+	                	query = new ParseQuery<ParseObject>("Question");
 	                	query.whereNotContainedIn("objectId", tempQuestions);
 	                	if (level == Constants.EASY) {
 	                		int easy = DatabaseHelperSingleton.instance()
@@ -4159,8 +4475,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         @Override
         protected Void doInBackground(Void... nothing) {
-            ParseQuery query =
-            		new ParseQuery("Stage");
+            ParseQuery<ParseObject> query =
+            		new ParseQuery<ParseObject>("Stage");
             query.whereEqualTo("userId", userId);
             query.whereContainedIn("questionId", ids);
             query.setLimit(ids.size());
@@ -4381,7 +4697,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         correctAnswers.add(correctId);
         //count--;
         ApplicationEx.setStringArrayPref(
-        		ResourcesSingleton.instance().getString(R.string.correct_key), correctAnswers);
+        		ResourcesSingleton.instance().getString(R.string.correct_key),
+        		correctAnswers);
     }
     
     @Override
@@ -4466,7 +4783,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	*/
     @Override
     public SlidingMenu slidingMenu() {
-        return slidingMenu;
+        return getSlidingMenu();
     }
     
     @Override
@@ -4498,23 +4815,29 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     @Override
     public boolean getGoToSetlist() {
-    	if (goToSetlist)
+    	if (goToSetlist) {
     		nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
+    	}
         return goToSetlist;
     }
     
     @Override
     public void setInSetlist(boolean inSetlist) {
+    	if (this.inSetlist == inSetlist) {
+    		return;
+    	}
         this.inSetlist = inSetlist;
         DatabaseHelperSingleton.instance().setUserValue(inSetlist ? 1 : 0,
                 DatabaseHelper.COL_IN_SETLIST, userId);
         refreshMenu();
+        refreshSlidingMenu();
     }
     
     @Override
     public boolean getInSetlist() {
-    	if (inSetlist)
+    	if (inSetlist) {
     		nManager.cancel(Constants.NOTIFICATION_NEW_SONG);
+    	}
         return inSetlist;
     }
     
@@ -4529,6 +4852,16 @@ public class ActivityMain extends SlidingFragmentActivity implements
         	options.inMutable = true;
         return BitmapFactory.decodeResource(ResourcesSingleton.instance(),
         		resId, options);
+    }
+    
+    @Override
+    public void setCurrFrag(FragmentBase currFrag) {
+    	this.currFrag = currFrag;
+    }
+    
+    @Override
+    public FragmentBase getCurrFrag() {
+    	return currFrag;
     }
     
 }

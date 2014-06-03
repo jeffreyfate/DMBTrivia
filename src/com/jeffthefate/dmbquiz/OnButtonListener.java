@@ -3,6 +3,7 @@ package com.jeffthefate.dmbquiz;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import com.jeffthefate.dmbquiz.fragment.FragmentBase;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public interface OnButtonListener {
@@ -361,4 +362,8 @@ public interface OnButtonListener {
      * @return drawable of image from resource id
      */
     public Bitmap getBitmap(int resId);
+    
+    public void setCurrFrag(FragmentBase currFrag);
+    
+    public FragmentBase getCurrFrag();
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ParentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <com.jeffthefate.dmbquiz.ImageViewEx
@@ -9,6 +10,7 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/SetlistMenu" />
     <ScrollView
+        android:id="@+id/SetlistScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true" >

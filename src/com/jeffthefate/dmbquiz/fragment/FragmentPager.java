@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
+import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
@@ -74,21 +76,20 @@ public class FragmentPager extends FragmentBase {
             @Override
             public void onPageSelected(int position) {
                 if (mCallback != null) {
+                	mCallback.setCurrFrag((FragmentBase) ((FragmentPagerAdapter)
+                			viewPager.getAdapter()).getItem(position));
                     switch (position) {
                     case 0:
-                        mCallback.slidingMenu().setTouchModeAbove(
-                                SlidingMenu.TOUCHMODE_FULLSCREEN);
                         mCallback.setInSetlist(false);
-                        if (((FragmentPagerAdapter) viewPager.getAdapter())
-                        		.getItem(position) instanceof FragmentSplash)
+                        if (mCallback.getCurrFrag() instanceof FragmentSplash) {
                         	tracker.sendView("ActivityMain/FragmentSplash");
-                        else if (((FragmentPagerAdapter) viewPager.getAdapter())
-                        		.getItem(position) instanceof FragmentQuiz)
+                        }
+                        else if (mCallback.getCurrFrag() instanceof
+                        		FragmentQuiz) {
                         	tracker.sendView("ActivityMain/FragmentQuiz");
+                        }
                         break;
                     case 1:
-                        mCallback.slidingMenu().setTouchModeAbove(
-                                SlidingMenu.TOUCHMODE_NONE);
                         mCallback.setInSetlist(true);
                         tracker.sendView("ActivityMain/FragmentSetlist");
                         break;
@@ -123,16 +124,13 @@ public class FragmentPager extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (viewPager.getAdapter().getCount() > 1 && mCallback != null) {
+        	Log.i(Constants.LOG_TAG, mCallback.getGoToSetlist() + " : " + mCallback.getInSetlist());
             if (mCallback.getGoToSetlist() || mCallback.getInSetlist()) {
                 viewPager.setCurrentItem(1);
-                mCallback.slidingMenu().setTouchModeAbove(
-                        SlidingMenu.TOUCHMODE_NONE);
                 mCallback.setInSetlist(true);
             }
             else {
                 viewPager.setCurrentItem(0);
-                mCallback.slidingMenu().setTouchModeAbove(
-                        SlidingMenu.TOUCHMODE_FULLSCREEN);
                 mCallback.setInSetlist(false);
             }
         }

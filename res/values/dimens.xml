@@ -17,6 +17,8 @@
 <resources>
     <dimen name="menu_width_port">60dp</dimen>
     <dimen name="menu_width_land">240dp</dimen>
+    <dimen name="menu_setlist_width_port">200dp</dimen>
+    <dimen name="menu_setlist_width_land">400dp</dimen>
     <dimen name="setlist_offset">0dp</dimen>
     <dimen name="list_padding">10dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
