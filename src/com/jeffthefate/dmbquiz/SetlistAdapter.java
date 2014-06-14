@@ -26,7 +26,6 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
     private TreeMap<String, TreeMap<String, String>> parseMap;
     private List<Object> keyList;
     private Context context;
-    private ExpandableListView listView;
     
     public class ViewHolder {
         private TextView setText;
@@ -50,10 +49,9 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    public SetlistAdapter(Context context, ExpandableListView listView,
+    public SetlistAdapter(Context context,
     		TreeMap<String, TreeMap<String, String>> parseMap) {
         this.context = context;
-        this.listView = listView;
         this.parseMap = parseMap;
         keyList = Arrays.asList(parseMap.keySet().toArray());
         groupCount = parseMap.size();
@@ -109,7 +107,7 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
 		final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.setlist_row, parent, false);
+                    R.layout.date_row, parent, false);
             holder = new ViewHolder();
             holder.setSetText((TextView) convertView.findViewById(R.id.SetText));
             if (getGroup(groupPosition) != null) {

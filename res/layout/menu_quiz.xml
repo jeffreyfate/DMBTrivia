@@ -147,7 +147,6 @@
 	                android:textStyle="bold"
 	                android:textSize="20sp" />
 	        </RelativeLayout>
-	        <!-- 
 	        <RelativeLayout
 	            android:id="@+id/NameButton"
 	            android:layout_width="match_parent"
@@ -172,7 +171,6 @@
 	                android:textStyle="bold"
 	                android:textSize="20sp" />
 	        </RelativeLayout>
-	         -->
 	        <RelativeLayout
 	            android:id="@+id/ExitButton"
 	            android:layout_width="match_parent"
@@ -224,7 +222,6 @@
 	                android:textSize="20sp" />
 	        </RelativeLayout>
 	    </LinearLayout>
-	    <!--
 	    <LinearLayout
 	        android:id="@+id/SettingsLayout"
 	        android:layout_width="match_parent"
@@ -270,6 +267,7 @@
                     android:textSize="20sp"
                     android:checkMark="@drawable/btn_check_inverse" />
             </RelativeLayout>
+            <!--
 	        <RelativeLayout
 	            android:id="@+id/QuickTipsButton"
 	            android:layout_width="match_parent"
@@ -296,8 +294,8 @@
 	                android:textSize="20sp"
 	                android:checkMark="@drawable/btn_check_inverse" />
 	        </RelativeLayout>
+	        -->
 	    </LinearLayout>
-	    -->
 	    <LinearLayout
             android:id="@+id/SetlistLayout"
             android:layout_width="match_parent"
@@ -458,5 +456,34 @@
 	                android:textSize="20sp" />
 	        </RelativeLayout>
 	    </LinearLayout>
+	    <RelativeLayout
+            android:id="@+id/VersionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/SocialLayout" >
+            <TextView
+                android:id="@+id/VersionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/VersionTitle"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:paddingTop="8dip"
+                android:paddingBottom="8dip"
+                android:paddingLeft="16dip" />
+            <TextView
+                android:id="@+id/VersionNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="right"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:paddingTop="8dip"
+                android:paddingBottom="8dip"
+                android:paddingRight="16dip" />
+        </RelativeLayout>
 	</RelativeLayout>
 </ScrollView>

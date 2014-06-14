@@ -54,7 +54,7 @@ public class FragmentLogin extends FragmentBase {
             			Constants.ACTION_BUTTON_PRESS, "loginRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
-                    if (ApplicationEx.getConnection()) {
+                    if (ApplicationEx.hasConnection()) {
                         mCallback.setNetworkProblem(false);
                         mCallback.setupUser(mCallback.isNewUser());
                         networkText.setVisibility(View.INVISIBLE);
@@ -75,7 +75,7 @@ public class FragmentLogin extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (mCallback != null) {
-            if (ApplicationEx.getConnection()) {
+            if (ApplicationEx.hasConnection()) {
                 mCallback.setNetworkProblem(false);
                 //mCallback.setupUser();
                 networkText.setVisibility(View.INVISIBLE);

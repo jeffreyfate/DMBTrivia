@@ -1,8 +1,16 @@
 package com.jeffthefate.dmbquiz.receiver;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,13 +66,6 @@ public class PushReceiver extends BroadcastReceiver {
         }
     }
     
-    private static String getUpdatedDateString(long millis) {
-        ApplicationEx.df.setTimeZone(TimeZone.getDefault());
-        Date date = new Date();
-        date.setTime(millis);
-        return ApplicationEx.df.format(date.getTime());
-    }
-    
     private class ReceiveTask extends AsyncTask<Void, Void, Void> {
     	private Intent intent;
     	
@@ -113,6 +114,8 @@ public class PushReceiver extends BroadcastReceiver {
                 String latestSong = "";
                 String latestSet = "";
                 String latestSetDate = "";
+                String latestSetVenue = "";
+                String latestSetCity = "";
                 try {
                 	if (!intent.hasExtra("com.parse.Data"))
                 		throw new JSONException("No data sent!");
@@ -121,6 +124,8 @@ public class PushReceiver extends BroadcastReceiver {
                     latestSong = json.getString("song");
                     latestSet = json.getString("setlist");
                     latestSetDate = json.getString("shortDate");
+                    latestSetVenue = json.getString("venueName");
+                    latestSetCity = json.getString("venueCity");
                     ApplicationEx.parseSetlist(latestSet);
                     Editor editor = SharedPreferencesSingleton.instance()
                     		.edit();
@@ -130,11 +135,15 @@ public class PushReceiver extends BroadcastReceiver {
                     		R.string.setlist_key), latestSet);
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.set_date_key), latestSetDate);
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setvenue_key), latestSetVenue);
+                    editor.putString(ResourcesSingleton.instance().getString(
+                    		R.string.setcity_key), latestSetCity);
                     editor.putBoolean(ResourcesSingleton.instance().getString(
                     		R.string.archive_key), false);
                     StringBuilder sb = new StringBuilder();
                     sb.append("Updated:\n");
-                    sb.append(getUpdatedDateString(
+                    sb.append(ApplicationEx.getUpdatedDateString(
                     		Long.parseLong(json.getString("timestamp"))));
                     editor.putString(ResourcesSingleton.instance().getString(
                     		R.string.setstamp_key), sb.toString());
@@ -194,23 +203,35 @@ public class PushReceiver extends BroadcastReceiver {
                     Bitmap largeIcon = ApplicationEx.resizeImage(
                     		ResourcesSingleton.instance(),
                             ApplicationEx.findMatchingImage(latestSong));
-                    nBuilder.setLargeIcon(largeIcon).
-                        setSmallIcon(R.drawable.notification_large).
-                        setWhen(System.currentTimeMillis()).
-                        setTicker(latestSong).
-                        setContentTitle(latestSong).
-                        setLights(0xffff0000, 2000, 10000);
+                    nBuilder.setLargeIcon(largeIcon)
+                    	.setSmallIcon(R.drawable.notification_large)
+                        .setWhen(System.currentTimeMillis())
+                        .setTicker(latestSong)
+                        .setContentTitle(latestSong)
+                        .setLights(0xffff0000, 2000, 10000);
+                    if (!latestSet.isEmpty()) {
+                    	String bigText = getNotificationString(latestSet,
+                    			latestSong);
+                    	if (!StringUtils.isBlank(bigText)) {
+                    		nBuilder.setStyle(
+                    				new NotificationCompat.BigTextStyle()
+                    					.bigText(bigText));
+                    	}
+                    }
                     switch (SharedPreferencesSingleton.instance().getInt(
                     		ResourcesSingleton.instance().getString(
                     				R.string.notificationsound_key), 0)) {
                     case 0:
+                    	Log.i(Constants.LOG_TAG, "soundSetting: 0");
                         nBuilder.setVibrate(new long[]{0, 500, 100, 500});
                         nBuilder.setSound(ApplicationEx.notificationSound);
                         break;
                     case 1:
+                    	Log.i(Constants.LOG_TAG, "soundSetting: 1");
                         nBuilder.setSound(ApplicationEx.notificationSound);
                         break;
                     case 2:
+                    	Log.i(Constants.LOG_TAG, "soundSetting: 2");
                         nBuilder.setVibrate(new long[]{0, 500, 100, 500});
                         break;
                     }
@@ -271,4 +292,63 @@ public class PushReceiver extends BroadcastReceiver {
         	wakeLock.release();
         }
     }
+    
+    public static String getNotificationString(String latestSet,
+    		String latestSong) {
+    	CircularFifoQueue<String> circularFifoQueue =
+    			new CircularFifoQueue<String>(7);
+    	List<String> latestList = Arrays.asList(
+    			StringUtils.split(latestSet, "\n"));
+    	latestList = latestList.subList(4, latestList.size()-1);
+    	Log.i(Constants.LOG_TAG, "latestList: " + latestList);
+    	Log.i(Constants.LOG_TAG, "queue size: " + circularFifoQueue.size());
+    	for (String temp : latestList) {
+    		if (temp.toLowerCase(Locale.getDefault()).startsWith("notes:")) {
+    			break;
+    		}
+    		if (StringUtils.strip(latestSong).equals(
+    				StringUtils.strip(temp))) {
+    			Log.i(Constants.LOG_TAG, "Found current song, ending");
+    			break;
+    		}
+    		circularFifoQueue.add(temp);
+    		Log.i(Constants.LOG_TAG, "circularFifoQueue: " + circularFifoQueue);
+    	}
+    	Log.i(Constants.LOG_TAG, "queue size: " + circularFifoQueue.size());
+    	StringBuilder sb = new StringBuilder();
+    	String setLine = "";
+    	Iterator<String> iter = circularFifoQueue.iterator();
+    	while (iter.hasNext()) {
+    		setLine = iter.next();
+    		if (setLine.toLowerCase(Locale.getDefault())
+    				.startsWith("show begins")) {
+    			Log.i(Constants.LOG_TAG, "Found show begins, exiting");
+    			return "";
+    		}
+    		else if (StringUtils.strip(latestSong).equals(
+    				StringUtils.strip(setLine))) {
+    			Log.i(Constants.LOG_TAG, "Found current song, skipping");
+    			continue;
+    		}
+    		else if (!StringUtils.isBlank(setLine)) {
+    			if (!StringUtils.isBlank(sb.toString())) {
+    				Log.i(Constants.LOG_TAG, "Adding new line");
+    				sb.append("\n");
+    			}
+    			Log.i(Constants.LOG_TAG, "Adding " + setLine);
+    			sb.append(setLine);
+    		}
+    		Log.e(Constants.LOG_TAG, sb.toString());
+    	}
+    	if (!circularFifoQueue.isEmpty()) {
+    		if (circularFifoQueue.size() > 1) {
+    			sb.insert(0, "LAST " + circularFifoQueue.size() + "\n");
+    		}
+    		else {
+    			sb.insert(0, "LAST\n");
+    		}
+    	}
+    	return sb.toString();
+    }
+    
 }

@@ -25,6 +25,7 @@
     <string name="hintTime">15</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="upLevel">LEVEL UP</string>
     
     <string name="backgroundImage">Background Image</string>
     <string name="answerImage">Answer Image</string>
@@ -93,6 +94,8 @@
     <string name="set_date_key">setdate</string>
     <string name="lastsong_key">lastsong</string>
     <string name="setstamp_key">setstamp</string>
+    <string name="setvenue_key">setvenue</string>
+    <string name="setcity_key">setcity</string>
     <string name="setlist_list_key">setlistlist</string>
     <string name="selected_group_key">selectedgroup</string>
     <string name="selected_child_key">selectedchild</string>
@@ -133,6 +136,7 @@
     <string name="SettingsTitle">SETTINGS</string>
     <string name="SetlistTitle">SETLIST UPDATES</string>
     <string name="SocialTitle">SOCIAL</string>
+    <string name="VersionTitle">VERSION</string>
     
     <string name="left">Left Quick Tip</string>
     

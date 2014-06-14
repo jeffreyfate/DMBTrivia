@@ -54,7 +54,7 @@ public class FragmentLoad extends FragmentBase {
             			Constants.ACTION_BUTTON_PRESS, "loadRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
-                    if (ApplicationEx.getConnection()) {
+                    if (ApplicationEx.hasConnection()) {
                         mCallback.setNetworkProblem(false);
                         mCallback.onStatsPressed();
                     }
@@ -72,7 +72,7 @@ public class FragmentLoad extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (mCallback != null) {
-            if (ApplicationEx.getConnection()) {
+            if (ApplicationEx.hasConnection()) {
                 mCallback.setNetworkProblem(false);
                 progress.setVisibility(View.VISIBLE);
                 networkText.setVisibility(View.INVISIBLE);

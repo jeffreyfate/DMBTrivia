@@ -65,12 +65,8 @@ public class FragmentSplash extends FragmentBase {
         super.onCreate(savedInstanceState);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notification_key))) {
-        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			ResourcesSingleton.instance().getString(R.string.notification_key), true).commit();
-        	else
-		        SharedPreferencesSingleton.instance().edit().putBoolean(
-		        		ResourcesSingleton.instance().getString(R.string.notification_key), true).apply();
+        	SharedPreferencesSingleton.putBoolean(R.string.notification_key,
+        			true);
         }
     }
 
@@ -242,12 +238,7 @@ public class FragmentSplash extends FragmentBase {
         showQuickTipMenu(quickTipLeftView, "Swipe from left for menu",
         		Constants.QUICK_TIP_LEFT);
 		*/
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-        	SharedPreferencesSingleton.instance().edit().putBoolean(
-        			ResourcesSingleton.instance().getString(R.string.menu_key), true).commit();
-        else
-        	SharedPreferencesSingleton.instance().edit().putBoolean(
-        			ResourcesSingleton.instance().getString(R.string.menu_key), true).apply();
+    	SharedPreferencesSingleton.putBoolean(R.string.menu_key, true);
     }
     
     private void processLogin(boolean signUp) {

@@ -22,9 +22,11 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
+import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
+import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -76,8 +78,6 @@ public class FragmentPager extends FragmentBase {
             @Override
             public void onPageSelected(int position) {
                 if (mCallback != null) {
-                	mCallback.setCurrFrag((FragmentBase) ((FragmentPagerAdapter)
-                			viewPager.getAdapter()).getItem(position));
                     switch (position) {
                     case 0:
                         mCallback.setInSetlist(false);
@@ -128,6 +128,7 @@ public class FragmentPager extends FragmentBase {
             if (mCallback.getGoToSetlist() || mCallback.getInSetlist()) {
                 viewPager.setCurrentItem(1);
                 mCallback.setInSetlist(true);
+                mCallback.setGoToSetlist(false);
             }
             else {
                 viewPager.setCurrentItem(0);
@@ -207,9 +208,9 @@ public class FragmentPager extends FragmentBase {
     }
     
     @Override
-    public void updateSetText() {
+    public void updateSetText(OnButtonListener callback) {
     	((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
-    			.updateSetText();
+    			.updateSetText(callback);
     }
     
     public FragmentBase getFragmentForPager() {
@@ -292,4 +293,10 @@ public class FragmentPager extends FragmentBase {
             super.startScroll(startX, startY, dx, dy, mDuration);
         }
     }
+    
+    @Override
+    public void setSetlistText(String setlistText, boolean canRefresh) {
+		getPage(1).setSetlistText(setlistText, canRefresh);
+	}
+    
 }

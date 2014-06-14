@@ -5,7 +5,14 @@
     </style>
     
     <style name="ActivityTheme" parent="@style/Theme.Sherlock">
+        <item name="actionBarStyle">@style/ActivityActionBar</item>
+        <item name="android:actionBarStyle">@style/ActivityActionBar</item>
         <!-- <item name="android:windowBackground">@android:color/black</item> -->
+    </style>
+    
+    <style name="ActivityActionBar" parent="Widget.Sherlock.ActionBar">
+        <item name="background">@drawable/ab_transparent_dmb</item>
+        <item name="android:background">@drawable/ab_transparent_dmb</item>
     </style>
     
     <style name="SplashLayout">

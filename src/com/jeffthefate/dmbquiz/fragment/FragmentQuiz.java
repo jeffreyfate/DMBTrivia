@@ -60,6 +60,7 @@ public class FragmentQuiz extends FragmentBase {
     private ImageViewEx answerImage;
     private TextView retryText;
     private Button retryButton;
+    private Button upLevelButton;
     
     private long skipTick = 17000;
     private long hintTick = 15000;
@@ -103,21 +104,11 @@ public class FragmentQuiz extends FragmentBase {
         setHasOptionsMenu(true);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.sound_key))) {
-        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		ResourcesSingleton.instance().getString(R.string.sound_key), true).commit();
-        	else
-	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		ResourcesSingleton.instance().getString(R.string.sound_key), true).apply();
+        	SharedPreferencesSingleton.putBoolean(R.string.sound_key, true);
         }
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.quicktip_key))) {
-        	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			ResourcesSingleton.instance().getString(R.string.quicktip_key),false).commit();
-        	else
-	        	SharedPreferencesSingleton.instance().edit().putBoolean(
-	        			ResourcesSingleton.instance().getString(R.string.quicktip_key),false).apply();
+        	SharedPreferencesSingleton.putBoolean(R.string.quicktip_key, true);
         }
         imm = (InputMethodManager) getActivity().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
@@ -384,7 +375,7 @@ public class FragmentQuiz extends FragmentBase {
             			Constants.ACTION_BUTTON_PRESS, "quizRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
-                    if (ApplicationEx.getConnection()) {
+                    if (ApplicationEx.hasConnection()) {
                         mCallback.setNetworkProblem(false);
                         if (mCallback.questionIdsEmpty() || mCallback.getQuestionId(0) != null)
                             resumeQuestion();
@@ -399,6 +390,14 @@ public class FragmentQuiz extends FragmentBase {
                         showNetworkProblem();
                     }
                 }
+            }
+        });
+        upLevelButton = (Button) v.findViewById(R.id.UpLevelButton);
+        upLevelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	upLevelButton.setVisibility(View.GONE);
+            	mCallback.updateLevel();
             }
         });
         if (!SharedPreferencesSingleton.instance().getString(
@@ -755,6 +754,9 @@ public class FragmentQuiz extends FragmentBase {
 	        	retryText.setVisibility(View.INVISIBLE);
 	        if (retryButton != null)
 	        	retryButton.setVisibility(View.INVISIBLE);
+	        if (upLevelButton != null) {
+	        	upLevelButton.setVisibility(View.INVISIBLE);
+	        }
 	        if (mCallback.isNewQuestion()) {
 	            answerButton.setText("NEXT");
 	            answerButton.setEnabled(true);
@@ -861,7 +863,7 @@ public class FragmentQuiz extends FragmentBase {
         super.onResume();
         if (mCallback != null) {
         	mCallback.setLoggingOut(false);
-            if (ApplicationEx.getConnection()) {
+            if (ApplicationEx.hasConnection()) {
                 //mCallback.saveUserScore(mCallback.getCurrentScore());
                 if (!mCallback.questionIdsEmpty() &&
                 		mCallback.getQuestionId(0) != null) {
@@ -1164,11 +1166,22 @@ public class FragmentQuiz extends FragmentBase {
         answerImage.setVisibility(View.INVISIBLE);
         questionText.setVisibility(View.VISIBLE);
         questionText.setTextColor(Color.WHITE);
-        if (level == Constants.HARD)
-        	questionText.setText("Congratulations!\nYou've answered them all!\nCheck back often for more questions");
-        else
-        	questionText.setText("Congratulations!\nYou've answered them all!" +
+        switch (level) {
+        case Constants.MEDIUM:
+        	questionText.setText("Congratulations!\nYou've answered all the easy and medium questions!" +
         			"\nChange level for more questions");
+        	upLevelButton.setVisibility(View.VISIBLE);
+        	break;
+        case Constants.EASY:
+        	questionText.setText("Congratulations!\nYou've answered all the easy questions!" +
+        			"\nChange level for more questions");
+        	upLevelButton.setVisibility(View.VISIBLE);
+        	break;
+        case Constants.HARD:
+    	default:
+    		questionText.setText("Congratulations!\nYou've answered them all!\nCheck back often for more questions");
+    		break;
+        }
         /*
         background.resetColoredViews();
         background.addColoredView(questionText,

@@ -13,7 +13,7 @@ public interface OnButtonListener {
 	 * @param showNew	true if changing the background, false if setting it for
 	 * 					the first time (initializing)
 	 */
-    public void setBackground(String name, boolean showNew, String screen);
+    public boolean setBackground(String name, boolean showNew, String screen);
     /**
      * Return the current (non-setlist) background name, based on orientation
      * @return
@@ -339,6 +339,7 @@ public interface OnButtonListener {
      */
     public void refreshMenu();
     
+    public void setGoToSetlist(boolean goToSetlist);
     /**
      * Determines if app should first navigate to the setlist
      * @return true if setlist should be viewed first, false otherwise
@@ -366,4 +367,9 @@ public interface OnButtonListener {
     public void setCurrFrag(FragmentBase currFrag);
     
     public FragmentBase getCurrFrag();
+    
+    public void updateLevel();
+    
+    public void updateSetlistMap(String setDate, String setVenue,
+    		String setCity, String setlist);
 }

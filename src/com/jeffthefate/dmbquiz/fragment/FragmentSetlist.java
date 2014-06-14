@@ -1,5 +1,8 @@
 package com.jeffthefate.dmbquiz.fragment;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import android.app.Activity;
@@ -13,11 +16,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -29,9 +37,13 @@ import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.AutoResizeTextView;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.ImageViewEx;
+import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-public class FragmentSetlist extends FragmentBase {
+public class FragmentSetlist extends FragmentBase implements OnRefreshListener {
     
 	private String setlist = "";
     private TextView setText;
@@ -39,10 +51,14 @@ public class FragmentSetlist extends FragmentBase {
     private String setStamp = "";
     private TextView stampText;
     private SetlistReceiver setlistReceiver;
+    private String setVenue = "";
+    private String setCity = "";
+    private String setDate = "";
     
     private Button retryButton;
     private TextView networkText;
     
+    private SwipeRefreshLayout setlistSwipe;
     private ScrollView setlistScroll;
     private RelativeLayout setlistLayoutShot;
     private AutoResizeTextView setTextShot;
@@ -67,6 +83,43 @@ public class FragmentSetlist extends FragmentBase {
             Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.setlist, container, false);
+        setlistSwipe = (SwipeRefreshLayout) v.findViewById(R.id.SetlistSwipe);
+        setlistSwipe.setOnRefreshListener(this);
+        setlistSwipe.setColorScheme(R.color.orange, 
+                android.R.color.white, 
+                R.color.orange, 
+                android.R.color.white);
+        ViewTreeObserver vto = setlistSwipe.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Calculate the trigger distance.
+                final DisplayMetrics metrics = getResources()
+                		.getDisplayMetrics();
+                Log.d(Constants.LOG_TAG, "height: " + ((View) setlistSwipe.getParent()).getHeight() * 0.6f);
+                Log.d(Constants.LOG_TAG, "density: " + (120 * metrics.density));
+                Float mDistanceToTriggerSync = 
+                		((View) setlistSwipe.getParent()).getHeight() * 0.6f;
+
+                try {
+                    // Set the internal trigger distance using reflection.
+                    Field field = SwipeRefreshLayout.class.getDeclaredField(
+                    		"mDistanceToTriggerSync");
+                    field.setAccessible(true);
+                    field.setFloat(setlistSwipe, mDistanceToTriggerSync);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Only needs to be done once so remove listener.
+                ViewTreeObserver obs = setlistSwipe.getViewTreeObserver();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
         setlistScroll = (ScrollView) v.findViewById(R.id.SetlistScroll);
         setText = (TextView) v.findViewById(R.id.SetText);
         stampText = (TextView) v.findViewById(R.id.StampText);
@@ -108,8 +161,8 @@ public class FragmentSetlist extends FragmentBase {
         });
         */
 		background = (ImageViewEx) v.findViewById(R.id.Background);
-		mCallback.setlistBackground(
-				ResourcesSingleton.instance().getResourceEntryName(R.drawable.setlist), background);
+		mCallback.setlistBackground(ResourcesSingleton.instance()
+				.getResourceEntryName(R.drawable.setlist), background);
 		/*
 		try {
 		    background.setImageDrawable(mCallback.getDrawable(R.drawable.setlist));
@@ -126,7 +179,7 @@ public class FragmentSetlist extends FragmentBase {
             			Constants.ACTION_BUTTON_PRESS, "setlistRetry", 1l);
                 disableButton(true);
                 if (mCallback != null) {
-                    if (ApplicationEx.getConnection()) {
+                    if (ApplicationEx.hasConnection()) {
                         mCallback.setNetworkProblem(false);
                         ApplicationEx.getSetlist();
                     }
@@ -148,8 +201,8 @@ public class FragmentSetlist extends FragmentBase {
         intentFilter.addAction(Constants.ACTION_UPDATE_SETLIST);
         intentFilter.addAction(Constants.ACTION_NEW_SONG);
         ApplicationEx.getApp().registerReceiver(setlistReceiver, intentFilter);
-        updateSetAndStamp();
-        if (ApplicationEx.getConnection()) {
+        updateSetAndStamp(mCallback);
+        if (ApplicationEx.hasConnection()) {
 	        if (!StringUtils.isBlank(setlist) &&
 	        		!setlist.equals("Error downloading setlist")) {
 	            setText.setText(setlist);
@@ -220,8 +273,8 @@ public class FragmentSetlist extends FragmentBase {
     }
     
     @Override
-    public void updateSetText() {
-    	updateSetAndStamp();
+    public void updateSetText(OnButtonListener callback) {
+    	updateSetAndStamp(callback);
     	if (retryButton != null && networkText != null && setText != null) {
     		retryButton.setVisibility(View.GONE);
 	        networkText.setVisibility(View.GONE);
@@ -241,7 +294,7 @@ public class FragmentSetlist extends FragmentBase {
     	}
     }
     
-    private void updateSetAndStamp() {
+    private void updateSetAndStamp(OnButtonListener callback) {
     	setlist = SharedPreferencesSingleton.instance().getString(
         		ResourcesSingleton.instance().getString(R.string.setlist_key),
         		"");
@@ -251,16 +304,29 @@ public class FragmentSetlist extends FragmentBase {
         isArchive = SharedPreferencesSingleton.instance().getBoolean(
         		ResourcesSingleton.instance().getString(R.string.archive_key),
         		false);
+        // TODO Update setlistMap with latest one if doesn't exist
+        setDate = SharedPreferencesSingleton.instance().getString(
+        		ResourcesSingleton.instance().getString(R.string.set_date_key),
+        		"");
+        setVenue = SharedPreferencesSingleton.instance().getString(
+        		ResourcesSingleton.instance().getString(R.string.setvenue_key),
+        		"");
+        setCity = SharedPreferencesSingleton.instance().getString(
+        		ResourcesSingleton.instance().getString(R.string.setcity_key),
+        		"");
+        callback.updateSetlistMap(setDate, setVenue, setCity, setlist);
     }
     
     private class SetlistReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
         	if (Build.VERSION.SDK_INT <
-                    Build.VERSION_CODES.HONEYCOMB)
+                    Build.VERSION_CODES.HONEYCOMB) {
             	new ReceiveTask(context, intent).execute();
-            else
+        	}
+            else {
             	new ReceiveTask(context, intent).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
         }
     }
     
@@ -295,10 +361,12 @@ public class FragmentSetlist extends FragmentBase {
         protected void onPostExecute(Void nothing) {
         	if ((intent.hasExtra("success") &&
             		intent.getBooleanExtra("success", false)) ||
-            	!intent.hasExtra("success"))
-                updateSetText();
-            else
+            	!intent.hasExtra("success")) {
+                updateSetText(mCallback);
+        	}
+            else {
                 showNetworkProblem();
+            }
         	wakeLock.release();
         }
     }
@@ -347,7 +415,7 @@ public class FragmentSetlist extends FragmentBase {
 	}
 	
 	@Override
-    public void setSetlistText(String setlistText) {
+    public void setSetlistText(String setlistText, boolean canRefresh) {
 		if (setText != null) {
 			setText.setText(setlistText);
 			setlistScroll.scrollTo(0, 0);
@@ -355,6 +423,12 @@ public class FragmentSetlist extends FragmentBase {
 		if (setTextShot != null) {
 			setTextShot.setText(setlistText);
 			setTextShot.resizeText();
+		}
+		if (!canRefresh) {
+			setlistSwipe.setEnabled(false);
+		}
+		else {
+			setlistSwipe.setEnabled(true);
 		}
 	}
 	
@@ -367,5 +441,57 @@ public class FragmentSetlist extends FragmentBase {
 			stampText.setVisibility(View.INVISIBLE);
 		}
 	}
+
+	@Override
+	public void onRefresh() {
+		if (Build.VERSION.SDK_INT <
+                Build.VERSION_CODES.HONEYCOMB) {
+        	new UpdateSetlistTask().execute();
+    	}
+        else {
+        	new UpdateSetlistTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+	}
+	
+	private class UpdateSetlistTask extends AsyncTask<Void, Void, String> {
+    	
+        @Override
+        protected String doInBackground(Void... nothing) {
+        	Log.i(Constants.LOG_TAG, "Fetching setlist");
+        	ParseQuery<ParseObject> setlistQuery = new ParseQuery<ParseObject>("Setlist");
+            setlistQuery.addDescendingOrder("setDate");
+            setlistQuery.setLimit(1);
+            try {
+				List<ParseObject> setlists = setlistQuery.find();
+				Log.i(Constants.LOG_TAG, "Found " + setlists.size() + " setlist");
+				return setlists.get(0).getString("set");
+			} catch (ParseException e) {
+				ApplicationEx.showShortToast("Refresh failed");
+			}
+            return null;
+        }
+        
+        protected void onProgressUpdate(Void... nothing) {
+        }
+        
+        @Override
+        protected void onCancelled(String setlist) {
+        }
+        
+        @Override
+        protected void onPostExecute(String setlist) {
+        	Log.i(Constants.LOG_TAG, "Turning off refreshing");
+        	setlistSwipe.setRefreshing(false);
+        	if (setlist != null) {
+        		setSetlistText(setlist, true);
+        		String timestamp = ApplicationEx.getUpdatedDateString(
+                		System.currentTimeMillis());
+        		SharedPreferencesSingleton.putString(R.string.setlist_key,
+        				setlist);
+        		SharedPreferencesSingleton.putString(R.string.setstamp_key,
+        				timestamp);
+        	}
+        }
+    }
 
 }

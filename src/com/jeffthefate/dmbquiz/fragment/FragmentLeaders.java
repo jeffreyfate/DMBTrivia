@@ -220,12 +220,7 @@ public class FragmentLeaders extends FragmentBase {
         if (mCallback != null && !SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.dialog_key))) {
             mCallback.showScoreDialog();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	            SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		ResourcesSingleton.instance().getString(R.string.dialog_key), true).commit();
-            else
-	            SharedPreferencesSingleton.instance().edit().putBoolean(
-	            		ResourcesSingleton.instance().getString(R.string.dialog_key), true).apply();
+            SharedPreferencesSingleton.putBoolean(R.string.dialog_key, true);
         }
         if (!isRestored && mCallback != null &&
                 mCallback.getLeadersState() != null) {

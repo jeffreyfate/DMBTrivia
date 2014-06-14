@@ -289,11 +289,32 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     protected void setBackgroundBitmap(String name, String screen) {
         Bitmap backgroundBitmap = ApplicationEx.getBackgroundBitmap();
+        // TODO Do something better than this to apply the correct background
+        // mCallback.setCurrFrag(this);
+        Log.w(Constants.LOG_TAG, "setBackgroundBitmap");
+        Log.w(Constants.LOG_TAG, name + " : " + screen);
         if (backgroundBitmap == null) {
-        	if (name == null)
-        	    mCallback.setBackground("splash4", false, screen);
-        	else
-        	    mCallback.setBackground(name, false, screen);
+        	boolean success = false;
+        	if (screen.equalsIgnoreCase("setlist")) {
+        		name = "setlist";
+        	}
+        	if (name == null) {
+        		if (screen.equalsIgnoreCase("setlist")) {
+            		name = "setlist";
+            	}
+        		else {
+        			name = "splash4";
+        		}
+        	    success = mCallback.setBackground(name, false, screen);
+        	}
+        	else {
+        	    success = mCallback.setBackground(name, false, screen);
+        	}
+        	if (!success) {
+        		int resourceId = ResourcesSingleton.instance().getIdentifier(
+        				name, "drawable", getActivity().getPackageName());
+        		setBackground(mCallback.getBitmap(resourceId));
+        	}
         }
         else {
             if (background != null) {
@@ -318,13 +339,16 @@ public class FragmentBase extends Fragment implements UiCallback {
             	BitmapDrawable bitmapDrawable = new BitmapDrawable(
             			ResourcesSingleton.instance(), backgroundBitmap);
             	if (screen.equalsIgnoreCase("info") ||
-            			screen.equalsIgnoreCase("leaders"))
+            			screen.equalsIgnoreCase("leaders")) {
             		bitmapDrawable.setColorFilter(new PorterDuffColorFilter(
                 			ResourcesSingleton.instance().getColor(
                 					R.color.background_dark),
         					PorterDuff.Mode.SRC_ATOP));
-            	else
+            	}
+            	else {
             		bitmapDrawable.setColorFilter(null);
+            	}
+            	Log.i(Constants.LOG_TAG, "setting background");
                 background.setImageDrawable(bitmapDrawable);
             }
         }
@@ -332,50 +356,26 @@ public class FragmentBase extends Fragment implements UiCallback {
     
     @SuppressLint("NewApi")
 	public void toggleSounds() {
-    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-    		SharedPreferencesSingleton.instance().edit().putBoolean(
-    				ResourcesSingleton.instance().getString(R.string.sound_key),
-    				!SharedPreferencesSingleton.instance().getBoolean(
-    						ResourcesSingleton.instance().getString(R.string.sound_key),true))
-				.commit();
-    	else
-    		SharedPreferencesSingleton.instance().edit().putBoolean(
-    				ResourcesSingleton.instance().getString(R.string.sound_key),
-    				!SharedPreferencesSingleton.instance().getBoolean(
-    						ResourcesSingleton.instance().getString(R.string.sound_key),true))
-				.apply();
+    	SharedPreferencesSingleton.putBoolean(R.string.sound_key,
+    			!SharedPreferencesSingleton.instance().getBoolean(
+						ResourcesSingleton.instance().getString(
+								R.string.sound_key), true));
     }
     
     @SuppressLint("NewApi")
 	public void toggleNotifications() {
-    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			ResourcesSingleton.instance().getString(R.string.notification_key),
-	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		ResourcesSingleton.instance().getString(R.string.notification_key), true))
-	            .commit();
-    	else
-	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			ResourcesSingleton.instance().getString(R.string.notification_key),
-	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		ResourcesSingleton.instance().getString(R.string.notification_key), true))
-	            .apply();
+    	SharedPreferencesSingleton.putBoolean(R.string.notification_key,
+    			!SharedPreferencesSingleton.instance().getBoolean(
+						ResourcesSingleton.instance().getString(
+								R.string.notification_key), true));
     }
     
     @SuppressLint("NewApi")
 	public void toggleTips() {
-    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			ResourcesSingleton.instance().getString(R.string.quicktip_key),
-	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		ResourcesSingleton.instance().getString(R.string.quicktip_key), true))
-	            .commit();
-    	else
-	    	SharedPreferencesSingleton.instance().edit().putBoolean(
-	    			ResourcesSingleton.instance().getString(R.string.quicktip_key),
-	                !SharedPreferencesSingleton.instance().getBoolean(
-	                		ResourcesSingleton.instance().getString(R.string.quicktip_key), true))
-	            .apply();
+    	SharedPreferencesSingleton.putBoolean(R.string.quicktip_key,
+    			!SharedPreferencesSingleton.instance().getBoolean(
+						ResourcesSingleton.instance().getString(
+								R.string.quicktip_key), true));
     }
     
     public void report() {
@@ -444,6 +444,7 @@ public class FragmentBase extends Fragment implements UiCallback {
         	BitmapDrawable bitmapDrawable = new BitmapDrawable(
         			ResourcesSingleton.instance(), newBackground);
         	bitmapDrawable.setColorFilter(null);
+        	Log.i(Constants.LOG_TAG, "setting background");
             background.setImageDrawable(bitmapDrawable);
         }
     }
@@ -457,7 +458,7 @@ public class FragmentBase extends Fragment implements UiCallback {
 	}
 	
     @Override
-    public void updateSetText() {}
+    public void updateSetText(OnButtonListener callback) {}
 
     @Override
     public void showRetry() {}
@@ -477,7 +478,7 @@ public class FragmentBase extends Fragment implements UiCallback {
 	public void hideResizedSetlist() {}
 	
 	@Override
-    public void setSetlistText(String setlistText) {}
+    public void setSetlistText(String setlistText, boolean canRefresh) {}
 	
 	@Override
 	public void setSetlistStampVisible(boolean isVisible) {}

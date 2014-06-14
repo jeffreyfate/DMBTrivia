@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -137,6 +138,69 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     			sharedPrefs = PreferenceManager.getDefaultSharedPreferences(app);
     		return sharedPrefs;
     	}
+    	
+    	public static void toggleBoolean(int resId, boolean def) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                instance().edit().putBoolean(ResourcesSingleton.instance()
+                		.getString(resId), !instance().getBoolean(
+                        		ResourcesSingleton.instance().getString(resId),
+                        		def))
+                .commit();
+    		}
+            else {
+            	instance().edit().putBoolean(ResourcesSingleton.instance()
+                		.getString(resId), !instance().getBoolean(
+                        		ResourcesSingleton.instance().getString(resId),
+                        		def))
+                .apply();
+            }
+    	}
+    	
+    	public static void putBoolean(int resId, boolean newValue) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                SharedPreferencesSingleton.instance().edit().putBoolean(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .commit();
+    		}
+            else {
+                SharedPreferencesSingleton.instance().edit().putBoolean(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .apply();
+            }
+    	}
+    	
+    	public static void putString(int resId, String newValue) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                SharedPreferencesSingleton.instance().edit().putString(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .commit();
+    		}
+            else {
+                SharedPreferencesSingleton.instance().edit().putString(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .apply();
+            }
+    	}
+    	
+    	public static void putInt(int resId, int newValue) {
+    		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                SharedPreferencesSingleton.instance().edit().putInt(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .commit();
+    		}
+            else {
+                SharedPreferencesSingleton.instance().edit().putInt(
+                		ResourcesSingleton.instance().getString(resId),
+                        newValue)
+                .apply();
+            }
+    	}
+    	
     }
     
     /**
@@ -226,10 +290,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         connMan = ((ConnectivityManager) getSystemService(
                 Context.CONNECTIVITY_SERVICE));
         NetworkInfo nInfo = connMan.getActiveNetworkInfo();
-        if (nInfo == null)
+        if (nInfo == null) {
             mHasConnection = false;
-        else
+        }
+        else {
             mHasConnection = nInfo.isConnected();
+        }
         DatabaseHelperSingleton.instance().checkUpgrade();
         //setlist = "Jun 1 2013\nDave Matthews Band\nBlossom Music Center\nCuyahoga Falls, OH\n\nDancing Nancies ->\nWarehouse\nThe Idea Of You\nBelly Belly Nice\nSave Me\nCaptain\nSeven";
         //setlistStamp = "Updated:\n8:16 PDT";
@@ -242,18 +308,9 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         String notificationType = ResourcesSingleton.instance().getString(
         		R.string.notificationtype_key);
         try {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-            SharedPreferencesSingleton.instance().edit().putInt(
-            		notificationType,
-            		SharedPreferencesSingleton.instance().getBoolean(
-            				notificationType, false) ? 1 : 0)
-            .commit();
-        else
-        	SharedPreferencesSingleton.instance().edit().putInt(
-            		notificationType,
-            		SharedPreferencesSingleton.instance().getBoolean(
-            				notificationType, false) ? 1 : 0)
-            .apply();
+        	SharedPreferencesSingleton.putInt(R.string.notificationtype_key,
+        			SharedPreferencesSingleton.instance().getBoolean(
+            				notificationType, false) ? 1 : 0);
         } catch (ClassCastException e) {}
         getSetlist();
         /*
@@ -338,7 +395,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
      * Reports if the application has a network connection
      * @return true if the application reports having a connection
      */
-    public static boolean getConnection() {
+    public static boolean hasConnection() {
         return mHasConnection;
     }
     
@@ -609,7 +666,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songMap.put("stolen away on 55th & 3rd", new SongInfo(R.drawable.stand_up, R.raw.standup));
         songMap.put("you might die trying", new SongInfo(R.drawable.stand_up, R.raw.standup));
         
-        songMap.put("an' another thing", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
+        songMap.put("an another thing", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
         songMap.put("baby", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
         songMap.put("dodo", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
         songMap.put("gravedigger", new SongInfo(R.drawable.some_devil, R.raw.somedevil));
@@ -649,7 +706,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songMap.put("when the world ends", new SongInfo(R.drawable.everyday, R.raw.everyday));
         
         songMap.put("crush", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
-        songMap.put("don't drink the water",
+        songMap.put("dont drink the water",
                 new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         songMap.put("dreaming tree", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         songMap.put("halloween", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
@@ -660,6 +717,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songMap.put("rapunzel", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         songMap.put("spoon", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         songMap.put("stay", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
+        songMap.put("stay wasting time", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         songMap.put("the stone", new SongInfo(R.drawable.before_these_crowded_streets, R.raw.btcs));
         
         songMap.put("#41", new SongInfo(R.drawable.crash, R.raw.crash));
@@ -693,7 +751,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 new SongInfo(R.drawable.under_the_table_and_dreaming, R.raw.uttad));
         
         songMap.put("christmas song", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
-        songMap.put("i'll back you up", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
+        songMap.put("ill back you up", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
         songMap.put("minarets", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
         songMap.put("one sweet world", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
         songMap.put("recently", new SongInfo(R.drawable.remember_two_things, R.raw.r2t));
@@ -731,6 +789,8 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "#");
         songTitle = StringUtils.remove(songTitle, "-");
         songTitle = StringUtils.remove(songTitle, ">");
+        songTitle = StringUtils.remove(songTitle, "(");
+        songTitle = StringUtils.remove(songTitle, ")");
         songTitle = StringUtils.replace(songTitle, "’", "'");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
@@ -751,22 +811,35 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
         songTitle = StringUtils.remove(songTitle, "+");
         songTitle = StringUtils.remove(songTitle, "~");
         songTitle = StringUtils.remove(songTitle, "�");
+        songTitle = StringUtils.remove(songTitle, "#");
+        songTitle = StringUtils.remove(songTitle, "-");
+        songTitle = StringUtils.remove(songTitle, ">");
         songTitle = StringUtils.remove(songTitle, "(");
+        songTitle = StringUtils.remove(songTitle, ")");
         songTitle = StringUtils.replace(songTitle, "’", "'");
         songTitle = StringUtils.strip(songTitle);
         songTitle = StringUtils.lowerCase(songTitle, Locale.ENGLISH);
+        //songTitle = StringUtils.remove(songTitle, " ");
+    	//songTitle = StringUtils.remove(songTitle, "'");
         Entry<String, SongInfo> entry = songMap.select(songTitle);
+        Log.w(Constants.LOG_TAG, songTitle + " : " + entry.getKey());
         switch (SharedPreferencesSingleton.instance().getInt(
                 ResourcesSingleton.instance().getString(
                 		R.string.notificationtype_key), 0)) {
         case 0:
+        	Log.d(Constants.LOG_TAG, "0 typeSetting: general");
         	ApplicationEx.createNotificationUri(R.raw.general);
         	break;
         case 1:
-        	if (songTitle.startsWith(entry.getKey()))
-        		ApplicationEx.createNotificationUri(entry.getValue().getAudio());
-        	else
+        	if (songTitle.startsWith(entry.getKey())) {
+        		Log.d(Constants.LOG_TAG, "1 typeSetting: album");
+        		ApplicationEx.createNotificationUri(
+        				entry.getValue().getAudio());
+        	}
+        	else {
+        		Log.d(Constants.LOG_TAG, "1 typeSetting: general");
         		ApplicationEx.createNotificationUri(R.raw.general);
+        	}
         	break;
         /*
         case 2:
@@ -918,7 +991,7 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
             File audioFile = null;
             StringBuilder sb = new StringBuilder();
     		ParseFile file = null;
-    		ParseQuery query = new ParseQuery("Audio");
+    		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Audio");
     		if (songs != null)
     			query.whereContainedIn("name", songs);
     		try {
@@ -980,5 +1053,12 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
 	public static List<String> getSerialsList() {
 		return serialsList;
 	}
+	
+	public static String getUpdatedDateString(long millis) {
+        ApplicationEx.df.setTimeZone(TimeZone.getDefault());
+        Date date = new Date();
+        date.setTime(millis);
+        return ApplicationEx.df.format(date.getTime());
+    }
 
 }

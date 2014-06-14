@@ -8,10 +8,13 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
@@ -43,8 +46,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.CheckedTextView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -84,6 +89,7 @@ import com.jeffthefate.dmbquiz.fragment.FragmentLogin;
 import com.jeffthefate.dmbquiz.fragment.FragmentNameDialog;
 import com.jeffthefate.dmbquiz.fragment.FragmentPager;
 import com.jeffthefate.dmbquiz.fragment.FragmentScoreDialog;
+import com.jeffthefate.dmbquiz.fragment.FragmentSetlist;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -164,8 +170,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private boolean newUser = false;
     
     private TreeMap<String, TreeMap<String, String>> setlistMap =
-    		new TreeMap<String, TreeMap<String, String>>(
-    		String.CASE_INSENSITIVE_ORDER);
+		new TreeMap<String, TreeMap<String, String>>(new YearComparator());
     private int firstVisiblePosition = 0;
     private ArrayList<Integer> expandedGroups = new ArrayList<Integer>(0);
     
@@ -175,7 +180,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         public void showNoMoreQuestions(int level);
         public void resumeQuestion();
         public void updateScoreText();
-        public void updateSetText();
+        public void updateSetText(OnButtonListener callback);
         public void resetHint();
         public void disableButton(boolean isRetry);
         public void enableButton(boolean isRetry);
@@ -188,7 +193,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         public void setBackground(Bitmap newBackground);
         public void showResizedSetlist();
         public void hideResizedSetlist();
-        public void setSetlistText(String setlistText);
+        public void setSetlistText(String setlistText, boolean canRefresh);
         public void setSetlistStampVisible(boolean isVisible);
     }
     
@@ -216,11 +221,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private RelativeLayout logoutButton;
     private ExpandableListView setlistListView;
     private ProgressBar setlistProgress;
-    //private TextView logoutText;
-    // TODO Re-add levels
-    //protected RelativeLayout levelButton;
-    //protected ImageViewEx levelImage;
-    //protected TextView levelText;
+    private TextView logoutText;
+    protected RelativeLayout levelButton;
+    protected ImageViewEx levelImage;
+    protected TextView levelText;
     private RelativeLayout soundsButton;
     private CheckedTextView soundsText;
     private RelativeLayout notificationsButton;
@@ -236,6 +240,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
     
     private RelativeLayout followButton;
     private RelativeLayout likeButton;
+    
+    private RelativeLayout versionLayout;
+    private TextView versionText;
     
     //protected ViewGroup quickTipView;
     //protected ViewGroup quickTipMenuView;
@@ -322,6 +329,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
         //PushService.unsubscribe(app, "");
         PushService.subscribe(ApplicationEx.getApp(), "setlist",
         		ActivityMain.class);
+        PushService.subscribe(ApplicationEx.getApp(), "test",
+        		ActivityMain.class);
         PushService.setDefaultPushCallback(this, ActivityMain.class);
         fMan = getSupportFragmentManager();
         if (savedInstanceState != null) {
@@ -342,7 +351,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     "leadersBackground");
             */
             portBackground = savedInstanceState.getString("portBackground");
+            Log.e(Constants.LOG_TAG, "portBackground: " + portBackground);
             landBackground = savedInstanceState.getString("landBackground");
+            Log.e(Constants.LOG_TAG, "landBackground: " + landBackground);
             userId = savedInstanceState.getString("userId");
             newQuestion = savedInstanceState.getBoolean("newQuestion");
             displayName = savedInstanceState.getString("displayName");
@@ -380,6 +391,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             //checkCount = savedInstanceState.getBoolean("checkCount");
             setlistMap = (TreeMap<String, TreeMap<String, String>>)
             		savedInstanceState.getSerializable("setlists");
+            Log.i(Constants.LOG_TAG, "setlistMap size: " + setlistMap.size());
             firstVisiblePosition = savedInstanceState.getInt("firstVisible");
             expandedGroups = savedInstanceState.getIntegerArrayList(
             		"expandedGroups");
@@ -413,51 +425,33 @@ public class ActivityMain extends SlidingFragmentActivity implements
             if (landBackground == null)
                 landBackground = DatabaseHelperSingleton.instance().getLandBackground(userId);
         }
+        Log.e(Constants.LOG_TAG, "portBackground: " + portBackground);
+        Log.e(Constants.LOG_TAG, "landBackground: " + landBackground);
         nManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         connReceiver = new ConnectionReceiver();
         getSlidingMenu().setShadowWidthRes(R.dimen.shadow_width);
         getSlidingMenu().setFadeDegree(0.35f);
-        getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notification_key))) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                SharedPreferencesSingleton.instance().edit().putBoolean(
-                		ResourcesSingleton.instance().getString(R.string.notification_key), true).commit();
-            else
-                SharedPreferencesSingleton.instance().edit().putBoolean(
-                		ResourcesSingleton.instance().getString(R.string.notification_key), true).apply();
+        	SharedPreferencesSingleton.putBoolean(R.string.notification_key,
+        			true);
         }
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.level_key))) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                SharedPreferencesSingleton.instance().edit().putInt(
-                		ResourcesSingleton.instance().getString(R.string.level_key),
-                        Constants.HARD).commit();
-            else
-                SharedPreferencesSingleton.instance().edit().putInt(
-                		ResourcesSingleton.instance().getString(R.string.level_key),
-                        Constants.HARD).apply();
+        	SharedPreferencesSingleton.putInt(R.string.level_key,
+        			Constants.HARD);
         }
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notificationsound_key))) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                SharedPreferencesSingleton.instance().edit().putInt(
-                		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0).commit();
-            else
-                SharedPreferencesSingleton.instance().edit().putInt(
-                		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0).apply();
+        	SharedPreferencesSingleton.putInt(R.string.notificationsound_key,
+        			0);
         }
         if (!SharedPreferencesSingleton.instance().contains(
         		ResourcesSingleton.instance().getString(R.string.notificationtype_key))) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                SharedPreferencesSingleton.instance().edit().putBoolean(
-                		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true).commit();
-            else
-                SharedPreferencesSingleton.instance().edit().putBoolean(
-                		ResourcesSingleton.instance().getString(R.string.notificationtype_key), true).apply();
+        	SharedPreferencesSingleton.putInt(R.string.notificationtype_key,
+        			1);
         }
-        Log.d(Constants.LOG_TAG, "ActivityMain onCreate");
         refreshSlidingMenu();
         getWindow().setBackgroundDrawable(null);
         googleAnalytics = GoogleAnalytics.getInstance(this);
@@ -677,8 +671,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
         //outState.putInt("count", count);
         //outState.putBoolean("checkCount", true);
         outState.putSerializable("setlists", setlistMap);
-        outState.putInt("firstVisible",
-        		setlistListView.getFirstVisiblePosition());
+        if (setlistListView != null) {
+	        outState.putInt("firstVisible",
+	        		setlistListView.getFirstVisiblePosition());
+        }
         outState.putIntegerArrayList("expandedGroups", expandedGroups);
         super.onSaveInstanceState(outState);
     }
@@ -823,6 +819,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -957,28 +954,23 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void showQuiz(boolean fromStats, boolean fromSetlist) {
         newUser = false;
         try {
-        	if (fMan.findFragmentByTag("fQuiz") == null) {
-        	    FragmentPager fQuiz = new FragmentPager();
-        	    currFrag = fQuiz;
-	            FragmentTransaction ft = fMan.beginTransaction();
-	            /*
-	            if (fromStats)
-	                ft.setCustomAnimations(R.anim.slide_in_top,
-	                        R.anim.slide_out_top);
-	            else if (fromSetlist)
-	                ft.setCustomAnimations(R.anim.slide_in_left,
-	                        R.anim.slide_out_right);
-                */
-	            ft.replace(android.R.id.content, fQuiz, "fQuiz")
-	                    .commitAllowingStateLoss();
-	            fMan.executePendingTransactions();
-        	}
-        	else {
-        		currFrag = (FragmentBase) fMan.findFragmentByTag("fQuiz");
-        	}
+    	    FragmentPager fQuiz = new FragmentPager();
+    	    currFrag = fQuiz;
+            FragmentTransaction ft = fMan.beginTransaction();
+            /*
+            if (fromStats)
+                ft.setCustomAnimations(R.anim.slide_in_top,
+                        R.anim.slide_out_top);
+            else if (fromSetlist)
+                ft.setCustomAnimations(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
+            */
+            ft.replace(android.R.id.content, fQuiz, "fQuiz")
+                    .commitAllowingStateLoss();
+            fMan.executePendingTransactions();
         	Log.d(Constants.LOG_TAG, "ActivityMain showQuiz");
         	refreshSlidingMenu();
-        	currFrag.updateSetText();
+        	currFrag.updateSetText(this);
         } catch (IllegalStateException e) {}
     }
     
@@ -1000,7 +992,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             fMan.executePendingTransactions();
             Log.d(Constants.LOG_TAG, "ActivityMain showSplash");
             refreshSlidingMenu();
-            currFrag.updateSetText();
+            currFrag.updateSetText(this);
         } catch (IllegalStateException e) {}
     }
     
@@ -1009,14 +1001,18 @@ public class ActivityMain extends SlidingFragmentActivity implements
         try {
             unregisterReceiver(connReceiver);
         } catch (IllegalArgumentException e) {}
-        if (getStageTask != null)
+        if (getStageTask != null) {
             getStageTask.cancel(true);
-        if (getNextQuestionsTask != null)
+        }
+        if (getNextQuestionsTask != null) {
             getNextQuestionsTask.cancel(true);
-        if (userTask != null)
+        }
+        if (userTask != null) {
             userTask.cancel(true);
-        if (getStatsTask != null)
+        }
+        if (getStatsTask != null) {
             getStatsTask.cancel(true);
+        }
         if (!isLogging && userId != null &&
         		!DatabaseHelperSingleton.instance().isAnonUser(userId))
             getScore(false, false, userId, false);
@@ -1244,10 +1240,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         goToQuiz();
                     } catch (IllegalStateException exception) {}
                 }
-                else
+                else {
                     getNextQuestions(false, SharedPreferencesSingleton.instance().getInt(
                     		ResourcesSingleton.instance().getString(R.string.level_key),
     						Constants.HARD));
+                }
             }
             if (restore)
                 showLoggedInFragment();
@@ -1448,7 +1445,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
     private void refreshSlidingMenu() {
         if (!loggedIn) {
             setBehindContentView(R.layout.menu_splash);
-            getSlidingMenu().setMode(SlidingMenu.LEFT);
         	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
 	        case Configuration.ORIENTATION_LANDSCAPE:
 	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
@@ -1564,6 +1560,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     if (getSlidingMenu().isMenuShowing()) {
                         int soundSetting = SharedPreferencesSingleton.instance().getInt(
                         		ResourcesSingleton.instance().getString(R.string.notificationsound_key), 0);
+                        Log.i(Constants.LOG_TAG, "soundSetting: " + soundSetting);
                         switch (soundSetting) {
                         case 0:
                         	notificationSoundText.setText(R.string.NotificationSilentTitle);
@@ -1598,17 +1595,10 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             soundSetting = 2;
                             break;
                         }
+                        Log.i(Constants.LOG_TAG, "soundSetting: " + soundSetting);
                         notificationSoundImage.setImageLevel(soundSetting);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
-                                    soundSetting)
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
-                                    soundSetting)
-                            .apply();
+                        SharedPreferencesSingleton.putInt(
+                        		R.string.notificationsound_key, soundSetting);
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"splashNotificationSound", (long) soundSetting);
@@ -1616,7 +1606,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
-            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 1);
             notificationAlbumImage.setImageLevel(typeSetting);
             switch (typeSetting) {
             case 0:
@@ -1636,7 +1626,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     if (getSlidingMenu().isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
-                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 1);
+                        Log.d(Constants.LOG_TAG, "typeSetting: " + typeSetting);
                         switch (typeSetting) {
                         case 0:
                             notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
@@ -1659,16 +1650,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         */
                         }
                         notificationAlbumImage.setImageLevel(typeSetting);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                            		typeSetting)
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                            		typeSetting)
-                            .apply();
+                        SharedPreferencesSingleton.putInt(
+                        		R.string.notificationtype_key, typeSetting);
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"splashNotificationType", (long) typeSetting);
@@ -1754,16 +1737,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 }
                             }
                         }
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                    notificationsText.isChecked())
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                    notificationsText.isChecked())
-                            .apply();
+                        SharedPreferencesSingleton.putBoolean(
+                        		R.string.notification_key,
+                        		notificationsText.isChecked());
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"splashNotificationToggle",
@@ -1774,7 +1750,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         else if (!inStats) {
             setBehindContentView(R.layout.menu_quiz);
-            getSlidingMenu().setMode(SlidingMenu.LEFT);
         	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
 	        case Configuration.ORIENTATION_LANDSCAPE:
 	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
@@ -1784,8 +1759,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	            break;
 	        }
             statsButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.StatsButton);
-            if (DatabaseHelperSingleton.instance().isAnonUser(userId))
+            if (DatabaseHelperSingleton.instance().isAnonUser(userId)) {
             	statsButton.setVisibility(View.GONE);
+            }
             else {
             	statsButton.setVisibility(View.VISIBLE);
 	            statsButton.setOnClickListener(new OnClickListener() {
@@ -1871,8 +1847,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             logoutButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.LogoutButton);
-            //logoutText = (TextView) findViewById(R.id.LogoutText);
-            /*
+            logoutText = (TextView) findViewById(R.id.LogoutText);
             nameButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.NameButton);
             nameButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -1898,7 +1873,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 statsButton.setVisibility(View.GONE);
                 nameButton.setVisibility(View.GONE);
             }
-            */
             logoutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
@@ -1929,26 +1903,30 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                 	tracker.sendEvent(Constants.CATEGORY_MENU,
                 			Constants.ACTION_BUTTON_PRESS, "quizExit", 1l);
-                    if (getSlidingMenu().isMenuShowing())
+                    if (getSlidingMenu().isMenuShowing()) {
                         moveTaskToBack(true);
+                    }
                 }
             });
-            /*
             levelButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.LevelButton);
             levelImage = (ImageViewEx) getSlidingMenu().findViewById(R.id.LevelImage);
             levelText = (TextView) getSlidingMenu().findViewById(R.id.LevelText);
             switch (SharedPreferencesSingleton.instance().getInt(
-                    res.getString(R.string.level_key),Constants.HARD)) {
+            		ResourcesSingleton.instance().getString(R.string.level_key),
+            		Constants.HARD)) {
             case Constants.EASY:
-                levelText.setText(res.getString(R.string.LevelTitle) + " (Easy)");
+                levelText.setText(ResourcesSingleton.instance().getString(
+                		R.string.LevelTitle) + " (Easy)");
                 levelImage.setImageResource(R.drawable.ic_level_easy_inverse);
                 break;
             case Constants.MEDIUM:
-                levelText.setText(res.getString(R.string.LevelTitle) + " (Medium)");
+                levelText.setText(ResourcesSingleton.instance().getString(
+                		R.string.LevelTitle) + " (Medium)");
                 levelImage.setImageResource(R.drawable.ic_level_med_inverse);
                 break;
             case Constants.HARD:
-                levelText.setText(res.getString(R.string.LevelTitle) + " (Hard)");
+                levelText.setText(ResourcesSingleton.instance().getString(
+                		R.string.LevelTitle) + " (Hard)");
                 levelImage.setImageResource(R.drawable.ic_level_hard_inverse);
                 break;
             }
@@ -1957,59 +1935,46 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     if (getSlidingMenu().isMenuShowing()) {
                         switch (SharedPreferencesSingleton.instance().getInt(
-                            res.getString(R.string.level_key), Constants.HARD)) {
+                        		ResourcesSingleton.instance().getString(
+                        				R.string.level_key), Constants.HARD)) {
                         case Constants.EASY:
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.MEDIUM).commit();
-                            else
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.MEDIUM).apply();
-                            levelText.setText(res.getString(R.string.LevelTitle) +
-                                    " (Medium)");
+                        	SharedPreferencesSingleton.putInt(
+                        			R.string.level_key, Constants.MEDIUM);
+                            levelText.setText(ResourcesSingleton.instance()
+                            		.getString(R.string.LevelTitle) +
+                            		" (Medium)");
                             levelImage.setImageResource(R.drawable.ic_level_med_inverse);
                             break;
                         case Constants.MEDIUM:
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.HARD).commit();
-                            else
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.HARD).apply();
-                            levelText.setText(res.getString(R.string.LevelTitle) +
+                        	SharedPreferencesSingleton.putInt(
+                        			R.string.level_key, Constants.HARD);
+                            levelText.setText(ResourcesSingleton.instance()
+                            		.getString(R.string.LevelTitle) +
                                     " (Hard)");
                             levelImage.setImageResource(R.drawable.ic_level_hard_inverse);
                             break;
                         case Constants.HARD:
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.EASY).commit();
-                            else
-                                SharedPreferencesSingleton.instance().edit().putInt(
-                                        res.getString(R.string.level_key),
-                                        Constants.EASY).apply();
-                            levelText.setText(res.getString(R.string.LevelTitle) +
+                        	SharedPreferencesSingleton.putInt(
+                        			R.string.level_key, Constants.EASY);
+                            levelText.setText(ResourcesSingleton.instance()
+                            		.getString(R.string.LevelTitle) +
                                     " (Easy)");
                             levelImage.setImageResource(R.drawable.ic_level_easy_inverse);
                             break;
                         }
-                        if (getQuestion() == null) {
+                        if (getQuestion(0) == null) {
                             getNextQuestions(false,
                                     SharedPreferencesSingleton.instance().getInt(
-                                    res.getString(R.string.level_key),
+                                		ResourcesSingleton.instance().getString(
+                                				R.string.level_key),
                                     Constants.HARD));
-                            if (currFrag != null)
+                            if (currFrag != null) {
                                 currFrag.showRetry();
+                            }
                         }
                     }
                 }
             });
-            */
             soundsButton = (RelativeLayout) getSlidingMenu().findViewById(R.id.SoundsButton);
             soundsText = (CheckedTextView) getSlidingMenu().findViewById(R.id.SoundsText);
             soundsText.setChecked(SharedPreferencesSingleton.instance().getBoolean(
@@ -2019,18 +1984,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     if (getSlidingMenu().isMenuShowing()) {
                         soundsText.toggle();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.sound_key),
-                                    !SharedPreferencesSingleton.instance().getBoolean(
-                                    		ResourcesSingleton.instance().getString(R.string.sound_key), true))
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.sound_key),
-                                    !SharedPreferencesSingleton.instance().getBoolean(
-                                    		ResourcesSingleton.instance().getString(R.string.sound_key), true))
-                            .apply();
+                        SharedPreferencesSingleton.toggleBoolean(
+                        		R.string.sound_key, true);
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS, "quizSounds",
                     			soundsText.isChecked() ? 1l : 0l);
@@ -2123,16 +2078,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                             break;
                         }
                         notificationSoundImage.setImageLevel(soundSetting);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
-                                    soundSetting)
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationsound_key),
-                                    soundSetting)
-                            .apply();
+                        SharedPreferencesSingleton.putInt(
+                    			R.string.notificationsound_key, soundSetting);
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"quizNotificationSound", (long) soundSetting);
@@ -2140,7 +2087,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 }
             });
             int typeSetting = SharedPreferencesSingleton.instance().getInt(
-            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+            		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 1);
             notificationAlbumImage.setImageLevel(typeSetting);
             switch (typeSetting) {
             case 0:
@@ -2160,7 +2107,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 public void onClick(View arg0) {
                     if (getSlidingMenu().isMenuShowing()) {
                         int typeSetting = SharedPreferencesSingleton.instance().getInt(
-                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 0);
+                        		ResourcesSingleton.instance().getString(R.string.notificationtype_key), 1);
                         switch (typeSetting) {
                         case 0:
                             notificationAlbumText.setText(R.string.NotificationTypeAlbumTitle);
@@ -2183,16 +2130,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
                         */
                         }
                         notificationAlbumImage.setImageLevel(typeSetting);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                            		typeSetting)
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putInt(
-                            		ResourcesSingleton.instance().getString(R.string.notificationtype_key),
-                            		typeSetting)
-                            .apply();
+                        SharedPreferencesSingleton.putInt(
+                    			R.string.notificationtype_key, typeSetting);
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"quizNotificationType", (long) typeSetting);
@@ -2278,16 +2217,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
                                 }
                             }
                         }
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                    notificationsText.isChecked())
-                            .commit();
-                        else
-                            SharedPreferencesSingleton.instance().edit().putBoolean(
-                            		ResourcesSingleton.instance().getString(R.string.notification_key),
-                                    notificationsText.isChecked())
-                            .apply();
+                        SharedPreferencesSingleton.putBoolean(
+                        		R.string.notification_key,
+                        		notificationsText.isChecked());
                         tracker.sendEvent(Constants.CATEGORY_MENU,
                     			Constants.ACTION_BUTTON_PRESS,
                     			"quizNotificationToggle",
@@ -2298,7 +2230,6 @@ public class ActivityMain extends SlidingFragmentActivity implements
         }
         else if (inStats) {
             setBehindContentView(R.layout.menu_leaders);
-            getSlidingMenu().setMode(SlidingMenu.LEFT);
         	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
 	        case Configuration.ORIENTATION_LANDSCAPE:
 	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_width_land);
@@ -2421,18 +2352,8 @@ public class ActivityMain extends SlidingFragmentActivity implements
             public void onClick(View arg0) {
                 if (getSlidingMenu().isMenuShowing()) {
                     tipsText.toggle();
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                        SharedPreferencesSingleton.instance().edit().putBoolean(
-                                res.getString(R.string.quicktip_key),
-                                !SharedPreferencesSingleton.instance().getBoolean(
-                                        res.getString(R.string.quicktip_key), true))
-                        .commit();
-                    else
-                        SharedPreferencesSingleton.instance().edit().putBoolean(
-                                res.getString(R.string.quicktip_key),
-                                !SharedPreferencesSingleton.instance().getBoolean(
-                                        res.getString(R.string.quicktip_key), true))
-                        .apply();
+                    SharedPreferencesSingleton.toggleBoolean(
+                    	R.string.quicktip_key, true);
                 }
             }
         });
@@ -2509,9 +2430,27 @@ public class ActivityMain extends SlidingFragmentActivity implements
             }
         });
         switchButton.setEnabled(true);
+        versionLayout = (RelativeLayout) getSlidingMenu().findViewById(
+        		R.id.VersionLayout);
+        versionText = (TextView) getSlidingMenu().findViewById(
+        		R.id.VersionNumber);
+        try {
+        	versionText.setText(getPackageManager().getPackageInfo(
+        			getPackageName(), 0).versionName);
+        	versionLayout.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+        	versionLayout.setVisibility(View.GONE);
+        }
         if (inSetlist) {
         	setBehindContentView(R.layout.menu_setlist);
         	getSlidingMenu().setMode(SlidingMenu.RIGHT);
+        	getSlidingMenu().getMenu().setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					Log.i(Constants.LOG_TAG, "touching menu");
+					return false;
+				}
+        	});
         	switch(ResourcesSingleton.instance().getConfiguration().orientation) {
 	        case Configuration.ORIENTATION_LANDSCAPE:
 	        	getSlidingMenu().setBehindOffsetRes(R.dimen.menu_setlist_width_land);
@@ -2524,9 +2463,23 @@ public class ActivityMain extends SlidingFragmentActivity implements
             setlistListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 				@Override
 				public void onGroupExpand(int groupPosition) {
+					for (Integer group : expandedGroups) {
+						if (group != groupPosition) {
+							expandedGroups.remove(group);
+							setlistListView.collapseGroup(group);
+						}
+					}
 					if (!expandedGroups.contains(groupPosition)) {
 						expandedGroups.add(groupPosition);
 					}
+					Log.d(Constants.LOG_TAG, "groupPos: " +
+							SharedPreferencesSingleton.instance().getInt(
+			        		ResourcesSingleton.instance().getString(
+			        				R.string.selected_group_key), -1));
+					Log.d(Constants.LOG_TAG, "childPos: " +
+							SharedPreferencesSingleton.instance().getInt(
+			        		ResourcesSingleton.instance().getString(
+			        				R.string.selected_child_key), -1));
 				}
             });
             setlistListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
@@ -2540,45 +2493,27 @@ public class ActivityMain extends SlidingFragmentActivity implements
     			@Override
     			public boolean onChildClick(ExpandableListView parent, View view,
     					int groupPos, int childPos, long id) {
-    				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
-    		            SharedPreferencesSingleton.instance().edit().putInt(
-    		            		ResourcesSingleton.instance().getString(
-    		            				R.string.selected_group_key),
-    		                    groupPos)
-    		            .commit();
-    		            SharedPreferencesSingleton.instance().edit().putInt(
-    		            		ResourcesSingleton.instance().getString(
-    		            				R.string.selected_child_key),
-    		                    childPos)
-    		            .commit();
-    		    	}
-    		        else {
-    		        	SharedPreferencesSingleton.instance().edit().putInt(
-    		            		ResourcesSingleton.instance().getString(
-    		            				R.string.selected_group_key),
-    		                    groupPos)
-    		            .apply();
-    		        	SharedPreferencesSingleton.instance().edit().putInt(
-    		            		ResourcesSingleton.instance().getString(
-    		            				R.string.selected_child_key),
-    		                    childPos)
-    		            .apply();
-    		        }
+    				SharedPreferencesSingleton.putInt(
+    						R.string.selected_group_key, groupPos);
+    				SharedPreferencesSingleton.putInt(
+    						R.string.selected_child_key, childPos);
     				SetlistAdapter setlistAdapter = 
-    						(SetlistAdapter) setlistListView.getExpandableListAdapter();
+    						(SetlistAdapter) setlistListView
+    							.getExpandableListAdapter();
     				setlistAdapter.notifyDataSetChanged();
     				String setlist = setlistAdapter.getSetlist(groupPos,
     						childPos);
-    				currFrag.setSetlistText(setlist);
-    				if (setlistAdapter.getGroupCount()-1 == groupPos &&
-						setlistAdapter.getChildrenCount(groupPos)-1 == childPos) {
+    				if (0 == groupPos && setlistAdapter.getChildrenCount(0) ==
+    						childPos) {
     					//currFrag.updateSetText();
     					currFrag.setSetlistStampVisible(true);
     					saveSet(setlist, false);
+    					currFrag.setSetlistText(setlist, true);
     				}
     				else {
     					currFrag.setSetlistStampVisible(false);
     					saveSet(setlist, true);
+    					currFrag.setSetlistText(setlist, false);
     				}
     				getSlidingMenu().showContent();
     				return true;
@@ -2586,30 +2521,66 @@ public class ActivityMain extends SlidingFragmentActivity implements
             });
             setlistProgress = (ProgressBar) getSlidingMenu().findViewById(R.id.SetlistProgress);
             if (setlistMap.isEmpty()) {
-	            parseTask = new ParseTask();
-	            if (Build.VERSION.SDK_INT <
-	                    Build.VERSION_CODES.HONEYCOMB) {
-	            	parseTask.execute();
-	    		}
-	            else {
-	            	parseTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-	            }
+            	if (ApplicationEx.hasConnection()) {
+		            parseTask = new ParseTask();
+		            if (Build.VERSION.SDK_INT <
+		                    Build.VERSION_CODES.HONEYCOMB) {
+		            	parseTask.execute();
+		    		}
+		            else {
+		            	parseTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		            }
+            	}
+            	else {
+            		ApplicationEx.showLongToast(R.string.NoConnectionToast);
+                    getSlidingMenu().showContent(true);
+            	}
             }
             else {
             	String setlistDate = SharedPreferencesSingleton.instance()
             			.getString(ResourcesSingleton.instance().getString(
             					R.string.set_date_key), "");
+        		String setlistVenue = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.setvenue_key), "");
+        		String setlistCity = SharedPreferencesSingleton.instance()
+            			.getString(ResourcesSingleton.instance().getString(
+            					R.string.setcity_key), "");
             	String setlist = SharedPreferencesSingleton.instance()
             			.getString(ResourcesSingleton.instance().getString(
             					R.string.setlist_key), "");
-            	if (!setlistDate.isEmpty()) {
+            	if (!setlistDate.isEmpty() && setlistDate.length() >= 4) {
             		TreeMap<String, String> tempMap = setlistMap.get(
             				setlistDate.substring(0, 4));
-            		tempMap.put(setlistDate, setlist);
+            		boolean found = false;
+            		for (Entry<String, String> temp : tempMap.entrySet()) {
+            			found = temp.getKey().contains(setlistDate);
+            		}
+            		if (!found) {
+            			StringBuilder sb = new StringBuilder();
+            			sb.append(setlistDate);
+            			sb.append(" - ");
+            			sb.append(setlistVenue);
+            			sb.append(" - ");
+            			sb.append(setlistCity);
+            			tempMap.put(sb.toString(), setlist);
+            		}
+            		if (!SharedPreferencesSingleton.instance().contains(
+                			ResourcesSingleton.instance().getString(
+                					R.string.selected_group_key)) ||
+    					!SharedPreferencesSingleton.instance().contains(
+                			ResourcesSingleton.instance().getString(
+                					R.string.selected_group_key))) {
+    	            	SharedPreferencesSingleton.putInt(
+    							R.string.selected_group_key, 0);
+    					SharedPreferencesSingleton.putInt(
+    							R.string.selected_child_key, 0);
+                	}
             	}
             	SetlistAdapter setlistAdapter = new SetlistAdapter(
-            			ApplicationEx.getApp(), setlistListView, setlistMap);
+            			ApplicationEx.getApp(), setlistMap);
             	setlistListView.setAdapter(setlistAdapter);
+            	setlistAdapter.notifyDataSetChanged();
             	for (Integer expandedGroup : expandedGroups) {
                 	setlistListView.expandGroup(expandedGroup);
                 }
@@ -2617,37 +2588,19 @@ public class ActivityMain extends SlidingFragmentActivity implements
             	setlistListView.setVisibility(View.VISIBLE);
             }
         }
+        else {
+        	getSlidingMenu().setMode(SlidingMenu.LEFT);
+        }
+        getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        getSlidingMenu().setTouchModeBehind(SlidingMenu.TOUCHMODE_MARGIN);
     }
     
     private void saveSet(String set, boolean archive) {
-    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
-            SharedPreferencesSingleton.instance().edit().putString(
-            		ResourcesSingleton.instance().getString(
-            				R.string.setlist_key),
-                    set)
-            .commit();
-            SharedPreferencesSingleton.instance().edit().putBoolean(
-            		ResourcesSingleton.instance().getString(
-            				R.string.archive_key),
-                    archive)
-            .commit();
-    	}
-        else {
-            SharedPreferencesSingleton.instance().edit().putString(
-            		ResourcesSingleton.instance().getString(
-            				R.string.setlist_key),
-                    set)
-            .apply();
-            SharedPreferencesSingleton.instance().edit().putBoolean(
-            		ResourcesSingleton.instance().getString(
-            				R.string.archive_key),
-                    archive)
-            .apply();
-        }
+    	SharedPreferencesSingleton.putString(R.string.setlist_key, set);
+    	SharedPreferencesSingleton.putBoolean(R.string.archive_key, archive);
     }
     
-    private class ParseTask extends AsyncTask<Void, Void,
-    		TreeMap<String, TreeMap<String, String>>> {
+    private class ParseTask extends AsyncTask<Void, Void, Void> {
     	@Override
     	protected void onPreExecute() {
     		setlistListView.setVisibility(View.INVISIBLE);
@@ -2655,10 +2608,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
     	}
     	
         @Override
-        protected TreeMap<String, TreeMap<String, String>> doInBackground(Void... nothing) {
+        protected Void doInBackground(Void... nothing) {
         	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Setlist");
         	query.setLimit(1000);
         	query.addAscendingOrder("setDate");
+        	query.include("venue");
         	List<ParseObject> setlistList = new ArrayList<ParseObject>(0);
         	List<ParseObject> tempList = new ArrayList<ParseObject>(0);
         	do {
@@ -2673,57 +2627,101 @@ public class ActivityMain extends SlidingFragmentActivity implements
         	dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         	String setDate;
         	String year;
+        	ParseObject venueObject;
+        	StringBuilder sb;
         	String setlist;
         	TreeMap<String, String> tempMap;
+        	setlistMap = new TreeMap<String, TreeMap<String, String>>(
+    				new YearComparator());
         	for (ParseObject set : setlistList) {
         		setDate = (String) DateFormat.format(
         				dateFormat.toLocalizedPattern(), convertToUtc(
         						set.getDate("setDate")));
         		year = setDate.substring(0, 4);
         		setlist = set.getString("set");
+        		venueObject = set.getParseObject("venue");
+        		sb = new StringBuilder();
+        		sb.append(setDate);
+        		sb.append(" - ");
+        		if (venueObject != null) {
+	        		sb.append(venueObject.get("name"));
+	        		sb.append(" - ");
+	        		sb.append(venueObject.get("city"));
+        		}
         		if (setlistMap.containsKey(year)) {
         			tempMap = setlistMap.get(year);
-        			if (!tempMap.containsKey(setDate)) {
-        				tempMap.put(setDate, setlist);
+        			if (!tempMap.containsKey(sb.toString())) {
+        				tempMap.put(sb.toString(), setlist);
         			}
         		}
         		else {
         			tempMap = new TreeMap<String, String>(
-        					String.CASE_INSENSITIVE_ORDER);
-        			tempMap.put(setDate, setlist);
+        					new SetlistComparator());
+        			tempMap.put(sb.toString(), setlist);
         			setlistMap.put(year, tempMap);
         		}
         	}
-            return setlistMap;
+        	String setlistDate = SharedPreferencesSingleton.instance()
+        			.getString(ResourcesSingleton.instance().getString(
+        					R.string.set_date_key), "");
+    		String setlistVenue = SharedPreferencesSingleton.instance()
+        			.getString(ResourcesSingleton.instance().getString(
+        					R.string.setvenue_key), "");
+    		String setlistCity = SharedPreferencesSingleton.instance()
+        			.getString(ResourcesSingleton.instance().getString(
+        					R.string.setcity_key), "");
+        	setlist = SharedPreferencesSingleton.instance()
+        			.getString(ResourcesSingleton.instance().getString(
+        					R.string.setlist_key), "");
+        	if (!setlistDate.isEmpty() && setlistDate.length() >= 4) {
+        		Log.i(Constants.LOG_TAG, setlistDate);
+        		tempMap = setlistMap.get(setlistDate.substring(0, 4));
+        		if (tempMap != null) {
+            		boolean found = false;
+            		for (Entry<String, String> temp : tempMap.entrySet()) {
+            			found = temp.getKey().contains(setlistDate);
+            		}
+            		if (!found) {
+            			sb = new StringBuilder();
+            			sb.append(setlistDate);
+            			sb.append(" - ");
+            			sb.append(setlistVenue);
+            			sb.append(" - ");
+            			sb.append(setlistCity);
+            			tempMap.put(sb.toString(), setlist);
+            		}
+        		}
+        	}
+        	return null;
         }
         
         protected void onProgressUpdate(Void... nothing) {}
         
         @Override
-        protected void onCancelled(TreeMap<String, TreeMap<String, String>> setlistMap) {}
+        protected void onCancelled(Void nothing) {}
         
         @Override
-        protected void onPostExecute(TreeMap<String, TreeMap<String, String>> setlistMap) {
+        protected void onPostExecute(Void nothing) {
         	setlistProgress.setVisibility(View.INVISIBLE);
         	if (setlistListView != null) {
-        		String setlistDate = SharedPreferencesSingleton.instance()
-            			.getString(ResourcesSingleton.instance().getString(
-            					R.string.set_date_key), "");
-            	String setlist = SharedPreferencesSingleton.instance()
-            			.getString(ResourcesSingleton.instance().getString(
-            					R.string.setlist_key), "");
-            	if (!setlistDate.isEmpty()) {
-            		TreeMap<String, String> tempMap = setlistMap.get(
-            				setlistDate.substring(0, 4));
-            		tempMap.put(setlistDate, setlist);
-            	}
         		SetlistAdapter setlistAdapter = new SetlistAdapter(
-            			ApplicationEx.getApp(), setlistListView, setlistMap);
+            			ApplicationEx.getApp(), setlistMap);
         		setlistListView.setAdapter(setlistAdapter);
             	for (Integer expandedGroup : expandedGroups) {
                 	setlistListView.expandGroup(expandedGroup);
                 }
             	setlistListView.setSelection(firstVisiblePosition);
+            	if (!SharedPreferencesSingleton.instance().contains(
+            			ResourcesSingleton.instance().getString(
+            					R.string.selected_group_key)) ||
+					!SharedPreferencesSingleton.instance().contains(
+            			ResourcesSingleton.instance().getString(
+            					R.string.selected_group_key))) {
+	            	SharedPreferencesSingleton.putInt(
+							R.string.selected_group_key, 0);
+					SharedPreferencesSingleton.putInt(
+							R.string.selected_child_key, 0);
+            	}
         		setlistListView.setVisibility(View.VISIBLE);
         	}
         }
@@ -2761,12 +2759,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             		ResourcesSingleton.instance().getString(R.string.stats_key)) ||
                 SharedPreferencesSingleton.instance().getBoolean(
                 		ResourcesSingleton.instance().getString(R.string.quicktip_key), false)) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                    SharedPreferencesSingleton.instance().edit().putBoolean(
-                    		ResourcesSingleton.instance().getString(R.string.stats_key), true).commit();
-                else
-                    SharedPreferencesSingleton.instance().edit().putBoolean(
-                    		ResourcesSingleton.instance().getString(R.string.stats_key), true).apply();
+            	SharedPreferencesSingleton.putBoolean(R.string.stats_key, true);
                 /*
                 showQuickTipMenu(quickTipMenuView,
                         "Touch your score to enter Stats & Standings",
@@ -2889,40 +2882,56 @@ public class ActivityMain extends SlidingFragmentActivity implements
      */
     @SuppressLint("NewApi")
 	@Override
-    public void setBackground(final String name, final boolean showNew,
+    public boolean setBackground(final String name, final boolean showNew,
             final String screen) {
+    	Log.i(Constants.LOG_TAG, "setBackground screen: " + screen);
         if (!showNew) {
-            if (name == null)
-                return;
-            if (setBackgroundTask != null)
+            if (name == null) {
+                return false;
+            }
+            if (setBackgroundTask != null) {
                 setBackgroundTask.cancel(true);
-            int resourceId = ResourcesSingleton.instance().getIdentifier(name, "drawable", getPackageName());
+            }
+            int resourceId = ResourcesSingleton.instance().getIdentifier(name,
+            		"drawable", getPackageName());
             try {
                 if (name.equals("setlist")) {
+                	Log.d(Constants.LOG_TAG, "setting bitmap to " + resourceId);
                     ApplicationEx.setSetlistBitmap(getBitmap(resourceId));
                     if (currFrag != null) {
-                        currFrag.setBackground(ApplicationEx.getSetlistBitmap());
+                        currFrag.setBackground(
+                        		ApplicationEx.getSetlistBitmap());
+                    }
+                }
+                else if (!(currFrag instanceof FragmentSetlist)){
+                    if (fieldsList.indexOf(resourceId) >= 0) {
+                        ApplicationEx.setBackgroundBitmap(getBitmap(resourceId));
+                    }
+                    else {
+                        ApplicationEx.setBackgroundBitmap(getBitmap(R.drawable.splash4));
+                    }
+                    if (currFrag != null) {
+                    	Log.w(Constants.LOG_TAG, "setting non setlist background on " + screen);
+                        currFrag.setBackground(ApplicationEx.getBackgroundBitmap());
                     }
                 }
                 else {
-                    if (fieldsList.indexOf(resourceId) >= 0)
-                        ApplicationEx.setBackgroundBitmap(getBitmap(resourceId));
-                    else
-                        ApplicationEx.setBackgroundBitmap(getBitmap(R.drawable.splash4));
-                    if (currFrag != null) {
-                        currFrag.setBackground(ApplicationEx.getBackgroundBitmap());
-                    }
+                	return false;
                 }
             } catch (RuntimeException err) {
                 Log.e(Constants.LOG_TAG, "Failed to set background!", err);
                 if (setBackgroundWaitTask != null)
                     setBackgroundWaitTask.cancel(true);
-                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew, screen);
+                setBackgroundWaitTask = new SetBackgroundWaitTask(name, showNew,
+                		screen);
                 if (Build.VERSION.SDK_INT <
-                        Build.VERSION_CODES.HONEYCOMB)
+                        Build.VERSION_CODES.HONEYCOMB) {
                     setBackgroundWaitTask.execute();
-                else
-                    setBackgroundWaitTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                else {
+                    setBackgroundWaitTask.executeOnExecutor(
+                    		AsyncTask.THREAD_POOL_EXECUTOR);
+                }
             } catch (OutOfMemoryError memErr) {
                 ApplicationEx.showShortToast("Error setting background");
                 /*
@@ -2947,6 +2956,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
             else
             	setBackgroundTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
+        return true;
     }
     
     private class SetBackgroundTask extends AsyncTask<Void, Void, Void> {
@@ -2966,6 +2976,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
         
         @Override
         protected Void doInBackground(Void... nothing) {
+        	Log.i(Constants.LOG_TAG, "SetBackgroundTask screen: " + screen);
             if (isCancelled())
                 return null;
             if (name == null)
@@ -3107,6 +3118,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                 	*/
                     if (isCancelled())
                         return null;
+                    Log.i(Constants.LOG_TAG, "setting with task");
                     if (fieldsList.indexOf(resourceId) >= 0)
                         ApplicationEx.setBackgroundBitmap(getBitmap(resourceId));
                     else
@@ -3230,9 +3242,12 @@ public class ActivityMain extends SlidingFragmentActivity implements
     @Override
     public void setlistBackground(final String name,
             final ImageViewEx background) {
-        if (name == null)
+        if (name == null) {
             return;
-        int resourceId = ResourcesSingleton.instance().getIdentifier(name, "drawable", getPackageName());
+        }
+        int resourceId = ResourcesSingleton.instance().getIdentifier(name,
+        		"drawable", getPackageName());
+        Log.w(Constants.LOG_TAG, "SETTING " + name + " : " + resourceId);
         if (background != null) {
             try {
                 ApplicationEx.setSetlistBitmap(getBitmap(resourceId));
@@ -3544,6 +3559,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3572,6 +3588,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3593,6 +3610,7 @@ public class ActivityMain extends SlidingFragmentActivity implements
                     .commitAllowingStateLoss();
             fMan.executePendingTransactions();
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            getSlidingMenu().setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
         } catch (IllegalStateException e) {}
     }
     
@@ -3901,22 +3919,21 @@ public class ActivityMain extends SlidingFragmentActivity implements
         @Override
         protected Void doInBackground(Void... nothing) {
             loggedIn = false;
-            Editor editor = SharedPreferencesSingleton.instance().edit();
-            editor.putString(ResourcesSingleton.instance().getString(R.string.scoretext_key), "");
-            editor.putString(ResourcesSingleton.instance().getString(R.string.questiontext_key), "");
-            editor.putString(ResourcesSingleton.instance().getString(R.string.hinttext_key), "");
-            editor.putString(ResourcesSingleton.instance().getString(R.string.answertext_key), "");
-            editor.putString(ResourcesSingleton.instance().getString(R.string.placetext_key), "");
-            editor.putInt(ResourcesSingleton.instance().getString(R.string.hinttimevis_key), View.VISIBLE);
-            editor.putInt(ResourcesSingleton.instance().getString(R.string.hinttextvis_key), View.INVISIBLE);
-            editor.putInt(ResourcesSingleton.instance().getString(R.string.skiptimevis_key), View.VISIBLE);
-            editor.putInt(ResourcesSingleton.instance().getString(R.string.skiptextvis_key), View.INVISIBLE);
-            editor.putString(ResourcesSingleton.instance().getString(R.string.hintnum_key), "");
-            editor.putString(ResourcesSingleton.instance().getString(R.string.skipnum_key), "");
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD)
-                editor.commit();
-            else
-                editor.apply();
+            SharedPreferencesSingleton.putString(R.string.scoretext_key, "");
+            SharedPreferencesSingleton.putString(R.string.questiontext_key, "");
+            SharedPreferencesSingleton.putString(R.string.hinttext_key, "");
+            SharedPreferencesSingleton.putString(R.string.answertext_key, "");
+            SharedPreferencesSingleton.putString(R.string.placetext_key, "");
+            SharedPreferencesSingleton.putInt(R.string.hinttimevis_key,
+            		View.VISIBLE);
+            SharedPreferencesSingleton.putInt(R.string.hinttextvis_key,
+            		View.INVISIBLE);
+            SharedPreferencesSingleton.putInt(R.string.skiptimevis_key,
+            		View.VISIBLE);
+            SharedPreferencesSingleton.putInt(R.string.skiptextvis_key,
+            		View.INVISIBLE);
+            SharedPreferencesSingleton.putString(R.string.hintnum_key, "");
+            SharedPreferencesSingleton.putString(R.string.skipnum_key, "");
             if (userTask != null)
                 userTask.cancel(true);
             if (getScoreTask != null)
@@ -4075,8 +4092,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
 
     @Override
     public String getQuestionId(int index) {
-    	if (questionIds.isEmpty())
+    	if (questionIds.isEmpty()) {
     		return null;
+    	}
         return questionIds.get(index);
     }
     
@@ -4266,16 +4284,18 @@ public class ActivityMain extends SlidingFragmentActivity implements
 	                		int easy = DatabaseHelperSingleton.instance()
 	                				.getUserIntValue(DatabaseHelper.COL_EASY,
 	                						userId);
-	                		if (easy <= 0)
+	                		if (easy <= 0) {
 	                			easy = 600;
+	                		}
 	                		query.whereLessThanOrEqualTo("score", easy);
 	                	}
 	                	else if (level == Constants.MEDIUM) {
 	                		int med = DatabaseHelperSingleton.instance()
 	                				.getUserIntValue(DatabaseHelper.COL_MEDIUM,
 	                						userId);
-	                		if (med <= 0)
+	                		if (med <= 0) {
 	                			med = 800;
+	                		}
 	                		query.whereLessThanOrEqualTo("score", med);
 	                	}
 	                }
@@ -4822,6 +4842,11 @@ public class ActivityMain extends SlidingFragmentActivity implements
     }
     
     @Override
+    public void setGoToSetlist(boolean goToSetlist) {
+    	this.goToSetlist = goToSetlist;
+    }
+    
+    @Override
     public void setInSetlist(boolean inSetlist) {
     	if (this.inSetlist == inSetlist) {
     		return;
@@ -4848,8 +4873,9 @@ public class ActivityMain extends SlidingFragmentActivity implements
         options.inInputShareable = true;
         options.inTempStorage = new byte[16*1024];
         options.inSampleSize = 2;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         	options.inMutable = true;
+        }
         return BitmapFactory.decodeResource(ResourcesSingleton.instance(),
         		resId, options);
     }
@@ -4863,5 +4889,107 @@ public class ActivityMain extends SlidingFragmentActivity implements
     public FragmentBase getCurrFrag() {
     	return currFrag;
     }
+    
+    @Override
+    public void updateLevel() {
+    	if (levelText != null && levelImage != null) {
+	    	switch (SharedPreferencesSingleton.instance().getInt(
+	        		ResourcesSingleton.instance().getString(R.string.level_key),
+	        		Constants.HARD)) {
+	        case Constants.EASY:
+	            levelText.setText(ResourcesSingleton.instance().getString(
+	            		R.string.LevelTitle) + " (Easy)");
+	            levelImage.setImageResource(R.drawable.ic_level_easy_inverse);
+	            break;
+	        case Constants.MEDIUM:
+	            levelText.setText(ResourcesSingleton.instance().getString(
+	            		R.string.LevelTitle) + " (Medium)");
+	            levelImage.setImageResource(R.drawable.ic_level_med_inverse);
+	            break;
+	        case Constants.HARD:
+	            levelText.setText(ResourcesSingleton.instance().getString(
+	            		R.string.LevelTitle) + " (Hard)");
+	            levelImage.setImageResource(R.drawable.ic_level_hard_inverse);
+	            break;
+	        }
+	    	if (getQuestion(0) == null) {
+                getNextQuestions(false,
+                        SharedPreferencesSingleton.instance().getInt(
+                    		ResourcesSingleton.instance().getString(
+                    				R.string.level_key),
+                        Constants.HARD));
+                if (currFrag != null) {
+                    currFrag.showRetry();
+                }
+            }
+    	}
+    }
+    
+    public static class YearComparator implements Comparator<String> {
+    	@Override
+	    public int compare(String left, String right) {
+	    	int lhs = Integer.parseInt(left);
+	    	int rhs = Integer.parseInt(right);
+	        if (lhs > rhs) {
+	            return -1;
+	        } else if (lhs == rhs) {
+	        	return 0;
+	        } else {
+	            return 1;
+	        }
+	    }
+	}
+    
+    public static class SetlistComparator implements Comparator<String> {
+    	Date leftDate;
+    	Date rightDate;
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
+    			Locale.getDefault());
+    	
+    	@Override
+	    public int compare(String left, String right) {
+    		try {
+	    		leftDate = dateFormat.parse(left.substring(0, 10));
+	    		rightDate = dateFormat.parse(right.substring(0, 10));
+    		} catch (Exception e) {
+    			return 0;
+    		}
+	        if (leftDate.after(rightDate)) {
+	            return -1;
+	        } else if (rightDate.after(leftDate)) {
+	        	return -1;
+	        } else {
+	            return 0;
+	        }
+	    }
+	}
+    
+    @Override
+    public void updateSetlistMap(String setDate, String setVenue,
+    		String setCity, String setlist) {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(setDate);
+    	sb.append(" - ");
+    	sb.append(setVenue);
+    	sb.append(" - ");
+    	sb.append(setCity);
+    	String setKey = sb.toString();
+    	TreeMap<String, String> tempMap;
+    	for (Entry<String, TreeMap<String, String>> setEntry :
+    			setlistMap.entrySet()) {
+    		if (setEntry.getKey().startsWith(setKey.substring(0, 4))) {
+    			tempMap = setEntry.getValue();
+    			if (!tempMap.containsKey(setKey)) {
+    				tempMap.put(setKey, setlist);
+    			}
+    		}
+    	}
+    	if (setlistListView != null) {
+    		SetlistAdapter setlistAdapter = new SetlistAdapter(
+    				ApplicationEx.getApp(), setlistMap);
+    		setlistListView.setAdapter(setlistAdapter);
+    		setlistAdapter.notifyDataSetChanged();
+    	}
+    }    
     
 }
