@@ -13,6 +13,9 @@ public class Constants {
     public static final String SCREENS_LOCATION = "Screenshots" +
             File.separator;
     public static final String AUDIO_LOCATION = "Audio" + File.separator;
+    public static final String SELECTED_SET_FILE = "selectedSet.ser";
+    public static final String LATEST_SET_FILE = "latestSet.ser";
+    public static final String SETLIST_MAP_FILE = "setlistMap.ser";
     
     public static final String ACTION_NEW_QUESTIONS =
             "com.jeffthefate.dmb.ACTION_NEW_QUESTIONS";

@@ -1,13 +1,9 @@
 package com.jeffthefate.dmbquiz.receiver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
@@ -32,10 +28,12 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.jeffthefate.dmbquiz.ApplicationEx;
+import com.jeffthefate.dmbquiz.ApplicationEx.FileCacheSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
 import com.jeffthefate.dmbquiz.ApplicationEx.SharedPreferencesSingleton;
 import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.R;
+import com.jeffthefate.dmbquiz.SetInfo;
 import com.jeffthefate.dmbquiz.activity.ActivityMain;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -121,11 +119,21 @@ public class PushReceiver extends BroadcastReceiver {
                 		throw new JSONException("No data sent!");
                     json = new JSONObject(intent.getExtras().getString(
                             "com.parse.Data"));
+                    SetInfo setInfo = new SetInfo();
                     latestSong = json.getString("song");
                     latestSet = json.getString("setlist");
+                    setInfo.setSetlist(latestSet);
                     latestSetDate = json.getString("shortDate");
+                    setInfo.setSetDate(latestSetDate);
                     latestSetVenue = json.getString("venueName");
+                    setInfo.setSetVenue(latestSetVenue);
                     latestSetCity = json.getString("venueCity");
+                    setInfo.setSetCity(latestSetCity);
+                    setInfo.setArchive(false);
+                    FileCacheSingleton fileCacheSingleton =
+                    		FileCacheSingleton.instance();
+                    fileCacheSingleton.saveSerializableToFile(
+                    		Constants.LATEST_SET_FILE, setInfo);
                     ApplicationEx.parseSetlist(latestSet);
                     Editor editor = SharedPreferencesSingleton.instance()
                     		.edit();

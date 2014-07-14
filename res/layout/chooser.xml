@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ListLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black" >
+    <ExpandableListView
+        android:id="@+id/SetlistList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"
+        android:scrollbars="none"
+        android:visibility="invisible" />
+    <ProgressBar
+        android:id="@+id/SetlistProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:indeterminateDrawable="@drawable/progress" />
+    <TextView
+        android:id="@+id/NetworkText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="20dip"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip"
+        android:gravity="center"
+        android:text="@string/NoService"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:background="@color/background_dark"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    <Button
+        android:id="@+id/RetryButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dip"
+        android:text="@string/retry"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_below="@id/NetworkText"
+        android:visibility="gone" />
+</RelativeLayout>

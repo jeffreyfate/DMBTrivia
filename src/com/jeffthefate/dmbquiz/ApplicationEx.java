@@ -1,9 +1,13 @@
 package com.jeffthefate.dmbquiz;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -242,6 +246,86 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
     		if (res == null)
     			res = getApp().getResources();
     		return res;
+    	}
+    }
+    
+    public static class FileCacheSingleton {
+    	private static FileCacheSingleton fileCacheSingleton;
+    	private static String cacheLocation;
+    	private static String fileLocation;
+    	
+    	public static FileCacheSingleton instance() {
+    		if (fileCacheSingleton == null) {
+    			fileCacheSingleton = new FileCacheSingleton();
+    		}
+    		if (cacheLocation == null) {
+    			cacheLocation = ApplicationEx.getApp().getExternalCacheDir()
+    					.getAbsolutePath();
+    			fileLocation = ApplicationEx.getApp().getFilesDir()
+    					.getAbsolutePath();
+    		}
+    		return fileCacheSingleton;
+    	}
+    	
+    	public String createLocation(String dir) {
+    		File path = new File(dir);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
+                path.setExecutable(true, false);
+                path.setReadable(true, false);
+                path.setWritable(true, false);
+            }
+            path.mkdirs();
+            return path.getAbsolutePath();
+    	}
+    	
+    	public boolean saveSerializableToFile(String file,
+    			Serializable object) {
+    		return saveSerializable(file, fileLocation, object);
+    	}
+    	
+    	public Serializable readSerializableFromFile(String file) {
+    		return readSerializable(file, fileLocation);
+    	}
+    	
+    	public boolean saveSerializable(String file, String location,
+    			Serializable object) {
+    		File cacheFile = new File(location + File.separatorChar + file);
+    		try {
+    			FileOutputStream fileOutputStream =
+    					new FileOutputStream(cacheFile);
+    			ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+                        fileOutputStream);
+                objectOutputStream.writeObject(object);
+                objectOutputStream.close();
+    			fileOutputStream.close();
+    		} catch (FileNotFoundException e) {
+    			e.printStackTrace();
+    			return false;
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    			return false;
+    		}
+    		return true;
+    	}
+    	
+    	public Serializable readSerializable(String file,
+    			String location) {
+    		Serializable object;
+    		try {
+                FileInputStream fileInputStream = new FileInputStream(
+                		location + File.separatorChar + file);
+                ObjectInputStream objectInputStream = new ObjectInputStream(
+                        fileInputStream);
+                object = (Serializable) objectInputStream.readObject();
+                objectInputStream.close();
+                fileInputStream.close();
+            } catch (FileNotFoundException e) {
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+    		return object;
     	}
     }
     
@@ -827,17 +911,14 @@ public class ApplicationEx extends Application implements OnStacktraceListener {
                 ResourcesSingleton.instance().getString(
                 		R.string.notificationtype_key), 0)) {
         case 0:
-        	Log.d(Constants.LOG_TAG, "0 typeSetting: general");
         	ApplicationEx.createNotificationUri(R.raw.general);
         	break;
         case 1:
         	if (songTitle.startsWith(entry.getKey())) {
-        		Log.d(Constants.LOG_TAG, "1 typeSetting: album");
         		ApplicationEx.createNotificationUri(
         				entry.getValue().getAudio());
         	}
         	else {
-        		Log.d(Constants.LOG_TAG, "1 typeSetting: general");
         		ApplicationEx.createNotificationUri(R.raw.general);
         	}
         	break;

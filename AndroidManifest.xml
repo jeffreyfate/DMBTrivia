@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jeffthefate.dmbquiz"
     android:versionCode="12"
-    android:versionName="2.0.3"
+    android:versionName="2.1"
     android:installLocation="auto" >
     
     <permission android:name="com.jeffthefate.dmbquiz.permission.C2D_MESSAGE" android:protectionLevel="signature" />

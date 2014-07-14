@@ -1,7 +1,11 @@
 package com.jeffthefate.dmbquiz;
 
+import java.util.TreeMap;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 
 import com.jeffthefate.dmbquiz.fragment.FragmentBase;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -350,6 +354,8 @@ public interface OnButtonListener {
      * @param inSetlist true if now in setlist, false otherwise
      */
     public void setInSetlist(boolean inSetlist);
+    
+    public void setInChooser(boolean inChooser);
     /**
      * Determine if app is viewing the setlist tab
      * @return true if viewing the setlist
@@ -370,6 +376,27 @@ public interface OnButtonListener {
     
     public void updateLevel();
     
-    public void updateSetlistMap(String setDate, String setVenue,
-    		String setCity, String setlist);
+    public void updateSetlistMap(String setKey, String setlist);
+    
+    public void checkSetlistMap(ExpandableListView setlistListView,
+    		ProgressBar setlistProgress);
+	
+    public TreeMap<String, TreeMap<String, String>> getSetlistMap();
+    
+    public SetInfo getLatestSetInfo();
+    
+    public void setLatestKey(String key);
+    
+    public String getLatestKey();
+    
+    public String getLatestSetlist();
+    
+    public String getLatestSetStamp();
+    
+    public void readSetlistInfoFromDatabase();
+    
+    public SetInfo getSelectedSetInfo();
+    
+    public void setSelectedSetInfo(SetInfo setInfo);
+    
 }

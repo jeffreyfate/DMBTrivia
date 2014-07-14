@@ -697,8 +697,6 @@ public class FragmentQuiz extends FragmentBase {
 	                        AsyncTask.THREAD_POOL_EXECUTOR);
 	            return;
 	        }
-	        if (mCallback.getQuestionAnswer(0) != null)
-	        	Log.d(Constants.LOG_TAG, mCallback.getQuestionAnswer(0));
 	        if (answerText != null)
 	        	answerText.setVisibility(View.VISIBLE);
 	        if (mCallback.getQuestion(0) != null && questionText != null) {

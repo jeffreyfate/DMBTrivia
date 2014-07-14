@@ -80,6 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_IN_INFO = "InInfo";
     public static final String COL_IN_FAQ = "InFaq";
     public static final String COL_IN_SETLIST = "InSetlist";
+    public static final String COL_IN_CHOOSER = "InChooser";
     public static final String COL_NEW_SETLIST = "NewSetlist";
     public static final String COL_NEW_QUESTION = "NewQuestion";
     public static final String COL_DISPLAY_NAME = "DisplayName";
@@ -147,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_IN_LOAD + " INTEGER DEFAULT 0, " + COL_IN_STATS +
             " INTEGER DEFAULT 0, " + COL_IN_INFO + " INTEGER DEFAULT 0, " +
             COL_IN_FAQ + " INTEGER DEFAULT 0, " + COL_IN_SETLIST +
+            " INTEGER DEFAULT 0, " + COL_IN_CHOOSER +
             " INTEGER DEFAULT 0, " + COL_NEW_SETLIST +
             " INTEGER DEFAULT 0, " + COL_NEW_QUESTION +
             " INTEGER DEFAULT 0, " + COL_DISPLAY_NAME +
@@ -1277,6 +1279,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (!colList.contains(COL_IN_SETLIST)) {
             sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_SETLIST +
+                    " INTEGER DEFAULT 0";
+            try {
+                db.execSQL(sqlString);
+            } catch (SQLException e) {
+                Log.e(Constants.LOG_TAG, "Bad SQL string: " + sqlString, e);
+            }
+        }
+        if (!colList.contains(COL_IN_CHOOSER)) {
+            sqlString = "ALTER TABLE " + USER_TABLE + " ADD " + COL_IN_CHOOSER +
                     " INTEGER DEFAULT 0";
             try {
                 db.execSQL(sqlString);

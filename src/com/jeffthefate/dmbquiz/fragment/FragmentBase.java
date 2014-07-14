@@ -3,10 +3,16 @@ package com.jeffthefate.dmbquiz.fragment;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -17,8 +23,11 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -33,7 +42,6 @@ import com.jeffthefate.dmbquiz.ImageViewEx;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
 import com.jeffthefate.dmbquiz.activity.ActivityMain.UiCallback;
-import com.parse.Parse;
 //import android.graphics.drawable.TransitionDrawable;
 
 public class FragmentBase extends Fragment implements UiCallback {
@@ -166,6 +174,15 @@ public class FragmentBase extends Fragment implements UiCallback {
         super.onDestroyView();
     }
     */
+    
+    public void updateSetText() {
+    	if (mCallback.getSelectedSetInfo() == null ||
+    			StringUtils.isBlank(
+    					mCallback.getSelectedSetInfo().getSetlist())) {
+    		mCallback.readSetlistInfoFromDatabase();
+    	}
+    }
+    
     @Override
     public void showNetworkProblem() {}
 
@@ -325,7 +342,6 @@ public class FragmentBase extends Fragment implements UiCallback {
                     if (tempDrawable != null)
                         background.setImageDrawable(tempDrawable);
                     else {
-                        Log.i(Constants.LOG_TAG, "setBackgroundBitmap");
                         if (name == null)
                             mCallback.setBackground("splash4", false, screen);
                         else
@@ -348,7 +364,6 @@ public class FragmentBase extends Fragment implements UiCallback {
             	else {
             		bitmapDrawable.setColorFilter(null);
             	}
-            	Log.i(Constants.LOG_TAG, "setting background");
                 background.setImageDrawable(bitmapDrawable);
             }
         }
@@ -444,7 +459,6 @@ public class FragmentBase extends Fragment implements UiCallback {
         	BitmapDrawable bitmapDrawable = new BitmapDrawable(
         			ResourcesSingleton.instance(), newBackground);
         	bitmapDrawable.setColorFilter(null);
-        	Log.i(Constants.LOG_TAG, "setting background");
             background.setImageDrawable(bitmapDrawable);
         }
     }
@@ -456,9 +470,6 @@ public class FragmentBase extends Fragment implements UiCallback {
     	else
     		return background.getDrawable();
 	}
-	
-    @Override
-    public void updateSetText(OnButtonListener callback) {}
 
     @Override
     public void showRetry() {}
@@ -482,5 +493,9 @@ public class FragmentBase extends Fragment implements UiCallback {
 	
 	@Override
 	public void setSetlistStampVisible(boolean isVisible) {}
+	
+	@Override
+	public void updateSetlistMap(
+    		TreeMap<String, TreeMap<String, String>> setlistMap) {}
 
 }

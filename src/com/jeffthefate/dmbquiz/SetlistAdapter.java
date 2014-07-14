@@ -1,7 +1,10 @@
 package com.jeffthefate.dmbquiz;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.jeffthefate.dmbquiz.ApplicationEx.ResourcesSingleton;
@@ -24,7 +27,6 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
     
     private int groupCount = 0;
     private TreeMap<String, TreeMap<String, String>> parseMap;
-    private List<Object> keyList;
     private Context context;
     
     public class ViewHolder {
@@ -53,14 +55,82 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
     		TreeMap<String, TreeMap<String, String>> parseMap) {
         this.context = context;
         this.parseMap = parseMap;
-        keyList = Arrays.asList(parseMap.keySet().toArray());
         groupCount = parseMap.size();
     }
     
     public String getSetlist(int groupPosition, int childPosition) {
+    	Entry<String, String> entry = getEntry(groupPosition, childPosition);
+    	if (entry != null) {
+    		return entry.getValue();
+    	}
+    	return null;
+    }
+    
+    public String getSetlist(String key) {
+    	Entry<String, String> entry = getEntry(key);
+    	if (entry != null) {
+    		return entry.getValue();
+    	}
+    	return null;
+    }
+    
+    public String getKey(int groupPosition, int childPosition) {
+    	Entry<String, String> entry = getEntry(groupPosition, childPosition);
+    	if (entry != null) {
+    		return entry.getKey();
+    	}
+    	return null;
+    }
+    
+    public void setSelected(String key, ExpandableListView setlistListView) {
+    	int i = -1;
+    	int j = -1;
+    	for (Entry<String, TreeMap<String, String>> entry :
+				parseMap.entrySet()) {
+    		i++;
+			for (Entry<String, String> child : entry.getValue().entrySet()) {
+				j++;
+				if (child.getKey().equals(key)) {
+					Log.d(Constants.LOG_TAG, "setSelected: " + i + " : " + j);
+					setlistListView.setSelectedChild(i, j, true);
+					return;
+				}
+			}
+    	}
+    }
+    
+    public boolean isFirst(String key) {
+    	return parseMap.firstEntry().getValue().firstKey().equals(key);
+    }
+    
+    public Entry<String, String> getEntry(int groupPosition,
+    		int childPosition) {
     	TreeMap<String, String> childMap = parseMap.get(
-				keyList.get(groupPosition));
-    	return childMap.get(getChild(groupPosition, childPosition));
+				parseMap.keySet().toArray()[groupPosition]);
+    	Set<Entry<String, String>> children = childMap.entrySet();
+    	Iterator<Entry<String, String>> childrenIter = children.iterator();
+    	Entry<String, String> child;
+    	int i = 0;
+    	while (childrenIter.hasNext()) {
+    		child = childrenIter.next();
+    		if (i == childPosition) {
+    			return child;
+    		}
+    		i++;
+    	}
+    	return null;
+    }
+    
+    public Entry<String, String> getEntry(String key) {
+    	for (Entry<String, TreeMap<String, String>> entry :
+    			parseMap.entrySet()) {
+    		for (Entry<String, String> child : entry.getValue().entrySet()) {
+    			if (child.getKey().equals(key)) {
+    				return child;
+    			}
+    		}
+    	}
+    	return null;
     }
 
 	@Override
@@ -70,20 +140,20 @@ public class SetlistAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return parseMap.get(keyList.get(groupPosition)).size();
+		return parseMap.get(parseMap.keySet().toArray()[groupPosition]).size();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return keyList.get(groupPosition);
+		return parseMap.keySet().toArray()[groupPosition];
 	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		TreeMap<String, String> childMap = parseMap.get(
-				keyList.get(groupPosition));
-		List<Object> childList = Arrays.asList(childMap.keySet().toArray());
-		return childList.get(childPosition);
+				parseMap.keySet().toArray()[groupPosition]);
+		Object[] array = childMap.keySet().toArray();
+		return array[childPosition];
 	}
 
 	@Override

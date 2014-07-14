@@ -2,6 +2,7 @@ package com.jeffthefate.dmbquiz.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +15,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +22,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-import com.jeffthefate.dmbquiz.ApplicationEx;
 import com.jeffthefate.dmbquiz.ApplicationEx.DatabaseHelperSingleton;
-import com.jeffthefate.dmbquiz.Constants;
 import com.jeffthefate.dmbquiz.DatabaseHelper;
 import com.jeffthefate.dmbquiz.OnButtonListener;
 import com.jeffthefate.dmbquiz.R;
@@ -93,6 +91,9 @@ public class FragmentPager extends FragmentBase {
                         mCallback.setInSetlist(true);
                         tracker.sendView("ActivityMain/FragmentSetlist");
                         break;
+                    case 2:
+                    	tracker.sendView("ActivityMain/FragmentChooser");
+                        break;
                     default:
                         mCallback.slidingMenu().setTouchModeAbove(
                                 SlidingMenu.TOUCHMODE_MARGIN);
@@ -124,7 +125,6 @@ public class FragmentPager extends FragmentBase {
     public void onResume() {
         super.onResume();
         if (viewPager.getAdapter().getCount() > 1 && mCallback != null) {
-        	Log.i(Constants.LOG_TAG, mCallback.getGoToSetlist() + " : " + mCallback.getInSetlist());
             if (mCallback.getGoToSetlist() || mCallback.getInSetlist()) {
                 viewPager.setCurrentItem(1);
                 mCallback.setInSetlist(true);
@@ -153,6 +153,7 @@ public class FragmentPager extends FragmentBase {
             mFragments = new ArrayList<FragmentBase>();
             mFragments.add(frag);
             mFragments.add(new FragmentSetlist());
+            mFragments.add(new FragmentChooser());
         }
 
         @Override
@@ -207,20 +208,17 @@ public class FragmentPager extends FragmentBase {
     	return (FragmentBase) ((FragmentPagerAdapter) viewPager.getAdapter()).getItem(position);
     }
     
-    @Override
-    public void updateSetText(OnButtonListener callback) {
-    	((PagerAdapter) viewPager.getAdapter()).getFragmentList().get(1)
-    			.updateSetText(callback);
-    }
-    
     public FragmentBase getFragmentForPager() {
-        if (!loggedIn)
+        if (!loggedIn) {
             return new FragmentSplash();
+        }
         else {
-            if (inStats)
+            if (inStats) {
                 return new FragmentLeaders();
-            else
+            }
+            else {
                 return new FragmentQuiz();
+            }
         }
     }
     
@@ -298,5 +296,23 @@ public class FragmentPager extends FragmentBase {
     public void setSetlistText(String setlistText, boolean canRefresh) {
 		getPage(1).setSetlistText(setlistText, canRefresh);
 	}
+    
+    @Override
+	public void updateSetlistMap(
+			TreeMap<String, TreeMap<String, String>> setlistMap) {
+    	getPage(2).updateSetlistMap(setlistMap);
+    }
+    
+    @Override
+	public void setSetlistStampVisible(boolean isVisible) {
+		getPage(1).setSetlistStampVisible(isVisible);
+	}
+    
+    @Override
+    public void updateSetText() {
+    	super.updateSetText();
+    	getPage(1).updateSetText();
+    	getPage(2).updateSetText();
+    }
     
 }
